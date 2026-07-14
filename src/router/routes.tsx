@@ -7,7 +7,7 @@ import { Players } from '../modules/players';
 import { Analytics } from '../modules/analytics';
 import { Fantasy } from '../modules/fantasy';
 import { AppLayout } from '../layouts/AppLayout';
-import { NotFound } from '../shared/pages';
+import { NotFound, ChampionsLeagueComingSoon } from '../shared/pages';
 
 const router = createBrowserRouter([
   {
@@ -56,23 +56,23 @@ const router = createBrowserRouter([
           },
           {
             path: 'dashboard',
-            element: <Dashboard />,
+            element: <ChampionsLeagueComingSoon />,
           },
           {
             path: 'fixtures',
-            element: <Fixtures />,
+            element: <ChampionsLeagueComingSoon />,
           },
           {
             path: 'players',
-            element: <Players />,
+            element: <ChampionsLeagueComingSoon />,
           },
           {
             path: 'analytics',
-            element: <Analytics />,
+            element: <ChampionsLeagueComingSoon />,
           },
           {
             path: 'fantasy',
-            element: <Fantasy />,
+            element: <ChampionsLeagueComingSoon />,
           },
         ],
       },

@@ -9,3 +9,4 @@ export { StatCard } from './StatCard';
 export { WidgetContainer } from './WidgetContainer';
 export { WidgetHeader } from './WidgetHeader';
 export { WidgetContent } from './WidgetContent';
+export { ComingSoon } from './ComingSoon';
