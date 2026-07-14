@@ -10,7 +10,9 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives",
     "lint:fix": "eslint src --ext ts,tsx --fix",
     "format": "prettier --write src",
-    "type-check": "tsc --noEmit"
+    "format:check": "prettier --check src",
+    "type-check": "tsc --noEmit",
+    "typecheck": "tsc --noEmit"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
