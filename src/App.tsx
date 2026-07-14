@@ -1,12 +1,8 @@
 import React from 'react';
-import './App.css';
+import { Router } from '@router/routes';
 
 const App: React.FC = () => {
-  return (
-    <main className="app-container">
-      <h1 className="app-title">DC5 Fantasy Hub</h1>
-    </main>
-  );
+  return <Router />;
 };
 
 export { App };
