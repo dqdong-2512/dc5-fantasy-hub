@@ -318,6 +318,8 @@ Do not explain.
 
 Generate only the requested implementation.
 
+---
+
 # Execution Rules
 
 Never run the application.
@@ -337,3 +339,21 @@ Never verify by launching the application.
 Only modify source code.
 
 Leave execution to the developer.
+
+---
+
+# Incremental Development
+
+The project is already implemented incrementally.
+
+Never regenerate completed work.
+
+Never replace working implementations.
+
+Always extend the existing codebase.
+
+Prefer modifying existing files over creating new ones.
+
+Every task should introduce only the minimum required changes.
+
+Preserve backward compatibility with the existing architecture.
