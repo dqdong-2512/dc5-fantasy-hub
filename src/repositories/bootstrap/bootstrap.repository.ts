@@ -1,6 +1,7 @@
 /**
  * Bootstrap Repository
- * Provides access to normalized bootstrap information
+ * Provides access to bootstrap information
+ * Returns domain models instead of raw normalized data
  */
 
 import type {
@@ -11,9 +12,19 @@ import type {
   NormalizedPlayer,
 } from '../types';
 import { getDataFiles } from '../data-loader';
+import { GameweekMapper, PlayerMapper, TeamMapper } from '@domain/mappers';
+import type { Player, Team, Gameweek } from '@domain/models';
+
+export interface DomainBootstrapData {
+  teams: Team[];
+  players: Player[];
+  gameweeks: Gameweek[];
+  elementTypes: NormalizedElementType[];
+}
 
 export class BootstrapRepository {
   private cache: BootstrapData | null = null;
+  private domainCache: DomainBootstrapData | null = null;
 
   private loadData(): BootstrapData {
     if (this.cache) {
@@ -32,23 +43,42 @@ export class BootstrapRepository {
     return this.cache as BootstrapData;
   }
 
-  getBootstrap(): BootstrapData {
-    return this.loadData();
+  getBootstrap(): DomainBootstrapData {
+    if (this.domainCache) {
+      return this.domainCache;
+    }
+
+    const normalized = this.loadData();
+    const teamMap = new Map(normalized.teams.map((t: NormalizedTeam) => [t.id, t]));
+
+    this.domainCache = {
+      teams: normalized.teams.map((t: NormalizedTeam) => TeamMapper.toDomain(t)),
+      players: normalized.players.map((p: NormalizedPlayer) => {
+        const team = teamMap.get(p.team);
+        const teamName = team ? team.name : `Team ${p.team}`;
+        return PlayerMapper.toDomain(p, teamName, p.elementType);
+      }),
+      gameweeks: normalized.gameweeks.map((gw: NormalizedGameweek) => GameweekMapper.toDomain(gw)),
+      elementTypes: normalized.elementTypes,
+    };
+
+    return this.domainCache;
   }
 
-  getCurrentGameweek(): NormalizedGameweek | null {
-    const bootstrap = this.loadData();
-    const current = bootstrap.gameweeks.find((gw: NormalizedGameweek) => !gw.finished);
-    return current || null;
+  getCurrentGameweek(): Gameweek | null {
+    const normalized = this.loadData();
+    const current = normalized.gameweeks.find((gw: NormalizedGameweek) => !gw.finished);
+    return current ? GameweekMapper.toDomain(current) : null;
   }
 
-  getGameweekById(id: number): NormalizedGameweek | null {
-    const bootstrap = this.loadData();
-    return bootstrap.gameweeks.find((gw: NormalizedGameweek) => gw.id === id) || null;
+  getGameweekById(id: number): Gameweek | null {
+    const normalized = this.loadData();
+    const gameweek = normalized.gameweeks.find((gw: NormalizedGameweek) => gw.id === id);
+    return gameweek ? GameweekMapper.toDomain(gameweek) : null;
   }
 
   getElementType(id: number): NormalizedElementType | null {
-    const bootstrap = this.loadData();
-    return bootstrap.elementTypes.find((et: NormalizedElementType) => et.id === id) || null;
+    const normalized = this.loadData();
+    return normalized.elementTypes.find((et: NormalizedElementType) => et.id === id) || null;
   }
 }

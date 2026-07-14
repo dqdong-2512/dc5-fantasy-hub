@@ -1,13 +1,22 @@
 /**
  * Player Repository
  * Provides access to player data with search capabilities
+ * Returns domain models instead of raw normalized data
  */
 
 import type { NormalizedPlayer } from '../types';
 import { getDataFiles } from '../data-loader';
+import { PlayerMapper } from '@domain/mappers';
+import type { Player } from '@domain/models';
+import { TeamRepository } from '../teams';
 
 export class PlayerRepository {
   private cache: NormalizedPlayer[] | null = null;
+  private teamRepository: TeamRepository;
+
+  constructor() {
+    this.teamRepository = new TeamRepository();
+  }
 
   private loadData(): NormalizedPlayer[] {
     if (this.cache) {
@@ -19,29 +28,41 @@ export class PlayerRepository {
     return this.cache;
   }
 
-  getAll(): NormalizedPlayer[] {
-    return this.loadData();
+  private toDomainPlayer(normalized: NormalizedPlayer): Player {
+    const team = this.teamRepository.getById(normalized.team);
+    const teamName = team ? team.name : `Team ${normalized.team}`;
+
+    return PlayerMapper.toDomain(normalized, teamName, normalized.elementType);
   }
 
-  getById(id: number): NormalizedPlayer | null {
+  getAll(): Player[] {
+    return this.loadData().map((player) => this.toDomainPlayer(player));
+  }
+
+  getById(id: number): Player | null {
     const players = this.loadData();
-    return players.find((player) => player.id === id) || null;
+    const player = players.find((p) => p.id === id) || null;
+    return player ? this.toDomainPlayer(player) : null;
   }
 
-  search(name: string): NormalizedPlayer[] {
+  search(name: string): Player[] {
     const players = this.loadData();
     const lowerName = name.toLowerCase();
 
-    return players.filter((player) => {
+    const filtered = players.filter((player) => {
       const fullName = `${player.firstName} ${player.secondName}`.toLowerCase();
       const webName = player.webName.toLowerCase();
 
       return fullName.includes(lowerName) || webName.includes(lowerName);
     });
+
+    return filtered.map((player) => this.toDomainPlayer(player));
   }
 
-  getByTeam(teamId: number): NormalizedPlayer[] {
+  getByTeam(teamId: number): Player[] {
     const players = this.loadData();
-    return players.filter((player) => player.team === teamId);
+    return players
+      .filter((player) => player.team === teamId)
+      .map((player) => this.toDomainPlayer(player));
   }
 }

@@ -1,1 +1,1 @@
-export { BootstrapRepository } from './bootstrap.repository';
+export { BootstrapRepository, type DomainBootstrapData } from './bootstrap.repository';

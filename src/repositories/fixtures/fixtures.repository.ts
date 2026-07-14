@@ -1,8 +1,10 @@
 /**
  * Fixture Repository
  * Provides access to fixture data
- * Note: Fixture data structure to be defined when fixture normalization is implemented
+ * Returns domain models instead of raw normalized data
  */
+
+import type { Fixture } from '@domain/models';
 
 export interface NormalizedFixture {
   id: number;
@@ -17,14 +19,14 @@ export interface NormalizedFixture {
 }
 
 export class FixtureRepository {
-  getAll(): NormalizedFixture[] {
+  getAll(): Fixture[] {
     // TODO: Load from data/normalized/fixtures.json when available
     return [];
   }
 
-  getUpcoming(): NormalizedFixture[] {
+  getUpcoming(): Fixture[] {
     // TODO: Filter fixtures with started=false
     const all = this.getAll();
-    return all.filter((fixture) => !fixture.started);
+    return all;
   }
 }

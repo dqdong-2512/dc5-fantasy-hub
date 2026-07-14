@@ -1,10 +1,13 @@
 /**
  * Team Repository
  * Provides access to team data
+ * Returns domain models instead of raw normalized data
  */
 
 import type { NormalizedTeam } from '../types';
 import { getDataFiles } from '../data-loader';
+import { TeamMapper } from '@domain/mappers';
+import type { Team } from '@domain/models';
 
 export class TeamRepository {
   private cache: NormalizedTeam[] | null = null;
@@ -19,12 +22,13 @@ export class TeamRepository {
     return this.cache;
   }
 
-  getAll(): NormalizedTeam[] {
-    return this.loadData();
+  getAll(): Team[] {
+    return this.loadData().map((team) => TeamMapper.toDomain(team));
   }
 
-  getById(id: number): NormalizedTeam | null {
+  getById(id: number): Team | null {
     const teams = this.loadData();
-    return teams.find((team) => team.id === id) || null;
+    const team = teams.find((t) => t.id === id) || null;
+    return team ? TeamMapper.toDomain(team) : null;
   }
 }
