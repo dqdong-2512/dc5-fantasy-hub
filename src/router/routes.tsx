@@ -3,19 +3,24 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { CompetitionSelection } from '../app/CompetitionSelection';
 import { Dashboard } from '../modules/dashboard/Dashboard';
 import { AppLayout } from '../layouts/AppLayout';
+import { NotFound } from '../shared/pages';
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <CompetitionSelection />,
-  },
-  {
-    path: '/:competition',
     element: <AppLayout />,
     children: [
       {
-        path: 'dashboard',
+        index: true,
+        element: <CompetitionSelection />,
+      },
+      {
+        path: ':competition/dashboard',
         element: <Dashboard />,
+      },
+      {
+        path: '*',
+        element: <NotFound />,
       },
     ],
   },
