@@ -1,5 +1,5 @@
 import React from 'react';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
 import { CompetitionSelection } from '../app/CompetitionSelection';
 import { Dashboard } from '../modules/dashboard/Dashboard';
 import { AppLayout } from '../layouts/AppLayout';
@@ -15,8 +15,30 @@ const router = createBrowserRouter([
         element: <CompetitionSelection />,
       },
       {
-        path: ':competition/dashboard',
-        element: <Dashboard />,
+        path: 'premier-league',
+        children: [
+          {
+            index: true,
+            element: <Navigate to="dashboard" replace />,
+          },
+          {
+            path: 'dashboard',
+            element: <Dashboard />,
+          },
+        ],
+      },
+      {
+        path: 'champions-league',
+        children: [
+          {
+            index: true,
+            element: <Navigate to="dashboard" replace />,
+          },
+          {
+            path: 'dashboard',
+            element: <Dashboard />,
+          },
+        ],
       },
       {
         path: '*',

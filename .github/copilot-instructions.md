@@ -317,3 +317,23 @@ Do not generate additional files unless explicitly requested.
 Do not explain.
 
 Generate only the requested implementation.
+
+# Execution Rules
+
+Never run the application.
+
+Never start the development server.
+
+Never execute npm run dev.
+
+Never execute npm run preview.
+
+Never execute npm start.
+
+Never open browser preview.
+
+Never verify by launching the application.
+
+Only modify source code.
+
+Leave execution to the developer.
