@@ -1,15 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import {
-  Box,
-  Typography,
-  Card,
-  CardContent,
-  CardActions,
-  Button,
-  Paper,
-  Stack,
-} from '@mui/material';
+import { Box, Typography, Card, CardContent, CardActions, Button } from '@mui/material';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import EventIcon from '@mui/icons-material/Event';
 import GroupIcon from '@mui/icons-material/Group';
@@ -19,9 +10,49 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import GroupsIcon from '@mui/icons-material/Groups';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
-import { PageContainer } from '@shared/components';
+import {
+  PageContainer,
+  SectionTitle,
+  StatCard,
+  WidgetContainer,
+  WidgetHeader,
+  WidgetContent,
+} from '@shared/components';
 import type { CompetitionType } from '../../types/competition';
 import { COMPETITIONS } from '../../types/competition';
+
+interface ActionCardProps {
+  icon: React.ComponentType<{ sx?: { fontSize: number; color: string; marginBottom: number } }>;
+  title: string;
+  color: string;
+  onClick: () => void;
+}
+
+const ActionCard: React.FC<ActionCardProps> = ({ icon: Icon, title, color, onClick }) => (
+  <Card
+    sx={{
+      cursor: 'pointer',
+      transition: 'transform 0.3s, box-shadow 0.3s',
+      '&:hover': {
+        transform: 'translateY(-4px)',
+        boxShadow: '0 12px 24px rgba(0, 0, 0, 0.15)',
+      },
+    }}
+    onClick={onClick}
+  >
+    <CardContent sx={{ textAlign: 'center', paddingY: 3 }}>
+      <Icon sx={{ fontSize: 40, color, marginBottom: 1 }} />
+      <Typography variant="h6" sx={{ fontWeight: 600 }}>
+        {title}
+      </Typography>
+    </CardContent>
+    <CardActions sx={{ justifyContent: 'center', paddingBottom: 2 }}>
+      <Button size="small" sx={{ color }}>
+        View
+      </Button>
+    </CardActions>
+  </Card>
+);
 
 export const Dashboard: React.FC = () => {
   const location = useLocation();
@@ -67,7 +98,7 @@ export const Dashboard: React.FC = () => {
 
   return (
     <PageContainer>
-      {/* Top Section */}
+      {/* Top Banner Section */}
       <Box sx={{ marginBottom: 4 }}>
         <Typography
           variant="h3"
@@ -108,7 +139,7 @@ export const Dashboard: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Summary Section */}
+      {/* Statistics Section */}
       <Box
         sx={{
           display: 'grid',
@@ -117,79 +148,35 @@ export const Dashboard: React.FC = () => {
           marginBottom: 4,
         }}
       >
-        <Card sx={{ height: '100%' }}>
-          <CardContent>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <EventIcon sx={{ fontSize: 32, color: '#1976d2' }} />
-              <Box sx={{ flex: 1 }}>
-                <Typography variant="body2" color="textSecondary">
-                  Current Gameweek
-                </Typography>
-                <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                  {placeholderData.gameweek}
-                </Typography>
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
-        <Card sx={{ height: '100%' }}>
-          <CardContent>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <AccessTimeIcon sx={{ fontSize: 32, color: '#ff9800' }} />
-              <Box sx={{ flex: 1 }}>
-                <Typography variant="body2" color="textSecondary">
-                  Deadline
-                </Typography>
-                <Typography variant="body1" sx={{ fontWeight: 600 }}>
-                  15:00 GMT
-                </Typography>
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
-        <Card sx={{ height: '100%' }}>
-          <CardContent>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <SportsSoccerIcon sx={{ fontSize: 32, color: '#4caf50' }} />
-              <Box sx={{ flex: 1 }}>
-                <Typography variant="body2" color="textSecondary">
-                  Total Fixtures
-                </Typography>
-                <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                  {placeholderData.totalFixtures}
-                </Typography>
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
-        <Card sx={{ height: '100%' }}>
-          <CardContent>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              <GroupsIcon sx={{ fontSize: 32, color: '#9c27b0' }} />
-              <Box sx={{ flex: 1 }}>
-                <Typography variant="body2" color="textSecondary">
-                  Total Players
-                </Typography>
-                <Typography variant="h5" sx={{ fontWeight: 600 }}>
-                  {placeholderData.totalPlayers}
-                </Typography>
-              </Box>
-            </Box>
-          </CardContent>
-        </Card>
+        <StatCard
+          icon={<EventIcon />}
+          title="Current Gameweek"
+          value={placeholderData.gameweek}
+          iconColor="#1976d2"
+        />
+        <StatCard
+          icon={<AccessTimeIcon />}
+          title="Deadline"
+          value="15:00 GMT"
+          iconColor="#ff9800"
+        />
+        <StatCard
+          icon={<SportsSoccerIcon />}
+          title="Total Fixtures"
+          value={placeholderData.totalFixtures}
+          iconColor="#4caf50"
+        />
+        <StatCard
+          icon={<GroupsIcon />}
+          title="Total Players"
+          value={placeholderData.totalPlayers}
+          iconColor="#9c27b0"
+        />
       </Box>
 
-      {/* Quick Actions */}
+      {/* Quick Actions Section */}
       <Box sx={{ marginBottom: 4 }}>
-        <Typography
-          variant="h6"
-          sx={{
-            fontWeight: 600,
-            marginBottom: 2,
-          }}
-        >
-          Quick Actions
-        </Typography>
+        <SectionTitle>Quick Actions</SectionTitle>
         <Box
           sx={{
             display: 'grid',
@@ -197,114 +184,34 @@ export const Dashboard: React.FC = () => {
             gap: 2,
           }}
         >
-          <Card
-            sx={{
-              cursor: 'pointer',
-              transition: 'transform 0.3s, box-shadow 0.3s',
-              '&:hover': {
-                transform: 'translateY(-4px)',
-                boxShadow: '0 12px 24px rgba(0, 0, 0, 0.15)',
-              },
-            }}
-          >
-            <CardContent sx={{ textAlign: 'center', paddingY: 3 }}>
-              <SportsSoccerIcon sx={{ fontSize: 40, color: '#1976d2', marginBottom: 1 }} />
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                Fixtures
-              </Typography>
-            </CardContent>
-            <CardActions sx={{ justifyContent: 'center', paddingBottom: 2 }}>
-              <Button
-                size="small"
-                onClick={() => handleNavigate('fixtures')}
-                sx={{ color: '#1976d2' }}
-              >
-                View
-              </Button>
-            </CardActions>
-          </Card>
-          <Card
-            sx={{
-              cursor: 'pointer',
-              transition: 'transform 0.3s, box-shadow 0.3s',
-              '&:hover': {
-                transform: 'translateY(-4px)',
-                boxShadow: '0 12px 24px rgba(0, 0, 0, 0.15)',
-              },
-            }}
-          >
-            <CardContent sx={{ textAlign: 'center', paddingY: 3 }}>
-              <GroupIcon sx={{ fontSize: 40, color: '#4caf50', marginBottom: 1 }} />
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                Players
-              </Typography>
-            </CardContent>
-            <CardActions sx={{ justifyContent: 'center', paddingBottom: 2 }}>
-              <Button
-                size="small"
-                onClick={() => handleNavigate('players')}
-                sx={{ color: '#4caf50' }}
-              >
-                View
-              </Button>
-            </CardActions>
-          </Card>
-          <Card
-            sx={{
-              cursor: 'pointer',
-              transition: 'transform 0.3s, box-shadow 0.3s',
-              '&:hover': {
-                transform: 'translateY(-4px)',
-                boxShadow: '0 12px 24px rgba(0, 0, 0, 0.15)',
-              },
-            }}
-          >
-            <CardContent sx={{ textAlign: 'center', paddingY: 3 }}>
-              <AnalyticsIcon sx={{ fontSize: 40, color: '#ff9800', marginBottom: 1 }} />
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                Analytics
-              </Typography>
-            </CardContent>
-            <CardActions sx={{ justifyContent: 'center', paddingBottom: 2 }}>
-              <Button
-                size="small"
-                onClick={() => handleNavigate('analytics')}
-                sx={{ color: '#ff9800' }}
-              >
-                View
-              </Button>
-            </CardActions>
-          </Card>
-          <Card
-            sx={{
-              cursor: 'pointer',
-              transition: 'transform 0.3s, box-shadow 0.3s',
-              '&:hover': {
-                transform: 'translateY(-4px)',
-                boxShadow: '0 12px 24px rgba(0, 0, 0, 0.15)',
-              },
-            }}
-          >
-            <CardContent sx={{ textAlign: 'center', paddingY: 3 }}>
-              <EmojiEventsIcon sx={{ fontSize: 40, color: '#9c27b0', marginBottom: 1 }} />
-              <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                Fantasy Game
-              </Typography>
-            </CardContent>
-            <CardActions sx={{ justifyContent: 'center', paddingBottom: 2 }}>
-              <Button
-                size="small"
-                onClick={() => handleNavigate('fantasy')}
-                sx={{ color: '#9c27b0' }}
-              >
-                View
-              </Button>
-            </CardActions>
-          </Card>
+          <ActionCard
+            icon={SportsSoccerIcon}
+            title="Fixtures"
+            color="#1976d2"
+            onClick={() => handleNavigate('fixtures')}
+          />
+          <ActionCard
+            icon={GroupIcon}
+            title="Players"
+            color="#4caf50"
+            onClick={() => handleNavigate('players')}
+          />
+          <ActionCard
+            icon={AnalyticsIcon}
+            title="Analytics"
+            color="#ff9800"
+            onClick={() => handleNavigate('analytics')}
+          />
+          <ActionCard
+            icon={EmojiEventsIcon}
+            title="Fantasy Game"
+            color="#9c27b0"
+            onClick={() => handleNavigate('fantasy')}
+          />
         </Box>
       </Box>
 
-      {/* Content Sections */}
+      {/* Main Content Grid */}
       <Box
         sx={{
           display: 'grid',
@@ -313,12 +220,10 @@ export const Dashboard: React.FC = () => {
           marginBottom: 4,
         }}
       >
-        {/* Upcoming Fixtures */}
-        <Paper sx={{ padding: 3 }}>
-          <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: 2 }}>
-            Upcoming Fixtures
-          </Typography>
-          <Stack spacing={2}>
+        {/* Upcoming Fixtures Widget */}
+        <WidgetContainer>
+          <WidgetHeader>Upcoming Fixtures</WidgetHeader>
+          <WidgetContent>
             {upcomingFixtures.map((fixture) => (
               <Box
                 key={fixture.id}
@@ -342,15 +247,13 @@ export const Dashboard: React.FC = () => {
                 <SportsSoccerIcon sx={{ color: '#1976d2' }} />
               </Box>
             ))}
-          </Stack>
-        </Paper>
+          </WidgetContent>
+        </WidgetContainer>
 
-        {/* Top Players */}
-        <Paper sx={{ padding: 3 }}>
-          <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: 2 }}>
-            Top Players
-          </Typography>
-          <Stack spacing={2}>
+        {/* Top Players Widget */}
+        <WidgetContainer>
+          <WidgetHeader>Top Players</WidgetHeader>
+          <WidgetContent>
             {topPlayers.map((player) => (
               <Box
                 key={player.id}
@@ -379,15 +282,13 @@ export const Dashboard: React.FC = () => {
                 </Typography>
               </Box>
             ))}
-          </Stack>
-        </Paper>
+          </WidgetContent>
+        </WidgetContainer>
       </Box>
 
-      {/* Latest News */}
+      {/* Latest News Section */}
       <Box sx={{ marginBottom: 4 }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: 2 }}>
-          Latest News
-        </Typography>
+        <SectionTitle>Latest News</SectionTitle>
         <Box
           sx={{
             display: 'grid',
@@ -415,30 +316,28 @@ export const Dashboard: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Charts Placeholder */}
+      {/* Analytics Placeholder Widget */}
       <Box sx={{ marginBottom: 4 }}>
-        <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: 2 }}>
-          Analytics
-        </Typography>
-        <Paper
-          sx={{
-            padding: 6,
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: '#f5f5f5',
-            borderRadius: 2,
-          }}
-        >
-          <TimelineIcon sx={{ fontSize: 48, color: '#ccc', marginBottom: 2 }} />
-          <Typography variant="h6" color="textSecondary">
-            Coming Soon
-          </Typography>
-          <Typography variant="body2" color="textSecondary" sx={{ marginTop: 1 }}>
-            Charts and advanced analytics will be available soon
-          </Typography>
-        </Paper>
+        <SectionTitle>Analytics</SectionTitle>
+        <WidgetContainer sx={{ backgroundColor: '#f5f5f5' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              paddingY: 3,
+            }}
+          >
+            <TimelineIcon sx={{ fontSize: 48, color: '#ccc', marginBottom: 2 }} />
+            <Typography variant="h6" color="textSecondary">
+              Coming Soon
+            </Typography>
+            <Typography variant="body2" color="textSecondary" sx={{ marginTop: 1 }}>
+              Charts and advanced analytics will be available soon
+            </Typography>
+          </Box>
+        </WidgetContainer>
       </Box>
     </PageContainer>
   );
