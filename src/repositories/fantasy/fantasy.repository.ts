@@ -10,6 +10,7 @@ import {
   type EntryPicksData,
   type LeagueStandingsData,
 } from '@shared/services/fpl-client';
+import { FantasyGameLiveService } from '@shared/services/fantasy-game-live.service';
 import type {
   FantasyEntry,
   FantasyManager,
@@ -19,13 +20,16 @@ import type {
   FantasyPick,
   FantasyLeagueStanding,
   FantasyLeagueStandings,
+  LiveSquadPerformance,
 } from '@domain/models';
 
 export class FantasyGameRepository {
   private fplClient: FplClient;
+  private liveService: FantasyGameLiveService;
 
   constructor() {
     this.fplClient = new FplClient();
+    this.liveService = new FantasyGameLiveService();
   }
 
   /**
@@ -70,6 +74,31 @@ export class FantasyGameRepository {
   async getLeagueStandings(leagueId: number, page?: number): Promise<FantasyLeagueStandings> {
     const data = await this.fplClient.getLeagueStandings(leagueId, page);
     return this.mapLeagueStandingsToModel(data);
+  }
+
+  /**
+   * Get live squad performance for a gameweek
+   * Merges picks with live event data
+   */
+  async getLiveSquadPerformance(
+    entryId: number,
+    gameweekId: number,
+    playerMap?: Map<number, any>
+  ): Promise<LiveSquadPerformance> {
+    // Fetch picks and live data in parallel
+    const [picks, eventLiveData] = await Promise.all([
+      this.getEntryPicks(entryId, gameweekId),
+      this.fplClient.getEventLive(gameweekId),
+    ]);
+
+    // Calculate squad performance
+    return this.liveService.calculateSquadPerformance(
+      entryId,
+      gameweekId,
+      picks,
+      eventLiveData,
+      playerMap
+    );
   }
 
   // Mappers

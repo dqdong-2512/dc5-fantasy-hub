@@ -5,8 +5,8 @@
  */
 
 import React, { useState, useEffect, useMemo } from 'react';
-import { Box, Tabs, Tab, Stack, Alert } from '@mui/material';
-import type { FantasyGameweekHistory, FantasyGameweekPicks } from '@domain/models';
+import { Box, Tabs, Tab, Stack, Alert, FormControl, Select, MenuItem } from '@mui/material';
+import type { FantasyGameweekHistory, LiveSquadPerformance } from '@domain/models';
 import { FantasyGameRepository } from '@repositories/fantasy';
 import { BootstrapRepository } from '@repositories/bootstrap';
 import { FantasyGameHeader, FantasyOverview, MyTeam, Leagues } from '../components';
@@ -24,14 +24,29 @@ export interface FantasyWorkspaceProps {
 export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.ReactElement {
   const [activeTab, setActiveTab] = useState(0);
   const [history, setHistory] = useState<FantasyGameweekHistory[] | null>(null);
-  const [picks, setPicks] = useState<FantasyGameweekPicks | null>(null);
+  const [liveSquadPerformance, setLiveSquadPerformance] = useState<LiveSquadPerformance | null>(
+    null
+  );
   const [isLoadingHistory, setIsLoadingHistory] = useState(false);
-  const [isLoadingPicks, setIsLoadingPicks] = useState(false);
+  const [isLoadingLive, setIsLoadingLive] = useState(false);
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
-  const [picksError, setPicksError] = useState<string | null>(null);
+  const [selectedGameweek, setSelectedGameweek] = useState<number | null>(null);
+  const [liveError, setLiveError] = useState<string | null>(null);
+  const [isRefreshing, setIsRefreshing] = useState(false);
 
   const repository = new FantasyGameRepository();
   const bootstrapRepository = useMemo(() => new BootstrapRepository(), []);
+  const bootstrap = useMemo(() => bootstrapRepository.getBootstrap(), [bootstrapRepository]);
+
+  // Determine initial gameweek (current or most recent finished)
+  const initialGameweek = useMemo(() => {
+    let gw = bootstrap.gameweeks.find((g) => !g.finished);
+    if (!gw && bootstrap.gameweeks.length > 0) {
+      gw = bootstrap.gameweeks[bootstrap.gameweeks.length - 1];
+    }
+    return gw?.id ?? null;
+  }, [bootstrap]);
 
   // Load history
   useEffect(() => {
@@ -52,41 +67,39 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
     loadHistory();
   }, [gameState.connectedEntryId, repository]);
 
-  // Load picks for relevant gameweek
+  // Initialize selected gameweek
   useEffect(() => {
-    if (!gameState.connectedEntryId) return;
+    if (selectedGameweek === null && initialGameweek !== null) {
+      setSelectedGameweek(initialGameweek);
+    }
+  }, [initialGameweek, selectedGameweek]);
 
-    const loadPicks = async () => {
+  // Load live squad performance for selected gameweek
+  useEffect(() => {
+    if (!gameState.connectedEntryId || selectedGameweek === null) return;
+
+    const loadLiveSquad = async () => {
       try {
-        setIsLoadingPicks(true);
-        setPicksError(null);
+        setIsLoadingLive(true);
+        setLiveError(null);
 
-        // Determine relevant gameweek
-        const bootstrap = bootstrapRepository.getBootstrap();
-        let targetGameweek = bootstrap.gameweeks.find((gw) => !gw.finished);
-        if (!targetGameweek && bootstrap.gameweeks.length > 0) {
-          targetGameweek = bootstrap.gameweeks[bootstrap.gameweeks.length - 1];
-        }
-
-        if (!targetGameweek) {
-          setPicksError('No gameweek data available');
-          return;
-        }
-
-        const picksData = await repository.getEntryPicks(
+        const performance = await repository.getLiveSquadPerformance(
           gameState.connectedEntryId!,
-          targetGameweek.id
+          selectedGameweek,
+          new Map() // Could enrich with player map if available
         );
-        setPicks(picksData);
+
+        setLiveSquadPerformance(performance);
+        setLastUpdated(new Date());
       } catch (err) {
-        setPicksError(err instanceof Error ? err.message : 'Failed to load picks');
+        setLiveError(err instanceof Error ? err.message : 'Failed to load live data');
       } finally {
-        setIsLoadingPicks(false);
+        setIsLoadingLive(false);
       }
     };
 
-    loadPicks();
-  }, [gameState.connectedEntryId, bootstrapRepository, repository]);
+    loadLiveSquad();
+  }, [gameState.connectedEntryId, selectedGameweek, repository]);
 
   const handleChangeTeam = () => {
     gameState.disconnectEntry();
@@ -94,6 +107,26 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
 
   const handleDisconnect = () => {
     gameState.disconnectEntry();
+  };
+
+  const handleRefreshLive = async () => {
+    if (isRefreshing || !gameState.connectedEntryId || selectedGameweek === null) return;
+
+    try {
+      setIsRefreshing(true);
+      const performance = await repository.getLiveSquadPerformance(
+        gameState.connectedEntryId,
+        selectedGameweek,
+        new Map()
+      );
+      setLiveSquadPerformance(performance);
+      setLastUpdated(new Date());
+      setLiveError(null);
+    } catch (err) {
+      setLiveError(err instanceof Error ? err.message : 'Failed to refresh live data');
+    } finally {
+      setIsRefreshing(false);
+    }
   };
 
   return (
@@ -142,7 +175,36 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
         )}
 
         {/* My Team Tab */}
-        {activeTab === 1 && <MyTeam picks={picks} isLoading={isLoadingPicks} error={picksError} />}
+        {activeTab === 1 && (
+          <Stack spacing={ThemeTokens.spacing.lg}>
+            {/* Gameweek Selector */}
+            <FormControl size="small" sx={{ minWidth: 150 }}>
+              <Select
+                value={selectedGameweek ?? ''}
+                onChange={(e) => setSelectedGameweek(Number(e.target.value))}
+                displayEmpty
+              >
+                {bootstrap.gameweeks.map((gw) => (
+                  <MenuItem key={gw.id} value={gw.id}>
+                    GW {gw.id}
+                    {gw.finished && ' — Final'}
+                    {!gw.finished && ' — Live'}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            {/* Live squad performance */}
+            <MyTeam
+              livePerformance={liveSquadPerformance}
+              isLoading={isLoadingLive}
+              error={liveError}
+              lastUpdated={lastUpdated}
+              onRefresh={handleRefreshLive}
+              isRefreshing={isRefreshing}
+            />
+          </Stack>
+        )}
 
         {/* Leagues Tab */}
         {activeTab === 2 && (

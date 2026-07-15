@@ -257,6 +257,48 @@ export interface LeagueStandingsData {
   };
 }
 
+/**
+ * Live event data for a gameweek
+ * Contains real-time player performance stats
+ */
+export interface LivePlayerStats {
+  id: number;
+  stats: {
+    minutes: number;
+    goals_scored: number;
+    assists: number;
+    clean_sheets: number;
+    goals_conceded: number;
+    own_goals: number;
+    penalties_saved: number;
+    penalties_missed: number;
+    yellow_cards: number;
+    red_cards: number;
+    saves: number;
+    bonus: number;
+    bps: number;
+    total_points: number;
+    in_lineups: number;
+  };
+  explain: Array<{
+    fixture: number;
+    points: number;
+    total: number;
+    event: number;
+  }>;
+}
+
+export interface EventLiveData {
+  state: 'live' | 'pre' | 'post' | 'unknown';
+  status: Array<{
+    id: number;
+    match_event: number | null;
+    league_match: number | null;
+    event: number;
+  }>;
+  elements: LivePlayerStats[];
+}
+
 // API Endpoints
 const ENDPOINTS = {
   BOOTSTRAP_STATIC: '/bootstrap-static/',
@@ -288,9 +330,12 @@ export class FplClient {
     return this.httpClient.get<unknown>(`${ENDPOINTS.ELEMENT_SUMMARY}${elementId}/`);
   }
 
-  async getEventLive(eventId: number): Promise<unknown> {
-    // Placeholder for future implementation
-    return this.httpClient.get<unknown>(`${ENDPOINTS.EVENT_LIVE}${eventId}/`);
+  /**
+   * Get live stats for all players in a gameweek
+   * Real-time player performance data
+   */
+  async getEventLive(eventId: number): Promise<EventLiveData> {
+    return this.httpClient.get<EventLiveData>(`/event/${eventId}/live/`);
   }
 
   // Personal Entry Endpoints

@@ -13,3 +13,10 @@ export type {
   FantasyLeagueStanding,
   FantasyLeagueStandings,
 } from './FantasyEntry';
+export {
+  PlayerMatchStatus,
+  type LivePlayerStats,
+  type LiveSquadPlayer,
+  type LiveGameweekSummary,
+  type LiveSquadPerformance,
+} from './LiveSquadPerformance';
