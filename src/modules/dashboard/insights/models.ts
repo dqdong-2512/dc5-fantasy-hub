@@ -6,13 +6,7 @@
 export type InsightSeverity = 'info' | 'positive' | 'warning' | 'critical';
 
 export type InsightType =
-  | 'deadline'
-  | 'form'
-  | 'ownership'
-  | 'performance'
-  | 'availability'
-  | 'fixture'
-  | 'transfer';
+  'deadline' | 'form' | 'ownership' | 'performance' | 'availability' | 'fixture' | 'transfer';
 
 /**
  * Core insight model

@@ -9,12 +9,14 @@ import teamsData from '../../data/seasons/2025-2026/normalized/teams.json';
 import playersData from '../../data/seasons/2025-2026/normalized/players.json';
 import gameweeksData from '../../data/seasons/2025-2026/normalized/gameweeks.json';
 import elementTypesData from '../../data/seasons/2025-2026/normalized/element-types.json';
+import fixturesData from '../../data/seasons/2025-2026/normalized/fixtures.json';
 
 export interface DataFiles {
   teams: unknown;
   players: unknown;
   gameweeks: unknown;
   elementTypes: unknown;
+  fixtures: unknown;
 }
 
 /**
@@ -34,6 +36,7 @@ export function getDataFiles(): DataFiles {
     players: playersData,
     gameweeks: gameweeksData,
     elementTypes: elementTypesData,
+    fixtures: fixturesData,
   };
 }
 
@@ -50,6 +53,7 @@ export function getDataFilesBySeason(season: string): DataFiles | null {
       players: playersData,
       gameweeks: gameweeksData,
       elementTypes: elementTypesData,
+      fixtures: fixturesData,
     };
   }
 

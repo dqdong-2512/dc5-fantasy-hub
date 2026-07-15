@@ -6,11 +6,7 @@
 
 import type { Player } from '../../../domain/models/Player';
 import type { Gameweek } from '../../../domain/models/Gameweek';
-import type {
-  CommandCenterData,
-  DeadlineInsight,
-  PlayerRecommendation,
-} from './models';
+import type { CommandCenterData, DeadlineInsight, PlayerRecommendation } from './models';
 
 // Thresholds for insight calculations (centralized constants)
 const INSIGHT_THRESHOLDS = {
@@ -34,9 +30,7 @@ const INSIGHT_THRESHOLDS = {
 /**
  * Calculate deadline insight
  */
-export function calculateDeadlineInsight(
-  gameweek: Gameweek | null,
-): DeadlineInsight | null {
+export function calculateDeadlineInsight(gameweek: Gameweek | null): DeadlineInsight | null {
   if (!gameweek) return null;
 
   const now = new Date();
@@ -82,7 +76,7 @@ function calculatePlayerWatchScore(player: Player): number {
  */
 export function generatePlayersToWatch(
   players: Player[],
-  limit: number = INSIGHT_THRESHOLDS.PLAYERS_TO_WATCH_COUNT,
+  limit: number = INSIGHT_THRESHOLDS.PLAYERS_TO_WATCH_COUNT
 ): PlayerRecommendation[] {
   return players
     .filter((p) => p.form > 0 && p.totalPoints > 0)
@@ -110,14 +104,14 @@ export function generatePlayersToWatch(
  */
 export function generateDifferentialWatch(
   players: Player[],
-  limit: number = INSIGHT_THRESHOLDS.DIFFERENTIAL_COUNT,
+  limit: number = INSIGHT_THRESHOLDS.DIFFERENTIAL_COUNT
 ): PlayerRecommendation[] {
   return players
     .filter(
       (p) =>
         p.form >= INSIGHT_THRESHOLDS.DIFFERENTIAL_FORM_MIN &&
         p.ownership <= INSIGHT_THRESHOLDS.LOW_OWNERSHIP_MAX &&
-        p.minutesPlayed >= INSIGHT_THRESHOLDS.MEANINGFUL_MINUTES_MIN,
+        p.minutesPlayed >= INSIGHT_THRESHOLDS.MEANINGFUL_MINUTES_MIN
     )
     .map((p) => ({
       playerId: p.id,
@@ -141,7 +135,7 @@ export function generateDifferentialWatch(
  */
 export function generateOwnershipWatch(
   players: Player[],
-  limit: number = INSIGHT_THRESHOLDS.TOP_OWNED_COUNT,
+  limit: number = INSIGHT_THRESHOLDS.TOP_OWNED_COUNT
 ): PlayerRecommendation[] {
   return players
     .filter((p) => p.ownership >= INSIGHT_THRESHOLDS.HIGH_OWNERSHIP_MIN)
@@ -165,9 +159,7 @@ export function generateOwnershipWatch(
  * Generate availability watch
  * Players with status/availability issues
  */
-export function generateAvailabilityWatch(
-  players: Player[],
-): PlayerRecommendation[] {
+export function generateAvailabilityWatch(players: Player[]): PlayerRecommendation[] {
   return players
     .filter(
       (p) =>
@@ -176,7 +168,7 @@ export function generateAvailabilityWatch(
           p.status.toLowerCase() === 'unavailable' ||
           p.status.toLowerCase().includes('injury') ||
           p.status.toLowerCase().includes('doubt') ||
-          p.status.toLowerCase().includes('out')),
+          p.status.toLowerCase().includes('out'))
     )
     .map((p) => ({
       playerId: p.id,
@@ -198,7 +190,7 @@ export function generateAvailabilityWatch(
  */
 export function compileCommandCenterData(
   gameweek: Gameweek | null,
-  players: Player[],
+  players: Player[]
 ): CommandCenterData {
   const deadline = calculateDeadlineInsight(gameweek);
   const playersToWatch = generatePlayersToWatch(players);

@@ -8,7 +8,7 @@
 export { BootstrapRepository, type DomainBootstrapData } from './bootstrap';
 export { TeamRepository } from './teams';
 export { PlayerRepository } from './players';
-export { FixtureRepository, type NormalizedFixture } from './fixtures';
+export { FixtureRepository } from './fixtures';
 
 // Internal normalized types - not recommended for external use
 // These are exported only for internal repository implementation
@@ -17,5 +17,6 @@ export type {
   NormalizedPlayer,
   NormalizedGameweek,
   NormalizedElementType,
+  NormalizedFixture,
   BootstrapData,
 } from './types';

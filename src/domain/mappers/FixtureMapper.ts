@@ -1,21 +1,26 @@
-import type { NormalizedFixture } from '../../repositories/fixtures';
+import type { NormalizedFixture } from '../../repositories/types';
 import { FixtureStatus } from '../enums';
 import type { Fixture } from '../models';
+import type { Team } from '../models';
 
 /**
  * Maps normalized fixture data to domain fixture model
  */
 export class FixtureMapper {
-  static toDomain(fixture: NormalizedFixture, homeTeamName: string, awayTeamName: string): Fixture {
+  static toDomain(fixture: NormalizedFixture, homeTeam: Team, awayTeam: Team): Fixture {
     return {
       id: fixture.id,
-      gameweek: fixture.event,
-      homeTeam: homeTeamName,
-      awayTeam: awayTeamName,
+      gameweek: fixture.gameweek,
+      homeTeam,
+      awayTeam,
       homeTeamScore: fixture.homeTeamScore,
       awayTeamScore: fixture.awayTeamScore,
       status: this.statusFromFixture(fixture),
-      kickoffTime: fixture.kickoff_time,
+      started: fixture.started,
+      finished: fixture.finished,
+      kickoffTime: fixture.kickoffTime,
+      homeDifficulty: fixture.homeDifficulty,
+      awayDifficulty: fixture.awayDifficulty,
     };
   }
 

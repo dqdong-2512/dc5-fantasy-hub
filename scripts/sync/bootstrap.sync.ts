@@ -1,6 +1,6 @@
 /**
  * Bootstrap Synchronizer
- * Downloads bootstrap-static data from FPL API and saves to raw data folder
+ * Downloads bootstrap-static and fixtures data from FPL API and saves to raw data folder
  */
 
 import fs from 'fs';
@@ -18,17 +18,23 @@ export async function syncBootstrap(): Promise<void> {
 
   try {
     const client = new FplClient();
-    const data = await client.getBootstrap();
+    const [bootstrapData, fixturesData] = await Promise.all([
+      client.getBootstrap(),
+      client.getFixtures(),
+    ]);
 
     // Ensure data directory exists
     if (!fs.existsSync(dataDir)) {
       fs.mkdirSync(dataDir, { recursive: true });
     }
 
-    const filePath = path.join(dataDir, 'bootstrap-static.json');
-    fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-
+    const bootstrapPath = path.join(dataDir, 'bootstrap-static.json');
+    fs.writeFileSync(bootstrapPath, JSON.stringify(bootstrapData, null, 2));
     console.log('Bootstrap downloaded.');
+
+    const fixturesPath = path.join(dataDir, 'fixtures.json');
+    fs.writeFileSync(fixturesPath, JSON.stringify(fixturesData, null, 2));
+    console.log('Fixtures downloaded.');
   } catch (error) {
     throw new Error(
       `Failed to sync bootstrap: ${error instanceof Error ? error.message : String(error)}`

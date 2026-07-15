@@ -112,6 +112,27 @@ export interface GameSettings {
   timezone: string;
 }
 
+export interface FPLFixture {
+  id: number;
+  event: number;
+  home_team: number;
+  away_team: number;
+  home_team_score: number | null;
+  away_team_score: number | null;
+  started: boolean;
+  finished: boolean;
+  kickoff_time: string;
+  home_difficulty: number;
+  away_difficulty: number;
+  pulse_id: number;
+  team_h: number;
+  team_a: number;
+  team_h_score: number | null;
+  team_a_score: number | null;
+  team_h_difficulty: number;
+  team_a_difficulty: number;
+}
+
 // API Endpoints
 const ENDPOINTS = {
   BOOTSTRAP_STATIC: '/bootstrap-static/',
@@ -134,9 +155,8 @@ export class FplClient {
     return this.httpClient.get<BootstrapStatic>(ENDPOINTS.BOOTSTRAP_STATIC);
   }
 
-  async getFixtures(): Promise<unknown> {
-    // Placeholder for future implementation
-    return this.httpClient.get<unknown>(ENDPOINTS.FIXTURES);
+  async getFixtures(): Promise<FPLFixture[]> {
+    return this.httpClient.get<FPLFixture[]>(ENDPOINTS.FIXTURES);
   }
 
   async getElementSummary(elementId: number): Promise<unknown> {

@@ -12,6 +12,7 @@ import type {
   Team,
   Player,
   ElementType,
+  FPLFixture,
 } from '../../src/shared/services/fpl-client';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -58,6 +59,20 @@ interface NormalizedElementType {
   name: string;
   pluralName: string;
   singularName: string;
+}
+
+interface NormalizedFixture {
+  id: number;
+  gameweek: number;
+  homeTeamId: number;
+  awayTeamId: number;
+  homeTeamScore: number | null;
+  awayTeamScore: number | null;
+  started: boolean;
+  finished: boolean;
+  kickoffTime: string;
+  homeDifficulty: number;
+  awayDifficulty: number;
 }
 
 export async function normalize(): Promise<void> {
@@ -142,6 +157,32 @@ export async function normalize(): Promise<void> {
       JSON.stringify(normalizedElementTypes, null, 2)
     );
     console.log('Element types generated.');
+
+    // Normalize fixtures
+    const fixturesPath = path.join(rawDataDir, 'fixtures.json');
+    if (fs.existsSync(fixturesPath)) {
+      const fixturesData: FPLFixture[] = JSON.parse(fs.readFileSync(fixturesPath, 'utf-8'));
+      const normalizedFixtures: NormalizedFixture[] = fixturesData.map((fixture: FPLFixture) => ({
+        id: fixture.id,
+        gameweek: fixture.event,
+        homeTeamId: fixture.home_team,
+        awayTeamId: fixture.away_team,
+        homeTeamScore: fixture.home_team_score,
+        awayTeamScore: fixture.away_team_score,
+        started: fixture.started,
+        finished: fixture.finished,
+        kickoffTime: fixture.kickoff_time,
+        homeDifficulty: fixture.home_difficulty,
+        awayDifficulty: fixture.away_difficulty,
+      }));
+      fs.writeFileSync(
+        path.join(normalizedDataDir, 'fixtures.json'),
+        JSON.stringify(normalizedFixtures, null, 2)
+      );
+      console.log('Fixtures generated.');
+    } else {
+      console.log('Fixtures data not found, skipping fixtures normalization.');
+    }
   } catch (error) {
     throw new Error(
       `Failed to normalize data: ${error instanceof Error ? error.message : String(error)}`

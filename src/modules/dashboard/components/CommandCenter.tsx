@@ -86,8 +86,7 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ player, hideReason }) => (
         variant="body2"
         sx={{
           fontWeight: 600,
-          color:
-            player.form > 6.5 ? '#4caf50' : player.form > 4 ? '#ff9800' : '#999',
+          color: player.form > 6.5 ? '#4caf50' : player.form > 4 ? '#ff9800' : '#999',
         }}
       >
         {player.form.toFixed(1)}
@@ -132,7 +131,14 @@ export const CommandCenter: React.FC = () => {
     return null;
   }
 
-  const { deadline, playersToWatch, differentials, topOwned, hasUnavailableData, unavailablePlayers } = commandCenterData;
+  const {
+    deadline,
+    playersToWatch,
+    differentials,
+    topOwned,
+    hasUnavailableData,
+    unavailablePlayers,
+  } = commandCenterData;
 
   if (!deadline) {
     return null;
@@ -171,9 +177,7 @@ export const CommandCenter: React.FC = () => {
               {deadline.severity === 'warning' && (
                 <WarningIcon sx={{ color: '#ff9800', fontSize: 20 }} />
               )}
-              {deadline.severity === 'info' && (
-                <InfoIcon sx={{ color: '#1976d2', fontSize: 20 }} />
-              )}
+              {deadline.severity === 'info' && <InfoIcon sx={{ color: '#1976d2', fontSize: 20 }} />}
               <Typography
                 variant="h6"
                 sx={{
@@ -204,7 +208,11 @@ export const CommandCenter: React.FC = () => {
             <Typography variant="h6" sx={{ fontWeight: 700, marginBottom: 1 }}>
               Players to Watch
             </Typography>
-            <Typography variant="caption" color="textSecondary" sx={{ display: 'block', marginBottom: 1 }}>
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              sx={{ display: 'block', marginBottom: 1 }}
+            >
               Based on current form and season performance
             </Typography>
             <TableContainer sx={{ borderRadius: 1, backgroundColor: '#fafafa' }}>
@@ -240,7 +248,11 @@ export const CommandCenter: React.FC = () => {
             <Typography variant="h6" sx={{ fontWeight: 700, marginBottom: 1 }}>
               Differential Watch
             </Typography>
-            <Typography variant="caption" color="textSecondary" sx={{ display: 'block', marginBottom: 1 }}>
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              sx={{ display: 'block', marginBottom: 1 }}
+            >
               Low ownership + strong form + meaningful minutes
             </Typography>
             <TableContainer sx={{ borderRadius: 1, backgroundColor: '#fafafa' }}>
@@ -276,7 +288,11 @@ export const CommandCenter: React.FC = () => {
             <Typography variant="h6" sx={{ fontWeight: 700, marginBottom: 1 }}>
               Most Selected
             </Typography>
-            <Typography variant="caption" color="textSecondary" sx={{ display: 'block', marginBottom: 1 }}>
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              sx={{ display: 'block', marginBottom: 1 }}
+            >
               Popular template players
             </Typography>
             <TableContainer sx={{ borderRadius: 1, backgroundColor: '#fafafa' }}>
@@ -297,7 +313,10 @@ export const CommandCenter: React.FC = () => {
                 </TableHead>
                 <TableBody>
                   {topOwned.map((player: PlayerRecommendation) => (
-                    <TableRow key={player.playerId} sx={{ '&:hover': { backgroundColor: '#f0f0f0' } }}>
+                    <TableRow
+                      key={player.playerId}
+                      sx={{ '&:hover': { backgroundColor: '#f0f0f0' } }}
+                    >
                       <TableCell sx={{ maxWidth: 200 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                           <Avatar
@@ -327,11 +346,7 @@ export const CommandCenter: React.FC = () => {
                           sx={{
                             fontWeight: 600,
                             color:
-                              player.form > 6.5
-                                ? '#4caf50'
-                                : player.form > 4
-                                  ? '#ff9800'
-                                  : '#999',
+                              player.form > 6.5 ? '#4caf50' : player.form > 4 ? '#ff9800' : '#999',
                           }}
                         >
                           {player.form.toFixed(1)}

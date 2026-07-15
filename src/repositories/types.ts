@@ -59,6 +59,20 @@ export interface NormalizedElementType {
   singularName: string;
 }
 
+export interface NormalizedFixture {
+  id: number;
+  gameweek: number;
+  homeTeamId: number;
+  awayTeamId: number;
+  homeTeamScore: number | null;
+  awayTeamScore: number | null;
+  started: boolean;
+  finished: boolean;
+  kickoffTime: string;
+  homeDifficulty: number;
+  awayDifficulty: number;
+}
+
 export interface BootstrapData {
   teams: NormalizedTeam[];
   players: NormalizedPlayer[];

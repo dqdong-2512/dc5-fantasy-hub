@@ -1,1 +1,1 @@
-export { FixtureRepository, type NormalizedFixture } from './fixtures.repository';
+export { FixtureRepository } from './fixtures.repository';
