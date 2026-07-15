@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Typography, Card, CardContent, CardActions, Button } from '@mui/material';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
@@ -20,6 +20,10 @@ import {
 } from '@shared/components';
 import type { CompetitionType } from '../../types/competition';
 import { COMPETITIONS } from '../../types/competition';
+import { BootstrapRepository } from '@repositories/bootstrap';
+import { PlayerRepository } from '@repositories/players';
+import { TeamRepository } from '@repositories/teams';
+import type { Position } from '@domain/enums';
 
 interface ActionCardProps {
   icon: React.ComponentType<{ sx?: { fontSize: number; color: string; marginBottom: number } }>;
@@ -61,6 +65,59 @@ export const Dashboard: React.FC = () => {
   const competition = pathSegments[0] as CompetitionType;
   const competitionInfo = COMPETITIONS[competition];
 
+  // Load real data from repositories (must be before early returns)
+  const dashboardData = useMemo(() => {
+    try {
+      const bootstrapRepository = new BootstrapRepository();
+      const playerRepository = new PlayerRepository();
+      const teamRepository = new TeamRepository();
+
+      const currentGameweek = bootstrapRepository.getCurrentGameweek();
+      const players = playerRepository.getAll();
+      const teams = teamRepository.getAll();
+
+      return {
+        gameweek: currentGameweek?.id || 0,
+        season: '2025/26',
+        deadline: currentGameweek?.deadline || 'N/A',
+        totalPlayers: players.length,
+        totalTeams: teams.length,
+        totalFixtures: 0, // Will be available when fixture data is added
+      };
+    } catch (error) {
+      console.error('Error loading dashboard data:', error);
+      return {
+        gameweek: 0,
+        season: '2025/26',
+        deadline: 'N/A',
+        totalPlayers: 0,
+        totalTeams: 0,
+        totalFixtures: 0,
+      };
+    }
+  }, []);
+
+  // Load top players by form (must be before early returns)
+  const topPlayers = useMemo(() => {
+    try {
+      const playerRepository = new PlayerRepository();
+      const allPlayers = playerRepository.getAll();
+      return allPlayers
+        .sort((a: (typeof allPlayers)[0], b: (typeof allPlayers)[0]) => b.form - a.form)
+        .slice(0, 3)
+        .map((player: (typeof allPlayers)[0]) => ({
+          id: player.id,
+          name: player.displayName,
+          club: player.club,
+          position: player.position,
+          rating: player.form,
+        }));
+    } catch (error) {
+      console.error('Error loading top players:', error);
+      return [];
+    }
+  }, []);
+
   if (!competitionInfo) {
     return (
       <Box>
@@ -75,26 +132,21 @@ export const Dashboard: React.FC = () => {
     navigate(`/${competition}/${path}`);
   };
 
-  // Placeholder data
-  const placeholderData = {
-    gameweek: 15,
-    season: '2025/26',
-    deadline: 'Saturday, 15:00 GMT',
-    totalFixtures: 32,
-    totalPlayers: 428,
+  // Format deadline for display
+  const formatDeadline = (deadline: string | Date): string => {
+    if (!deadline) return 'N/A';
+    if (typeof deadline === 'string') return deadline;
+    if (deadline instanceof Date) {
+      return deadline.toLocaleString('en-GB', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+    }
+    return 'N/A';
   };
-
-  const upcomingFixtures = [
-    { id: 1, home: 'Team A', away: 'Team B', kickoff: '15:00' },
-    { id: 2, home: 'Team C', away: 'Team D', kickoff: '17:30' },
-    { id: 3, home: 'Team E', away: 'Team F', kickoff: '20:00' },
-  ];
-
-  const topPlayers = [
-    { id: 1, name: 'Player One', club: 'Club A', position: 'Forward', rating: 8.5 },
-    { id: 2, name: 'Player Two', club: 'Club B', position: 'Midfielder', rating: 8.2 },
-    { id: 3, name: 'Player Three', club: 'Club C', position: 'Defender', rating: 7.9 },
-  ];
 
   return (
     <PageContainer>
@@ -117,7 +169,7 @@ export const Dashboard: React.FC = () => {
               Current Gameweek
             </Typography>
             <Typography variant="h5" sx={{ fontWeight: 600 }}>
-              GW {placeholderData.gameweek}
+              GW {dashboardData.gameweek}
             </Typography>
           </Box>
           <Box>
@@ -125,7 +177,7 @@ export const Dashboard: React.FC = () => {
               Season
             </Typography>
             <Typography variant="h5" sx={{ fontWeight: 600 }}>
-              {placeholderData.season}
+              {dashboardData.season}
             </Typography>
           </Box>
           <Box>
@@ -133,7 +185,7 @@ export const Dashboard: React.FC = () => {
               Deadline
             </Typography>
             <Typography variant="h5" sx={{ fontWeight: 600 }}>
-              {placeholderData.deadline}
+              {formatDeadline(dashboardData.deadline)}
             </Typography>
           </Box>
         </Box>
@@ -151,25 +203,25 @@ export const Dashboard: React.FC = () => {
         <StatCard
           icon={<EventIcon />}
           title="Current Gameweek"
-          value={placeholderData.gameweek}
+          value={dashboardData.gameweek}
           iconColor="#1976d2"
         />
         <StatCard
           icon={<AccessTimeIcon />}
-          title="Deadline"
-          value="15:00 GMT"
+          title="Total Teams"
+          value={dashboardData.totalTeams}
           iconColor="#ff9800"
         />
         <StatCard
           icon={<SportsSoccerIcon />}
           title="Total Fixtures"
-          value={placeholderData.totalFixtures}
+          value={dashboardData.totalFixtures}
           iconColor="#4caf50"
         />
         <StatCard
           icon={<GroupsIcon />}
           title="Total Players"
-          value={placeholderData.totalPlayers}
+          value={dashboardData.totalPlayers}
           iconColor="#9c27b0"
         />
       </Box>
@@ -224,9 +276,9 @@ export const Dashboard: React.FC = () => {
         <WidgetContainer>
           <WidgetHeader>Upcoming Fixtures</WidgetHeader>
           <WidgetContent>
-            {upcomingFixtures.map((fixture) => (
+            {[1, 2, 3].map((item) => (
               <Box
-                key={fixture.id}
+                key={item}
                 sx={{
                   padding: 2,
                   backgroundColor: '#fafafa',
@@ -238,10 +290,10 @@ export const Dashboard: React.FC = () => {
               >
                 <Box sx={{ flex: 1 }}>
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {fixture.home} vs {fixture.away}
+                    Team A vs Team B
                   </Typography>
                   <Typography variant="caption" color="textSecondary">
-                    Kickoff: {fixture.kickoff}
+                    Kickoff: 15:00
                   </Typography>
                 </Box>
                 <SportsSoccerIcon sx={{ color: '#1976d2' }} />
@@ -254,34 +306,42 @@ export const Dashboard: React.FC = () => {
         <WidgetContainer>
           <WidgetHeader>Top Players</WidgetHeader>
           <WidgetContent>
-            {topPlayers.map((player) => (
-              <Box
-                key={player.id}
-                sx={{
-                  padding: 2,
-                  backgroundColor: '#fafafa',
-                  borderRadius: 1,
-                }}
-              >
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 1 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {player.name}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{
-                      fontWeight: 600,
-                      color: '#4caf50',
-                    }}
-                  >
-                    {player.rating}
+            {topPlayers.map(
+              (player: {
+                id: number;
+                name: string;
+                club: string;
+                position: Position;
+                rating: number;
+              }) => (
+                <Box
+                  key={player.id}
+                  sx={{
+                    padding: 2,
+                    backgroundColor: '#fafafa',
+                    borderRadius: 1,
+                  }}
+                >
+                  <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 1 }}>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      {player.name}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      sx={{
+                        fontWeight: 600,
+                        color: '#4caf50',
+                      }}
+                    >
+                      {player.rating}
+                    </Typography>
+                  </Box>
+                  <Typography variant="caption" color="textSecondary">
+                    {player.club} • {player.position}
                   </Typography>
                 </Box>
-                <Typography variant="caption" color="textSecondary">
-                  {player.club} • {player.position}
-                </Typography>
-              </Box>
-            ))}
+              )
+            )}
           </WidgetContent>
         </WidgetContainer>
       </Box>
