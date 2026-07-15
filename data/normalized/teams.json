@@ -1,1 +1,162 @@
-[]
+[
+  {
+    "id": 1,
+    "name": "Arsenal",
+    "shortName": "ARS",
+    "code": 3,
+    "strength": 5,
+    "position": 1
+  },
+  {
+    "id": 2,
+    "name": "Aston Villa",
+    "shortName": "AVL",
+    "code": 7,
+    "strength": 3,
+    "position": 4
+  },
+  {
+    "id": 3,
+    "name": "Burnley",
+    "shortName": "BUR",
+    "code": 90,
+    "strength": 2,
+    "position": 19
+  },
+  {
+    "id": 4,
+    "name": "Bournemouth",
+    "shortName": "BOU",
+    "code": 91,
+    "strength": 3,
+    "position": 6
+  },
+  {
+    "id": 5,
+    "name": "Brentford",
+    "shortName": "BRE",
+    "code": 94,
+    "strength": 3,
+    "position": 9
+  },
+  {
+    "id": 6,
+    "name": "Brighton",
+    "shortName": "BHA",
+    "code": 36,
+    "strength": 3,
+    "position": 8
+  },
+  {
+    "id": 7,
+    "name": "Chelsea",
+    "shortName": "CHE",
+    "code": 8,
+    "strength": 4,
+    "position": 10
+  },
+  {
+    "id": 8,
+    "name": "Crystal Palace",
+    "shortName": "CRY",
+    "code": 31,
+    "strength": 3,
+    "position": 15
+  },
+  {
+    "id": 9,
+    "name": "Everton",
+    "shortName": "EVE",
+    "code": 11,
+    "strength": 3,
+    "position": 13
+  },
+  {
+    "id": 10,
+    "name": "Fulham",
+    "shortName": "FUL",
+    "code": 54,
+    "strength": 3,
+    "position": 11
+  },
+  {
+    "id": 11,
+    "name": "Leeds",
+    "shortName": "LEE",
+    "code": 2,
+    "strength": 3,
+    "position": 14
+  },
+  {
+    "id": 12,
+    "name": "Liverpool",
+    "shortName": "LIV",
+    "code": 14,
+    "strength": 4,
+    "position": 5
+  },
+  {
+    "id": 13,
+    "name": "Man City",
+    "shortName": "MCI",
+    "code": 43,
+    "strength": 4,
+    "position": 2
+  },
+  {
+    "id": 14,
+    "name": "Man Utd",
+    "shortName": "MUN",
+    "code": 1,
+    "strength": 4,
+    "position": 3
+  },
+  {
+    "id": 15,
+    "name": "Newcastle",
+    "shortName": "NEW",
+    "code": 4,
+    "strength": 3,
+    "position": 12
+  },
+  {
+    "id": 16,
+    "name": "Nott'm Forest",
+    "shortName": "NFO",
+    "code": 17,
+    "strength": 3,
+    "position": 16
+  },
+  {
+    "id": 17,
+    "name": "Sunderland",
+    "shortName": "SUN",
+    "code": 56,
+    "strength": 3,
+    "position": 7
+  },
+  {
+    "id": 18,
+    "name": "Spurs",
+    "shortName": "TOT",
+    "code": 6,
+    "strength": 3,
+    "position": 17
+  },
+  {
+    "id": 19,
+    "name": "West Ham",
+    "shortName": "WHU",
+    "code": 21,
+    "strength": 3,
+    "position": 18
+  },
+  {
+    "id": 20,
+    "name": "Wolves",
+    "shortName": "WOL",
+    "code": 39,
+    "strength": 2,
+    "position": 20
+  }
+]

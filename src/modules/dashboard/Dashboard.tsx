@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Typography, Card, CardContent, CardActions, Button } from '@mui/material';
+import { Box, Typography, Card, CardContent, CardActions, Button, Chip } from '@mui/material';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import EventIcon from '@mui/icons-material/Event';
 import GroupIcon from '@mui/icons-material/Group';
@@ -10,6 +10,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import GroupsIcon from '@mui/icons-material/Groups';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
+import StarIcon from '@mui/icons-material/Star';
 import {
   PageContainer,
   SectionTitle,
@@ -23,7 +24,7 @@ import { COMPETITIONS } from '../../types/competition';
 import { BootstrapRepository } from '@repositories/bootstrap';
 import { PlayerRepository } from '@repositories/players';
 import { TeamRepository } from '@repositories/teams';
-import type { Position } from '@domain/enums';
+import { PlayerPresenter, formatDeadline } from '@shared/presentation';
 
 interface ActionCardProps {
   icon: React.ComponentType<{ sx?: { fontSize: number; color: string; marginBottom: number } }>;
@@ -65,7 +66,7 @@ export const Dashboard: React.FC = () => {
   const competition = pathSegments[0] as CompetitionType;
   const competitionInfo = COMPETITIONS[competition];
 
-  // Load real data from repositories (must be before early returns)
+  // Load dashboard data (must be before early returns)
   const dashboardData = useMemo(() => {
     try {
       const bootstrapRepository = new BootstrapRepository();
@@ -82,7 +83,7 @@ export const Dashboard: React.FC = () => {
         deadline: currentGameweek?.deadline || 'N/A',
         totalPlayers: players.length,
         totalTeams: teams.length,
-        totalFixtures: 0, // Will be available when fixture data is added
+        totalFixtures: 0,
       };
     } catch (error) {
       console.error('Error loading dashboard data:', error);
@@ -97,21 +98,13 @@ export const Dashboard: React.FC = () => {
     }
   }, []);
 
-  // Load top players by form (must be before early returns)
+  // Load top 5 players by total points (must be before early returns)
   const topPlayers = useMemo(() => {
     try {
       const playerRepository = new PlayerRepository();
       const allPlayers = playerRepository.getAll();
-      return allPlayers
-        .sort((a: (typeof allPlayers)[0], b: (typeof allPlayers)[0]) => b.form - a.form)
-        .slice(0, 3)
-        .map((player: (typeof allPlayers)[0]) => ({
-          id: player.id,
-          name: player.displayName,
-          club: player.club,
-          position: player.position,
-          rating: player.form,
-        }));
+      const topByPoints = allPlayers.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 5);
+      return PlayerPresenter.toListPresentations(topByPoints);
     } catch (error) {
       console.error('Error loading top players:', error);
       return [];
@@ -130,22 +123,6 @@ export const Dashboard: React.FC = () => {
 
   const handleNavigate = (path: string): void => {
     navigate(`/${competition}/${path}`);
-  };
-
-  // Format deadline for display
-  const formatDeadline = (deadline: string | Date): string => {
-    if (!deadline) return 'N/A';
-    if (typeof deadline === 'string') return deadline;
-    if (deadline instanceof Date) {
-      return deadline.toLocaleString('en-GB', {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-      });
-    }
-    return 'N/A';
   };
 
   return (
@@ -272,76 +249,92 @@ export const Dashboard: React.FC = () => {
           marginBottom: 4,
         }}
       >
-        {/* Upcoming Fixtures Widget */}
-        <WidgetContainer>
-          <WidgetHeader>Upcoming Fixtures</WidgetHeader>
-          <WidgetContent>
-            {[1, 2, 3].map((item) => (
-              <Box
-                key={item}
-                sx={{
-                  padding: 2,
-                  backgroundColor: '#fafafa',
-                  borderRadius: 1,
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <Box sx={{ flex: 1 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    Team A vs Team B
-                  </Typography>
-                  <Typography variant="caption" color="textSecondary">
-                    Kickoff: 15:00
-                  </Typography>
-                </Box>
-                <SportsSoccerIcon sx={{ color: '#1976d2' }} />
-              </Box>
-            ))}
-          </WidgetContent>
-        </WidgetContainer>
-
         {/* Top Players Widget */}
         <WidgetContainer>
-          <WidgetHeader>Top Players</WidgetHeader>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: 2 }}>
+            <StarIcon sx={{ color: '#fbc02d', fontSize: 24 }} />
+            <WidgetHeader>Top 5 Players</WidgetHeader>
+          </Box>
           <WidgetContent>
-            {topPlayers.map(
-              (player: {
-                id: number;
-                name: string;
-                club: string;
-                position: Position;
-                rating: number;
-              }) => (
+            {topPlayers.length > 0 ? (
+              topPlayers.map((player) => (
                 <Box
                   key={player.id}
                   sx={{
                     padding: 2,
                     backgroundColor: '#fafafa',
                     borderRadius: 1,
+                    marginBottom: 1,
+                    '&:last-child': { marginBottom: 0 },
                   }}
                 >
-                  <Box sx={{ display: 'flex', justifyContent: 'space-between', marginBottom: 1 }}>
-                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                      {player.name}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      marginBottom: 1,
+                    }}
+                  >
+                    <Box>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        {player.name}
+                      </Typography>
+                      <Typography variant="caption" color="textSecondary">
+                        {player.club} • {player.position}
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label={player.totalPoints}
+                      size="small"
+                      color="primary"
+                      variant="outlined"
+                    />
+                  </Box>
+                  <Box sx={{ display: 'flex', gap: 2, paddingTop: 1 }}>
+                    <Typography variant="caption">
+                      <strong>Price:</strong> {player.price}
                     </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontWeight: 600,
-                        color: '#4caf50',
-                      }}
-                    >
-                      {player.rating}
+                    <Typography variant="caption">
+                      <strong>Owned:</strong> {player.ownership}
+                    </Typography>
+                    <Typography variant="caption">
+                      <strong>Form:</strong> {player.form}
                     </Typography>
                   </Box>
-                  <Typography variant="caption" color="textSecondary">
-                    {player.club} • {player.position}
-                  </Typography>
                 </Box>
-              )
+              ))
+            ) : (
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                sx={{ padding: 2, textAlign: 'center' }}
+              >
+                No players data available
+              </Typography>
             )}
+          </WidgetContent>
+        </WidgetContainer>
+
+        {/* Upcoming Fixtures Widget */}
+        <WidgetContainer>
+          <WidgetHeader>Upcoming Fixtures</WidgetHeader>
+          <WidgetContent>
+            <Box
+              sx={{
+                padding: 2,
+                backgroundColor: '#fafafa',
+                borderRadius: 1,
+                textAlign: 'center',
+                color: '#999',
+              }}
+            >
+              <SportsSoccerIcon sx={{ fontSize: 32, marginBottom: 1, opacity: 0.5 }} />
+              <Typography variant="body2">Fixtures data coming soon</Typography>
+              <Typography variant="caption" color="textSecondary">
+                Fixture synchronization not yet available
+              </Typography>
+            </Box>
           </WidgetContent>
         </WidgetContainer>
       </Box>

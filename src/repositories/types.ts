@@ -26,6 +26,22 @@ export interface NormalizedPlayer {
   pointsPerGame: string;
   totalPoints: number;
   minutes: number;
+  code?: number;
+  photo?: string;
+  status?: string;
+  goalsScored?: number;
+  assists?: number;
+  cleanSheets?: number;
+  goalsConceded?: number;
+  ownGoals?: number;
+  penaltiesSaved?: number;
+  penaltiesMissed?: number;
+  yellowCards?: number;
+  redCards?: number;
+  influence?: string;
+  creativity?: string;
+  threat?: string;
+  ictIndex?: string;
 }
 
 export interface NormalizedGameweek {

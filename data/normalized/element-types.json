@@ -1,1 +1,22 @@
-[]
+[
+  {
+    "id": 1,
+    "pluralName": "Goalkeepers",
+    "singularName": "Goalkeeper"
+  },
+  {
+    "id": 2,
+    "pluralName": "Defenders",
+    "singularName": "Defender"
+  },
+  {
+    "id": 3,
+    "pluralName": "Midfielders",
+    "singularName": "Midfielder"
+  },
+  {
+    "id": 4,
+    "pluralName": "Forwards",
+    "singularName": "Forward"
+  }
+]
