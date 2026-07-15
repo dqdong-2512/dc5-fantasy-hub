@@ -11,7 +11,7 @@ import { FplClient } from '../../src/shared/services/fpl-client';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '../../');
-const dataDir = path.join(projectRoot, 'data', 'raw');
+const dataDir = path.join(projectRoot, 'data', 'seasons', '2025-2026', 'raw');
 
 export async function syncBootstrap(): Promise<void> {
   console.log('Fetching bootstrap...');

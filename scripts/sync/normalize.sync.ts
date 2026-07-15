@@ -17,8 +17,8 @@ import type {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '../../');
-const rawDataDir = path.join(projectRoot, 'data', 'raw');
-const normalizedDataDir = path.join(projectRoot, 'data', 'normalized');
+const rawDataDir = path.join(projectRoot, 'data', 'seasons', '2025-2026', 'raw');
+const normalizedDataDir = path.join(projectRoot, 'data', 'seasons', '2025-2026', 'normalized');
 
 interface NormalizedTeam {
   id: number;

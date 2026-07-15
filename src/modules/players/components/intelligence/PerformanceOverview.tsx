@@ -40,33 +40,33 @@ export function PerformanceOverview({ player }: PerformanceOverviewProps): React
     },
     {
       label: 'Total Points',
-      value: '—',
+      value: player.totalPoints || '—',
       unit: 'pts',
     },
     {
       label: 'Minutes Played',
-      value: player.minutesPlayed,
+      value: player.minutesPlayed || '—',
       unit: 'mins',
     },
     {
-      label: 'Goals',
-      value: '—',
+      label: 'Goals Scored',
+      value: player.goalsScored ?? '—',
     },
     {
       label: 'Assists',
-      value: '—',
+      value: player.assists ?? '—',
     },
     {
       label: 'Clean Sheets',
-      value: '—',
+      value: player.cleanSheets ?? '—',
     },
     {
       label: 'Yellow Cards',
-      value: '—',
+      value: player.yellowCards ?? '—',
     },
     {
       label: 'Red Cards',
-      value: '—',
+      value: player.redCards ?? '—',
     },
   ];
 

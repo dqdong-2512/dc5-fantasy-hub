@@ -12,11 +12,13 @@ import {
   Card,
   CardContent,
   Badge as MUIBadge,
+  Avatar,
 } from '@mui/material';
 import type { Player } from '@domain/models';
 import { Position } from '@domain/enums';
 import { SideDrawer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
+import { getPlayerImageUrl, getTeamBadgeUrl } from '@shared/assets';
 import {
   BuyScore,
   PerformanceOverview,
@@ -114,22 +116,38 @@ export function PlayerDetailDrawer({
                       },
                     }}
                   >
-                    <Box
+                    <Avatar
+                      src={getPlayerImageUrl(player.id)}
+                      alt={player.displayName}
                       sx={{
                         width: 60,
                         height: 60,
-                        backgroundColor: 'action.hover',
-                        borderRadius: 1,
                       }}
-                    />
+                    >
+                      {player.displayName.charAt(0)}
+                    </Avatar>
                   </MUIBadge>
                   <Box>
                     <Typography variant="h6" sx={{ fontWeight: 700 }}>
                       {player.displayName}
                     </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {player.club} • {getPositionLabel(player.position)}
-                    </Typography>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 1,
+                        marginTop: ThemeTokens.spacing.xs,
+                      }}
+                    >
+                      <Avatar
+                        src={getTeamBadgeUrl(player.clubCode || player.club)}
+                        sx={{ width: 20, height: 20 }}
+                        alt={player.club}
+                      />
+                      <Typography variant="caption" color="text.secondary">
+                        {player.club} • {getPositionLabel(player.position)}
+                      </Typography>
+                    </Box>
                   </Box>
                 </Box>
 

@@ -11,6 +11,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import NewspaperIcon from '@mui/icons-material/Newspaper';
 import StarIcon from '@mui/icons-material/Star';
+import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import {
   PageContainer,
   SectionTitle,
@@ -25,6 +26,7 @@ import { BootstrapRepository } from '@repositories/bootstrap';
 import { PlayerRepository } from '@repositories/players';
 import { TeamRepository } from '@repositories/teams';
 import { PlayerPresenter, formatDeadline } from '@shared/presentation';
+import { getSeasonDisplay } from '../../config';
 
 interface ActionCardProps {
   icon: React.ComponentType<{ sx?: { fontSize: number; color: string; marginBottom: number } }>;
@@ -79,7 +81,7 @@ export const Dashboard: React.FC = () => {
 
       return {
         gameweek: currentGameweek?.id || 0,
-        season: '2025/26',
+        season: getSeasonDisplay(),
         deadline: currentGameweek?.deadline || 'N/A',
         totalPlayers: players.length,
         totalTeams: teams.length,
@@ -89,7 +91,7 @@ export const Dashboard: React.FC = () => {
       console.error('Error loading dashboard data:', error);
       return {
         gameweek: 0,
-        season: '2025/26',
+        season: getSeasonDisplay(),
         deadline: 'N/A',
         totalPlayers: 0,
         totalTeams: 0,
@@ -107,6 +109,22 @@ export const Dashboard: React.FC = () => {
       return PlayerPresenter.toListPresentations(topByPoints);
     } catch (error) {
       console.error('Error loading top players:', error);
+      return [];
+    }
+  }, []);
+
+  // Load most owned players (must be before early returns)
+  const mostOwnedPlayers = useMemo(() => {
+    try {
+      const playerRepository = new PlayerRepository();
+      const allPlayers = playerRepository.getAll();
+      const mostOwned = allPlayers
+        .filter((p) => p.ownership !== undefined && p.ownership > 0)
+        .sort((a, b) => (b.ownership || 0) - (a.ownership || 0))
+        .slice(0, 3);
+      return PlayerPresenter.toListPresentations(mostOwned);
+    } catch (error) {
+      console.error('Error loading most owned players:', error);
       return [];
     }
   }, []);
@@ -240,7 +258,7 @@ export const Dashboard: React.FC = () => {
         </Box>
       </Box>
 
-      {/* Main Content Grid */}
+      {/* Main Content Grid - Top 5 Players & Most Owned */}
       <Box
         sx={{
           display: 'grid',
@@ -316,9 +334,78 @@ export const Dashboard: React.FC = () => {
           </WidgetContent>
         </WidgetContainer>
 
-        {/* Upcoming Fixtures Widget */}
+        {/* Most Owned Players Widget */}
         <WidgetContainer>
-          <WidgetHeader>Upcoming Fixtures</WidgetHeader>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: 2 }}>
+            <TrendingUpIcon sx={{ color: '#4caf50', fontSize: 24 }} />
+            <WidgetHeader>Most Selected</WidgetHeader>
+          </Box>
+          <WidgetContent>
+            {mostOwnedPlayers.length > 0 ? (
+              mostOwnedPlayers.map((player) => (
+                <Box
+                  key={player.id}
+                  sx={{
+                    padding: 2,
+                    backgroundColor: '#fafafa',
+                    borderRadius: 1,
+                    marginBottom: 1,
+                    '&:last-child': { marginBottom: 0 },
+                  }}
+                >
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      alignItems: 'flex-start',
+                      marginBottom: 1,
+                    }}
+                  >
+                    <Box>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        {player.name}
+                      </Typography>
+                      <Typography variant="caption" color="textSecondary">
+                        {player.club} • {player.position}
+                      </Typography>
+                    </Box>
+                    <Chip
+                      label={player.ownership}
+                      size="small"
+                      variant="outlined"
+                      sx={{ backgroundColor: '#e8f5e9', color: '#2e7d32' }}
+                    />
+                  </Box>
+                  <Box sx={{ display: 'flex', gap: 2, paddingTop: 1 }}>
+                    <Typography variant="caption">
+                      <strong>Price:</strong> {player.price}
+                    </Typography>
+                    <Typography variant="caption">
+                      <strong>Points:</strong> {player.totalPoints}
+                    </Typography>
+                    <Typography variant="caption">
+                      <strong>PPG:</strong> {player.pointsPerGame}
+                    </Typography>
+                  </Box>
+                </Box>
+              ))
+            ) : (
+              <Typography
+                variant="body2"
+                color="textSecondary"
+                sx={{ padding: 2, textAlign: 'center' }}
+              >
+                No players data available
+              </Typography>
+            )}
+          </WidgetContent>
+        </WidgetContainer>
+      </Box>
+
+      {/* Upcoming Fixtures Section */}
+      <Box sx={{ marginBottom: 4 }}>
+        <SectionTitle>Upcoming Fixtures</SectionTitle>
+        <WidgetContainer>
           <WidgetContent>
             <Box
               sx={{
