@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom'
 import { CompetitionSelection } from '../app/CompetitionSelection';
 import { Dashboard } from '../modules/dashboard/Dashboard';
 import { Fixtures } from '../modules/fixtures';
-import { Players } from '../modules/players';
+import { PlayerExplorer } from '../modules/players';
 import { Analytics } from '../modules/analytics';
 import { Fantasy } from '../modules/fantasy';
 import { AppLayout } from '../layouts/AppLayout';
@@ -35,7 +35,7 @@ const router = createBrowserRouter([
           },
           {
             path: 'players',
-            element: <Players />,
+            element: <PlayerExplorer />,
           },
           {
             path: 'analytics',
