@@ -10,6 +10,7 @@ import { PageContainer } from '@shared/components';
 import type { CompetitionType } from '../../types/competition';
 import { COMPETITIONS } from '../../types/competition';
 import { DashboardHeader } from './components/DashboardHeader';
+import { CommandCenter } from './components/CommandCenter';
 import {
   CurrentGameweekSummary,
   TopPerformingPlayers,
@@ -50,6 +51,11 @@ export const Dashboard: React.FC = () => {
     <PageContainer>
       {/* Dashboard Header */}
       <DashboardHeader competition={competitionInfo.name} lastSyncTime={new Date()} />
+
+      {/* FPL Command Center */}
+      <Box sx={{ marginBottom: ThemeTokens.spacing.lg }}>
+        <CommandCenter />
+      </Box>
 
       {/* Widget Grid Layout */}
       <Box
