@@ -133,6 +133,130 @@ export interface FPLFixture {
   team_a_difficulty: number;
 }
 
+// Personal Entry API Interfaces
+export interface EntryData {
+  id: number;
+  name: string;
+  manager: {
+    name: string;
+    status: string;
+    join_date?: string;
+    favourite_team?: number;
+    starting_chip?: string;
+  };
+  favourite_team?: number;
+  player_first_name: string;
+  player_last_name: string;
+  player_region_id?: number;
+  player_region_name?: string;
+  summary_overall_points: number;
+  summary_overall_rank: number | null;
+  current_event?: number;
+  current_event_fixture?: unknown;
+  league_set?: unknown;
+  leagues?: {
+    classic: Array<{
+      id: number;
+      name: string;
+      short_name?: string;
+      created?: string;
+      closed?: boolean;
+      rank?: number | null;
+      max_entries?: number;
+      league_type?: string;
+      scoring?: string;
+      admin_entry?: number;
+      start_event?: number;
+    }>;
+    h2h: Array<unknown>;
+  };
+}
+
+export interface EntryHistory {
+  current: Array<{
+    event: number;
+    points: number;
+    total_points: number;
+    rank: number | null;
+    rank_sort: number | null;
+    overall_rank: number | null;
+    bank: number;
+    value: number;
+    event_transfers: number;
+    event_transfers_cost: number;
+    transfers_made: number;
+    transfers_cost: number;
+  }>;
+  past: Array<{
+    season_name: string;
+    total_points: number;
+    rank: number | null;
+  }>;
+}
+
+export interface EntryPicksData {
+  active_chip: string | null;
+  automatic_subs: Array<{
+    entry: number;
+    element_in: number;
+    element_out: number;
+    period: number;
+    sub_order: number;
+  }>;
+  entry_history: {
+    event: number;
+    points: number;
+    total_points: number;
+    rank: number | null;
+    rank_sort: number | null;
+    overall_rank: number | null;
+    percentile_rank: number | null;
+    bank: number;
+    value: number;
+    event_transfers: number;
+    event_transfers_cost: number;
+    transfers_made: number;
+    transfers_cost: number;
+  };
+  picks: Array<{
+    element: number;
+    position: number;
+    multiplier: number;
+    is_captain: boolean;
+    is_vice_captain: boolean;
+  }>;
+}
+
+export interface LeagueStandingsData {
+  league: {
+    id: number;
+    name: string;
+    closed: boolean;
+    maxEntries?: number;
+    leagueType?: string;
+    scoring?: string;
+    adminEntry?: number;
+    startEvent?: number;
+  };
+  standings: {
+    has_next: boolean;
+    page: number;
+    results: Array<{
+      id: number;
+      rank: number;
+      previous_rank: number | null;
+      entry: number;
+      entry_name: string;
+      player_name: string;
+      total: number;
+      last_rank?: number | null;
+      event_total: number;
+      division_rank?: number | null;
+      division_points?: number | null;
+    }>;
+  };
+}
+
 // API Endpoints
 const ENDPOINTS = {
   BOOTSTRAP_STATIC: '/bootstrap-static/',
@@ -167,5 +291,26 @@ export class FplClient {
   async getEventLive(eventId: number): Promise<unknown> {
     // Placeholder for future implementation
     return this.httpClient.get<unknown>(`${ENDPOINTS.EVENT_LIVE}${eventId}/`);
+  }
+
+  // Personal Entry Endpoints
+
+  async getEntry(entryId: number): Promise<EntryData> {
+    return this.httpClient.get<EntryData>(`/entry/${entryId}/`);
+  }
+
+  async getEntryHistory(entryId: number): Promise<EntryHistory> {
+    return this.httpClient.get<EntryHistory>(`/entry/${entryId}/history/`);
+  }
+
+  async getEntryPicks(entryId: number, eventId: number): Promise<EntryPicksData> {
+    return this.httpClient.get<EntryPicksData>(`/entry/${entryId}/event/${eventId}/picks/`);
+  }
+
+  async getLeagueStandings(leagueId: number, page?: number): Promise<LeagueStandingsData> {
+    const pageParam = page ? `?page_standings=${page}` : '';
+    return this.httpClient.get<LeagueStandingsData>(
+      `/leagues-classic/${leagueId}/standings/${pageParam}`
+    );
   }
 }

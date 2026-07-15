@@ -1,24 +1,51 @@
-import React from 'react';
-import { useLocation } from 'react-router-dom';
-import { Typography } from '@mui/material';
-import { PageContainer } from '@shared/components';
-import type { CompetitionType } from '../../types/competition';
-import { COMPETITIONS } from '../../types/competition';
+/**
+ * Fantasy Game Module
+ * Personal FPL workspace for connected users
+ * Displays team, picks, and leagues
+ */
+
+import React, { useState } from 'react';
+import { Box, CircularProgress } from '@mui/material';
+import { useFantasyGame } from './hooks';
+import { ConnectTeam } from './components';
+import { FantasyWorkspace } from './pages';
 
 export const Fantasy: React.FC = () => {
-  const location = useLocation();
-  const pathSegments = location.pathname.split('/').filter(Boolean);
-  const competition = pathSegments[0] as CompetitionType;
-  const competitionInfo = COMPETITIONS[competition];
+  const gameState = useFantasyGame();
+  const [connectError, setConnectError] = useState<string | null>(null);
 
-  return (
-    <PageContainer>
-      <Typography variant="h4" component="h1" sx={{ fontWeight: 600, marginBottom: 3 }}>
-        Fantasy Game
-      </Typography>
-      <Typography variant="body1" color="textSecondary">
-        {competitionInfo?.name} - Fantasy Game section coming soon
-      </Typography>
-    </PageContainer>
-  );
+  const handleConnect = async (entryId: number) => {
+    try {
+      setConnectError(null);
+      await gameState.connectEntry(entryId);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to connect entry';
+      setConnectError(message);
+    }
+  };
+
+  // Show loading while checking for stored entry
+  if (gameState.isLoading && !gameState.isConnected) {
+    return (
+      <Box
+        sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // Not connected - Show Connect Form
+  if (!gameState.isConnected) {
+    return (
+      <ConnectTeam
+        onConnect={handleConnect}
+        error={connectError || gameState.error}
+        isLoading={gameState.isConnecting}
+      />
+    );
+  }
+
+  // Connected - Show Workspace
+  return <FantasyWorkspace gameState={gameState} />;
 };

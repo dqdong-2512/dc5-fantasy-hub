@@ -8,6 +8,7 @@
 export { BootstrapRepository, type DomainBootstrapData } from './bootstrap';
 export { TeamRepository } from './teams';
 export { PlayerRepository } from './players';
+export { FantasyGameRepository } from './fantasy';
 export { FixtureRepository } from './fixtures';
 
 // Internal normalized types - not recommended for external use
