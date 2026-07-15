@@ -4,6 +4,7 @@
  */
 
 import React, { useState, useMemo } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Typography, Stack } from '@mui/material';
 import type { Player } from '@domain/models';
 import { BootstrapRepository } from '@repositories/bootstrap';
@@ -34,6 +35,11 @@ const DEFAULT_FILTERS: PlayerFilters = {
  * Production-quality analytics interface for player exploration
  */
 export function PlayerExplorer(): React.ReactElement {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const pathSegments = location.pathname.split('/').filter(Boolean);
+  const competition = pathSegments[0] || 'premier-league';
+
   const [filters, setFilters] = useState<PlayerFilters>(DEFAULT_FILTERS);
   const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -72,6 +78,10 @@ export function PlayerExplorer(): React.ReactElement {
   const handlePlayerSelect = (player: Player): void => {
     setSelectedPlayer(player);
     setDrawerOpen(true);
+  };
+
+  const handleClubClick = (clubCode: number): void => {
+    navigate(`/${competition}/teams?club=${clubCode}`);
   };
 
   const handleDrawerClose = (): void => {
@@ -169,6 +179,7 @@ export function PlayerExplorer(): React.ReactElement {
           <PlayerTable
             players={filteredPlayers}
             onRowClick={handlePlayerSelect}
+            onClubClick={handleClubClick}
             sortBy={filters.sortBy}
             sortOrder={filters.sortOrder}
             onSort={(field, order) =>

@@ -26,11 +26,10 @@ import {
   TableRow,
   Chip,
 } from '@mui/material';
-import { PageContainer } from '@shared/components';
+import { PageContent, PageHeader } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { BootstrapRepository } from '@repositories/bootstrap';
 import { FixtureRepository } from '@repositories/fixtures';
-import { getSeasonDisplay } from '@config/appConfig';
 import { getTeamBadgeUrl } from '@shared/assets';
 import {
   formatKickoffDate,
@@ -117,25 +116,55 @@ export const FixtureExplorer: React.FC = () => {
   const totalFixtures = filteredFixtures.reduce((sum, [, fixtures]) => sum + fixtures.length, 0);
 
   return (
-    <PageContainer>
-      {/* Header */}
-      <Box sx={{ marginBottom: ThemeTokens.spacing.xxxl }}>
-        <Typography
-          variant="h4"
-          component="h1"
-          sx={{ fontWeight: 600, marginBottom: ThemeTokens.spacing.sm }}
-        >
-          Fixtures
-        </Typography>
-        <Typography
-          variant="caption"
-          color="textSecondary"
-          sx={{ display: 'block', marginBottom: ThemeTokens.spacing.md }}
-        >
-          Fantasy Premier League {getSeasonDisplay()} • GW {selectedGameweek} • {totalFixtures}{' '}
-          fixtures
-        </Typography>
-      </Box>
+    <PageContent>
+      <PageHeader>
+        <Stack spacing={ThemeTokens.spacing.md}>
+          <Typography variant={ThemeTokens.typography.pageTitleVariant} sx={{ fontWeight: 700 }}>
+            Fixture Explorer
+          </Typography>
+          <Stack
+            direction="row"
+            spacing={ThemeTokens.spacing.xxl}
+            sx={{
+              flexWrap: 'wrap',
+              '& > div': { minWidth: 150 },
+            }}
+          >
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                Competition
+              </Typography>
+              <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                Fantasy Premier League
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                Season
+              </Typography>
+              <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                2025/26
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                Gameweek
+              </Typography>
+              <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                GW {selectedGameweek}
+              </Typography>
+            </Box>
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                Total Fixtures
+              </Typography>
+              <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
+                {totalFixtures}
+              </Typography>
+            </Box>
+          </Stack>
+        </Stack>
+      </PageHeader>
 
       {/* Fixture Intelligence Cards */}
       <Box
@@ -144,6 +173,7 @@ export const FixtureExplorer: React.FC = () => {
           gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
           gap: ThemeTokens.spacing.lg,
           marginBottom: ThemeTokens.spacing.xxxl,
+          marginTop: ThemeTokens.spacing.xxl,
         }}
       >
         {/* Easiest Runs */}
@@ -452,6 +482,6 @@ export const FixtureExplorer: React.FC = () => {
           ))}
         </Stack>
       )}
-    </PageContainer>
+    </PageContent>
   );
 };

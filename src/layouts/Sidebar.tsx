@@ -1,4 +1,5 @@
 import React from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Drawer,
   Box,
@@ -18,17 +19,44 @@ interface SidebarProps {
 }
 
 const MENU_ITEMS = [
-  { id: 'dashboard', label: 'Dashboard', path: '/' },
-  { id: 'fixtures', label: 'Fixtures', path: '/fixtures' },
-  { id: 'players', label: 'Players', path: '/players' },
-  { id: 'analytics', label: 'Analytics', path: '/analytics' },
-  { id: 'fantasy', label: 'Fantasy', path: '/fantasy' },
-  { id: 'champions', label: 'Champions League', path: '/champions-league' },
+  { id: 'dashboard', label: 'Dashboard', path: 'dashboard' },
+  { id: 'players', label: 'Players', path: 'players' },
+  { id: 'fixtures', label: 'Fixtures', path: 'fixtures' },
+  { id: 'teams', label: 'Clubs', path: 'teams' },
+  { id: 'analytics', label: 'Analytics', path: 'analytics' },
+  { id: 'fantasy', label: 'Fantasy Game', path: 'fantasy' },
+  { id: 'champions', label: 'Champions League', path: 'champions-league/dashboard' },
 ];
 
 export const Sidebar: React.FC<SidebarProps> = ({ width, open, onToggle }) => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Get the current competition and path segment
+  const pathSegments = location.pathname.split('/').filter(Boolean);
+  const competition = pathSegments[0];
+  const currentPage = pathSegments[1];
+
+  const handleNavigate = (path: string): void => {
+    // Handle Champions League specially (it goes to champions-league, not under premier-league)
+    if (path.startsWith('champions-league')) {
+      navigate(`/${path}`);
+    } else {
+      navigate(`/${competition}/${path}`);
+    }
+    if (isMobile) {
+      onToggle();
+    }
+  };
+
+  const isActive = (path: string): boolean => {
+    if (path.startsWith('champions-league')) {
+      return currentPage === 'champions-league' || pathSegments[0] === 'champions-league';
+    }
+    return currentPage === path;
+  };
 
   return (
     <Drawer
@@ -59,17 +87,24 @@ export const Sidebar: React.FC<SidebarProps> = ({ width, open, onToggle }) => {
           {MENU_ITEMS.map((item) => (
             <ListItem key={item.id} disablePadding>
               <ListItemButton
+                onClick={() => handleNavigate(item.path)}
+                selected={isActive(item.path)}
                 sx={{
                   paddingX: 2,
                   paddingY: 1.5,
-                  color: '#424242',
+                  color: isActive(item.path) ? '#1976d2' : '#424242',
+                  backgroundColor: isActive(item.path) ? '#e3f2fd' : 'transparent',
+                  fontWeight: isActive(item.path) ? 600 : 400,
                   '&:hover': {
                     backgroundColor: '#f5f5f5',
                   },
-                  '&.active': {
+                  '&.Mui-selected': {
                     backgroundColor: '#e3f2fd',
                     color: '#1976d2',
                     fontWeight: 600,
+                    '&:hover': {
+                      backgroundColor: '#e3f2fd',
+                    },
                   },
                 }}
               >

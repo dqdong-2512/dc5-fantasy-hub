@@ -11,11 +11,15 @@ import { TeamRepository } from '@repositories/teams';
 import { getTeamBadgeUrl } from '@shared/assets';
 import { ThemeTokens } from '@shared/theme/tokens';
 
+interface TopClubsProps {
+  onViewClubs?: () => void;
+}
+
 /**
  * Top Clubs Widget
  * Shows clubs ordered by strength
  */
-export const TopClubs: React.FC = () => {
+export const TopClubs: React.FC<TopClubsProps> = ({ onViewClubs }) => {
   const topClubs = useMemo(() => {
     try {
       const repo = new TeamRepository();
@@ -36,6 +40,14 @@ export const TopClubs: React.FC = () => {
       title="Top Clubs"
       subtitle="By squad strength"
       icon={<EmojiEventsIcon sx={{ color: '#fbc02d' }} />}
+      action={
+        onViewClubs
+          ? {
+              label: 'View All',
+              onClick: onViewClubs,
+            }
+          : undefined
+      }
     >
       {topClubs.length > 0 ? (
         <Stack spacing={ThemeTokens.spacing.md}>

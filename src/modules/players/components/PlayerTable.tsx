@@ -29,6 +29,7 @@ import { getDifficultyColor } from '@shared/presentation/fixture-formats';
 export interface PlayerTableProps {
   players: Player[];
   onRowClick: (player: Player) => void;
+  onClubClick?: (clubCode: number) => void;
   sortBy: string;
   sortOrder: 'asc' | 'desc';
   onSort: (field: string, order: 'asc' | 'desc') => void;
@@ -41,6 +42,7 @@ export interface PlayerTableProps {
 export function PlayerTable({
   players,
   onRowClick,
+  onClubClick,
   sortBy,
   sortOrder,
   onSort,
@@ -192,7 +194,26 @@ export function PlayerTable({
                 <TableCell sx={{ fontWeight: 600 }}>{player.displayName}</TableCell>
                 <TableCell>{getPositionDisplay(player.position)}</TableCell>
                 <TableCell>
-                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      cursor: onClubClick ? 'pointer' : 'default',
+                      '&:hover': onClubClick
+                        ? {
+                            opacity: 0.7,
+                            textDecoration: 'underline',
+                          }
+                        : {},
+                    }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      if (onClubClick && player.clubCode) {
+                        onClubClick(player.clubCode);
+                      }
+                    }}
+                  >
                     <Avatar
                       src={getTeamBadgeUrl(player.clubCode || player.club)}
                       sx={{ width: 24, height: 24 }}

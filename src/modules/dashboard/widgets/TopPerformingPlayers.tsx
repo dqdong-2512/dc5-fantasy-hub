@@ -21,11 +21,15 @@ import { PlayerRepository } from '@repositories/players';
 import { PlayerPresenter } from '@shared/presentation';
 import { getPlayerImageUrl } from '@shared/assets';
 
+export interface TopPerformingPlayersProps {
+  onPlayerClick?: (playerId: number) => void;
+}
+
 /**
  * Top Performing Players Widget
  * Shows top 10 players by total points
  */
-export const TopPerformingPlayers: React.FC = () => {
+export const TopPerformingPlayers: React.FC<TopPerformingPlayersProps> = ({ onPlayerClick }) => {
   const topPlayers = useMemo(() => {
     try {
       const repo = new PlayerRepository();
@@ -63,7 +67,15 @@ export const TopPerformingPlayers: React.FC = () => {
             </TableHead>
             <TableBody>
               {topPlayers.map((player, idx) => (
-                <TableRow key={player.id} sx={{ '&:hover': { backgroundColor: '#f9f9f9' } }}>
+                <TableRow
+                  key={player.id}
+                  onClick={() => onPlayerClick?.(player.id as unknown as number)}
+                  sx={{
+                    cursor: onPlayerClick ? 'pointer' : 'default',
+                    '&:hover': { backgroundColor: '#f9f9f9' },
+                  }}
+                >
+                  {' '}
                   <TableCell>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <Typography sx={{ fontWeight: 600, minWidth: 20 }}>{idx + 1}</Typography>
