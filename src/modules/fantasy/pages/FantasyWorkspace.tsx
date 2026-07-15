@@ -212,6 +212,7 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
             entry={gameState.entry}
             isLoading={gameState.isLoading}
             connectedEntryId={gameState.connectedEntryId}
+            selectedGameweek={selectedGameweek}
           />
         )}
       </Stack>

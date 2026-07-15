@@ -20,3 +20,8 @@ export {
   type LiveGameweekSummary,
   type LiveSquadPerformance,
 } from './LiveSquadPerformance';
+export type {
+  LiveManagerScore,
+  LiveLeagueStanding,
+  LiveLeagueStandingsResult,
+} from './LiveLeagueStandings';
