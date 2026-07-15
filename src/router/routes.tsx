@@ -4,6 +4,7 @@ import { CompetitionSelection } from '../app/CompetitionSelection';
 import { Dashboard } from '../modules/dashboard/Dashboard';
 import { Fixtures } from '../modules/fixtures';
 import { PlayerExplorer } from '../modules/players';
+import { ClubExplorer } from '../modules/teams';
 import { Analytics } from '../modules/analytics';
 import { Fantasy } from '../modules/fantasy';
 import { AppLayout } from '../layouts/AppLayout';
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
           {
             path: 'players',
             element: <PlayerExplorer />,
+          },
+          {
+            path: 'teams',
+            element: <ClubExplorer />,
           },
           {
             path: 'analytics',

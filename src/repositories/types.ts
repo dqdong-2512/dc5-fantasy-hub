@@ -10,6 +10,12 @@ export interface NormalizedTeam {
   code: number;
   strength: number;
   position: number;
+  strengthOverallHome: number;
+  strengthOverallAway: number;
+  strengthAttackHome: number;
+  strengthAttackAway: number;
+  strengthDefenceHome: number;
+  strengthDefenceAway: number;
 }
 
 export interface NormalizedPlayer {

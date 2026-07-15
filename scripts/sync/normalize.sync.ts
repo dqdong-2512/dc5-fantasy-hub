@@ -28,6 +28,12 @@ interface NormalizedTeam {
   code: number;
   strength: number;
   position: number;
+  strengthOverallHome: number;
+  strengthOverallAway: number;
+  strengthAttackHome: number;
+  strengthAttackAway: number;
+  strengthDefenceHome: number;
+  strengthDefenceAway: number;
 }
 
 interface NormalizedPlayer {
@@ -100,6 +106,12 @@ export async function normalize(): Promise<void> {
       code: team.code,
       strength: team.strength,
       position: team.position,
+      strengthOverallHome: team.strength_overall_home,
+      strengthOverallAway: team.strength_overall_away,
+      strengthAttackHome: team.strength_attack_home,
+      strengthAttackAway: team.strength_attack_away,
+      strengthDefenceHome: team.strength_defence_home,
+      strengthDefenceAway: team.strength_defence_away,
     }));
     fs.writeFileSync(
       path.join(normalizedDataDir, 'teams.json'),
