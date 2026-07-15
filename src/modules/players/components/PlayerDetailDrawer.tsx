@@ -200,7 +200,7 @@ export function PlayerDetailDrawer({
         <PerformanceOverview player={player} />
 
         {/* Fixture Intelligence */}
-        <FixtureIntelligence playerClub={player.club} />
+        <FixtureIntelligence player={player} />
 
         {/* Transfer Intelligence */}
         <TransferIntelligence playerPrice={player.price} playerOwnership={player.ownership} />

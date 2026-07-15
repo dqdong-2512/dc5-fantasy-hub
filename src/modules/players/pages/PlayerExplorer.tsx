@@ -10,7 +10,12 @@ import { BootstrapRepository } from '@repositories/bootstrap';
 import { PlayerRepository } from '@repositories/players';
 import { PageContent, PageHeader, PageSection, LoadingState, EmptyState } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { PlayerTable, PlayerDetailDrawer, FilterToolbar } from '../components';
+import {
+  PlayerTable,
+  PlayerDetailDrawer,
+  FilterToolbar,
+  PlayersWithFavorableFixtures,
+} from '../components';
 import { PlayerFiltersUtil } from '../utils/filters';
 import type { PlayerFilters } from '../types';
 
@@ -142,6 +147,10 @@ export function PlayerExplorer(): React.ReactElement {
           onFiltersChange={setFilters}
           onReset={handleResetFilters}
         />
+      </PageSection>
+
+      <PageSection title="Intelligence" sx={{ marginBottom: ThemeTokens.spacing.xxl }}>
+        <PlayersWithFavorableFixtures players={allPlayers} onPlayerSelect={handlePlayerSelect} />
       </PageSection>
 
       <PageSection

@@ -5,8 +5,18 @@
 
 import type { Player } from '@domain/models';
 import type { PlayerFilters } from '../types';
+import { PlayerFixtureIntelligenceService } from '../services';
 
 export class PlayerFiltersUtil {
+  private static fixtureService: PlayerFixtureIntelligenceService | null = null;
+
+  private static getFixtureService(): PlayerFixtureIntelligenceService {
+    if (!this.fixtureService) {
+      this.fixtureService = new PlayerFixtureIntelligenceService();
+    }
+    return this.fixtureService;
+  }
+
   static applyFilters(players: Player[], filters: PlayerFilters): Player[] {
     return players
       .filter((player) => this.matchesSearch(player, filters.search))
@@ -39,6 +49,13 @@ export class PlayerFiltersUtil {
         case 'ownership':
           aVal = a.ownership;
           bVal = b.ownership;
+          break;
+        case 'avgFdr':
+          const fixtureService = this.getFixtureService();
+          const aSummary = fixtureService.getPlayerFixtureSummary(a);
+          const bSummary = fixtureService.getPlayerFixtureSummary(b);
+          aVal = aSummary.avgDifficulty;
+          bVal = bSummary.avgDifficulty;
           break;
         default:
           return 0;

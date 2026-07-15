@@ -12,7 +12,7 @@ export interface PlayerFilters {
   clubs: number[];
   priceRange: [number, number];
   availability: 'all' | 'available' | 'expensive' | 'cheap';
-  sortBy: 'name' | 'price' | 'form' | 'points' | 'ownership';
+  sortBy: 'name' | 'price' | 'form' | 'points' | 'ownership' | 'avgFdr';
   sortOrder: 'asc' | 'desc';
 }
 
@@ -24,3 +24,12 @@ export interface SortConfig {
 export type FilterablePlayer = Player & {
   teamId?: number;
 };
+
+// Re-export player-fixtures types
+export type {
+  PlayerUpcomingFixture,
+  PlayerFixtureSummary,
+  FixtureOutlook,
+  PlayerWithFixtureIntelligence,
+} from './player-fixtures';
+export { FixtureOutlook as FixtureOutlookEnum } from './player-fixtures';
