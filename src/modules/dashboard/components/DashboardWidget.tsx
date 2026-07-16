@@ -4,7 +4,7 @@
  */
 
 import React from 'react';
-import { Box, Card, CardContent, CardHeader, Typography, Button } from '@mui/material';
+import { Box, Card, CardContent, Typography, Button } from '@mui/material';
 import { ThemeTokens } from '@shared/theme/tokens';
 
 export interface DashboardWidgetProps {
@@ -40,42 +40,79 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
         flexDirection: 'column',
         borderRadius: ThemeTokens.borderRadius.md,
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
+        overflow: 'hidden',
         ...sx,
       }}
     >
-      {/* Widget Header */}
+      {/* Widget Header with Orange-Yellow Background */}
       {(title || action) && (
-        <CardHeader
-          avatar={icon}
-          title={
-            <Box>
-              <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1rem' }}>
+        <Box
+          sx={{
+            backgroundColor: '#f59e0b',
+            paddingX: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg },
+            paddingY: { xs: ThemeTokens.spacing.sm, md: ThemeTokens.spacing.md },
+            display: 'flex',
+            alignItems: 'center',
+            gap: ThemeTokens.spacing.md,
+            justifyContent: 'space-between',
+          }}
+        >
+          {/* Icon + Title/Subtitle */}
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: ThemeTokens.spacing.md,
+              minWidth: 0,
+              flex: 1,
+            }}
+          >
+            {icon && <Box sx={{ color: '#ffffff', display: 'flex', flexShrink: 0 }}>{icon}</Box>}
+            <Box sx={{ minWidth: 0 }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 700,
+                  fontSize: '1rem',
+                  color: '#ffffff',
+                  lineHeight: 1.2,
+                }}
+              >
                 {title}
               </Typography>
               {subtitle && (
                 <Typography
                   variant="caption"
-                  color="textSecondary"
-                  sx={{ display: 'block', marginTop: 0.25 }}
+                  sx={{
+                    display: 'block',
+                    marginTop: 0.25,
+                    color: 'rgba(255, 255, 255, 0.75)',
+                    fontSize: '0.75rem',
+                  }}
                 >
                   {subtitle}
                 </Typography>
               )}
             </Box>
-          }
-          action={
-            action ? (
-              <Button size="small" onClick={action.onClick} sx={{ textTransform: 'none' }}>
-                {action.label}
-              </Button>
-            ) : undefined
-          }
-          sx={{
-            paddingBottom: ThemeTokens.spacing.sm,
-            paddingX: ThemeTokens.spacing.md,
-            paddingTop: ThemeTokens.spacing.md,
-          }}
-        />
+          </Box>
+
+          {/* Action Button */}
+          {action && (
+            <Button
+              size="small"
+              onClick={action.onClick}
+              sx={{
+                textTransform: 'none',
+                color: '#ffffff',
+                backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.25)' },
+                flexShrink: 0,
+              }}
+            >
+              {action.label}
+            </Button>
+          )}
+        </Box>
       )}
 
       {/* Widget Content */}
