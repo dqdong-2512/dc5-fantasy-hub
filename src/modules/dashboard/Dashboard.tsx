@@ -4,6 +4,7 @@ import { Box, Typography } from '@mui/material';
 import { PageContainer } from '@shared/components';
 import type { CompetitionType } from '../../types/competition';
 import { COMPETITIONS } from '../../types/competition';
+import { DashboardHero } from './components/DashboardHero';
 import { CommandCenter } from './components/CommandCenter';
 import {
   CurrentGameweekSummary,
@@ -13,7 +14,6 @@ import {
   TopClubs,
 } from './widgets';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { BootstrapRepository } from '@repositories/bootstrap';
 
 /**
  * Professional Dashboard
@@ -40,80 +40,58 @@ export const Dashboard: React.FC = () => {
     navigate(`/${competition}/${path}`);
   };
 
-  // Get current gameweek from bootstrap
-  const currentGW = React.useMemo(() => {
-    try {
-      const repo = new BootstrapRepository();
-      return repo.getCurrentGameweek();
-    } catch {
-      return 1;
-    }
-  }, []);
-
   return (
-    <PageContainer sx={{ paddingY: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}>
-      {/* Dashboard Header - Ultra Compact */}
-      <Box sx={{ marginBottom: ThemeTokens.spacing.lg }}>
-        <Typography variant="h4" sx={{ fontWeight: 700, marginBottom: ThemeTokens.spacing.xs }}>
-          Dashboard
-        </Typography>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ marginBottom: ThemeTokens.spacing.sm }}
+    <Box>
+      {/* FPL Dashboard Hero - Full Width */}
+      <DashboardHero />
+
+      {/* Dashboard Content Container */}
+      <PageContainer sx={{ paddingY: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}>
+        {/* FPL Command Center */}
+        <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
+          <CommandCenter />
+        </Box>
+
+        {/* Widget Grid - First Row: Current GW (3 cols) + Top Players (9 cols) */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: '3fr 9fr' },
+            gap: ThemeTokens.spacing.md,
+            marginBottom: ThemeTokens.spacing.md,
+            alignItems: 'start',
+          }}
         >
-          Fantasy Premier League Analytics & Overview
-        </Typography>
-        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.8rem' }}>
-          {competitionInfo.name} • 2025/26 • GW
-          {currentGW ? (typeof currentGW === 'object' ? currentGW.id : currentGW) : '-'}
-        </Typography>
-      </Box>
-
-      {/* FPL Command Center */}
-      <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
-        <CommandCenter />
-      </Box>
-
-      {/* Widget Grid - First Row: Current GW (3 cols) + Top Players (9 cols) */}
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: '3fr 9fr' },
-          gap: ThemeTokens.spacing.md,
-          marginBottom: ThemeTokens.spacing.md,
-          alignItems: 'start',
-        }}
-      >
-        <Box>
-          <CurrentGameweekSummary />
+          <Box>
+            <CurrentGameweekSummary />
+          </Box>
+          <Box>
+            <TopPerformingPlayers onPlayerClick={() => handleNavigate('players')} />
+          </Box>
         </Box>
-        <Box>
-          <TopPerformingPlayers onPlayerClick={() => handleNavigate('players')} />
-        </Box>
-      </Box>
 
-      {/* Row 2: Most Selected & Form Rankings */}
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-          gap: ThemeTokens.spacing.md,
-          marginBottom: ThemeTokens.spacing.md,
-        }}
-      >
-        <Box>
-          <MostSelectedPlayers />
+        {/* Row 2: Most Selected & Form Rankings */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+            gap: ThemeTokens.spacing.md,
+            marginBottom: ThemeTokens.spacing.md,
+          }}
+        >
+          <Box>
+            <MostSelectedPlayers />
+          </Box>
+          <Box>
+            <PlayerFormRankings />
+          </Box>
         </Box>
-        <Box>
-          <PlayerFormRankings />
-        </Box>
-      </Box>
 
-      {/* Row 3: Club Intelligence */}
-      <Box>
-        <TopClubs onViewClubs={() => handleNavigate('teams')} />
-      </Box>
-    </PageContainer>
+        {/* Row 3: Club Intelligence */}
+        <Box>
+          <TopClubs onViewClubs={() => handleNavigate('teams')} />
+        </Box>
+      </PageContainer>
+    </Box>
   );
 };
