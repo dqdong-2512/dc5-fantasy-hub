@@ -36,11 +36,10 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
   return (
     <Card
       sx={{
-        height: '100%',
         display: 'flex',
         flexDirection: 'column',
         borderRadius: ThemeTokens.borderRadius.md,
-        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.1)',
+        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
         ...sx,
       }}
     >
@@ -50,14 +49,14 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
           avatar={icon}
           title={
             <Box>
-              <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1.1rem' }}>
+              <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1rem' }}>
                 {title}
               </Typography>
               {subtitle && (
                 <Typography
                   variant="caption"
                   color="textSecondary"
-                  sx={{ display: 'block', marginTop: 0.5 }}
+                  sx={{ display: 'block', marginTop: 0.25 }}
                 >
                   {subtitle}
                 </Typography>
@@ -72,13 +71,20 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
             ) : undefined
           }
           sx={{
-            paddingBottom: 0,
+            paddingBottom: ThemeTokens.spacing.sm,
+            paddingX: ThemeTokens.spacing.md,
+            paddingTop: ThemeTokens.spacing.md,
           }}
         />
       )}
 
       {/* Widget Content */}
-      <CardContent sx={{ flex: 1, overflowY: 'auto', '&:last-child': { paddingBottom: 2 } }}>
+      <CardContent
+        sx={{
+          padding: ThemeTokens.spacing.md,
+          '&:last-child': { paddingBottom: ThemeTokens.spacing.md },
+        }}
+      >
         {children}
       </CardContent>
 

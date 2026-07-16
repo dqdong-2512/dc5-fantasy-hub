@@ -45,11 +45,11 @@ export const MostSelectedPlayers: React.FC = () => {
       icon={<PeopleIcon sx={{ color: '#9c27b0' }} />}
     >
       {mostOwned.length > 0 ? (
-        <Stack spacing={ThemeTokens.spacing.md}>
+        <Stack spacing={ThemeTokens.spacing.sm}>
           {mostOwned.map((player, idx) => (
             <Box key={player.id}>
               {/* Player Header */}
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: 1 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: 0.5 }}>
                 <Typography sx={{ fontWeight: 600, minWidth: 20, color: '#9c27b0' }}>
                   #{idx + 1}
                 </Typography>

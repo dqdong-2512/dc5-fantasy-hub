@@ -30,67 +30,40 @@ export const CurrentGameweekSummary: React.FC = () => {
     }
   }, []);
 
-  const timeRemaining = useMemo(() => {
-    if (!gameweekData.deadline) return 'N/A';
-    const now = new Date();
-    const deadline = new Date(gameweekData.deadline);
-    const diff = deadline.getTime() - now.getTime();
-
-    if (diff <= 0) return 'Deadline passed';
-
-    const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-    const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-
-    if (days > 0) return `${days}d ${hours}h remaining`;
-    return `${hours}h remaining`;
-  }, [gameweekData.deadline]);
-
   return (
-    <DashboardWidget
-      title="Current Gameweek"
-      icon={<EventIcon sx={{ color: '#1976d2' }} />}
-      subtitle={`Gameweek ${gameweekData.gameweek}`}
-    >
-      <Stack spacing={ThemeTokens.spacing.md}>
-        {/* Gameweek Number */}
+    <DashboardWidget title="Current Gameweek" icon={<EventIcon sx={{ color: '#1976d2' }} />}>
+      <Stack spacing={ThemeTokens.spacing.sm}>
+        {/* Gameweek Number - Compact */}
         <Box
           sx={{
-            padding: ThemeTokens.spacing.md,
-            backgroundColor: '#e3f2fd',
-            borderRadius: 1,
-            textAlign: 'center',
+            display: 'flex',
+            alignItems: 'baseline',
+            gap: 1,
+            marginBottom: ThemeTokens.spacing.xs,
           }}
         >
-          <Typography variant="h3" sx={{ fontWeight: 700, color: '#1976d2' }}>
+          <Typography variant="h5" sx={{ fontWeight: 700, color: '#1976d2', lineHeight: 1 }}>
             {gameweekData.gameweek}
           </Typography>
-          <Typography variant="caption" color="textSecondary">
-            Current Gameweek
+          <Typography variant="body2" color="textSecondary" sx={{ fontWeight: 600 }}>
+            {gameweekData.gameweek > 0 ? 'Active' : 'Complete'}
           </Typography>
         </Box>
 
-        {/* Details Grid */}
-        <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' }, gap: 2 }}>
-          {/* Deadline */}
-          <Box>
-            <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1.5 }}>
-              <AccessTimeIcon sx={{ color: '#ff9800', marginTop: 0.5, fontSize: 20 }} />
-              <Box>
-                <Typography
-                  variant="caption"
-                  color="textSecondary"
-                  sx={{ display: 'block', marginBottom: 0.5 }}
-                >
-                  Deadline
-                </Typography>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                  {gameweekData.deadlineFormatted}
-                </Typography>
-                <Typography variant="caption" color="textSecondary">
-                  {timeRemaining}
-                </Typography>
-              </Box>
-            </Box>
+        {/* Deadline Info */}
+        <Box sx={{ display: 'flex', alignItems: 'flex-start', gap: 1 }}>
+          <AccessTimeIcon sx={{ color: '#ff9800', fontSize: 16, marginTop: 0.25, flexShrink: 0 }} />
+          <Box sx={{ minWidth: 0 }}>
+            <Typography
+              variant="caption"
+              color="textSecondary"
+              sx={{ display: 'block', marginBottom: 0.25 }}
+            >
+              Deadline
+            </Typography>
+            <Typography variant="body2" sx={{ fontWeight: 600, fontSize: '0.875rem' }}>
+              {gameweekData.deadlineFormatted}
+            </Typography>
           </Box>
         </Box>
       </Stack>

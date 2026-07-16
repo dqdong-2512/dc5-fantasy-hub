@@ -1,6 +1,6 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Button, Typography, Stack } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { PageContainer } from '@shared/components';
 import type { CompetitionType } from '../../types/competition';
 import { COMPETITIONS } from '../../types/competition';
@@ -51,89 +51,55 @@ export const Dashboard: React.FC = () => {
   }, []);
 
   return (
-    <PageContainer>
-      {/* Dashboard Header */}
-      <Box
-        sx={{
-          paddingBottom: ThemeTokens.spacing.lg,
-          marginBottom: ThemeTokens.spacing.lg,
-          borderBottom: '1px solid #e0e0e0',
-        }}
-      >
-        <Stack spacing={ThemeTokens.spacing.md} sx={{ marginBottom: ThemeTokens.spacing.md }}>
-          <Typography variant="h4" sx={{ fontWeight: 700 }}>
-            Dashboard
-          </Typography>
-          <Typography variant="body2" color="text.secondary">
-            Fantasy Premier League Analytics & Overview
-          </Typography>
-        </Stack>
-        <Stack
-          direction="row"
-          spacing={ThemeTokens.spacing.lg}
-          sx={{
-            flexWrap: 'wrap',
-            '& > div': { minWidth: 150 },
-          }}
+    <PageContainer sx={{ paddingY: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}>
+      {/* Dashboard Header - Ultra Compact */}
+      <Box sx={{ marginBottom: ThemeTokens.spacing.lg }}>
+        <Typography variant="h4" sx={{ fontWeight: 700, marginBottom: ThemeTokens.spacing.xs }}>
+          Dashboard
+        </Typography>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ marginBottom: ThemeTokens.spacing.sm }}
         >
-          <Box>
-            <Typography variant="caption" color="text.secondary">
-              Competition
-            </Typography>
-            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-              {competitionInfo.name}
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="caption" color="text.secondary">
-              Season
-            </Typography>
-            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-              2025/26
-            </Typography>
-          </Box>
-          <Box>
-            <Typography variant="caption" color="text.secondary">
-              Current Gameweek
-            </Typography>
-            <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-              GW {currentGW ? (typeof currentGW === 'object' ? currentGW.id : currentGW) : '-'}
-            </Typography>
-          </Box>
-        </Stack>
+          Fantasy Premier League Analytics & Overview
+        </Typography>
+        <Typography variant="caption" color="text.secondary" sx={{ fontSize: '0.8rem' }}>
+          {competitionInfo.name} • 2025/26 • GW
+          {currentGW ? (typeof currentGW === 'object' ? currentGW.id : currentGW) : '-'}
+        </Typography>
       </Box>
 
       {/* FPL Command Center */}
-      <Box sx={{ marginBottom: ThemeTokens.spacing.lg }}>
+      <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
         <CommandCenter />
       </Box>
 
-      {/* Widget Grid - Balanced 2-column layout */}
+      {/* Widget Grid - First Row: Current GW (3 cols) + Top Players (9 cols) */}
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', lg: '1fr 2fr' },
-          gap: ThemeTokens.spacing.lg,
+          gridTemplateColumns: { xs: '1fr', md: '3fr 9fr' },
+          gap: ThemeTokens.spacing.md,
+          marginBottom: ThemeTokens.spacing.md,
+          alignItems: 'start',
         }}
       >
-        {/* Column 1: Context widgets */}
         <Box>
           <CurrentGameweekSummary />
         </Box>
-
-        {/* Column 2: Primary data widget */}
         <Box>
           <TopPerformingPlayers onPlayerClick={() => handleNavigate('players')} />
         </Box>
       </Box>
 
-      {/* Row 2: Most Selected & Form Rankings - Balanced grid */}
+      {/* Row 2: Most Selected & Form Rankings */}
       <Box
         sx={{
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-          gap: ThemeTokens.spacing.lg,
-          marginTop: ThemeTokens.spacing.lg,
+          gap: ThemeTokens.spacing.md,
+          marginBottom: ThemeTokens.spacing.md,
         }}
       >
         <Box>
@@ -145,46 +111,8 @@ export const Dashboard: React.FC = () => {
       </Box>
 
       {/* Row 3: Club Intelligence */}
-      <Box sx={{ marginTop: ThemeTokens.spacing.lg }}>
+      <Box>
         <TopClubs onViewClubs={() => handleNavigate('teams')} />
-      </Box>
-
-      {/* Quick Navigation Actions */}
-      <Box
-        sx={{
-          display: 'flex',
-          gap: ThemeTokens.spacing.md,
-          justifyContent: 'center',
-          flexWrap: 'wrap',
-          marginTop: ThemeTokens.spacing.xl,
-          paddingTop: ThemeTokens.spacing.lg,
-          borderTop: '1px solid #e0e0e0',
-        }}
-      >
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleNavigate('players')}
-          sx={{ textTransform: 'none', minWidth: 160 }}
-        >
-          Explore Players
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleNavigate('fixtures')}
-          sx={{ textTransform: 'none', minWidth: 160 }}
-        >
-          View Fixtures
-        </Button>
-        <Button
-          variant="contained"
-          color="primary"
-          onClick={() => handleNavigate('teams')}
-          sx={{ textTransform: 'none', minWidth: 160 }}
-        >
-          Analyze Clubs
-        </Button>
       </Box>
     </PageContainer>
   );

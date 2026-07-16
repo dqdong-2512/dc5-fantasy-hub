@@ -24,7 +24,7 @@ export function PageSection({
   ...props
 }: PageSectionProps): React.ReactElement {
   return (
-    <Box sx={{ marginBottom: ThemeTokens.spacing.xxl, ...sx }} {...props}>
+    <Box sx={{ marginBottom: ThemeTokens.spacing.lg, ...sx }} {...props}>
       {(title || subtitle || action) && (
         <Box
           sx={{

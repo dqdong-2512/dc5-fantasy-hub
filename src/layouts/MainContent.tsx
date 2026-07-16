@@ -17,10 +17,12 @@ export const MainContent: React.FC<MainContentProps> = ({ children }) => {
       }}
     >
       <Container
-        maxWidth="lg"
+        maxWidth={false}
         sx={{
-          paddingX: { xs: 2, sm: 3, md: 4 },
-          paddingY: 4,
+          maxWidth: { xs: '100%', sm: '100%', md: '100%', lg: 1600, xl: 1600 },
+          marginX: 'auto',
+          paddingX: { xs: 2, sm: 3, md: 4, lg: 3, xl: 4 },
+          paddingY: { xs: 2, sm: 3, md: 3 },
         }}
       >
         {children}

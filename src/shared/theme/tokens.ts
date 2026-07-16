@@ -35,11 +35,11 @@ export const ThemeTokens = {
 
   // Layout
   layout: {
-    maxWidth: 1400,
+    maxWidth: 1600,
     pageHorizontalPadding: 24,
-    sectionGap: 24,
-    gridColumnGap: 16,
-    gridRowGap: 16,
+    sectionGap: 16,
+    gridColumnGap: 12,
+    gridRowGap: 12,
   },
 
   // Typography - using MUI variants

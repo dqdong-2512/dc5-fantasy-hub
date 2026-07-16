@@ -48,76 +48,74 @@ export const PlayerFormRankings: React.FC = () => {
     return 'Cold';
   };
 
+  if (topForm.length === 0) {
+    return null;
+  }
+
   return (
     <DashboardWidget
       title="Form Rankings"
       subtitle="Top 8 players by form"
       icon={<LocalFireDepartmentIcon sx={{ color: '#e53935' }} />}
     >
-      {topForm.length > 0 ? (
-        <Stack spacing={ThemeTokens.spacing.md}>
-          {topForm.map((player, idx) => (
-            <Box key={player.id}>
-              {/* Player Row */}
-              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: 0.5 }}>
-                <Typography sx={{ fontWeight: 600, minWidth: 20, color: '#666' }}>
-                  {idx + 1}
-                </Typography>
-                <Avatar
-                  src={getPlayerImageUrl(player.id)}
-                  sx={{ width: 32, height: 32 }}
-                  alt={player.name}
-                >
-                  {player.name.charAt(0)}
-                </Avatar>
-                <Box sx={{ flex: 1, minWidth: 0 }}>
-                  <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
-                    {player.name}
-                  </Typography>
-                </Box>
-                <Chip
-                  label={getFormLabel(player.form)}
-                  size="small"
-                  sx={{
-                    backgroundColor: getFormColor(player.form),
-                    color: '#fff',
-                    fontWeight: 600,
-                    minWidth: 60,
-                  }}
-                />
-                <Typography
-                  sx={{
-                    fontWeight: 700,
-                    minWidth: 40,
-                    textAlign: 'right',
-                    color: getFormColor(player.form),
-                  }}
-                >
-                  {player.form}
+      <Stack spacing={ThemeTokens.spacing.md}>
+        {topForm.map((player, idx) => (
+          <Box key={player.id}>
+            {/* Player Row */}
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: 0.5 }}>
+              <Typography sx={{ fontWeight: 600, minWidth: 20, color: '#666' }}>
+                {idx + 1}
+              </Typography>
+              <Avatar
+                src={getPlayerImageUrl(player.id)}
+                sx={{ width: 32, height: 32 }}
+                alt={player.name}
+              >
+                {player.name.charAt(0)}
+              </Avatar>
+              <Box sx={{ flex: 1, minWidth: 0 }}>
+                <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
+                  {player.name}
                 </Typography>
               </Box>
-
-              {/* Form Progress */}
-              <LinearProgress
-                variant="determinate"
-                value={Math.min(100, (parseFloat(player.form) / 10) * 100)}
+              <Chip
+                label={getFormLabel(player.form)}
+                size="small"
                 sx={{
-                  height: 4,
-                  borderRadius: 2,
-                  backgroundColor: '#e0e0e0',
-                  '& .MuiLinearProgress-bar': {
-                    backgroundColor: getFormColor(player.form),
-                  },
+                  backgroundColor: getFormColor(player.form),
+                  color: '#fff',
+                  fontWeight: 600,
+                  minWidth: 60,
                 }}
               />
+              <Typography
+                sx={{
+                  fontWeight: 700,
+                  minWidth: 40,
+                  textAlign: 'right',
+                  color: getFormColor(player.form),
+                }}
+              >
+                {player.form}
+              </Typography>
             </Box>
-          ))}
-        </Stack>
-      ) : (
-        <Typography color="textSecondary" sx={{ textAlign: 'center', padding: 2 }}>
-          No players data available
-        </Typography>
-      )}
+
+            {/* Form Progress */}
+            <LinearProgress
+              variant="determinate"
+              value={Math.min(100, (parseFloat(player.form) / 10) * 100)}
+              sx={{
+                height: 4,
+                borderRadius: 2,
+                backgroundColor: '#e0e0e0',
+                '& .MuiLinearProgress-bar': {
+                  backgroundColor: getFormColor(player.form),
+                },
+              }}
+            />
+          </Box>
+        ))}
+      </Stack>
     </DashboardWidget>
   );
 };

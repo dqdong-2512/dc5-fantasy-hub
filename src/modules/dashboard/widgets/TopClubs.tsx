@@ -50,7 +50,7 @@ export const TopClubs: React.FC<TopClubsProps> = ({ onViewClubs }) => {
       }
     >
       {topClubs.length > 0 ? (
-        <Stack spacing={ThemeTokens.spacing.md}>
+        <Stack spacing={ThemeTokens.spacing.sm}>
           {topClubs.map((club, idx) => (
             <Box key={club.id}>
               {/* Club Row */}

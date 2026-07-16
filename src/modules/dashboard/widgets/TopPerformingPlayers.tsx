@@ -50,17 +50,17 @@ export const TopPerformingPlayers: React.FC<TopPerformingPlayersProps> = ({ onPl
     >
       {topPlayers.length > 0 ? (
         <TableContainer>
-          <Table size="small">
+          <Table size="small" sx={{ '& td': { padding: '8px' }, '& th': { padding: '8px' } }}>
             <TableHead>
               <TableRow sx={{ backgroundColor: '#f5f5f5' }}>
-                <TableCell sx={{ fontWeight: 600 }}>Player</TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600 }}>
+                <TableCell sx={{ fontWeight: 600, padding: '8px' }}>Player</TableCell>
+                <TableCell align="right" sx={{ fontWeight: 600, padding: '8px' }}>
                   Points
                 </TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600 }}>
+                <TableCell align="right" sx={{ fontWeight: 600, padding: '8px' }}>
                   Form
                 </TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600 }}>
+                <TableCell align="right" sx={{ fontWeight: 600, padding: '8px' }}>
                   Price
                 </TableCell>
               </TableRow>
@@ -72,6 +72,7 @@ export const TopPerformingPlayers: React.FC<TopPerformingPlayersProps> = ({ onPl
                   onClick={() => onPlayerClick?.(player.id as unknown as number)}
                   sx={{
                     cursor: onPlayerClick ? 'pointer' : 'default',
+                    height: 44,
                     '&:hover': { backgroundColor: '#f9f9f9' },
                   }}
                 >
