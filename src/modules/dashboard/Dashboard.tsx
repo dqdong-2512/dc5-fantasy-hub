@@ -5,7 +5,6 @@ import { PageContainer } from '@shared/components';
 import type { CompetitionType } from '../../types/competition';
 import { COMPETITIONS } from '../../types/competition';
 import { DashboardHero } from './components/DashboardHero';
-import { CommandCenter } from './components/CommandCenter';
 import {
   CurrentGameweekSummary,
   TopPerformingPlayers,
@@ -46,12 +45,12 @@ export const Dashboard: React.FC = () => {
       <DashboardHero />
 
       {/* Dashboard Content Container */}
-      <PageContainer sx={{ paddingY: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}>
-        {/* FPL Command Center */}
-        <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
-          <CommandCenter />
-        </Box>
-
+      <PageContainer
+        sx={{
+          paddingTop: { xs: '16px', md: '24px' },
+          paddingBottom: { xs: '16px', md: '24px' },
+        }}
+      >
         {/* Widget Grid - First Row: Current GW (3 cols) + Top Players (9 cols) */}
         <Box
           sx={{

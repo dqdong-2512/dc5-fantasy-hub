@@ -19,7 +19,7 @@ export const DashboardHero: React.FC = () => {
         width: '100%',
         py: { xs: '16px', sm: '20px', md: '24px' },
         px: { xs: '16px', sm: '20px', md: '20px' },
-        mb: ThemeTokens.spacing.lg,
+        mb: ThemeTokens.spacing.xs,
       }}
     >
       <Box
