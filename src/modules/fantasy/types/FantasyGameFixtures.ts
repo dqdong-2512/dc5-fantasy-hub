@@ -44,10 +44,25 @@ export interface FantasyLeagueFixture {
 }
 
 /**
+ * Squad pick fixture - represents a selected player for the squad
+ * References real player data by playerId
+ */
+export interface FantasySquadPick {
+  playerId: number;
+  position: number; // FPL position in squad (1-15)
+  isStarter: boolean; // True for starting XI, false for bench
+  benchOrder?: number; // 0-3 for bench players
+  isCaptain?: boolean;
+  isViceCaptain?: boolean;
+  gameweekPoints?: number;
+}
+
+/**
  * Complete Fantasy Game fixture set
  */
 export interface FantasyGameFixtures {
   manager: FantasyGameManagerFixture;
   currentGameweek: FantasyGameweekFixture;
   leagues: FantasyLeagueFixture[];
+  squad?: FantasySquadPick[];
 }

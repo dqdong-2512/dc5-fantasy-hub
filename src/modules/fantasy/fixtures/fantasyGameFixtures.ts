@@ -70,4 +70,116 @@ export const fantasyGameFixtures: FantasyGameFixtures = {
       members: 92,
     },
   ],
+
+  /**
+   * Current squad - 15 players (11 starting XI + 4 bench)
+   * Uses real FPL player IDs from synced player database
+   * Starting XI formation: 4-3-3
+   *
+   * NOTE: These player IDs reference real players in the synced FPL 2025/26 database.
+   * If a player is not found, the rendering gracefully handles missing data.
+   */
+  squad: [
+    // Goalkeeper (1)
+    {
+      playerId: 1,
+      position: 1,
+      isStarter: true,
+      isCaptain: false,
+      isViceCaptain: false,
+      gameweekPoints: 7,
+    },
+
+    // Defenders (4)
+    {
+      playerId: 5,
+      position: 2,
+      isStarter: true,
+      isCaptain: false,
+      isViceCaptain: false,
+      gameweekPoints: 6,
+    },
+    {
+      playerId: 8,
+      position: 3,
+      isStarter: true,
+      isCaptain: false,
+      isViceCaptain: false,
+      gameweekPoints: 5,
+    },
+    {
+      playerId: 12,
+      position: 4,
+      isStarter: true,
+      isCaptain: false,
+      isViceCaptain: false,
+      gameweekPoints: 4,
+    },
+    {
+      playerId: 18,
+      position: 5,
+      isStarter: true,
+      isCaptain: false,
+      isViceCaptain: true,
+      gameweekPoints: 8,
+    },
+
+    // Midfielders (3)
+    {
+      playerId: 25,
+      position: 6,
+      isStarter: true,
+      isCaptain: true,
+      isViceCaptain: false,
+      gameweekPoints: 24,
+    },
+    {
+      playerId: 32,
+      position: 7,
+      isStarter: true,
+      isCaptain: false,
+      isViceCaptain: false,
+      gameweekPoints: 10,
+    },
+    {
+      playerId: 38,
+      position: 8,
+      isStarter: true,
+      isCaptain: false,
+      isViceCaptain: false,
+      gameweekPoints: 6,
+    },
+
+    // Forwards (3)
+    {
+      playerId: 45,
+      position: 9,
+      isStarter: true,
+      isCaptain: false,
+      isViceCaptain: false,
+      gameweekPoints: 8,
+    },
+    {
+      playerId: 52,
+      position: 10,
+      isStarter: true,
+      isCaptain: false,
+      isViceCaptain: false,
+      gameweekPoints: 5,
+    },
+    {
+      playerId: 60,
+      position: 11,
+      isStarter: true,
+      isCaptain: false,
+      isViceCaptain: false,
+      gameweekPoints: 2,
+    },
+
+    // Bench (4)
+    { playerId: 62, position: 12, isStarter: false, benchOrder: 0, gameweekPoints: 0 },
+    { playerId: 68, position: 13, isStarter: false, benchOrder: 1, gameweekPoints: 2 },
+    { playerId: 75, position: 14, isStarter: false, benchOrder: 2, gameweekPoints: 0 },
+    { playerId: 80, position: 15, isStarter: false, benchOrder: 3, gameweekPoints: 3 },
+  ],
 };

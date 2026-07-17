@@ -49,6 +49,12 @@ const router = createBrowserRouter([
           {
             path: 'fantasy-game',
             element: <Fantasy />,
+            children: [
+              {
+                path: 'team',
+                element: <Fantasy />,
+              },
+            ],
           },
         ],
       },

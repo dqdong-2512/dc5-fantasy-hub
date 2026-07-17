@@ -6,6 +6,7 @@
 
 import React, { useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { fantasyGameFixtures } from '../fixtures';
@@ -13,10 +14,10 @@ import { MyTeamSummary, CurrentGameweekSummary, MyLeagues, QuickActions } from '
 
 export const FantasyGameOverview: React.FC = () => {
   const fixtures = useMemo(() => fantasyGameFixtures, []);
+  const navigate = useNavigate();
 
   const handleViewTeam = (): void => {
-    // TODO: Navigate to team pitch view
-    console.log('View My Team - feature coming soon');
+    navigate('/premier-league/fantasy-game/team');
   };
 
   const handleLeagueClick = (leagueId: number): void => {

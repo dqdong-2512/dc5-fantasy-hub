@@ -3,3 +3,7 @@ export { FantasyGameHeader, type FantasyGameHeaderProps } from './FantasyGameHea
 export { FantasyOverview, type FantasyOverviewProps } from './FantasyOverview';
 export { MyTeam, type MyTeamProps } from './MyTeam';
 export { Leagues, type LeaguesProps } from './Leagues';
+export { PitchPlayer, type PitchPlayerProps } from './PitchPlayer';
+export { FootballPitch, type FootballPitchProps } from './FootballPitch';
+export { Bench, type BenchProps } from './Bench';
+export { TeamSummary, type TeamSummaryProps } from './TeamSummary';

@@ -6,11 +6,13 @@
 
 import React from 'react';
 import { Box, CircularProgress } from '@mui/material';
+import { useLocation } from 'react-router-dom';
 import { useFantasyGame } from './hooks';
-import { FantasyWorkspace, FantasyGameOverview } from './pages';
+import { FantasyWorkspace, FantasyGameOverview, MyTeamPage } from './pages';
 
 export const Fantasy: React.FC = () => {
   const gameState = useFantasyGame();
+  const location = useLocation();
 
   // Show loading while checking for stored entry
   if (gameState.isLoading && !gameState.isConnected) {
@@ -23,9 +25,13 @@ export const Fantasy: React.FC = () => {
     );
   }
 
-  // Not connected - Show Overview or Connect Form
+  // Not connected - Show Overview or Team page based on route
   if (!gameState.isConnected) {
-    // For now, show the Fantasy Game Overview with fixture data
+    // Check if requesting /team path
+    if (location.pathname.includes('/team')) {
+      return <MyTeamPage />;
+    }
+    // Show the Fantasy Game Overview with fixture data
     // This allows UI development and testing before real entry connection
     return <FantasyGameOverview />;
   }
