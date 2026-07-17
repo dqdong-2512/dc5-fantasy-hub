@@ -10,7 +10,6 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { DashboardWidget } from '../components/DashboardWidget';
 import { BootstrapRepository } from '@repositories/bootstrap';
 import { formatDeadline } from '@shared/presentation';
-import { ThemeTokens } from '@shared/theme/tokens';
 
 /**
  * Current Gameweek Summary Widget
@@ -32,14 +31,13 @@ export const CurrentGameweekSummary: React.FC = () => {
 
   return (
     <DashboardWidget title="Current Gameweek" icon={<EventIcon sx={{ color: '#1976d2' }} />}>
-      <Stack spacing={ThemeTokens.spacing.sm}>
+      <Stack spacing={4}>
         {/* Gameweek Number - Compact */}
         <Box
           sx={{
             display: 'flex',
             alignItems: 'baseline',
             gap: 1,
-            marginBottom: ThemeTokens.spacing.xs,
           }}
         >
           <Typography variant="h5" sx={{ fontWeight: 700, color: '#1976d2', lineHeight: 1 }}>

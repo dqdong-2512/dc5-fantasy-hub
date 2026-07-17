@@ -41,6 +41,7 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
         borderRadius: ThemeTokens.borderRadius.md,
         boxShadow: '0 1px 3px rgba(0, 0, 0, 0.08)',
         overflow: 'hidden',
+        height: '100%',
         ...sx,
       }}
     >
@@ -49,12 +50,12 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
         <Box
           sx={{
             backgroundColor: '#f59e0b',
-            paddingX: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg },
-            paddingY: { xs: ThemeTokens.spacing.sm, md: ThemeTokens.spacing.md },
+            padding: { xs: 2, md: 4 },
             display: 'flex',
             alignItems: 'center',
             gap: ThemeTokens.spacing.md,
             justifyContent: 'space-between',
+            flexShrink: 0,
           }}
         >
           {/* Icon + Title/Subtitle */}
@@ -118,8 +119,10 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
       {/* Widget Content */}
       <CardContent
         sx={{
-          padding: ThemeTokens.spacing.md,
-          '&:last-child': { paddingBottom: ThemeTokens.spacing.md },
+          padding: 4,
+          '&:last-child': { paddingBottom: 8 },
+          flex: 1,
+          overflowY: 'auto',
         }}
       >
         {children}

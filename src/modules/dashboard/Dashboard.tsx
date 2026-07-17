@@ -58,13 +58,13 @@ export const Dashboard: React.FC = () => {
             gridTemplateColumns: { xs: '1fr', md: '3fr 9fr' },
             gap: ThemeTokens.spacing.md,
             marginBottom: ThemeTokens.spacing.md,
-            alignItems: 'start',
+            alignItems: { xs: 'start', md: 'stretch' },
           }}
         >
-          <Box>
+          <Box sx={{ height: { xs: 'auto', md: '100%' } }}>
             <CurrentGameweekSummary />
           </Box>
-          <Box>
+          <Box sx={{ height: { xs: 'auto', md: '100%' } }}>
             <TopPerformingPlayers onPlayerClick={() => handleNavigate('players')} />
           </Box>
         </Box>
