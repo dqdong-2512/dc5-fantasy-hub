@@ -24,7 +24,7 @@ const MENU_ITEMS = [
   { id: 'fixtures', label: 'Fixtures', path: 'fixtures' },
   { id: 'teams', label: 'Clubs', path: 'teams' },
   { id: 'analytics', label: 'Analytics', path: 'analytics' },
-  { id: 'fantasy', label: 'Fantasy Game', path: 'fantasy' },
+  { id: 'fantasy-game', label: 'Fantasy Game', path: 'fantasy-game' },
   { id: 'champions', label: 'Champions League', path: 'champions-league/dashboard' },
 ];
 

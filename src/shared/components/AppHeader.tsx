@@ -28,7 +28,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Players', path: '/premier-league/players' },
   { label: 'Fixtures', path: '/premier-league/fixtures' },
   { label: 'Clubs', path: '/premier-league/teams' },
-  { label: 'Fantasy Game', path: '/premier-league/fantasy' },
+  { label: 'Fantasy Game', path: '/premier-league/fantasy-game' },
   { label: 'Analytics', path: '/premier-league/analytics' },
 ];
 

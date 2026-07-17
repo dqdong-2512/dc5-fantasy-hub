@@ -47,7 +47,7 @@ const router = createBrowserRouter([
             element: <Analytics />,
           },
           {
-            path: 'fantasy',
+            path: 'fantasy-game',
             element: <Fantasy />,
           },
         ],
