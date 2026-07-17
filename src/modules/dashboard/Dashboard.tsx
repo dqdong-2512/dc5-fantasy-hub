@@ -51,20 +51,20 @@ export const Dashboard: React.FC = () => {
           paddingBottom: { xs: '16px', md: '24px' },
         }}
       >
-        {/* Widget Grid - First Row: Current GW (3 cols) + Top Players (9 cols) */}
+        {/* Widget Grid - First Row: Current GW (50%) + Top Players (50%) on lg+ */}
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: '3fr 9fr' },
+            gridTemplateColumns: { xs: '1fr', sm: '1fr', md: '1fr', lg: '1fr 1fr' },
             gap: ThemeTokens.spacing.md,
             marginBottom: ThemeTokens.spacing.md,
-            alignItems: { xs: 'start', md: 'stretch' },
+            alignItems: { xs: 'start', lg: 'stretch' },
           }}
         >
-          <Box sx={{ height: { xs: 'auto', md: '100%' } }}>
+          <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
             <CurrentGameweekSummary />
           </Box>
-          <Box sx={{ height: { xs: 'auto', md: '100%' } }}>
+          <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
             <TopPerformingPlayers onPlayerClick={() => handleNavigate('players')} />
           </Box>
         </Box>

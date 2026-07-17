@@ -56,6 +56,7 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
             gap: ThemeTokens.spacing.md,
             justifyContent: 'space-between',
             flexShrink: 0,
+            minHeight: 0,
           }}
         >
           {/* Icon + Title/Subtitle */}
