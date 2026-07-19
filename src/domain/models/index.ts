@@ -52,3 +52,15 @@ export type {
   ManagerHeadToHeadComparison,
   PlayerComparisonRow,
 } from './ManagerHeadToHead';
+export {
+  OwnershipCategory,
+  type RawPlayerMetrics,
+  type ValueMetrics,
+  type FormMetrics,
+  type DifferentialMetrics,
+  type FixtureMetrics,
+  type PlayerAnalyticsRecord,
+  type PlayerComparisonRecord,
+  type TransferTarget,
+  type ShortlistEntry,
+} from './PlayerAnalytics';
