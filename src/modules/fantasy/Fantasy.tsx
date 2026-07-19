@@ -4,22 +4,24 @@
  * Displays team, picks, and leagues
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box, CircularProgress } from '@mui/material';
 import { useLocation } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import { useFantasyGame } from './hooks';
 import {
   FantasyWorkspace,
   FantasyGameOverview,
   MyTeamPage,
-  MyLeaguesPage,
   LeagueStandingsPage,
   ManagerComparisonPage,
 } from './pages';
+import { fantasyGameFixtures } from './fixtures';
 
 export const Fantasy: React.FC = () => {
   const gameState = useFantasyGame();
   const location = useLocation();
+  const fixtures = useMemo(() => fantasyGameFixtures, []);
 
   // Show loading while checking for stored entry
   if (gameState.isLoading && !gameState.isConnected) {
@@ -34,6 +36,16 @@ export const Fantasy: React.FC = () => {
 
   // Not connected - Show pages based on route
   if (!gameState.isConnected) {
+    // Redirect /leagues (without ID) to primary league
+    if (location.pathname === '/premier-league/fantasy-game/leagues') {
+      return (
+        <Navigate
+          to={`/premier-league/fantasy-game/leagues/${fixtures.manager.primaryLeagueId}`}
+          replace
+        />
+      );
+    }
+
     // Check for manager comparison page (must check before /leagues/)
     if (location.pathname.includes('/managers/')) {
       return <ManagerComparisonPage />;
@@ -42,11 +54,6 @@ export const Fantasy: React.FC = () => {
     // Check for league standings page
     if (location.pathname.includes('/leagues/')) {
       return <LeagueStandingsPage />;
-    }
-
-    // Check for my leagues page
-    if (location.pathname.includes('/leagues')) {
-      return <MyLeaguesPage />;
     }
 
     // Check for team page

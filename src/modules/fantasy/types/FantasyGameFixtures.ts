@@ -16,6 +16,7 @@ export interface FantasyGameManagerFixture {
   overallRank: number;
   teamValue: number;
   bank: number;
+  primaryLeagueId: number;
 }
 
 /**

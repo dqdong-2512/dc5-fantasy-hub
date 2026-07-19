@@ -1,6 +1,7 @@
 /**
  * League Standings Page
  * Displays standings for a selected league
+ * Central workspace for league features with league switcher
  */
 
 import React, { useMemo } from 'react';
@@ -10,7 +11,12 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { fantasyGameFixtures, leagueStandingsFixtures } from '../fixtures';
-import { LeagueStandingsTable, YourPositionSummary } from '../components';
+import {
+  LeagueStandingsTable,
+  YourPositionSummary,
+  LeagueSwitcher,
+  RankMovement,
+} from '../components';
 import type { LeagueStandingEntry } from '../types';
 
 export const LeagueStandingsPage: React.FC = () => {
@@ -63,7 +69,7 @@ export const LeagueStandingsPage: React.FC = () => {
         {/* Back Button */}
         <Button
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/premier-league/fantasy-game/leagues')}
+          onClick={() => navigate('/premier-league/fantasy-game')}
           sx={{
             textTransform: 'none',
             marginBottom: 1.5,
@@ -72,24 +78,69 @@ export const LeagueStandingsPage: React.FC = () => {
             '&:hover': { backgroundColor: 'transparent' },
           }}
         >
-          Back to My Leagues
+          Back to Fantasy Game
         </Button>
 
-        {/* Page Title */}
-        <Typography
-          variant="h5"
+        {/* League Header Row - Title and Switcher */}
+        <Box
           sx={{
-            fontWeight: 700,
-            marginBottom: 0.5,
+            display: 'flex',
+            flexDirection: { xs: 'column', sm: 'row' },
+            alignItems: { xs: 'flex-start', sm: 'center' },
+            gap: { xs: 1.5, sm: 2 },
+            marginBottom: 1,
           }}
         >
-          {league.name}
-        </Typography>
+          <Typography
+            variant="h5"
+            sx={{
+              fontWeight: 700,
+              flex: 1,
+            }}
+          >
+            {league.name}
+          </Typography>
 
-        {/* Subtitle with member count */}
-        <Typography variant="body2" color="textSecondary">
-          {standings.entries.length} managers
-        </Typography>
+          {/* League Switcher */}
+          <LeagueSwitcher leagues={fixtures.leagues} selectedLeagueId={leagueIdNum} />
+        </Box>
+
+        {/* League Summary Info - Compact Row */}
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            alignItems: 'center',
+            flexWrap: 'wrap',
+          }}
+        >
+          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
+            Rank{' '}
+            <Typography component="span" sx={{ fontWeight: 600, color: '#333' }}>
+              #{currentManagerEntry.currentRank}
+            </Typography>
+          </Typography>
+
+          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
+            •
+          </Typography>
+
+          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
+            {standings.entries.length} Managers
+          </Typography>
+
+          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
+            •
+          </Typography>
+
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+            <RankMovement
+              previousRank={currentManagerEntry.previousRank}
+              currentRank={currentManagerEntry.currentRank}
+              size="small"
+            />
+          </Box>
+        </Box>
       </Box>
 
       {/* Main Content */}

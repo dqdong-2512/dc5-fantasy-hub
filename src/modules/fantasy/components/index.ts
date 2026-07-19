@@ -11,6 +11,7 @@ export { RankMovement, type RankMovementProps } from './RankMovement';
 export { YourPositionSummary, type YourPositionSummaryProps } from './YourPositionSummary';
 export { LeagueStandingsTable, type LeagueStandingsTableProps } from './LeagueStandingsTable';
 export { MyLeaguesList, type MyLeaguesListProps } from './MyLeaguesList';
+export { LeagueSwitcher, type LeagueSwitcherProps } from './LeagueSwitcher';
 export { ComparisonHeader, type ComparisonHeaderProps } from './ComparisonHeader';
 export { HeadToHeadSummary, type HeadToHeadSummaryProps } from './HeadToHeadSummary';
 export { CaptainComparison, type CaptainComparisonProps } from './CaptainComparison';

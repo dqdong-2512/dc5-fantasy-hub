@@ -26,6 +26,7 @@ export const fantasyGameFixtures: FantasyGameFixtures = {
     overallRank: 120408,
     teamValue: 102.4, // £m
     bank: 0.8, // £m
+    primaryLeagueId: 12345,
   },
 
   /**
