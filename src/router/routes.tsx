@@ -63,6 +63,14 @@ const router = createBrowserRouter([
                 element: <Fantasy />,
               },
               {
+                path: 'transfers',
+                element: <Fantasy />,
+              },
+              {
+                path: 'planner',
+                element: <Fantasy />,
+              },
+              {
                 path: 'leagues',
                 element: <Fantasy />,
               },

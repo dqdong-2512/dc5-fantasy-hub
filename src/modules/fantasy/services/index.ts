@@ -6,3 +6,8 @@ export { SquadValidationService, SQUAD_RULES } from './squad-validation.service'
 export { SquadSimulationService } from './squad-simulation.service';
 export { TransferPlanService } from './transfer-plan.service';
 export { TransferPlanRepository } from './transfer-plan-repository';
+export { GameweekPlanService } from './gameweek-plan.service';
+export { GameweekPlanValidationService } from './gameweek-plan-validation.service';
+export { GameweekPlanInsightService } from './gameweek-plan-insight.service';
+export { GameweekPlanRepository } from './gameweek-plan-repository.service';
+export { SquadSourceResolver, type ResolvedSquadSource } from './squad-source-resolver.service';
