@@ -38,3 +38,17 @@ export type {
   NearestRivalsData,
   CaptainRaceEntry,
 } from './LeagueRace';
+export type {
+  OverallComparison,
+  GameweekComparison,
+  CaptainComparison,
+  TransferComparison,
+  BenchComparison,
+  PlayerDifferentialImpact,
+  DifferentialAnalysis,
+  GameweekTrendEntry,
+  RivalrySummary,
+  HistoricalTrend,
+  ManagerHeadToHeadComparison,
+  PlayerComparisonRow,
+} from './ManagerHeadToHead';

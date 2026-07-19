@@ -16,12 +16,8 @@ import {
   LeagueStandingsTable,
   YourPositionSummary,
   OpponentSelector,
-  ComparisonHeader,
-  HeadToHeadSummary,
-  CaptainComparison,
-  TeamPitchComparison,
-  DifferentialSummary,
   LiveLeagueRace,
+  ManagerHeadToHeadPage,
 } from '../components';
 import type { LeagueStandingEntry } from '../types';
 
@@ -196,36 +192,16 @@ export const LeagueStandingsPage: React.FC = () => {
         />
 
         <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
-          {/* Comparison Header */}
-          <ComparisonHeader currentManager={fixtures.manager} opponentManager={opponentManager} />
-
-          {/* Head-to-Head Summary */}
-          <Box sx={{ marginTop: 3 }}>
-            <HeadToHeadSummary
-              currentManager={fixtures.manager}
-              opponentManager={opponentManager}
-            />
-          </Box>
-
-          {/* Captain Comparison */}
-          <Box sx={{ marginTop: 3 }}>
-            <CaptainComparison mySquad={currentSquad} opponentSquad={opponentSquad} />
-          </Box>
-
-          {/* Team Pitch Comparison */}
-          <Box sx={{ marginTop: 3 }}>
-            <TeamPitchComparison
-              mySquad={currentSquad}
-              myTeamName={fixtures.manager.teamName}
-              opponentSquad={opponentSquad}
-              opponentTeamName={opponentManager.teamName}
-            />
-          </Box>
-
-          {/* Differential Summary */}
-          <Box sx={{ marginTop: 3, paddingBottom: ThemeTokens.spacing.xs }}>
-            <DifferentialSummary mySquad={currentSquad} opponentSquad={opponentSquad} />
-          </Box>
+          <ManagerHeadToHeadPage
+            leagueId={leagueIdNum || 0}
+            currentManagerId={fixtures.manager.id}
+            opponentManagerId={managerIdNum}
+            standings={standings.entries}
+            currentManagerName={fixtures.manager.name}
+            opponentManagerName={opponentManager.managerName}
+            currentSquad={currentSquad}
+            opponentSquad={opponentSquad}
+          />
         </PageContainer>
       </Box>
     );
