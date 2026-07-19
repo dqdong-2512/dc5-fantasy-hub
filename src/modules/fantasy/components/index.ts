@@ -12,6 +12,9 @@ export { YourPositionSummary, type YourPositionSummaryProps } from './YourPositi
 export { LeagueStandingsTable, type LeagueStandingsTableProps } from './LeagueStandingsTable';
 export { MyLeaguesList, type MyLeaguesListProps } from './MyLeaguesList';
 export { LeagueSwitcher, type LeagueSwitcherProps } from './LeagueSwitcher';
+export { LeagueWorkspaceHeader, type LeagueWorkspaceHeaderProps } from './LeagueWorkspaceHeader';
+export { WorkspaceNavigation, type WorkspaceNavigationProps } from './WorkspaceNavigation';
+export { OpponentSelector, type OpponentSelectorProps } from './OpponentSelector';
 export { ComparisonHeader, type ComparisonHeaderProps } from './ComparisonHeader';
 export { HeadToHeadSummary, type HeadToHeadSummaryProps } from './HeadToHeadSummary';
 export { CaptainComparison, type CaptainComparisonProps } from './CaptainComparison';

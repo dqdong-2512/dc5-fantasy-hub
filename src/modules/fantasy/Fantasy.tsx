@@ -9,13 +9,7 @@ import { Box, CircularProgress } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import { useFantasyGame } from './hooks';
-import {
-  FantasyWorkspace,
-  FantasyGameOverview,
-  MyTeamPage,
-  LeagueStandingsPage,
-  ManagerComparisonPage,
-} from './pages';
+import { FantasyWorkspace, FantasyGameOverview, MyTeamPage, LeagueStandingsPage } from './pages';
 import { fantasyGameFixtures } from './fixtures';
 
 export const Fantasy: React.FC = () => {
@@ -46,12 +40,7 @@ export const Fantasy: React.FC = () => {
       );
     }
 
-    // Check for manager comparison page (must check before /leagues/)
-    if (location.pathname.includes('/managers/')) {
-      return <ManagerComparisonPage />;
-    }
-
-    // Check for league standings page
+    // Check for league workspace (handles both standings and manager comparison)
     if (location.pathname.includes('/leagues/')) {
       return <LeagueStandingsPage />;
     }

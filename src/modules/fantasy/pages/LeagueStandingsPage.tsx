@@ -1,31 +1,40 @@
 /**
- * League Standings Page
- * Displays standings for a selected league
- * Central workspace for league features with league switcher
+ * League Workspace Page
+ * Central workspace for all league-related features
+ * Handles Standings, Manager Comparison, and future Live Race features
  */
 
 import React, { useMemo } from 'react';
-import { Box, Typography, Button } from '@mui/material';
-import { useNavigate, useParams } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Box, Typography } from '@mui/material';
+import { useParams, Navigate, useLocation } from 'react-router-dom';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { fantasyGameFixtures, leagueStandingsFixtures } from '../fixtures';
+import { fantasyGameFixtures, leagueStandingsFixtures, opponentSquadsFixtures } from '../fixtures';
 import {
+  LeagueWorkspaceHeader,
+  WorkspaceNavigation,
   LeagueStandingsTable,
   YourPositionSummary,
-  LeagueSwitcher,
-  RankMovement,
+  OpponentSelector,
+  ComparisonHeader,
+  HeadToHeadSummary,
+  CaptainComparison,
+  TeamPitchComparison,
+  DifferentialSummary,
 } from '../components';
 import type { LeagueStandingEntry } from '../types';
 
 export const LeagueStandingsPage: React.FC = () => {
-  const navigate = useNavigate();
-  const { leagueId } = useParams<{ leagueId: string }>();
+  const { leagueId, managerId } = useParams<{ leagueId: string; managerId?: string }>();
+  const location = useLocation();
   const fixtures = useMemo(() => fantasyGameFixtures, []);
 
-  // Parse leagueId as number
+  // Parse IDs as numbers
   const leagueIdNum = useMemo(() => (leagueId ? parseInt(leagueId, 10) : null), [leagueId]);
+  const managerIdNum = useMemo(() => (managerId ? parseInt(managerId, 10) : null), [managerId]);
+
+  // Detect if on Live Race view
+  const isLiveRaceView = useMemo(() => location.pathname.includes('/live'), [location.pathname]);
 
   // Find league details
   const league = useMemo(
@@ -47,6 +56,28 @@ export const LeagueStandingsPage: React.FC = () => {
     [standings, fixtures.manager.id]
   );
 
+  // Find opponent manager in standings (if comparing)
+  const opponentManager = useMemo(
+    () =>
+      managerIdNum && standings
+        ? standings.entries.find((e: LeagueStandingEntry) => e.managerId === managerIdNum) || null
+        : null,
+    [managerIdNum, standings]
+  );
+
+  // Get opponent squad (if comparing)
+  const opponentSquad = useMemo(
+    () => (managerIdNum ? opponentSquadsFixtures[managerIdNum] || null : null),
+    [managerIdNum]
+  );
+
+  // Get current squad
+  const currentSquad = fixtures.squad || [];
+
+  // Check for self-comparison
+  const isSelfComparison = managerIdNum === fixtures.manager.id;
+
+  // Error: Invalid league
   if (!league || !standings || !currentManagerEntry) {
     return (
       <Box sx={{ padding: 4, textAlign: 'center' }}>
@@ -57,124 +88,173 @@ export const LeagueStandingsPage: React.FC = () => {
     );
   }
 
-  return (
-    <Box>
-      {/* Compact Page Header */}
-      <Box
-        sx={{
-          padding: ThemeTokens.spacing.xs,
-          borderBottom: '1px solid #e0e0e0',
-        }}
-      >
-        {/* Back Button */}
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/premier-league/fantasy-game')}
-          sx={{
-            textTransform: 'none',
-            marginBottom: 1.5,
-            color: '#1976d2',
-            padding: 0,
-            '&:hover': { backgroundColor: 'transparent' },
-          }}
-        >
-          Back to Fantasy Game
-        </Button>
+  // Error: Self-comparison
+  if (isSelfComparison) {
+    return <Navigate to={`/premier-league/fantasy-game/leagues/${leagueId}`} replace />;
+  }
 
-        {/* League Header Row - Title and Switcher */}
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: { xs: 'column', sm: 'row' },
-            alignItems: { xs: 'flex-start', sm: 'center' },
-            gap: { xs: 1.5, sm: 2 },
-            marginBottom: 1,
-          }}
-        >
-          <Typography
-            variant="h5"
-            sx={{
-              fontWeight: 700,
-              flex: 1,
-            }}
-          >
-            {league.name}
-          </Typography>
+  // Error: Invalid manager
+  if (managerIdNum && !opponentManager) {
+    return <Navigate to={`/premier-league/fantasy-game/leagues/${leagueId}`} replace />;
+  }
 
-          {/* League Switcher */}
-          <LeagueSwitcher leagues={fixtures.leagues} selectedLeagueId={leagueIdNum} />
-        </Box>
-
-        {/* League Summary Info - Compact Row */}
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 2,
-            alignItems: 'center',
-            flexWrap: 'wrap',
-          }}
-        >
-          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
-            Rank{' '}
-            <Typography component="span" sx={{ fontWeight: 600, color: '#333' }}>
-              #{currentManagerEntry.currentRank}
+  // Error: Missing opponent squad data
+  if (managerIdNum && !opponentSquad) {
+    return (
+      <Box>
+        <LeagueWorkspaceHeader
+          leagues={fixtures.leagues}
+          selectedLeagueId={leagueIdNum}
+          currentManagerEntry={currentManagerEntry}
+          standingsEntryCount={standings.entries.length}
+          workspaceNavigation={<WorkspaceNavigation leagueId={leagueIdNum || 0} />}
+        />
+        <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
+          <Box sx={{ padding: 4, textAlign: 'center' }}>
+            <Typography variant="body1" color="textSecondary">
+              Team data is not available for this manager
             </Typography>
-          </Typography>
-
-          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
-            •
-          </Typography>
-
-          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
-            {standings.entries.length} Managers
-          </Typography>
-
-          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
-            •
-          </Typography>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <RankMovement
-              previousRank={currentManagerEntry.previousRank}
-              currentRank={currentManagerEntry.currentRank}
-              size="small"
-            />
           </Box>
-        </Box>
+        </PageContainer>
       </Box>
+    );
+  }
 
-      {/* Main Content */}
-      <PageContainer
-        sx={{
-          padding: ThemeTokens.spacing.xs,
-        }}
-      >
-        {/* Your Position Summary */}
-        <YourPositionSummary
-          currentRank={currentManagerEntry.currentRank}
-          totalManagers={standings.entries.length}
-          gameweekPoints={currentManagerEntry.gameweekPoints}
-          totalPoints={currentManagerEntry.totalPoints}
+  // STANDINGS VIEW
+  if (!managerIdNum) {
+    return (
+      <Box>
+        <LeagueWorkspaceHeader
+          leagues={fixtures.leagues}
+          selectedLeagueId={leagueIdNum}
+          currentManagerEntry={currentManagerEntry}
+          standingsEntryCount={standings.entries.length}
+          workspaceNavigation={<WorkspaceNavigation leagueId={leagueIdNum || 0} />}
         />
 
-        {/* League Standings Table */}
-        <Box sx={{ marginTop: 3 }}>
-          <Typography
-            variant="h6"
-            sx={{
-              fontWeight: 700,
-              marginBottom: 1.5,
-              fontSize: '1rem',
-            }}
-          >
-            Standings
-          </Typography>
-          <LeagueStandingsTable
-            standings={standings.entries}
-            currentManagerId={fixtures.manager.id}
+        <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
+          {/* Your Position Summary */}
+          <YourPositionSummary
+            currentRank={currentManagerEntry.currentRank}
+            totalManagers={standings.entries.length}
+            gameweekPoints={currentManagerEntry.gameweekPoints}
+            totalPoints={currentManagerEntry.totalPoints}
           />
-        </Box>
-      </PageContainer>
-    </Box>
-  );
+
+          {/* League Standings Table */}
+          <Box sx={{ marginTop: 3 }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 700,
+                marginBottom: 1.5,
+                fontSize: '1rem',
+              }}
+            >
+              Standings
+            </Typography>
+            <LeagueStandingsTable
+              standings={standings.entries}
+              currentManagerId={fixtures.manager.id}
+            />
+          </Box>
+
+          {/* Compare Section - Quick Access */}
+          <Box sx={{ marginTop: 3, paddingBottom: ThemeTokens.spacing.xs }}>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: 700,
+                marginBottom: 1.5,
+                fontSize: '1rem',
+              }}
+            >
+              Compare Teams
+            </Typography>
+            <OpponentSelector
+              standings={standings.entries}
+              currentManagerId={fixtures.manager.id}
+              leagueId={leagueIdNum || 0}
+            />
+          </Box>
+        </PageContainer>
+      </Box>
+    );
+  }
+
+  // MANAGER COMPARISON VIEW
+  if (managerIdNum && opponentManager && opponentSquad) {
+    return (
+      <Box>
+        <LeagueWorkspaceHeader
+          leagues={fixtures.leagues}
+          selectedLeagueId={leagueIdNum}
+          currentManagerEntry={currentManagerEntry}
+          standingsEntryCount={standings.entries.length}
+          workspaceNavigation={<WorkspaceNavigation leagueId={leagueIdNum || 0} />}
+        />
+
+        <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
+          {/* Comparison Header */}
+          <ComparisonHeader currentManager={fixtures.manager} opponentManager={opponentManager} />
+
+          {/* Head-to-Head Summary */}
+          <Box sx={{ marginTop: 3 }}>
+            <HeadToHeadSummary
+              currentManager={fixtures.manager}
+              opponentManager={opponentManager}
+            />
+          </Box>
+
+          {/* Captain Comparison */}
+          <Box sx={{ marginTop: 3 }}>
+            <CaptainComparison mySquad={currentSquad} opponentSquad={opponentSquad} />
+          </Box>
+
+          {/* Team Pitch Comparison */}
+          <Box sx={{ marginTop: 3 }}>
+            <TeamPitchComparison
+              mySquad={currentSquad}
+              myTeamName={fixtures.manager.teamName}
+              opponentSquad={opponentSquad}
+              opponentTeamName={opponentManager.teamName}
+            />
+          </Box>
+
+          {/* Differential Summary */}
+          <Box sx={{ marginTop: 3, paddingBottom: ThemeTokens.spacing.xs }}>
+            <DifferentialSummary mySquad={currentSquad} opponentSquad={opponentSquad} />
+          </Box>
+        </PageContainer>
+      </Box>
+    );
+  }
+
+  // LIVE RACE VIEW
+  if (isLiveRaceView) {
+    return (
+      <Box>
+        <LeagueWorkspaceHeader
+          leagues={fixtures.leagues}
+          selectedLeagueId={leagueIdNum}
+          currentManagerEntry={currentManagerEntry}
+          standingsEntryCount={standings.entries.length}
+          workspaceNavigation={<WorkspaceNavigation leagueId={leagueIdNum || 0} />}
+        />
+
+        <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
+          <Box sx={{ padding: 4, textAlign: 'center' }}>
+            <Typography variant="h6" sx={{ fontWeight: 700, marginBottom: 2 }}>
+              Live League Race
+            </Typography>
+            <Typography variant="body1" color="textSecondary">
+              Live rankings and projected league positions will be available here. Coming soon.
+            </Typography>
+          </Box>
+        </PageContainer>
+      </Box>
+    );
+  }
+
+  return null;
 };
