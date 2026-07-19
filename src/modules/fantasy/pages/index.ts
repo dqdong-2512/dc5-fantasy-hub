@@ -4,3 +4,4 @@ export { MyTeamPage } from './MyTeamPage';
 export { MyLeaguesPage } from './MyLeaguesPage';
 export { LeagueStandingsPage } from './LeagueStandingsPage';
 export { GameweekCenterPage } from './GameweekCenterPage';
+export { TransferPlannerPage } from './TransferPlannerPage';

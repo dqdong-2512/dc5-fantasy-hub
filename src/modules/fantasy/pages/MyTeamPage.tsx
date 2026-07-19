@@ -4,9 +4,10 @@
  */
 
 import React, { useMemo } from 'react';
-import { Box, Typography, Button } from '@mui/material';
+import { Box, Typography, Button, Stack } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import SwapCallsIcon from '@mui/icons-material/SwapCalls';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { fantasyGameFixtures } from '../fixtures';
@@ -35,20 +36,34 @@ export const MyTeamPage: React.FC = () => {
           borderBottom: '1px solid #e0e0e0',
         }}
       >
-        {/* Back Button */}
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/premier-league/fantasy-game')}
-          sx={{
-            textTransform: 'none',
-            marginBottom: 1.5,
-            color: '#1976d2',
-            padding: 0,
-            '&:hover': { backgroundColor: 'transparent' },
-          }}
-        >
-          Back to Fantasy Game
-        </Button>
+        {/* Navigation Buttons */}
+        <Stack direction="row" spacing={1} sx={{ marginBottom: 1.5 }}>
+          <Button
+            startIcon={<ArrowBackIcon />}
+            onClick={() => navigate('/premier-league/fantasy-game')}
+            sx={{
+              textTransform: 'none',
+              color: '#1976d2',
+              padding: 0,
+              '&:hover': { backgroundColor: 'transparent' },
+            }}
+          >
+            Back
+          </Button>
+
+          <Button
+            startIcon={<SwapCallsIcon />}
+            onClick={() => navigate('/premier-league/fantasy-game/transfers')}
+            variant="outlined"
+            sx={{
+              textTransform: 'none',
+              borderColor: '#2196f3',
+              color: '#2196f3',
+            }}
+          >
+            Plan Transfers
+          </Button>
+        </Stack>
 
         {/* Page Title */}
         <Typography
