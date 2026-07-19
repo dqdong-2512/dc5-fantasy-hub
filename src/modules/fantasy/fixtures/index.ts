@@ -2,3 +2,8 @@
 export { fantasyGameFixtures } from './fantasyGameFixtures';
 export { leagueStandingsFixtures } from './leagueStandingsFixtures';
 export { opponentSquadsFixtures } from './opponentSquadsFixtures';
+export {
+  managerGameweekSnapshots,
+  getAvailableGameweekIds,
+  getManagerGameweekSnapshot,
+} from './managerGameweekSnapshots';

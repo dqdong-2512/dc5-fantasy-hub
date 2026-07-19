@@ -11,6 +11,7 @@ import type { FantasyGameweekFixture } from '../types';
 
 export interface CurrentGameweekSummaryProps {
   gameweek: FantasyGameweekFixture;
+  onViewGameweek?: () => void;
 }
 
 interface StatBoxProps {
@@ -34,7 +35,10 @@ const StatBox: React.FC<StatBoxProps> = ({ label, value, color = '#1976d2' }) =>
   </Box>
 );
 
-export const CurrentGameweekSummary: React.FC<CurrentGameweekSummaryProps> = ({ gameweek }) => {
+export const CurrentGameweekSummary: React.FC<CurrentGameweekSummaryProps> = ({
+  gameweek,
+  onViewGameweek,
+}) => {
   const pointsColor =
     gameweek.points > gameweek.averagePoints
       ? '#4caf50'
@@ -47,6 +51,14 @@ export const CurrentGameweekSummary: React.FC<CurrentGameweekSummaryProps> = ({ 
       title={`Gameweek ${gameweek.gameweek}`}
       subtitle="Gameweek statistics"
       icon={<TrendingUpIcon />}
+      action={
+        onViewGameweek
+          ? {
+              label: 'View Gameweek',
+              onClick: onViewGameweek,
+            }
+          : undefined
+      }
     >
       <Stack spacing={3}>
         {/* Primary Stats */}

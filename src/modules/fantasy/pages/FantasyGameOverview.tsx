@@ -20,6 +20,10 @@ export const FantasyGameOverview: React.FC = () => {
     navigate('/premier-league/fantasy-game/team');
   };
 
+  const handleViewGameweek = (): void => {
+    navigate(`/premier-league/fantasy-game/gameweeks/${fixtures.currentGameweek.gameweek}`);
+  };
+
   const handleViewLeagues = (): void => {
     navigate('/premier-league/fantasy-game/leagues');
   };
@@ -92,7 +96,10 @@ export const FantasyGameOverview: React.FC = () => {
             <MyTeamSummary manager={fixtures.manager} onViewTeam={handleViewTeam} />
           </Box>
           <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
-            <CurrentGameweekSummary gameweek={fixtures.currentGameweek} />
+            <CurrentGameweekSummary
+              gameweek={fixtures.currentGameweek}
+              onViewGameweek={handleViewGameweek}
+            />
           </Box>
         </Box>
 

@@ -55,6 +55,14 @@ const router = createBrowserRouter([
                 element: <Fantasy />,
               },
               {
+                path: 'gameweeks',
+                element: <Fantasy />,
+              },
+              {
+                path: 'gameweeks/:gameweekId',
+                element: <Fantasy />,
+              },
+              {
                 path: 'leagues',
                 element: <Fantasy />,
               },

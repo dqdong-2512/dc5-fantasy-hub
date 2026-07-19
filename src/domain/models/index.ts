@@ -25,3 +25,9 @@ export type {
   LiveLeagueStanding,
   LiveLeagueStandingsResult,
 } from './LiveLeagueStandings';
+export type {
+  PlayerGameweekContribution,
+  ManagerGameweekSnapshot,
+  GameweekCenterData,
+} from './GameweekCenter';
+export { GameweekStatus } from './GameweekCenter';

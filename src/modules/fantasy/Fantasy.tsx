@@ -9,7 +9,13 @@ import { Box, CircularProgress } from '@mui/material';
 import { useLocation } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import { useFantasyGame } from './hooks';
-import { FantasyWorkspace, FantasyGameOverview, MyTeamPage, LeagueStandingsPage } from './pages';
+import {
+  FantasyWorkspace,
+  FantasyGameOverview,
+  MyTeamPage,
+  LeagueStandingsPage,
+  GameweekCenterPage,
+} from './pages';
 import { fantasyGameFixtures } from './fixtures';
 
 export const Fantasy: React.FC = () => {
@@ -38,6 +44,11 @@ export const Fantasy: React.FC = () => {
           replace
         />
       );
+    }
+
+    // Check for gameweek center page
+    if (location.pathname.includes('/gameweeks/')) {
+      return <GameweekCenterPage />;
     }
 
     // Check for league workspace (handles both standings and manager comparison)

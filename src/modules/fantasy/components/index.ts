@@ -20,3 +20,8 @@ export { HeadToHeadSummary, type HeadToHeadSummaryProps } from './HeadToHeadSumm
 export { CaptainComparison, type CaptainComparisonProps } from './CaptainComparison';
 export { DifferentialSummary, type DifferentialSummaryProps } from './DifferentialSummary';
 export { TeamPitchComparison, type TeamPitchComparisonProps } from './TeamPitchComparison';
+export { GameweekSelector, type GameweekSelectorProps } from './GameweekSelector';
+export { GameweekSummary, type GameweekSummaryProps } from './GameweekSummary';
+export { CaptainImpact, type CaptainImpactProps } from './CaptainImpactDisplay';
+export { PointsBreakdown, type PointsBreakdownProps } from './PointsBreakdown';
+export { FixturesList, type FixturesListProps } from './FixturesList';
