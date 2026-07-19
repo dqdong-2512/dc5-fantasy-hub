@@ -21,6 +21,7 @@ import {
   CaptainComparison,
   TeamPitchComparison,
   DifferentialSummary,
+  LiveLeagueRace,
 } from '../components';
 import type { LeagueStandingEntry } from '../types';
 
@@ -243,14 +244,11 @@ export const LeagueStandingsPage: React.FC = () => {
         />
 
         <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
-          <Box sx={{ padding: 4, textAlign: 'center' }}>
-            <Typography variant="h6" sx={{ fontWeight: 700, marginBottom: 2 }}>
-              Live League Race
-            </Typography>
-            <Typography variant="body1" color="textSecondary">
-              Live rankings and projected league positions will be available here. Coming soon.
-            </Typography>
-          </Box>
+          <LiveLeagueRace
+            leagueId={leagueIdNum || 0}
+            standings={standings.entries}
+            currentManagerId={fixtures.manager.id}
+          />
         </PageContainer>
       </Box>
     );

@@ -25,3 +25,4 @@ export { GameweekSummary, type GameweekSummaryProps } from './GameweekSummary';
 export { CaptainImpact, type CaptainImpactProps } from './CaptainImpactDisplay';
 export { PointsBreakdown, type PointsBreakdownProps } from './PointsBreakdown';
 export { FixturesList, type FixturesListProps } from './FixturesList';
+export { LiveLeagueRace, type LiveLeagueRaceProps } from './LiveLeagueRace';

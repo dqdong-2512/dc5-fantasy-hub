@@ -31,3 +31,10 @@ export type {
   GameweekCenterData,
 } from './GameweekCenter';
 export { GameweekStatus } from './GameweekCenter';
+export type {
+  LeagueRaceEntry,
+  LeagueRaceMetrics,
+  LeagueMovers,
+  NearestRivalsData,
+  CaptainRaceEntry,
+} from './LeagueRace';
