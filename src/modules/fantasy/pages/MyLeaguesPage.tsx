@@ -1,6 +1,6 @@
 /**
- * My Team Page
- * Displays the user's selected FPL squad on a football pitch with bench
+ * My Leagues Page
+ * Displays all leagues joined by the current manager
  */
 
 import React, { useMemo } from 'react';
@@ -10,17 +10,17 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { fantasyGameFixtures } from '../fixtures';
-import { FootballPitch, Bench, TeamSummary } from '../components';
+import { MyLeaguesList } from '../components';
 
-export const MyTeamPage: React.FC = () => {
+export const MyLeaguesPage: React.FC = () => {
   const navigate = useNavigate();
   const fixtures = useMemo(() => fantasyGameFixtures, []);
 
-  if (!fixtures.squad) {
+  if (!fixtures.leagues || fixtures.leagues.length === 0) {
     return (
       <Box sx={{ padding: 4, textAlign: 'center' }}>
         <Typography variant="body1" color="textSecondary">
-          No squad data available
+          No leagues found
         </Typography>
       </Box>
     );
@@ -58,10 +58,10 @@ export const MyTeamPage: React.FC = () => {
             marginBottom: 0.5,
           }}
         >
-          My Team
+          My Leagues
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {fixtures.manager.teamName}
+          View your leagues and track your position
         </Typography>
       </Box>
 
@@ -71,39 +71,7 @@ export const MyTeamPage: React.FC = () => {
           padding: ThemeTokens.spacing.xs,
         }}
       >
-        {/* Team Summary Stats */}
-        <TeamSummary
-          teamName={fixtures.manager.teamName}
-          gameweekNumber={fixtures.currentGameweek.gameweek}
-          gameweekPoints={fixtures.currentGameweek.points}
-          teamValue={fixtures.manager.teamValue}
-          bank={fixtures.manager.bank}
-          squad={fixtures.squad.map((p) => ({
-            playerId: p.playerId,
-            isStarter: p.isStarter,
-          }))}
-        />
-
-        {/* Football Pitch */}
-        <FootballPitch
-          squad={fixtures.squad.map((p) => ({
-            playerId: p.playerId,
-            isStarter: p.isStarter,
-            isCaptain: p.isCaptain,
-            isViceCaptain: p.isViceCaptain,
-            gameweekPoints: p.gameweekPoints,
-          }))}
-        />
-
-        {/* Bench */}
-        <Bench
-          squad={fixtures.squad.map((p) => ({
-            playerId: p.playerId,
-            isStarter: p.isStarter,
-            benchOrder: p.benchOrder,
-            gameweekPoints: p.gameweekPoints,
-          }))}
-        />
+        <MyLeaguesList leagues={fixtures.leagues} />
       </PageContainer>
     </Box>
   );

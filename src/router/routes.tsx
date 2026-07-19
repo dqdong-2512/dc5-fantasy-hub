@@ -54,6 +54,18 @@ const router = createBrowserRouter([
                 path: 'team',
                 element: <Fantasy />,
               },
+              {
+                path: 'leagues',
+                element: <Fantasy />,
+              },
+              {
+                path: 'leagues/:leagueId',
+                element: <Fantasy />,
+              },
+              {
+                path: 'leagues/:leagueId/managers/:managerId',
+                element: <Fantasy />,
+              },
             ],
           },
         ],

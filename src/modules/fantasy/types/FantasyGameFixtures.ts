@@ -58,6 +58,27 @@ export interface FantasySquadPick {
 }
 
 /**
+ * League standing entry - represents one manager's position in a league
+ */
+export interface LeagueStandingEntry {
+  managerId: number;
+  managerName: string;
+  teamName: string;
+  currentRank: number;
+  previousRank: number;
+  totalPoints: number;
+  gameweekPoints: number;
+}
+
+/**
+ * League standings - all manager entries for a league
+ */
+export interface LeagueStandings {
+  leagueId: number;
+  entries: LeagueStandingEntry[];
+}
+
+/**
  * Complete Fantasy Game fixture set
  */
 export interface FantasyGameFixtures {

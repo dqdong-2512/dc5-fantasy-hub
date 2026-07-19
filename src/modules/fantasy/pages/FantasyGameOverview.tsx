@@ -20,9 +20,12 @@ export const FantasyGameOverview: React.FC = () => {
     navigate('/premier-league/fantasy-game/team');
   };
 
+  const handleViewLeagues = (): void => {
+    navigate('/premier-league/fantasy-game/leagues');
+  };
+
   const handleLeagueClick = (leagueId: number): void => {
-    // TODO: Navigate to league detail page
-    console.log('View League:', leagueId, '- feature coming soon');
+    navigate(`/premier-league/fantasy-game/leagues/${leagueId}`);
   };
 
   return (
@@ -72,8 +75,7 @@ export const FantasyGameOverview: React.FC = () => {
       {/* Main Content Container */}
       <PageContainer
         sx={{
-          paddingTop: { xs: ThemeTokens.spacing.lg, md: '32px' },
-          paddingBottom: { xs: '16px', md: '24px' },
+          padding: ThemeTokens.spacing.xs,
         }}
       >
         {/* First Row: My Team & Current Gameweek (50/50 on lg+) */}
@@ -100,8 +102,8 @@ export const FantasyGameOverview: React.FC = () => {
         </Box>
 
         {/* Quick Actions Row */}
-        <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
-          <QuickActions onViewTeam={handleViewTeam} />
+        <Box>
+          <QuickActions onViewTeam={handleViewTeam} onViewLeagues={handleViewLeagues} />
         </Box>
       </PageContainer>
     </Box>

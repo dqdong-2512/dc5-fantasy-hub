@@ -4,4 +4,7 @@ export type {
   FantasyGameweekFixture,
   FantasyLeagueFixture,
   FantasyGameFixtures,
+  FantasySquadPick,
+  LeagueStandingEntry,
+  LeagueStandings,
 } from './FantasyGameFixtures';

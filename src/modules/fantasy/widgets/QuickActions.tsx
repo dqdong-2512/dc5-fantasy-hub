@@ -106,7 +106,7 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
           label="My Leagues"
           icon={<CompareIcon fontSize="small" />}
           onClick={onViewLeagues}
-          comingSoon
+          comingSoon={!onViewLeagues}
         />
         <ActionButton
           label="Transfers"
