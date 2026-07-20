@@ -5,7 +5,13 @@
     "shortName": "ARS",
     "code": 3,
     "strength": 5,
-    "position": 1
+    "position": 1,
+    "strengthOverallHome": 1305,
+    "strengthOverallAway": 1370,
+    "strengthAttackHome": 1340,
+    "strengthAttackAway": 1390,
+    "strengthDefenceHome": 1270,
+    "strengthDefenceAway": 1350
   },
   {
     "id": 2,
@@ -13,7 +19,13 @@
     "shortName": "AVL",
     "code": 7,
     "strength": 3,
-    "position": 4
+    "position": 4,
+    "strengthOverallHome": 1155,
+    "strengthOverallAway": 1230,
+    "strengthAttackHome": 1140,
+    "strengthAttackAway": 1190,
+    "strengthDefenceHome": 1170,
+    "strengthDefenceAway": 1270
   },
   {
     "id": 3,
@@ -21,7 +33,13 @@
     "shortName": "BUR",
     "code": 90,
     "strength": 2,
-    "position": 19
+    "position": 19,
+    "strengthOverallHome": 975,
+    "strengthOverallAway": 1045,
+    "strengthAttackHome": 910,
+    "strengthAttackAway": 1050,
+    "strengthDefenceHome": 1040,
+    "strengthDefenceAway": 1040
   },
   {
     "id": 4,
@@ -29,7 +47,13 @@
     "shortName": "BOU",
     "code": 91,
     "strength": 3,
-    "position": 6
+    "position": 6,
+    "strengthOverallHome": 1145,
+    "strengthOverallAway": 1200,
+    "strengthAttackHome": 1060,
+    "strengthAttackAway": 1160,
+    "strengthDefenceHome": 1230,
+    "strengthDefenceAway": 1240
   },
   {
     "id": 5,
@@ -37,7 +61,13 @@
     "shortName": "BRE",
     "code": 94,
     "strength": 3,
-    "position": 9
+    "position": 9,
+    "strengthOverallHome": 1125,
+    "strengthOverallAway": 1215,
+    "strengthAttackHome": 1110,
+    "strengthAttackAway": 1170,
+    "strengthDefenceHome": 1140,
+    "strengthDefenceAway": 1260
   },
   {
     "id": 6,
@@ -45,7 +75,13 @@
     "shortName": "BHA",
     "code": 36,
     "strength": 3,
-    "position": 8
+    "position": 8,
+    "strengthOverallHome": 1165,
+    "strengthOverallAway": 1230,
+    "strengthAttackHome": 1130,
+    "strengthAttackAway": 1200,
+    "strengthDefenceHome": 1200,
+    "strengthDefenceAway": 1260
   },
   {
     "id": 7,
@@ -53,7 +89,13 @@
     "shortName": "CHE",
     "code": 8,
     "strength": 4,
-    "position": 10
+    "position": 10,
+    "strengthOverallHome": 1185,
+    "strengthOverallAway": 1225,
+    "strengthAttackHome": 1130,
+    "strengthAttackAway": 1170,
+    "strengthDefenceHome": 1240,
+    "strengthDefenceAway": 1280
   },
   {
     "id": 8,
@@ -61,7 +103,13 @@
     "shortName": "CRY",
     "code": 31,
     "strength": 3,
-    "position": 15
+    "position": 15,
+    "strengthOverallHome": 1140,
+    "strengthOverallAway": 1160,
+    "strengthAttackHome": 1130,
+    "strengthAttackAway": 1150,
+    "strengthDefenceHome": 1150,
+    "strengthDefenceAway": 1170
   },
   {
     "id": 9,
@@ -69,7 +117,13 @@
     "shortName": "EVE",
     "code": 11,
     "strength": 3,
-    "position": 13
+    "position": 13,
+    "strengthOverallHome": 1140,
+    "strengthOverallAway": 1145,
+    "strengthAttackHome": 1140,
+    "strengthAttackAway": 1140,
+    "strengthDefenceHome": 1140,
+    "strengthDefenceAway": 1150
   },
   {
     "id": 10,
@@ -77,7 +131,13 @@
     "shortName": "FUL",
     "code": 54,
     "strength": 3,
-    "position": 11
+    "position": 11,
+    "strengthOverallHome": 1095,
+    "strengthOverallAway": 1190,
+    "strengthAttackHome": 1080,
+    "strengthAttackAway": 1170,
+    "strengthDefenceHome": 1110,
+    "strengthDefenceAway": 1210
   },
   {
     "id": 11,
@@ -85,7 +145,13 @@
     "shortName": "LEE",
     "code": 2,
     "strength": 3,
-    "position": 14
+    "position": 14,
+    "strengthOverallHome": 1095,
+    "strengthOverallAway": 1195,
+    "strengthAttackHome": 1090,
+    "strengthAttackAway": 1160,
+    "strengthDefenceHome": 1100,
+    "strengthDefenceAway": 1230
   },
   {
     "id": 12,
@@ -93,7 +159,13 @@
     "shortName": "LIV",
     "code": 14,
     "strength": 4,
-    "position": 5
+    "position": 5,
+    "strengthOverallHome": 1235,
+    "strengthOverallAway": 1275,
+    "strengthAttackHome": 1170,
+    "strengthAttackAway": 1200,
+    "strengthDefenceHome": 1300,
+    "strengthDefenceAway": 1350
   },
   {
     "id": 13,
@@ -101,7 +173,13 @@
     "shortName": "MCI",
     "code": 43,
     "strength": 4,
-    "position": 2
+    "position": 2,
+    "strengthOverallHome": 1260,
+    "strengthOverallAway": 1350,
+    "strengthAttackHome": 1190,
+    "strengthAttackAway": 1310,
+    "strengthDefenceHome": 1330,
+    "strengthDefenceAway": 1390
   },
   {
     "id": 14,
@@ -109,7 +187,13 @@
     "shortName": "MUN",
     "code": 1,
     "strength": 4,
-    "position": 3
+    "position": 3,
+    "strengthOverallHome": 1230,
+    "strengthOverallAway": 1250,
+    "strengthAttackHome": 1170,
+    "strengthAttackAway": 1170,
+    "strengthDefenceHome": 1290,
+    "strengthDefenceAway": 1330
   },
   {
     "id": 15,
@@ -117,7 +201,13 @@
     "shortName": "NEW",
     "code": 4,
     "strength": 3,
-    "position": 12
+    "position": 12,
+    "strengthOverallHome": 1115,
+    "strengthOverallAway": 1205,
+    "strengthAttackHome": 1120,
+    "strengthAttackAway": 1120,
+    "strengthDefenceHome": 1110,
+    "strengthDefenceAway": 1290
   },
   {
     "id": 16,
@@ -125,7 +215,13 @@
     "shortName": "NFO",
     "code": 17,
     "strength": 3,
-    "position": 16
+    "position": 16,
+    "strengthOverallHome": 1130,
+    "strengthOverallAway": 1160,
+    "strengthAttackHome": 1110,
+    "strengthAttackAway": 1160,
+    "strengthDefenceHome": 1150,
+    "strengthDefenceAway": 1160
   },
   {
     "id": 17,
@@ -133,7 +229,13 @@
     "shortName": "SUN",
     "code": 56,
     "strength": 3,
-    "position": 7
+    "position": 7,
+    "strengthOverallHome": 1090,
+    "strengthOverallAway": 1155,
+    "strengthAttackHome": 1090,
+    "strengthAttackAway": 1190,
+    "strengthDefenceHome": 1090,
+    "strengthDefenceAway": 1120
   },
   {
     "id": 18,
@@ -141,7 +243,13 @@
     "shortName": "TOT",
     "code": 6,
     "strength": 3,
-    "position": 17
+    "position": 17,
+    "strengthOverallHome": 1145,
+    "strengthOverallAway": 1145,
+    "strengthAttackHome": 1120,
+    "strengthAttackAway": 1120,
+    "strengthDefenceHome": 1150,
+    "strengthDefenceAway": 1190
   },
   {
     "id": 19,
@@ -149,7 +257,13 @@
     "shortName": "WHU",
     "code": 21,
     "strength": 3,
-    "position": 18
+    "position": 18,
+    "strengthOverallHome": 1095,
+    "strengthOverallAway": 1130,
+    "strengthAttackHome": 1060,
+    "strengthAttackAway": 1080,
+    "strengthDefenceHome": 1130,
+    "strengthDefenceAway": 1180
   },
   {
     "id": 20,
@@ -157,6 +271,12 @@
     "shortName": "WOL",
     "code": 39,
     "strength": 2,
-    "position": 20
+    "position": 20,
+    "strengthOverallHome": 975,
+    "strengthOverallAway": 1060,
+    "strengthAttackHome": 950,
+    "strengthAttackAway": 1050,
+    "strengthDefenceHome": 1000,
+    "strengthDefenceAway": 1070
   }
 ]

@@ -94,7 +94,6 @@ export interface Player {
 
 export interface ElementType {
   id: number;
-  name: string;
   plural_name: string;
   singular_name: string;
 }

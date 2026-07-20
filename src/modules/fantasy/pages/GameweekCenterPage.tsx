@@ -32,9 +32,10 @@ export const GameweekCenterPage: React.FC = () => {
   const service = useMemo(() => new GameweekCenterService(), []);
 
   // Get gameweek center data
+  // Note: Without a configured manager ID, this returns public gameweek data only
   const gameweekData = useMemo(() => {
     if (!gameweekIdNum) return null;
-    return service.getGameweekCenterData(gameweekIdNum, 1234567); // Manager ID from fixtures
+    return service.getGameweekCenterData(gameweekIdNum);
   }, [gameweekIdNum, service]);
 
   // Handle invalid gameweek

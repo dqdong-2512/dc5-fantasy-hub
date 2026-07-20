@@ -1,15 +1,15 @@
 /**
  * Data Loader
- * Season-aware utility for accessing normalized data through Vite's JSON import
- * Automatically resolves configured season from appConfig
+ * Loads normalized data from db.json (synced from FPL API)
+ * Fallback to direct imports if db.json not available (dev mode)
  */
 
-// Import normalized JSON files for 2025-2026 season
-import teamsData from '../../data/seasons/2025-2026/normalized/teams.json';
-import playersData from '../../data/seasons/2025-2026/normalized/players.json';
-import gameweeksData from '../../data/seasons/2025-2026/normalized/gameweeks.json';
-import elementTypesData from '../../data/seasons/2025-2026/normalized/element-types.json';
-import fixturesData from '../../data/seasons/2025-2026/normalized/fixtures.json';
+// Fallback imports for development without db.json
+import teamsDataFallback from '../../data/seasons/2025-2026/normalized/teams.json';
+import playersDataFallback from '../../data/seasons/2025-2026/normalized/players.json';
+import gameweeksDataFallback from '../../data/seasons/2025-2026/normalized/gameweeks.json';
+import elementTypesDataFallback from '../../data/seasons/2025-2026/normalized/element-types.json';
+import fixturesDataFallback from '../../data/seasons/2025-2026/normalized/fixtures.json';
 
 export interface DataFiles {
   teams: unknown;
@@ -19,49 +19,66 @@ export interface DataFiles {
   fixtures: unknown;
 }
 
+// Runtime cache
+let cachedDb: any = null;
+
+/**
+ * Load data from db.json if available, otherwise fallback to direct imports
+ * This allows the app to work with or without a synced db.json
+ */
+function loadDbJson(): any | null {
+  try {
+    // Try to load db.json at runtime
+    // In a browser environment, this would be fetched via HTTP
+    // In Node environments (like tests), it could be required
+    const dbContent = (globalThis as any).__FPL_DB__;
+    return dbContent || null;
+  } catch {
+    return null;
+  }
+}
+
 /**
  * Get data files for the currently configured season
- * React never knows where data is stored - this handles the resolution
- * @returns DataFiles containing all normalized data for the active season
+ * Prefers db.json if available, falls back to direct imports
  */
 export function getDataFiles(): DataFiles {
-  // Currently returns 2025-2026 data
-  // To add new seasons:
-  // 1. Create new import statements for the season
-  // 2. Add conditional logic here based on getActiveSeason()
-  // 3. Run sync script for the new season
+  // Try to load from db.json first
+  if (!cachedDb) {
+    cachedDb = loadDbJson();
+  }
 
+  // If db.json is available, use it
+  if (cachedDb && cachedDb.teams) {
+    return {
+      teams: cachedDb.teams,
+      players: cachedDb.players,
+      gameweeks: cachedDb.gameweeks,
+      elementTypes: cachedDb.elementTypes,
+      fixtures: cachedDb.fixtures || [],
+    };
+  }
+
+  // Fallback to direct imports (development without db.json)
   return {
-    teams: teamsData,
-    players: playersData,
-    gameweeks: gameweeksData,
-    elementTypes: elementTypesData,
-    fixtures: fixturesData,
+    teams: teamsDataFallback,
+    players: playersDataFallback,
+    gameweeks: gameweeksDataFallback,
+    elementTypes: elementTypesDataFallback,
+    fixtures: fixturesDataFallback || [],
   };
 }
 
 /**
- * Get data files for a specific season (used during development/testing)
- * @param season - The season in YYYY-YYYY format
- * @returns DataFiles or null if season is not available
+ * Get data files for a specific season
+ * Currently only 2025-2026 is available
  */
 export function getDataFilesBySeason(season: string): DataFiles | null {
-  // Add new seasons here as they are synchronized
+  // In future, would support multiple seasons
   if (season === '2025-2026') {
-    return {
-      teams: teamsData,
-      players: playersData,
-      gameweeks: gameweeksData,
-      elementTypes: elementTypesData,
-      fixtures: fixturesData,
-    };
+    return getDataFiles();
   }
 
-  // 2026-2027 season will be added when synchronized
-  // Example:
-  // if (season === '2026-2027') {
-  //   return { ... import from 2026-2027 ... };
-  // }
-
+  // 2026-2027 and later seasons not yet available
   return null;
 }
