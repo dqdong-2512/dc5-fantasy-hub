@@ -171,9 +171,9 @@ export const FixtureExplorer: React.FC = () => {
         sx={{
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-          gap: ThemeTokens.spacing.lg,
-          marginBottom: ThemeTokens.spacing.xxxl,
-          marginTop: ThemeTokens.spacing.xxl,
+          gap: ThemeTokens.spacing.md,
+          marginBottom: ThemeTokens.spacing.md,
+          marginTop: ThemeTokens.spacing.md,
         }}
       >
         {/* Easiest Runs */}

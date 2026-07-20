@@ -5,6 +5,7 @@
 
 import React, { useMemo } from 'react';
 import { Box, Typography, Stack } from '@mui/material';
+import { ThemeTokens } from '@shared/theme/tokens';
 import EventIcon from '@mui/icons-material/Event';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import { DashboardWidget } from '../components/DashboardWidget';
@@ -31,7 +32,7 @@ export const CurrentGameweekSummary: React.FC = () => {
 
   return (
     <DashboardWidget title="Current Gameweek" icon={<EventIcon sx={{ color: '#1976d2' }} />}>
-      <Stack spacing={4}>
+      <Stack spacing={ThemeTokens.spacing.md}>
         {/* Gameweek Number - Compact */}
         <Box
           sx={{

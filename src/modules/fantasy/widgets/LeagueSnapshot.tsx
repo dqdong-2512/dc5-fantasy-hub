@@ -17,7 +17,8 @@ interface LeagueSnapshotProps {
 
 export const LeagueSnapshot: React.FC<LeagueSnapshotProps> = ({ leagues, onLeagueClick }) => {
   const [selectedLeagueId, setSelectedLeagueId] = useState<number | null>(
-    leagues.primaryLeagueId ?? (leagues.joinedLeagues.length > 0 ? leagues.joinedLeagues[0].id : null)
+    leagues.primaryLeagueId ??
+      (leagues.joinedLeagues.length > 0 ? leagues.joinedLeagues[0].id : null)
   );
 
   const selectedLeague = leagues.joinedLeagues.find((l: any) => l.id === selectedLeagueId);
@@ -46,7 +47,10 @@ export const LeagueSnapshot: React.FC<LeagueSnapshotProps> = ({ leagues, onLeagu
           </Typography>
         </Box>
 
-        <Typography variant="body2" sx={{ color: 'text.secondary', marginTop: ThemeTokens.spacing.md }}>
+        <Typography
+          variant="body2"
+          sx={{ color: 'text.secondary', marginTop: ThemeTokens.spacing.md }}
+        >
           No joined leagues
         </Typography>
 
@@ -86,7 +90,9 @@ export const LeagueSnapshot: React.FC<LeagueSnapshotProps> = ({ leagues, onLeagu
       }}
     >
       {/* Header */}
-      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: ThemeTokens.spacing.md }}>
+      <Box
+        sx={{ display: 'flex', alignItems: 'center', gap: 1, marginBottom: ThemeTokens.spacing.md }}
+      >
         <EmojiEventsIcon sx={{ color: '#ffc107' }} />
         <Typography
           variant="h6"

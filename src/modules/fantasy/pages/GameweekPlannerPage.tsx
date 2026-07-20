@@ -67,7 +67,7 @@ export const GameweekPlannerPage: React.FC = () => {
   const [sourceTransferPlanId, setSourceTransferPlanId] = useState<string | undefined>();
   const [saveDialogOpen, setSaveDialogOpen] = useState(false);
   const [planName, setPlanName] = useState('');
-  const [playerPositions, setPlayerPositions] = useState<Map<number, number>>(new Map());
+  const [playerPositions, setPlayerPositions] = useState<Map<number, number>>(new Map()); // Add a few lines up
 
   // Load gameweeks
   useEffect(() => {
@@ -267,9 +267,9 @@ export const GameweekPlannerPage: React.FC = () => {
         </Box>
 
         {/* Gameweek & Source Selectors */}
-        <Card sx={{ mb: ThemeTokens.spacing.lg }}>
+        <Card sx={{ mb: ThemeTokens.spacing.md }}>
           <CardContent>
-            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={ThemeTokens.spacing.lg}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={ThemeTokens.spacing.md}>
               <FormControl sx={{ minWidth: 200 }}>
                 <InputLabel>Gameweek</InputLabel>
                 <Select
@@ -298,7 +298,7 @@ export const GameweekPlannerPage: React.FC = () => {
 
         {/* Validation Status */}
         {!currentPlan.validation.isValid && (
-          <Alert severity="error" sx={{ mb: ThemeTokens.spacing.lg }}>
+          <Alert severity="error" sx={{ mb: ThemeTokens.spacing.md }}>
             <Typography variant="body2" sx={{ fontWeight: 600, mb: '4px' }}>
               {currentPlan.validation.errors.length} Validation Issues
             </Typography>
@@ -317,7 +317,7 @@ export const GameweekPlannerPage: React.FC = () => {
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' },
-            gap: ThemeTokens.spacing.lg,
+            gap: ThemeTokens.spacing.md,
           }}
         >
           {/* Left Column: Insights & Captain */}

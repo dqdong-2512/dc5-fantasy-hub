@@ -236,7 +236,7 @@ export const TransferPlannerPage: React.FC = () => {
       {/* Main Content */}
       <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
         {/* View Tabs */}
-        <Box sx={{ borderBottom: '1px solid #e0e0e0', marginBottom: ThemeTokens.spacing.lg }}>
+        <Box sx={{ borderBottom: '1px solid #e0e0e0', marginBottom: ThemeTokens.spacing.md }}>
           <Tabs
             value={activeView}
             onChange={(_, value) => setActiveView(value as ViewType)}
@@ -257,7 +257,7 @@ export const TransferPlannerPage: React.FC = () => {
 
         {/* Planner View */}
         {activeView === 'planner' && (
-          <Stack spacing={ThemeTokens.spacing.lg}>
+          <Stack spacing={ThemeTokens.spacing.md}>
             {/* Validation Alert */}
             {!currentPlan.validation.isValid && currentPlan.transfers.length > 0 && (
               <Alert severity="error">
@@ -277,7 +277,7 @@ export const TransferPlannerPage: React.FC = () => {
               sx={{
                 display: 'grid',
                 gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr' },
-                gap: ThemeTokens.spacing.lg,
+                gap: ThemeTokens.spacing.md,
               }}
             >
               {/* Left: Player Out Selector */}
@@ -304,7 +304,7 @@ export const TransferPlannerPage: React.FC = () => {
                 ) : (
                   <Box
                     sx={{
-                      padding: ThemeTokens.spacing.lg,
+                      padding: ThemeTokens.spacing.md,
                       backgroundColor: '#f5f5f5',
                       borderRadius: '8px',
                       textAlign: 'center',

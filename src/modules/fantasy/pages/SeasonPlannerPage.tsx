@@ -55,7 +55,7 @@ export const SeasonPlannerPage: React.FC = () => {
   const [endGameweek, setEndGameweek] = useState(38);
   const [baseSquadSource, setBaseSquadSource] = useState<BaseSquadSourceType>('current');
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
-  const [planName, setPlanName] = useState('');
+  const [planName, setPlanName] = useState(''); // placeholder
 
   // Load plan from URL if specified
   useEffect(() => {

@@ -24,14 +24,14 @@ export function PageSection({
   ...props
 }: PageSectionProps): React.ReactElement {
   return (
-    <Box sx={{ marginBottom: ThemeTokens.spacing.lg, ...sx }} {...props}>
+    <Box sx={{ marginBottom: ThemeTokens.spacing.md, ...sx }} {...props}>
       {(title || subtitle || action) && (
         <Box
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'flex-start',
-            marginBottom: ThemeTokens.spacing.lg,
+            marginBottom: ThemeTokens.spacing.md,
           }}
         >
           <Box>

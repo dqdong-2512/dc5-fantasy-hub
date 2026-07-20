@@ -6,11 +6,7 @@
  */
 
 import { BootstrapRepository } from '@repositories/bootstrap';
-import {
-  TransferPlanRepository,
-  GameweekPlanRepository,
-  SeasonPlanRepository,
-} from './index';
+import { TransferPlanRepository, GameweekPlanRepository, SeasonPlanRepository } from './index';
 import type { TransferPlan } from '../domain/TransferPlan';
 import type { GameweekPlan } from '../domain/GameweekPlan';
 import type { SeasonPlan } from '../domain/SeasonPlan';
@@ -114,14 +110,12 @@ export class FantasyDashboardService {
   buildDashboardViewModel(): FantasyDashboardViewModel {
     const gameweek = this.buildGameweekOverview();
     const transferStatus = this.buildTransferPlanStatus();
-    const gameweekStatus = this.buildGameweekPlanStatus(gameweek.nextGameweekId ?? gameweek.currentGameweekId);
+    const gameweekStatus = this.buildGameweekPlanStatus(
+      gameweek.nextGameweekId ?? gameweek.currentGameweekId
+    );
     const seasonStatus = this.buildSeasonPlanStatus();
     const leagues = this.buildLeagueSnapshot();
-    const nextActions = this.deriveNextActions(
-      transferStatus,
-      gameweekStatus,
-      seasonStatus
-    );
+    const nextActions = this.deriveNextActions(transferStatus, gameweekStatus, seasonStatus);
 
     return {
       gameweek,

@@ -47,8 +47,8 @@ export const Dashboard: React.FC = () => {
       {/* Dashboard Content Container */}
       <PageContainer
         sx={{
-          paddingTop: { xs: '16px', md: '24px' },
-          paddingBottom: { xs: '16px', md: '24px' },
+          paddingTop: ThemeTokens.spacing.xs,
+          paddingBottom: ThemeTokens.spacing.xs,
         }}
       >
         {/* Widget Grid - First Row: Current GW (50%) + Top Players (50%) on lg+ */}

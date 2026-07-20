@@ -151,7 +151,9 @@ export const PlanningStatusPanel: React.FC<PlanningStatusPanelProps> = ({
           label="Transfers"
           status={transferStatusType}
           details={transferDetails}
-          actionLabel={!transferStatus.hasActivePlan ? 'Plan' : transferStatus.isValid ? 'Review' : 'Fix'}
+          actionLabel={
+            !transferStatus.hasActivePlan ? 'Plan' : transferStatus.isValid ? 'Review' : 'Fix'
+          }
           onAction={onTransferClick}
         />
 
@@ -175,7 +177,8 @@ export const PlanningStatusPanel: React.FC<PlanningStatusPanelProps> = ({
       {/* Error Alert if transfer invalid */}
       {transferStatus.hasActivePlan && !transferStatus.isValid && (
         <Alert severity="error" sx={{ marginTop: ThemeTokens.spacing.md }}>
-          {transferStatus.errors} validation error{transferStatus.errors === 1 ? '' : 's'} in transfer plan
+          {transferStatus.errors} validation error{transferStatus.errors === 1 ? '' : 's'} in
+          transfer plan
         </Alert>
       )}
 

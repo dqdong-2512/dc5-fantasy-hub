@@ -24,7 +24,10 @@ interface ActionItemProps {
 }
 
 const ActionItem: React.FC<ActionItemProps> = ({ action, onNavigate }) => {
-  const priorityColors: Record<'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW', { bg: string; text: string }> = {
+  const priorityColors: Record<
+    'CRITICAL' | 'HIGH' | 'MEDIUM' | 'LOW',
+    { bg: string; text: string }
+  > = {
     CRITICAL: { bg: '#ef5350', text: '#fff' },
     HIGH: { bg: '#ff9800', text: '#fff' },
     MEDIUM: { bg: '#fbc02d', text: '#000' },
@@ -107,7 +110,10 @@ export const NextActionsPanel: React.FC<NextActionsProps> = ({
         <Typography variant="body2" sx={{ fontWeight: 600, color: '#4caf50' }}>
           All Set
         </Typography>
-        <Typography variant="caption" sx={{ color: 'text.secondary', display: 'block', marginTop: 0.5 }}>
+        <Typography
+          variant="caption"
+          sx={{ color: 'text.secondary', display: 'block', marginTop: 0.5 }}
+        >
           Your plans are up to date. Good luck!
         </Typography>
       </Card>
@@ -156,11 +162,7 @@ export const NextActionsPanel: React.FC<NextActionsProps> = ({
       {/* Action Items */}
       <Stack spacing={0}>
         {actions.map((action) => (
-          <ActionItem
-            key={action.id}
-            action={action}
-            onNavigate={() => handleAction(action)}
-          />
+          <ActionItem key={action.id} action={action} onNavigate={() => handleAction(action)} />
         ))}
       </Stack>
     </Card>

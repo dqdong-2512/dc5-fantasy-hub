@@ -33,7 +33,10 @@ export const FantasyGameOverview: React.FC = () => {
 
   // Initialize dashboard service
   const dashboardService = useMemo(() => new FantasyDashboardService(), []);
-  const dashboardData = useMemo(() => dashboardService.buildDashboardViewModel(), [dashboardService]);
+  const dashboardData = useMemo(
+    () => dashboardService.buildDashboardViewModel(),
+    [dashboardService]
+  );
 
   // Navigation handlers
   const handleViewTeam = (): void => {
@@ -178,10 +181,7 @@ export const FantasyGameOverview: React.FC = () => {
             alignItems: 'start',
           }}
         >
-          <LeagueSnapshot
-            leagues={dashboardData.leagues}
-            onLeagueClick={handleLeagueClick}
-          />
+          <LeagueSnapshot leagues={dashboardData.leagues} onLeagueClick={handleLeagueClick} />
 
           <GameweekContext
             gameweek={dashboardData.gameweek}

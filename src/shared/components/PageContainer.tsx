@@ -18,7 +18,7 @@ export const PageContainer: React.FC<React.PropsWithChildren<ContainerProps>> = 
           sm: ThemeTokens.spacing.lg,
           md: ThemeTokens.layout.pageHorizontalPadding,
         },
-        paddingY: { xs: ThemeTokens.spacing.md, sm: ThemeTokens.spacing.lg },
+        paddingY: ThemeTokens.spacing.xs,
       }}
       {...props}
     >

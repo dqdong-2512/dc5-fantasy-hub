@@ -37,11 +37,11 @@ const formatDeadline = (deadlineStr: string | undefined): string => {
   }
 };
 
-export const GameweekContext: React.FC<GameweekContextProps> = ({
-  gameweek,
-  onViewGameweek,
-}) => {
-  const statusColors: Record<'UPCOMING' | 'IN_PROGRESS' | 'FINISHED', { label: string; bg: string; text: string }> = {
+export const GameweekContext: React.FC<GameweekContextProps> = ({ gameweek, onViewGameweek }) => {
+  const statusColors: Record<
+    'UPCOMING' | 'IN_PROGRESS' | 'FINISHED',
+    { label: string; bg: string; text: string }
+  > = {
     UPCOMING: { label: 'Upcoming', bg: '#e3f2fd', text: '#1976d2' },
     IN_PROGRESS: { label: 'In Progress', bg: '#fff3e0', text: '#f57c00' },
     FINISHED: { label: 'Finished', bg: '#f3e5f5', text: '#7b1fa2' },
