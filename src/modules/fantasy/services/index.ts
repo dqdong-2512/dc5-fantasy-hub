@@ -18,3 +18,13 @@ export { SeasonPlanValidationService } from './season-plan-validation.service';
 export { BGWDGWAnalysisService } from './bgw-dgw-analysis.service';
 export { FixtureSwingAnalysisService } from './fixture-swing-analysis.service';
 export { ChipCandidateAnalysisService } from './chip-candidate-analysis.service';
+export {
+  FantasyDashboardService,
+  type FantasyDashboardViewModel,
+  type GameweekOverviewData,
+  type TransferPlanStatusData,
+  type GameweekPlanStatusData,
+  type SeasonPlanStatusData,
+  type LeagueSnapshotData,
+  type NextActionData,
+} from './fantasy-dashboard.service';

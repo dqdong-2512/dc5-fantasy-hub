@@ -1,7 +1,13 @@
 /**
- * Fantasy Game Overview Page
+ * Fantasy Game Overview Page (Enhanced Dashboard)
  * Main entry point for Fantasy Premier League game management
- * Displays team summary, current gameweek stats, leagues, and quick actions
+ * Integrates all planning tools into one cohesive dashboard:
+ * - Team summary and current gameweek stats
+ * - Planning status (Transfer, Gameweek, Season plans)
+ * - Next actions derived from application state
+ * - League snapshots with navigation
+ * - Gameweek context and deadlines
+ * - Quick actions for major features
  */
 
 import React, { useMemo } from 'react';
@@ -10,12 +16,26 @@ import { useNavigate } from 'react-router-dom';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { fantasyGameFixtures } from '../fixtures';
-import { MyTeamSummary, CurrentGameweekSummary, MyLeagues, QuickActions } from '../widgets';
+import {
+  MyTeamSummary,
+  CurrentGameweekSummary,
+  QuickActions,
+  PlanningStatusPanel,
+  NextActionsPanel,
+  LeagueSnapshot,
+  GameweekContext,
+} from '../widgets';
+import { FantasyDashboardService } from '../services';
 
 export const FantasyGameOverview: React.FC = () => {
   const fixtures = useMemo(() => fantasyGameFixtures, []);
   const navigate = useNavigate();
 
+  // Initialize dashboard service
+  const dashboardService = useMemo(() => new FantasyDashboardService(), []);
+  const dashboardData = useMemo(() => dashboardService.buildDashboardViewModel(), [dashboardService]);
+
+  // Navigation handlers
   const handleViewTeam = (): void => {
     navigate('/premier-league/fantasy-game/team');
   };
@@ -30,6 +50,23 @@ export const FantasyGameOverview: React.FC = () => {
 
   const handleLeagueClick = (leagueId: number): void => {
     navigate(`/premier-league/fantasy-game/leagues/${leagueId}`);
+  };
+
+  const handleTransferPlanClick = (): void => {
+    navigate('/premier-league/fantasy-game/transfer-planner');
+  };
+
+  const handleGameweekPlanClick = (): void => {
+    const gw = dashboardData.gameweek.nextGameweekId ?? dashboardData.gameweek.currentGameweekId;
+    navigate(`/premier-league/fantasy-game/gameweek-planner?gw=${gw}`);
+  };
+
+  const handleSeasonPlanClick = (): void => {
+    navigate('/premier-league/fantasy-game/season-planner');
+  };
+
+  const handleGameweekCenterClick = (): void => {
+    navigate(`/premier-league/fantasy-game/gameweeks/${fixtures.currentGameweek.gameweek}`);
   };
 
   return (
@@ -82,7 +119,7 @@ export const FantasyGameOverview: React.FC = () => {
           padding: ThemeTokens.spacing.xs,
         }}
       >
-        {/* First Row: My Team & Current Gameweek (50/50 on lg+) */}
+        {/* SECTION 1: Gameweek Overview & Team Summary (2-col layout on desktop) */}
         <Box
           sx={{
             display: 'grid',
@@ -103,13 +140,57 @@ export const FantasyGameOverview: React.FC = () => {
           </Box>
         </Box>
 
-        {/* My Leagues Row */}
-        <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
-          <MyLeagues leagues={fixtures.leagues} onLeagueClick={handleLeagueClick} />
+        {/* SECTION 2: Planning Status & Next Actions (2-col layout on desktop) */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: '1fr', md: '1fr', lg: '1fr 1fr' },
+            gap: ThemeTokens.spacing.md,
+            marginBottom: ThemeTokens.spacing.md,
+            alignItems: 'start',
+          }}
+        >
+          <PlanningStatusPanel
+            transferStatus={dashboardData.transferStatus}
+            gameweekStatus={dashboardData.gameweekStatus}
+            seasonStatus={dashboardData.seasonStatus}
+            onTransferClick={handleTransferPlanClick}
+            onGameweekClick={handleGameweekPlanClick}
+            onSeasonClick={handleSeasonPlanClick}
+          />
+
+          <NextActionsPanel
+            actions={dashboardData.nextActions}
+            onTransferClick={handleTransferPlanClick}
+            onGameweekClick={handleGameweekPlanClick}
+            onSeasonClick={handleSeasonPlanClick}
+            onGameweekCenterClick={handleGameweekCenterClick}
+          />
         </Box>
 
-        {/* Quick Actions Row */}
-        <Box>
+        {/* SECTION 3: League Snapshot & Gameweek Context (2-col layout on desktop) */}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', sm: '1fr', md: '1fr', lg: '1fr 1fr' },
+            gap: ThemeTokens.spacing.md,
+            marginBottom: ThemeTokens.spacing.md,
+            alignItems: 'start',
+          }}
+        >
+          <LeagueSnapshot
+            leagues={dashboardData.leagues}
+            onLeagueClick={handleLeagueClick}
+          />
+
+          <GameweekContext
+            gameweek={dashboardData.gameweek}
+            onViewGameweek={handleGameweekCenterClick}
+          />
+        </Box>
+
+        {/* SECTION 4: Quick Actions */}
+        <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
           <QuickActions onViewTeam={handleViewTeam} onViewLeagues={handleViewLeagues} />
         </Box>
       </PageContainer>
