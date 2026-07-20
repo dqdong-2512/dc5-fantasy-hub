@@ -9,7 +9,7 @@ import { Box, Typography, Stack } from '@mui/material';
 import type { Player } from '@domain/models';
 import { BootstrapRepository } from '@repositories/bootstrap';
 import { PlayerRepository } from '@repositories/players';
-import { PageContent, PageHeader, PageSection, LoadingState, EmptyState } from '@shared/components';
+import { PageContent, PageHeader, PageSection, EmptyState } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import {
   PlayerTable,
@@ -92,10 +92,26 @@ export function PlayerExplorer(): React.ReactElement {
     setFilters(DEFAULT_FILTERS);
   };
 
-  if (!gameweek || playerCount === 0) {
+  // Show empty state if no players available
+  if (playerCount === 0) {
     return (
       <PageContent>
-        <LoadingState label="Loading player data..." />
+        <EmptyState
+          title="No players available"
+          description="Unable to load player data. Please try refreshing the page."
+        />
+      </PageContent>
+    );
+  }
+
+  // Show error state if gameweek data is missing (should not happen)
+  if (!gameweek) {
+    return (
+      <PageContent>
+        <EmptyState
+          title="Gameweek data unavailable"
+          description="Unable to load gameweek information. Please try refreshing the page."
+        />
       </PageContent>
     );
   }

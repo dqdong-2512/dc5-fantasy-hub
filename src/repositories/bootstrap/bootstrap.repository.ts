@@ -67,8 +67,24 @@ export class BootstrapRepository {
 
   getCurrentGameweek(): Gameweek | null {
     const normalized = this.loadData();
-    const current = normalized.gameweeks.find((gw: NormalizedGameweek) => !gw.finished);
+    // Try to find the first unfinished gameweek
+    let current = normalized.gameweeks.find((gw: NormalizedGameweek) => !gw.finished);
+
+    // If all gameweeks are finished (completed season), use the latest gameweek
+    if (!current && normalized.gameweeks.length > 0) {
+      current = normalized.gameweeks[normalized.gameweeks.length - 1];
+    }
+
     return current ? GameweekMapper.toDomain(current) : null;
+  }
+
+  getLatestGameweek(): Gameweek | null {
+    const normalized = this.loadData();
+    if (normalized.gameweeks.length === 0) {
+      return null;
+    }
+    const latest = normalized.gameweeks[normalized.gameweeks.length - 1];
+    return GameweekMapper.toDomain(latest);
   }
 
   getGameweekById(id: number): Gameweek | null {
