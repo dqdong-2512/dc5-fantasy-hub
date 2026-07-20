@@ -71,6 +71,10 @@ const router = createBrowserRouter([
                 element: <Fantasy />,
               },
               {
+                path: 'season-planner',
+                element: <Fantasy />,
+              },
+              {
                 path: 'leagues',
                 element: <Fantasy />,
               },

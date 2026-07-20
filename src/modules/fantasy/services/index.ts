@@ -11,3 +11,10 @@ export { GameweekPlanValidationService } from './gameweek-plan-validation.servic
 export { GameweekPlanInsightService } from './gameweek-plan-insight.service';
 export { GameweekPlanRepository } from './gameweek-plan-repository.service';
 export { SquadSourceResolver, type ResolvedSquadSource } from './squad-source-resolver.service';
+export { SeasonPlanRepository } from './season-plan-repository';
+export { SeasonPlanService } from './season-plan.service';
+export { SeasonSquadSimulationService } from './season-squad-simulation.service';
+export { SeasonPlanValidationService } from './season-plan-validation.service';
+export { BGWDGWAnalysisService } from './bgw-dgw-analysis.service';
+export { FixtureSwingAnalysisService } from './fixture-swing-analysis.service';
+export { ChipCandidateAnalysisService } from './chip-candidate-analysis.service';

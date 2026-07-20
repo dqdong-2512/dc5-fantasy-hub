@@ -17,6 +17,7 @@ import {
   GameweekCenterPage,
   TransferPlannerPage,
   GameweekPlannerPage,
+  SeasonPlannerPage,
 } from './pages';
 import { fantasyGameFixtures } from './fixtures';
 
@@ -46,6 +47,11 @@ export const Fantasy: React.FC = () => {
           replace
         />
       );
+    }
+
+    // Check for season planner page
+    if (location.pathname.includes('/season-planner')) {
+      return <SeasonPlannerPage />;
     }
 
     // Check for gameweek planner page
