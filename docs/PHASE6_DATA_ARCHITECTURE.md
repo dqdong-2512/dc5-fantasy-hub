@@ -1,0 +1,409 @@
+/**
+
+- DATA ARCHITECTURE DOCUMENTATION
+- PHASE 6: Data Freshness, Sync Strategy & Season Lifecycle
+-
+- This document describes how the DC5 Fantasy Hub manages global FPL data,
+- personal manager data, and the transition between them.
+  */
+
+/**
+
+- ═══════════════════════════════════════════════════════════════════════════════
+- 1.  DATA CLASSIFICATION BY FRESHNESS
+- ═══════════════════════════════════════════════════════════════════════════════
+-
+- LOW FREQUENCY (Changes infrequently, safe to cache)
+- ─────────────────────────────────────────────────
+-
+- • Clubs/Teams (20 teams)
+- - Synced at season start
+- - IDs, names, short names, badges
+- - Changes only when team roster changes (rare within season)
+- - Cached in db.json as teams[]
+-
+- • Positions/ElementTypes (4 positions: GK, DEF, MID, FWD)
+- - Never changes within a season
+- - Maps position IDs to names
+- - Cached in db.json as elementTypes[]
+-
+- • Gameweek Schedule (38 gameweeks per season)
+- - Published at season start
+- - Contains deadline, fixture count, etc.
+- - Updates to "finished" status as gameweeks complete
+- - Cached in db.json as gameweeks[]
+-
+- MEDIUM FREQUENCY (Changes regularly, requires periodic sync)
+- ─────────────────────────────────────────────────
+-
+- • Player Static Data (841 players)
+- - ID, name, club, position, shirt number
+- - Rarely changes mid-season
+- - Cached in db.json as players[]
+-
+- • Fixtures (380 fixtures per season)
+- - Published before gameweek starts
+- - Status updates (not started → in progress → finished)
+- - Results populated during gameweek
+- - Cached in db.json as fixtures[]
+-
+- HIGH FREQUENCY (Changes frequently, use live API calls)
+- ────────────────────────────────────────────────
+-
+- • Player Statistics
+- - Points (updated after each match)
+- - Form (0.0 to 10.0, updated continuously)
+- - Value/Cost (updated after deadline)
+- - Selected by % (updated continuously)
+- - Updated within db.json during sync, but consider live API for real-time
+-
+- • Fixture Status & Results
+- - Live match status (not started → kickoff → in progress → finished)
+- - Live scores and events
+- - Updated during matches, not worth caching
+- - Consider live API endpoints for match weeks
+-
+- • Gameweek Status
+- - Current gameweek
+- - Fixtures finished count
+- - Updated continuously during matches
+- - Resolved from gameweeks[] during sync, re-evaluated at runtime
+-
+- PERSONAL DATA (Always use live API, never cache)
+- ────────────────────────────────────────
+-
+- • Manager Profile
+- - Entry ID: sole identity
+- - Name, email, team name, favorite club
+- - Fetched live via FPL API (/entry/{id})
+- - Never cached, never stored in db.json
+-
+- • Manager History & Picks
+- - Picks for each gameweek
+- - Transfers, captain selections
+- - Points and rank progression
+- - Fetched live via FPL API (/entry/{id}/history, /entry/{id}/event/{gw}/picks)
+- - Cached temporarily in-memory, cleared on page leave
+-
+- • League Standings
+- - Live league standings
+- - Fetched via FPL API (/league/{id}/standings)
+- - Never persisted to disk
+-
+- ═══════════════════════════════════════════════════════════════════════════════
+- 2.  DATA BOUNDARIES: GLOBAL vs PERSONAL
+- ═══════════════════════════════════════════════════════════════════════════════
+-
+- GLOBAL FPL DATA (Stored in db.json, synced periodically)
+- ────────────────────────────────────────────────
+-
+- Source: FPL Public API endpoints
+- Storage: db.json (project root)
+- Sync: npm run sync:fpl (manual, typically 1-2x per day)
+- Scope: All users, all competitions
+- Cache: db.json persists until next sync
+- Pages: Dashboard, Players, Fixtures, Clubs, Analytics
+-
+- Files:
+- • src/repositories/bootstrap/bootstrap.repository.ts - Loads global data
+- • src/repositories/data-loader.ts - Reads db.json, provides bootstrap data
+- • scripts/sync/index.ts - Orchestrates sync pipeline
+- • db.json - The single source of truth for global cached data
+-
+- PERSONAL MANAGER DATA (Fetched live, never persisted)
+- ─────────────────────────────────────────────
+-
+- Source: FPL API with Entry ID as identity
+- Storage: In-memory React state (FantasyGameState)
+- Sync: Real-time API calls on demand
+- Scope: Single connected manager
+- Cache: None (always fresh from API)
+- Pages: Fantasy Game, My Team, Gameweek Center, League Standings
+- Identity: Entry ID (stored in localStorage as backup)
+-
+- Files:
+- • src/shared/services/entry-storage.ts - Manages Entry ID persistence
+- • src/modules/fantasy/hooks/useFantasyGame.ts - Manager state management
+- • src/modules/fantasy/services/fantasy-game-data.adapter.ts - Data transformation
+- • src/repositories/fantasy/* - Personal data repositories
+-
+- ═══════════════════════════════════════════════════════════════════════════════
+- 3.  SYNC METADATA SCHEMA
+- ═══════════════════════════════════════════════════════════════════════════════
+-
+- Location: db.json.meta
+-
+- {
+- "meta": {
+-     // Schema version for migration support
+-     "schemaVersion": 1,
+-
+-     // Active season (e.g., "2025-2026")
+-     "season": "2025-2026",
+-
+-     // When sync occurred
+-     "syncedAt": "2026-07-20T05:22:28.057Z",
+-
+-     // Data source
+-     "source": "fpl",
+-
+-     // What was synced
+-     "publicDataSynced": true,
+-     "managerDataSynced": false,
+-     "managerId": null,
+-
+-     // Data quality
+-     "dataQualityStatus": "PASS",
+-
+-     // Gameweek state snapshot at sync time
+-     "currentGameweekId": 1,
+-     "nextGameweekId": 2,
+-     "lastFinishedGameweekId": null,
+-     "totalGameweeks": 38
+- }
+- }
+-
+- ═══════════════════════════════════════════════════════════════════════════════
+- 4.  CURRENT GAMEWEEK RESOLUTION
+- ═══════════════════════════════════════════════════════════════════════════════
+-
+- The GameweekStateService determines current gameweek state:
+-
+- Service: src/shared/services/gameweek-state.service.ts
+- Entry: GameweekStateService.getGameweekState()
+- Output: GameweekState (status, current, next, lastFinished, all)
+-
+- Status States:
+- • PRE_SEASON - No gameweek started yet
+- • ACTIVE - Current gameweek exists
+- • BETWEEN_GAMEWEEKS - Current finished, next scheduled
+- • SEASON_COMPLETE - All gameweeks finished
+-
+- Resolution Logic:
+- 1.  Iterate through gameweeks[]
+- 2.  Find first unfinished = current gameweek
+- 3.  Find next after current = next gameweek
+- 4.  Track last finished as we iterate
+- 5.  Determine status based on current/finished state
+-
+- Usage:
+- • Components: use useGameweekState() hook
+- • Services: new GameweekStateService().getGameweekState()
+- • Redux: Already in hooks, no need for global state
+-
+- ═══════════════════════════════════════════════════════════════════════════════
+- 5.  SEASON CONFIGURATION STRATEGY
+- ═══════════════════════════════════════════════════════════════════════════════
+-
+- Single Source of Truth: db.json.meta.season
+-
+- At Runtime:
+- • Services read from db.json metadata
+- • No hard-coded "2025/26" strings in components
+- • UI derives season from DataSeasonService
+-
+- Resolution Chain:
+- 1.  db.json loads (src/repositories/data-loader.ts)
+- 2.  DataSeasonService reads db.json.meta.season
+- 3.  Components use getCurrentSeasonLabel() or useSeasonLabel()
+- 4.  UI displays dynamically resolved season
+-
+- Files:
+- • src/shared/services/data-season.service.ts - Singleton season resolver
+- • src/shared/hooks/useDataSeason.ts - React hook for season access
+- • src/config/appConfig.ts - Fallback config (for non-React contexts)
+-
+- ═══════════════════════════════════════════════════════════════════════════════
+- 6.  DATA FRESHNESS SERVICE
+- ═══════════════════════════════════════════════════════════════════════════════
+-
+- Purpose: Non-intrusive staleness detection
+-
+- Service: src/shared/services/data-freshness.service.ts
+- Entry: DataFreshnessService.getDataQualityStatus()
+- Output: DataQualityStatus (freshness, lastSyncTime, isValid)
+-
+- Freshness Policy:
+- • Fresh: Synced within last 24 hours
+- • Stale: Synced more than 24 hours ago
+- • Unknown: No sync timestamp
+-
+- Methods:
+- • isFresh() - boolean check
+- • isStale() - boolean check
+- • getStaleMessage() - human-readable warning
+- • getLastSyncTimeFormatted() - formatted display string
+- • getDataCounts() - data availability snapshot
+-
+- Usage:
+- • Components: use useDataFreshness() hook
+- • Services: new DataFreshnessService().getDataQualityStatus()
+-
+- ═══════════════════════════════════════════════════════════════════════════════
+- 7.  UI DATA FRESHNESS INDICATOR
+- ═══════════════════════════════════════════════════════════════════════════════
+-
+- Component: src/shared/components/DataSyncIndicator.tsx
+- Location: Dashboard, PageContent area
+- Display: Compact or full mode
+- Warning: Optional stale data banner
+-
+- Visual States:
+- • Fresh: Green checkmark + "Data synced"
+- • Stale: Orange warning + age information
+- • Unknown: Loading spinner
+-
+- Non-Intrusive Design:
+- • Single placement (not on every page)
+- • Tooltip provides details
+- • Warning only if stale
+- • Compact mode available for sidebars
+-
+- ═══════════════════════════════════════════════════════════════════════════════
+- 8.  DATA VALIDATION RULES
+- ═══════════════════════════════════════════════════════════════════════════════
+-
+- Before Writing db.json:
+-
+- Players:
+- ✓ Player IDs exist and are unique
+- ✓ Club references valid (team ID in teams[])
+- ✓ Required fields present (id, name, team, elementType)
+- ✓ No NULL ids or duplicate IDs
+-
+- Teams:
+- ✓ Team IDs exist and are unique (1-20)
+- ✓ Required fields present (id, name, shortName)
+- ✓ Expected 20 teams
+-
+- Gameweeks:
+- ✓ Event IDs valid and unique
+- ✓ No duplicate IDs
+- ✓ Deadline timestamps valid
+- ✓ Expected 38 gameweeks
+-
+- Fixtures:
+- ✓ Fixture IDs valid and unique
+- ✓ Home and away teams exist in teams[]
+- ✓ Gameweek references valid
+- ✓ Expected ~380 fixtures per season
+-
+- Metadata:
+- ✓ Season string exists
+- ✓ syncedAt ISO timestamp valid
+- ✓ dataQualityStatus is PASS/FAIL/WARNING
+-
+- Validation: src/scripts/services/data-quality-validator.ts
+- Failures: Prevent db.json write, preserve previous version
+-
+- ═══════════════════════════════════════════════════════════════════════════════
+- 9.  ATOMIC/SAFE DATA WRITE
+- ═══════════════════════════════════════════════════════════════════════════════
+-
+- Strategy: Write-then-replace with backup
+-
+- Process:
+- 1.  Build complete dataset in memory
+- 2.  Validate dataset (see Data Validation section)
+- 3.  Serialize to JSON
+- 4.  Write to temporary file (db.json.tmp)
+- 5.  Verify temp file is valid JSON
+- 6.  Backup current db.json (db.json.backup)
+- 7.  Replace db.json with temp file
+- 8.  Clean up temp files
+-
+- Failure Behavior:
+- • If validation fails → Previous db.json preserved
+- • If write fails → Previous db.json preserved
+- • If serialization fails → Error reported, no write attempted
+- • Corruption unlikely → Separate files until final swap
+-
+- Implementation: src/scripts/services/atomic-db-writer.ts
+-
+- ═══════════════════════════════════════════════════════════════════════════════
+- 10. PRE-SEASON / OFF-SEASON HANDLING
+- ═══════════════════════════════════════════════════════════════════════════════
+-
+- Application Behavior:
+-
+- PRE-SEASON (No gameweek started):
+- • CurrentGameweek: null
+- • Status: PRE_SEASON
+- • UI Actions: Show "Pre-season" label, hide GW-specific widgets
+- • Players: Display 841 players, form = 0 is valid
+- • Fixtures: Hide or mark as "TBD"
+- • Dashboard: Show transfer targets, no form rankings
+-
+- SEASON COMPLETE:
+- • CurrentGameweek: null (all finished)
+- • Status: SEASON_COMPLETE
+- • UI Actions: Show "Season Complete" label
+- • Players: Display season final stats
+- • Fixtures: Show completed results
+- • Dashboard: Show season summary, awards
+-
+- Key Principle: Never show misleading values
+- • No "GW 0" unless intentionally defined
+- • No form stats when form = 0 due to pre-season
+- • No current gameweek if none exists
+- • Use explicit labels: "Pre-season", "Season Complete"
+-
+- ═══════════════════════════════════════════════════════════════════════════════
+- 11. SEASON TRANSITION (2025/26 → 2026/27)
+- ═══════════════════════════════════════════════════════════════════════════════
+-
+- Automatic via Central Configuration:
+-
+- Step 1: Update sync command
+- • Change FPL_SEASON env variable to "2026-2027"
+- • Or update hardcoded season in sync config
+- • Run: npm run sync:fpl
+-
+- Step 2: Automatic Updates
+- • db.json.meta.season = "2026-2027"
+- • DataSeasonService reads new season from metadata
+- • All UI components display updated season
+- • useSeasonLabel() returns "2026/27"
+-
+- No Manual Component Changes Required:
+- • DashboardHero dynamically resolves season ✓
+- • Dashboard shows new season from metadata ✓
+- • Players page shows new data ✓
+- • Fixtures show new season ✓
+- • Clubs display new teams ✓
+-
+- Historical Data:
+- • Previous season's db.json backed up
+- • Old data available via git history
+- • No in-app historical navigation in PHASE 6
+- • Focus: Single active season correctness
+-
+- ═══════════════════════════════════════════════════════════════════════════════
+- 12. IMPLEMENTATION NOTES
+- ═══════════════════════════════════════════════════════════════════════════════
+-
+- Services Created:
+- • DataSeasonService - Season metadata resolution
+- • GameweekStateService - Gameweek state detection
+- • DataFreshnessService - Staleness detection
+-
+- Hooks Created:
+- • useDataSeason, useSeasonLabel - Season access in components
+- • useDataFreshness, useIsDataFresh, useIsDataStale - Freshness checks
+- • useGameweekState, useCurrentGameweek, useNextGameweek - Gameweek access
+-
+- Components Created:
+- • DataSyncIndicator - Data freshness display
+-
+- Sync Infrastructure:
+- • AtomicDbWriter ensures safe writes
+- • DataQualityValidator ensures data integrity
+- • Gameweek state automatically calculated during sync
+-
+- No Breaking Changes:
+- • All previous functionality preserved
+- • Fallback behavior for missing metadata
+- • Backward compatible with existing db.json
+-
+- ═══════════════════════════════════════════════════════════════════════════════
+  */

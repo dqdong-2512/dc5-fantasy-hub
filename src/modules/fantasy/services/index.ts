@@ -6,6 +6,7 @@ export {
   type ManagerContext,
   type ManagerStats,
 } from './manager-context.service';
+export { FantasyGameDataAdapter } from './fantasy-game-data.adapter';
 export { EntryIdHelper } from './entry-id-helper';
 export { TransferBudgetService } from './transfer-budget.service';
 export { SquadValidationService, SQUAD_RULES } from './squad-validation.service';

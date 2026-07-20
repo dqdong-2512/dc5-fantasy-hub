@@ -1,17 +1,27 @@
 /**
  * FPL Dashboard Hero Section
  * Full-width header with logo, title, and gradient background
+ * Displays dynamically resolved season from synchronized dataset
  */
 
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
 import { ThemeTokens } from '@shared/theme/tokens';
+import { getCurrentSeasonLabel } from '@shared/services';
 
 /**
  * Dashboard Hero Component
  * Displays FPL branding with gradient background
+ * Season is resolved from db.json metadata, not hard-coded
  */
 export const DashboardHero: React.FC = () => {
+  const seasonLabel = useMemo(() => {
+    try {
+      return getCurrentSeasonLabel();
+    } catch {
+      return '2025/26'; // Fallback
+    }
+  }, []);
   return (
     <Box
       sx={{
@@ -84,7 +94,7 @@ export const DashboardHero: React.FC = () => {
               lineHeight: 1.3,
             }}
           >
-            Season 2026/27
+            Season {seasonLabel}
           </Typography>
         </Box>
       </Box>

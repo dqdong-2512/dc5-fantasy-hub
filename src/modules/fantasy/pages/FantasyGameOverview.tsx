@@ -24,13 +24,14 @@ import {
   LeagueSnapshot,
   GameweekContext,
 } from '../widgets';
-import { FantasyDashboardService } from '../services';
+import { FantasyDashboardService, FantasyGameDataAdapter } from '../services';
 import { useFantasyGame } from '../hooks';
 import { fantasyGameFixtures } from '../fixtures';
 
 export const FantasyGameOverview: React.FC = () => {
   const gameState = useFantasyGame();
   const navigate = useNavigate();
+  const fixtures = useMemo(() => fantasyGameFixtures, []);
 
   // Show not-connected state if user hasn't connected
   if (!gameState.isConnected) {
@@ -76,15 +77,32 @@ export const FantasyGameOverview: React.FC = () => {
     [dashboardService]
   );
 
+  // Prepare manager and gameweek data
+  // Use real data if connected, otherwise use fixtures
+  const managerData = useMemo(() => {
+    if (gameState.isConnected && gameState.entry) {
+      return FantasyGameDataAdapter.entryToManagerFixture(gameState.entry);
+    }
+    return fixtures.manager;
+  }, [gameState.isConnected, gameState.entry, fixtures.manager]);
+
+  const gameweekData = useMemo(() => {
+    if (gameState.isConnected && gameState.history && gameState.history.length > 0) {
+      return FantasyGameDataAdapter.getLatestGameweekFromHistory(gameState.history);
+    }
+    return fixtures.currentGameweek;
+  }, [gameState.isConnected, gameState.history, fixtures.currentGameweek]);
+
   // Navigation handlers
   const handleViewTeam = (): void => {
     navigate('/premier-league/fantasy-game/team');
   };
 
   const handleViewGameweek = (): void => {
-    navigate(
-      `/premier-league/fantasy-game/gameweeks/${fantasyGameFixtures.currentGameweek.gameweek}`
-    );
+    const gameweekNum = gameState.isConnected
+      ? gameState.displayGameweek
+      : fantasyGameFixtures.currentGameweek.gameweek;
+    navigate(`/premier-league/fantasy-game/gameweeks/${gameweekNum}`);
   };
 
   const handleViewLeagues = (): void => {
@@ -112,8 +130,37 @@ export const FantasyGameOverview: React.FC = () => {
     navigate(`/premier-league/fantasy-game/gameweeks/${dashboardData.gameweek.currentGameweekId}`);
   };
 
+  const handleDisconnect = (): void => {
+    gameState.disconnectEntry();
+    navigate('/premier-league/fantasy-game', { replace: true });
+  };
+
   return (
     <Box>
+      {/* Connection Header with Disconnect Button */}
+      {gameState.isConnected && (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'flex-end',
+            padding: ThemeTokens.spacing.md,
+            borderBottom: '1px solid #e0e0e0',
+          }}
+        >
+          <Button
+            size="small"
+            onClick={handleDisconnect}
+            sx={{
+              textTransform: 'none',
+              color: '#64748b',
+              '&:hover': { backgroundColor: '#f1f5f9' },
+            }}
+          >
+            Disconnect
+          </Button>
+        </Box>
+      )}
+
       {/* Page Header - Centered Logo and Subtitle */}
       <Box
         sx={{
@@ -173,13 +220,10 @@ export const FantasyGameOverview: React.FC = () => {
           }}
         >
           <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
-            <MyTeamSummary manager={fantasyGameFixtures.manager} onViewTeam={handleViewTeam} />
+            <MyTeamSummary manager={managerData} onViewTeam={handleViewTeam} />
           </Box>
           <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
-            <CurrentGameweekSummary
-              gameweek={fantasyGameFixtures.currentGameweek}
-              onViewGameweek={handleViewGameweek}
-            />
+            <CurrentGameweekSummary gameweek={gameweekData} onViewGameweek={handleViewGameweek} />
           </Box>
         </Box>
 

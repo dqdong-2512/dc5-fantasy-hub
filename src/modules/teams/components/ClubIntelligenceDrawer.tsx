@@ -22,6 +22,7 @@ import {
 } from '@mui/material';
 import type { Team } from '@domain/models';
 import { ThemeTokens } from '@shared/theme/tokens';
+import { useSeasonLabel } from '@shared/hooks';
 import { getTeamBadgeUrl } from '@shared/assets';
 import { ClubIntelligenceService } from '../insights';
 import { getDifficultyColor } from '@shared/presentation/fixture-formats';
@@ -41,6 +42,7 @@ export function ClubIntelligenceDrawer({
   open,
   onClose,
 }: ClubIntelligenceDrawerProps): React.ReactElement {
+  const seasonLabel = useSeasonLabel();
   const service = useMemo(() => new ClubIntelligenceService(), []);
 
   const intelligence = useMemo(() => (team ? service.analyzeClub(team) : null), [team, service]);
@@ -66,7 +68,7 @@ export function ClubIntelligenceDrawer({
                 {intelligence.team.name}
               </Typography>
               <Typography variant="caption" color="text.secondary">
-                {intelligence.team.shortName} • 2025/26
+                {intelligence.team.shortName} • {seasonLabel}
               </Typography>
             </Box>
           </Box>

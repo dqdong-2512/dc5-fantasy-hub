@@ -169,6 +169,34 @@ async function main(): Promise<void> {
     // Step 4: Write atomic db.json
     if (config.writeDb) {
       console.log('STEP 4: Writing atomic db.json...\n');
+
+      // Resolve gameweek state
+      let currentGameweekId: number | null = null;
+      let nextGameweekId: number | null = null;
+      let lastFinishedGameweekId: number | null = null;
+
+      if (gameweeks && gameweeks.length > 0) {
+        // Find current (first unfinished)
+        for (const gw of gameweeks) {
+          if (!gw.finished) {
+            currentGameweekId = gw.id;
+            break;
+          }
+          lastFinishedGameweekId = gw.id;
+        }
+
+        // If all finished, use last
+        if (!currentGameweekId) {
+          lastFinishedGameweekId = gameweeks[gameweeks.length - 1].id;
+        } else {
+          // Find next (first after current)
+          const currentIdx = gameweeks.findIndex((gw: any) => gw.id === currentGameweekId);
+          if (currentIdx >= 0 && currentIdx < gameweeks.length - 1) {
+            nextGameweekId = gameweeks[currentIdx + 1].id;
+          }
+        }
+      }
+
       const db: DatabaseSchema = {
         meta: {
           schemaVersion: 1,
@@ -179,6 +207,11 @@ async function main(): Promise<void> {
           managerDataSynced: config.syncManager,
           managerId: config.managerId,
           dataQualityStatus: result.dataQuality?.status || 'UNKNOWN',
+          // Gameweek state snapshot
+          currentGameweekId,
+          nextGameweekId,
+          lastFinishedGameweekId,
+          totalGameweeks: gameweeks ? gameweeks.length : 0,
         },
         teams,
         players,
@@ -194,6 +227,24 @@ async function main(): Promise<void> {
       console.log(`✓ db.json written: ${dbPath}`);
       console.log(`  File size: ${(fs.statSync(dbPath).size / 1024).toFixed(2)} KB`);
       console.log('');
+
+      // Log gameweek state
+      if (currentGameweekId) {
+        console.log(`Gameweek State:`);
+        console.log(`  Current: GW ${currentGameweekId}`);
+        console.log(
+          `  Next: ${nextGameweekId ? `GW ${nextGameweekId}` : 'None (season complete)'}`
+        );
+        console.log(
+          `  Last Finished: ${lastFinishedGameweekId ? `GW ${lastFinishedGameweekId}` : 'None'}`
+        );
+        console.log('');
+      } else if (lastFinishedGameweekId) {
+        console.log(`Gameweek State:`);
+        console.log(`  Status: Season Complete`);
+        console.log(`  Last Gameweek: GW ${lastFinishedGameweekId}`);
+        console.log('');
+      }
     }
 
     // Summary

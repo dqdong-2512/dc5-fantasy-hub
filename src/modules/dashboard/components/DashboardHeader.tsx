@@ -9,7 +9,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import UpdateIcon from '@mui/icons-material/Update';
 import { BootstrapRepository } from '@repositories/bootstrap';
-import { getSeasonDisplay } from '@config/appConfig';
+import { useSeasonLabel } from '@shared/hooks';
 import { ThemeTokens } from '@shared/theme/tokens';
 
 export interface DashboardHeaderProps {
@@ -22,6 +22,8 @@ export interface DashboardHeaderProps {
  * Shows competition, season, gameweek, deadline, and sync status
  */
 export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ competition, lastSyncTime }) => {
+  const seasonLabel = useSeasonLabel();
+
   // Load gameweek data
   const gameweekData = useMemo(() => {
     try {
@@ -86,7 +88,7 @@ export const DashboardHeader: React.FC<DashboardHeaderProps> = ({ competition, l
             {competition}
           </Typography>
           <Typography variant="body2" color="textSecondary" sx={{ marginTop: 0.5 }}>
-            Season {getSeasonDisplay()}
+            Season {seasonLabel}
           </Typography>
         </Box>
 

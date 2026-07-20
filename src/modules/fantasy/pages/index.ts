@@ -1,4 +1,5 @@
 export { FantasyWorkspace, type FantasyWorkspaceProps } from './FantasyWorkspace';
+export { FantasyConnectionPage } from './FantasyConnectionPage';
 export { FantasyGameOverview } from './FantasyGameOverview';
 export { MyTeamPage } from './MyTeamPage';
 export { MyLeaguesPage } from './MyLeaguesPage';

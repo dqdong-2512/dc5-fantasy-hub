@@ -28,6 +28,7 @@ import {
 } from '@mui/material';
 import { PageContent, PageHeader } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
+import { useSeasonLabel } from '@shared/hooks';
 import { BootstrapRepository } from '@repositories/bootstrap';
 import { FixtureRepository } from '@repositories/fixtures';
 import { getTeamBadgeUrl } from '@shared/assets';
@@ -46,6 +47,7 @@ import type { FixtureRunSummary } from './insights/models';
 import type { Fixture } from '@domain/models';
 
 export const FixtureExplorer: React.FC = () => {
+  const seasonLabel = useSeasonLabel();
   const bootstrapRepository = useMemo(() => new BootstrapRepository(), []);
   const fixtureRepository = useMemo(() => new FixtureRepository(), []);
 
@@ -144,7 +146,7 @@ export const FixtureExplorer: React.FC = () => {
                   Season
                 </Typography>
                 <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                  2025/26
+                  {seasonLabel}
                 </Typography>
               </Box>
               <Box>

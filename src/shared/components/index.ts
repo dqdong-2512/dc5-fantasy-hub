@@ -25,3 +25,6 @@ export * from './feedback';
 
 // Design System - Overlay Components
 export * from './overlay';
+
+// Data Status Components
+export { DataSyncIndicator } from './DataSyncIndicator';

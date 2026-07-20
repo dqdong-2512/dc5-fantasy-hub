@@ -10,6 +10,7 @@ import { BootstrapRepository } from '@repositories/bootstrap';
 import { TeamRepository } from '@repositories/teams';
 import { PageContent, PageHeader, PageSection, LoadingState } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
+import { useSeasonLabel } from '@shared/hooks';
 import { ClubOverview, ClubIntelligenceDrawer, ClubComparison } from '../components';
 
 /**
@@ -17,6 +18,7 @@ import { ClubOverview, ClubIntelligenceDrawer, ClubComparison } from '../compone
  * Production-quality analytics interface for club exploration
  */
 export function ClubExplorer(): React.ReactElement {
+  const seasonLabel = useSeasonLabel();
   const [selectedClub, setSelectedClub] = useState<Team | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedClubIds, setSelectedClubIds] = useState<number[]>([]);
@@ -139,7 +141,7 @@ export function ClubExplorer(): React.ReactElement {
                 Season
               </Typography>
               <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                2025/26
+                {seasonLabel}
               </Typography>
             </Box>
             <Box>

@@ -71,6 +71,8 @@ export function getActiveSeason(): string {
 
 /**
  * Get the season display format (e.g., 2025/26)
+ * Fallback version for non-React contexts
+ * React components should use useSeasonLabel() hook instead
  */
 export function getSeasonDisplay(): string {
   const [start, end] = appConfig.activeSeason.split('-');

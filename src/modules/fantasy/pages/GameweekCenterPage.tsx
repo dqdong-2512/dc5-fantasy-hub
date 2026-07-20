@@ -2,15 +2,17 @@
  * Gameweek Center Page
  * Central hub for gameweek-specific data and analysis
  * Displays manager performance, player contributions, fixtures, and captain impact
+ * Supports both real manager data (when connected) and public gameweek data (when not connected)
  */
 
 import React, { useMemo } from 'react';
-import { Box, Typography, Button, Alert } from '@mui/material';
+import { Box, Typography, Button, Alert, CircularProgress } from '@mui/material';
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { GameweekCenterService } from '../services';
+import { useFantasyGame, useEnrichedManagerPicks } from '../hooks';
 import {
   GameweekSelector,
   GameweekSummary,
@@ -24,6 +26,7 @@ import {
 export const GameweekCenterPage: React.FC = () => {
   const { gameweekId: gameweekIdParam } = useParams<{ gameweekId: string }>();
   const navigate = useNavigate();
+  const gameState = useFantasyGame();
 
   const gameweekIdNum = useMemo(() => {
     return gameweekIdParam ? parseInt(gameweekIdParam, 10) : null;
@@ -31,12 +34,58 @@ export const GameweekCenterPage: React.FC = () => {
 
   const service = useMemo(() => new GameweekCenterService(), []);
 
-  // Get gameweek center data
-  // Note: Without a configured manager ID, this returns public gameweek data only
+  // Load real manager picks if connected
+  const managerPicks = useEnrichedManagerPicks(gameState.connectedEntryId, gameweekIdNum);
+
+  // Get gameweek center data (public data + optional manager override)
   const gameweekData = useMemo(() => {
     if (!gameweekIdNum) return null;
     return service.getGameweekCenterData(gameweekIdNum);
   }, [gameweekIdNum, service]);
+
+  // Determine if using real manager data
+  const isUsingRealData =
+    gameState.isConnected && managerPicks.enrichedPicks && !managerPicks.isLoading;
+
+  // Show loading when fetching real manager picks
+  if (gameState.isConnected && gameweekIdNum && managerPicks.isLoading) {
+    return (
+      <Box
+        sx={{
+          padding: 4,
+          textAlign: 'center',
+          minHeight: '60vh',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
+  // Show error if real data fails to load
+  if (isUsingRealData === false && gameState.isConnected && managerPicks.error) {
+    return (
+      <Box sx={{ padding: 4 }}>
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate('/premier-league/fantasy-game')}
+          sx={{
+            textTransform: 'none',
+            color: '#1976d2',
+            padding: 0,
+            marginBottom: 2,
+            '&:hover': { backgroundColor: 'transparent' },
+          }}
+        >
+          Back to Fantasy Game
+        </Button>
+        <Alert severity="error">{managerPicks.error}</Alert>
+      </Box>
+    );
+  }
 
   // Handle invalid gameweek
   if (!gameweekData) {
@@ -198,6 +247,45 @@ export const GameweekCenterPage: React.FC = () => {
 
         {/* Fixtures Section - Always show for public data */}
         <FixturesList gameweekId={gameweekData.gameweek.id} />
+
+        {/* Manager Picks from Real Data (when connected) */}
+        {isUsingRealData && managerPicks.enrichedPicks && (
+          <>
+            <Box sx={{ marginTop: ThemeTokens.spacing.lg }}>
+              <Typography
+                variant="h6"
+                sx={{
+                  fontWeight: 700,
+                  marginBottom: 1.5,
+                  fontSize: '1rem',
+                }}
+              >
+                Your Gameweek Team
+              </Typography>
+
+              {/* Real Manager Picks on Pitch */}
+              <FootballPitch
+                squad={managerPicks.enrichedPicks.starters.map((pick: any) => ({
+                  playerId: pick.element,
+                  isStarter: true,
+                  isCaptain: pick.isCaptain,
+                  isViceCaptain: pick.isViceCaptain,
+                  gameweekPoints: pick.playerEffectivePoints,
+                }))}
+              />
+
+              {/* Real Manager Bench */}
+              <Bench
+                squad={managerPicks.enrichedPicks.bench.map((pick: any, idx: number) => ({
+                  playerId: pick.element,
+                  isStarter: false,
+                  benchOrder: idx,
+                  gameweekPoints: pick.playerEffectivePoints,
+                }))}
+              />
+            </Box>
+          </>
+        )}
 
         {/* Bottom Padding */}
         <Box sx={{ paddingBottom: ThemeTokens.spacing.xs }} />

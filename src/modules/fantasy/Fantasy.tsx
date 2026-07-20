@@ -11,6 +11,7 @@ import { Navigate } from 'react-router-dom';
 import { useFantasyGame } from './hooks';
 import {
   FantasyWorkspace,
+  FantasyConnectionPage,
   FantasyGameOverview,
   MyTeamPage,
   LeagueStandingsPage,
@@ -39,6 +40,12 @@ export const Fantasy: React.FC = () => {
 
   // Not connected - Show pages based on route
   if (!gameState.isConnected) {
+    // Show connection page for root path or explicit connection navigation
+    const isRootPath = location.pathname === '/premier-league/fantasy-game';
+    if (isRootPath) {
+      return <FantasyConnectionPage />;
+    }
+
     // Redirect /leagues (without ID) to primary league
     if (location.pathname === '/premier-league/fantasy-game/leagues') {
       return (

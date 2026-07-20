@@ -16,7 +16,12 @@ export interface DatabaseSchema {
     publicDataSynced: boolean;
     managerDataSynced: boolean;
     managerId: number | null;
-    dataQualityStatus: 'PASS' | 'FAIL' | 'WARNING';
+    dataQualityStatus: 'PASS' | 'FAIL' | 'WARNING' | 'UNKNOWN';
+    // Gameweek state snapshot
+    currentGameweekId: number | null;
+    nextGameweekId: number | null;
+    lastFinishedGameweekId: number | null;
+    totalGameweeks: number;
   };
   teams: any[];
   players: any[];

@@ -13,8 +13,8 @@
     "format:check": "prettier --check src",
     "type-check": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
-    "sync:fpl": "node --loader ts-node/esm scripts/sync/index.ts",
-    "sync:bootstrap": "node --loader ts-node/esm scripts/sync/bootstrap.sync.ts"
+    "sync:fpl": "npx tsx scripts/sync/index.ts",
+    "sync:bootstrap": "npx tsx scripts/sync/bootstrap.sync.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
@@ -27,6 +27,7 @@
     "globals": "^17.7.0",
     "prettier": "^3.9.5",
     "terser": "^5.49.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.5.0",
     "vite": "^5.4.21"
   },

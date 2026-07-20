@@ -11,6 +11,7 @@ import { BootstrapRepository } from '@repositories/bootstrap';
 import { PlayerRepository } from '@repositories/players';
 import { PageContent, PageHeader, PageSection, EmptyState } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
+import { useSeasonLabel } from '@shared/hooks';
 import {
   PlayerTable,
   PlayerDetailDrawer,
@@ -37,6 +38,7 @@ const DEFAULT_FILTERS: PlayerFilters = {
 export function PlayerExplorer(): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
+  const seasonLabel = useSeasonLabel();
   const pathSegments = location.pathname.split('/').filter(Boolean);
   const competition = pathSegments[0] || 'premier-league';
 
@@ -144,7 +146,7 @@ export function PlayerExplorer(): React.ReactElement {
                 Season
               </Typography>
               <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                2025/26
+                {seasonLabel}
               </Typography>
             </Box>
             <Box>
