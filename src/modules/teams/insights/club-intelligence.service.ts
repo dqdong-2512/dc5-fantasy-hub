@@ -31,8 +31,7 @@ export class ClubIntelligenceService {
    * Generate complete club intelligence profile
    */
   analyzeClub(team: Team): ClubIntelligence {
-    const allPlayers = this.playerRepository.getAll();
-    const clubPlayers = allPlayers.filter((p) => p.club === team.name || p.clubCode === team.id);
+    const clubPlayers = this.playerRepository.getByTeam(team.id);
     const upcomingFixtures = this.fixtureRepository.getUpcomingByTeam(team.id);
 
     return {

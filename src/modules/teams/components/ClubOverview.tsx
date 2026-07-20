@@ -21,8 +21,8 @@ import {
   Paper,
   TableSortLabel,
   useMediaQuery,
+  useTheme,
 } from '@mui/material';
-import type { Theme } from '@mui/material';
 import type { Team } from '@domain/models';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { getTeamBadgeUrl } from '@shared/assets';
@@ -47,8 +47,9 @@ export function ClubOverview({
   sortOrder,
   onSort,
 }: ClubOverviewProps): React.ReactElement {
+  const theme = useTheme();
   const service = useMemo(() => new ClubIntelligenceService(), []);
-  const isMobile = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
   const clubAnalysis = useMemo(
     () =>
