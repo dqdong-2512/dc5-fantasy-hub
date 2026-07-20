@@ -19,6 +19,8 @@ export function PageContent({ children, sx, ...props }: PageContentProps): React
       sx={{
         maxWidth: ThemeTokens.layout.maxWidth,
         paddingX: ThemeTokens.layout.pageHorizontalPadding,
+        paddingTop: ThemeTokens.spacing.xs,
+        paddingBottom: ThemeTokens.spacing.xs,
         ...sx,
       }}
       {...props}

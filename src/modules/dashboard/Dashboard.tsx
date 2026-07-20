@@ -1,7 +1,7 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
-import { PageContainer } from '@shared/components';
+import { PageContent } from '@shared/components';
 import type { CompetitionType } from '../../types/competition';
 import { COMPETITIONS } from '../../types/competition';
 import { DashboardHero } from './components/DashboardHero';
@@ -45,12 +45,7 @@ export const Dashboard: React.FC = () => {
       <DashboardHero />
 
       {/* Dashboard Content Container */}
-      <PageContainer
-        sx={{
-          paddingTop: ThemeTokens.spacing.xs,
-          paddingBottom: ThemeTokens.spacing.xs,
-        }}
-      >
+      <PageContent>
         {/* Widget Grid - First Row: Current GW (50%) + Top Players (50%) on lg+ */}
         <Box
           sx={{
@@ -90,7 +85,7 @@ export const Dashboard: React.FC = () => {
         <Box>
           <TopClubs onViewClubs={() => handleNavigate('teams')} />
         </Box>
-      </PageContainer>
+      </PageContent>
     </Box>
   );
 };

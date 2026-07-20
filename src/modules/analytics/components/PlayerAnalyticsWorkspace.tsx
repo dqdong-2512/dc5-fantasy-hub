@@ -6,7 +6,7 @@
 import React, { useMemo, useState, useCallback } from 'react';
 import { Box, Tabs, Tab, Typography, CircularProgress, Alert } from '@mui/material';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { PageContainer, PageHeader, PageContent } from '@shared/components';
+import { PageHeader, PageContent } from '@shared/components';
 import type { Player } from '@domain/models';
 import { PlayerRepository } from '@repositories/players';
 import { BootstrapRepository } from '@repositories/bootstrap';
@@ -212,7 +212,7 @@ export const PlayerAnalyticsWorkspace: React.FC = () => {
 
   if (isLoading) {
     return (
-      <PageContainer>
+      <PageContent>
         <Box
           sx={{
             display: 'flex',
@@ -223,24 +223,24 @@ export const PlayerAnalyticsWorkspace: React.FC = () => {
         >
           <CircularProgress />
         </Box>
-      </PageContainer>
+      </PageContent>
     );
   }
 
   if (error) {
     return (
-      <PageContainer>
+      <PageContent>
         <Alert severity="error">{error}</Alert>
-      </PageContainer>
+      </PageContent>
     );
   }
 
   return (
-    <Box>
+    <PageContent>
       {/* Header */}
       <PageHeader>
         <Typography variant="h5" sx={{ fontWeight: 700 }}>
-          Player Analytics & Transfer Intelligence
+          Analytics
         </Typography>
         <Typography
           variant="body2"
@@ -251,68 +251,64 @@ export const PlayerAnalyticsWorkspace: React.FC = () => {
         </Typography>
       </PageHeader>
 
-      <PageContent sx={{ padding: ThemeTokens.spacing.xs }}>
-        {/* View Tabs */}
-        <Box sx={{ borderBottom: '1px solid #e0e0e0', marginBottom: ThemeTokens.spacing.md }}>
-          <Tabs
-            value={activeView}
-            onChange={(_, value) => setActiveView(value as ViewType)}
-            sx={{
-              '& .MuiTab-root': {
-                fontSize: '0.9rem',
-                fontWeight: 600,
-                textTransform: 'none',
-                minWidth: '120px',
-              },
-            }}
-          >
-            {VIEWS.map((view) => (
-              <Tab key={view.id} label={view.label} value={view.id} />
-            ))}
-          </Tabs>
-        </Box>
+      {/* View Tabs */}
+      <Box sx={{ borderBottom: '1px solid #e0e0e0', marginBottom: ThemeTokens.spacing.md }}>
+        <Tabs
+          value={activeView}
+          onChange={(_, value) => setActiveView(value as ViewType)}
+          sx={{
+            '& .MuiTab-root': {
+              fontSize: '0.9rem',
+              fontWeight: 600,
+              textTransform: 'none',
+              minWidth: '120px',
+            },
+          }}
+        >
+          {VIEWS.map((view) => (
+            <Tab key={view.id} label={view.label} value={view.id} />
+          ))}
+        </Tabs>
+      </Box>
 
-        {/* Filters */}
-        <Box sx={{ marginBottom: ThemeTokens.spacing.lg }}>
-          <PlayerFilterBar
-            filters={filters}
-            onFiltersChange={setFilters}
-            onReset={handleResetFilters}
-            compact
+      {/* Filters */}
+      <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
+        <PlayerFilterBar
+          filters={filters}
+          onFiltersChange={setFilters}
+          onReset={handleResetFilters}
+          compact
+        />
+      </Box>
+
+      {/* Player Table */}
+      <Box sx={{ marginBottom: ThemeTokens.spacing.xs }}>
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ marginBottom: ThemeTokens.spacing.sm }}
+        >
+          Showing {viewData.players.length} of {viewData.count} players
+        </Typography>
+
+        {viewData.players.length === 0 ? (
+          <Alert severity="info">No players match your filters. Try adjusting your criteria.</Alert>
+        ) : (
+          <PlayerAnalyticsTable
+            players={viewData.players}
+            onPlayerClick={handlePlayerSelect}
+            sortBy={filters.sortBy}
+            sortOrder={filters.sortOrder}
+            onSort={(field, order) =>
+              setFilters({
+                ...filters,
+                sortBy: field as PlayerFilterConfig['sortBy'],
+                sortOrder: order,
+              })
+            }
           />
-        </Box>
-
-        {/* Player Table */}
-        <Box sx={{ marginBottom: ThemeTokens.spacing.xs }}>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ marginBottom: ThemeTokens.spacing.md }}
-          >
-            Showing {viewData.players.length} of {viewData.count} players
-          </Typography>
-
-          {viewData.players.length === 0 ? (
-            <Alert severity="info">
-              No players match your filters. Try adjusting your criteria.
-            </Alert>
-          ) : (
-            <PlayerAnalyticsTable
-              players={viewData.players}
-              onPlayerClick={handlePlayerSelect}
-              sortBy={filters.sortBy}
-              sortOrder={filters.sortOrder}
-              onSort={(field, order) =>
-                setFilters({
-                  ...filters,
-                  sortBy: field as PlayerFilterConfig['sortBy'],
-                  sortOrder: order,
-                })
-              }
-            />
-          )}
-        </Box>
-      </PageContent>
+        )}
+      </Box>
 
       {/* Player Insight Drawer */}
       {selectedPlayer && (
@@ -334,6 +330,6 @@ export const PlayerAnalyticsWorkspace: React.FC = () => {
         onClose={() => setComparisonOpen(false)}
         players={allPlayers}
       />
-    </Box>
+    </PageContent>
   );
 };
