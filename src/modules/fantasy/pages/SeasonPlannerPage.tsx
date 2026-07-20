@@ -28,6 +28,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { SeasonPlanService, SeasonPlanRepository } from '../services';
+import { BootstrapRepository } from '@repositories/bootstrap';
 import type { SeasonPlan } from '../domain/SeasonPlan';
 import type { BaseSquadSourceType } from '../domain/SeasonPlan';
 import {
@@ -48,11 +49,24 @@ export const SeasonPlannerPage: React.FC = () => {
   const planService = useMemo(() => new SeasonPlanService(), []);
   const planRepository = useMemo(() => new SeasonPlanRepository(), []);
 
+  // Derive maximum gameweek from canonical repository (not hardcoded)
+  const maxGameweek = useMemo(() => {
+    try {
+      const bootstrapRepo = new BootstrapRepository();
+      const bootstrap = bootstrapRepo.getBootstrap();
+      return bootstrap.gameweeks.length > 0
+        ? bootstrap.gameweeks[bootstrap.gameweeks.length - 1].id
+        : 38; // Fallback only if bootstrap unavailable
+    } catch {
+      return 38; // Fallback only if bootstrap unavailable
+    }
+  }, []);
+
   // State
   const [currentPlan, setCurrentPlan] = useState<SeasonPlan | null>(null);
   const [savedPlans, setSavedPlans] = useState<SeasonPlan[]>(planRepository.loadAllPlans());
   const [startGameweek, setStartGameweek] = useState(34);
-  const [endGameweek, setEndGameweek] = useState(38);
+  const [endGameweek, setEndGameweek] = useState(maxGameweek);
   const [baseSquadSource, setBaseSquadSource] = useState<BaseSquadSourceType>('current');
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [planName, setPlanName] = useState(''); // placeholder

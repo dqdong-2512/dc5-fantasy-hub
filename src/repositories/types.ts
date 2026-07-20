@@ -23,31 +23,28 @@ export interface NormalizedPlayer {
   firstName: string;
   secondName: string;
   webName: string;
+  status: string;
+  code: number;
   team: number;
+  teamCode: number;
   elementType: number;
   squadNumber: number | null;
+  photo: string;
   selectedByPercent: string;
   nowCost: number;
   form: string;
   pointsPerGame: string;
   totalPoints: number;
   minutes: number;
-  code?: number;
-  photo?: string;
-  status?: string;
-  goalsScored?: number;
-  assists?: number;
-  cleanSheets?: number;
-  goalsConceded?: number;
-  ownGoals?: number;
-  penaltiesSaved?: number;
-  penaltiesMissed?: number;
-  yellowCards?: number;
-  redCards?: number;
-  influence?: string;
-  creativity?: string;
-  threat?: string;
-  ictIndex?: string;
+  goalsScored: number;
+  assists: number;
+  cleanSheets: number;
+  goalsConceded: number;
+  ownGoals: number;
+  penaltiesSaved: number;
+  penaltiesMissed: number;
+  yellowCards: number;
+  redCards: number;
 }
 
 export interface NormalizedGameweek {
@@ -84,4 +81,13 @@ export interface BootstrapData {
   players: NormalizedPlayer[];
   gameweeks: NormalizedGameweek[];
   elementTypes: NormalizedElementType[];
+  metadata?: DatabaseMetadata;
+}
+
+export interface DatabaseMetadata {
+  competition: string;
+  season: string;
+  syncedAt: string;
+  dataMode: 'live' | 'historical' | 'mock';
+  source: string;
 }

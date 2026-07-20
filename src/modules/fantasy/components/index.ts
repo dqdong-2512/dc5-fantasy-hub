@@ -7,6 +7,7 @@ export { PitchPlayer, type PitchPlayerProps } from './PitchPlayer';
 export { FootballPitch, type FootballPitchProps } from './FootballPitch';
 export { Bench, type BenchProps } from './Bench';
 export { TeamSummary, type TeamSummaryProps } from './TeamSummary';
+export { GameweekSummaryCard, type GameweekSummaryCardProps } from './GameweekSummaryCard';
 export { RankMovement, type RankMovementProps } from './RankMovement';
 export { YourPositionSummary, type YourPositionSummaryProps } from './YourPositionSummary';
 export { LeagueStandingsTable, type LeagueStandingsTableProps } from './LeagueStandingsTable';

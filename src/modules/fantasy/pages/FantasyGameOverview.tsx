@@ -11,11 +11,10 @@
  */
 
 import React, { useMemo } from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, Typography, Button, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { fantasyGameFixtures } from '../fixtures';
 import {
   MyTeamSummary,
   CurrentGameweekSummary,
@@ -26,10 +25,49 @@ import {
   GameweekContext,
 } from '../widgets';
 import { FantasyDashboardService } from '../services';
+import { useFantasyGame } from '../hooks';
+import { fantasyGameFixtures } from '../fixtures';
 
 export const FantasyGameOverview: React.FC = () => {
-  const fixtures = useMemo(() => fantasyGameFixtures, []);
+  const gameState = useFantasyGame();
   const navigate = useNavigate();
+
+  // Show not-connected state if user hasn't connected
+  if (!gameState.isConnected) {
+    return (
+      <PageContainer>
+        <Box
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            textAlign: 'center',
+            py: 8,
+            gap: 3,
+          }}
+        >
+          <Typography variant="h5" sx={{ fontWeight: 600 }}>
+            Not Connected
+          </Typography>
+          <Typography variant="body2" color="textSecondary" sx={{ maxWidth: 500 }}>
+            To access your Fantasy Premier League team, you need to connect with your entry ID.
+          </Typography>
+          <Alert severity="info" sx={{ maxWidth: 500 }}>
+            Your entry ID is a unique number that identifies your FPL team. You can find it in your
+            FPL account or in the browser URL when viewing your team on fantasy.premierleague.com
+          </Alert>
+          <Button
+            variant="contained"
+            onClick={() => navigate('/premier-league/fantasy-game')}
+            color="primary"
+            size="large"
+          >
+            Go to Connection Form
+          </Button>
+        </Box>
+      </PageContainer>
+    );
+  }
 
   // Initialize dashboard service
   const dashboardService = useMemo(() => new FantasyDashboardService(), []);
@@ -44,7 +82,9 @@ export const FantasyGameOverview: React.FC = () => {
   };
 
   const handleViewGameweek = (): void => {
-    navigate(`/premier-league/fantasy-game/gameweeks/${fixtures.currentGameweek.gameweek}`);
+    navigate(
+      `/premier-league/fantasy-game/gameweeks/${fantasyGameFixtures.currentGameweek.gameweek}`
+    );
   };
 
   const handleViewLeagues = (): void => {
@@ -69,7 +109,7 @@ export const FantasyGameOverview: React.FC = () => {
   };
 
   const handleGameweekCenterClick = (): void => {
-    navigate(`/premier-league/fantasy-game/gameweeks/${fixtures.currentGameweek.gameweek}`);
+    navigate(`/premier-league/fantasy-game/gameweeks/${dashboardData.gameweek.currentGameweekId}`);
   };
 
   return (
@@ -133,11 +173,11 @@ export const FantasyGameOverview: React.FC = () => {
           }}
         >
           <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
-            <MyTeamSummary manager={fixtures.manager} onViewTeam={handleViewTeam} />
+            <MyTeamSummary manager={fantasyGameFixtures.manager} onViewTeam={handleViewTeam} />
           </Box>
           <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
             <CurrentGameweekSummary
-              gameweek={fixtures.currentGameweek}
+              gameweek={fantasyGameFixtures.currentGameweek}
               onViewGameweek={handleViewGameweek}
             />
           </Box>

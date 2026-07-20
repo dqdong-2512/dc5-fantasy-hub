@@ -10,6 +10,7 @@ import { ThemeTokens } from '@shared/theme/tokens';
 interface PlanningHorizonSelectorProps {
   startGameweek: number;
   endGameweek: number;
+  maxGameweek: number; // Derived from canonical bootstrap, not hardcoded
   onStartChange: (gw: number) => void;
   onEndChange: (gw: number) => void;
 }
@@ -24,6 +25,7 @@ const PRESET_RANGES = [
 export const PlanningHorizonSelector: React.FC<PlanningHorizonSelectorProps> = ({
   startGameweek,
   endGameweek,
+  maxGameweek,
   onStartChange,
   onEndChange,
 }) => {
@@ -31,7 +33,8 @@ export const PlanningHorizonSelector: React.FC<PlanningHorizonSelectorProps> = (
 
   const handlePreset = (duration: number) => {
     onStartChange(startGameweek);
-    onEndChange(Math.min(startGameweek + duration - 1, 38));
+    // Use maxGameweek from props instead of hardcoded 38
+    onEndChange(Math.min(startGameweek + duration - 1, maxGameweek));
   };
 
   return (

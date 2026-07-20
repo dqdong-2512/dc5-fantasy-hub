@@ -34,10 +34,6 @@ export class PlayerMapper {
       penaltiesMissed: player.penaltiesMissed,
       yellowCards: player.yellowCards,
       redCards: player.redCards,
-      influence: player.influence ? parseFloat(player.influence) : undefined,
-      creativity: player.creativity ? parseFloat(player.creativity) : undefined,
-      threat: player.threat ? parseFloat(player.threat) : undefined,
-      ictIndex: player.ictIndex ? parseFloat(player.ictIndex) : undefined,
     };
   }
 

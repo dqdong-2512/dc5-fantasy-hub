@@ -2,12 +2,13 @@
  * Live League Race Gameweek Selector
  * Selector for choosing gameweek within the league race context
  * Preserves league workspace by updating query parameter only
+ * Uses actual gameweek data from BootstrapRepository
  */
 
 import React, { useMemo } from 'react';
 import { Box, Select, MenuItem, Typography } from '@mui/material';
 import { useSearchParams } from 'react-router-dom';
-import { LeagueRaceService } from '../../services/LeagueRaceService';
+import { BootstrapRepository } from '@repositories/bootstrap';
 
 export interface LiveLeagueRaceGameweekSelectorProps {
   selectedGameweek: number;
@@ -20,10 +21,18 @@ export const LiveLeagueRaceGameweekSelector: React.FC<LiveLeagueRaceGameweekSele
 }) => {
   const [, setSearchParams] = useSearchParams();
 
-  // Get available gameweeks with race data
+  // Get available gameweeks from canonical repository (not hardcoded)
   const availableGameweeks = useMemo(() => {
-    const service = new LeagueRaceService();
-    return service.getAvailableGameweeks([37, 38]).sort((a, b) => b - a);
+    try {
+      const bootstrapRepo = new BootstrapRepository();
+      const bootstrap = bootstrapRepo.getBootstrap();
+
+      // Get most recent gameweeks (last 5 or all if fewer than 5)
+      const allGameweeks = bootstrap.gameweeks.map((gw) => gw.id).sort((a, b) => b - a);
+      return allGameweeks.slice(0, Math.max(5, allGameweeks.length));
+    } catch {
+      return [];
+    }
   }, []);
 
   const handleGameweekChange = (event: any): void => {
@@ -31,8 +40,39 @@ export const LiveLeagueRaceGameweekSelector: React.FC<LiveLeagueRaceGameweekSele
     setSearchParams({ gw: String(newGameweekId) });
   };
 
-  const statusDisplay = LeagueRaceService.formatStatus(dataStatus);
-  const statusColor = LeagueRaceService.getStatusColor(dataStatus);
+  // Status helpers (moved from LeagueRaceService since it's service-specific)
+  const formatStatus = (status: 'live' | 'final' | 'snapshot' | 'upcoming'): string => {
+    switch (status) {
+      case 'live':
+        return 'Live';
+      case 'final':
+        return 'Final';
+      case 'snapshot':
+        return 'Snapshot';
+      case 'upcoming':
+        return 'Upcoming';
+      default:
+        return 'Unknown';
+    }
+  };
+
+  const getStatusColor = (status: 'live' | 'final' | 'snapshot' | 'upcoming'): string => {
+    switch (status) {
+      case 'live':
+        return '#ff6b6b';
+      case 'final':
+        return '#4caf50';
+      case 'snapshot':
+        return '#2196f3';
+      case 'upcoming':
+        return '#ff9800';
+      default:
+        return '#999';
+    }
+  };
+
+  const statusDisplay = formatStatus(dataStatus);
+  const statusColor = getStatusColor(dataStatus);
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1.5 }}>
@@ -46,11 +86,15 @@ export const LiveLeagueRaceGameweekSelector: React.FC<LiveLeagueRaceGameweekSele
           fontWeight: 600,
         }}
       >
-        {availableGameweeks.map((gwId) => (
-          <MenuItem key={gwId} value={gwId}>
-            GW {gwId}
-          </MenuItem>
-        ))}
+        {availableGameweeks.length === 0 ? (
+          <MenuItem disabled>No gameweeks available</MenuItem>
+        ) : (
+          availableGameweeks.map((gwId) => (
+            <MenuItem key={gwId} value={gwId}>
+              GW {gwId}
+            </MenuItem>
+          ))
+        )}
       </Select>
 
       <Box

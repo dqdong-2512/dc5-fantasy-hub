@@ -1,6 +1,12 @@
 export { GameweekCenterService } from './GameweekCenterService';
 export { LeagueRaceService } from './LeagueRaceService';
 export { ManagerHeadToHeadService } from './ManagerHeadToHeadService';
+export {
+  ManagerContextService,
+  type ManagerContext,
+  type ManagerStats,
+} from './manager-context.service';
+export { EntryIdHelper } from './entry-id-helper';
 export { TransferBudgetService } from './transfer-budget.service';
 export { SquadValidationService, SQUAD_RULES } from './squad-validation.service';
 export { SquadSimulationService } from './squad-simulation.service';
@@ -18,6 +24,11 @@ export { SeasonPlanValidationService } from './season-plan-validation.service';
 export { BGWDGWAnalysisService } from './bgw-dgw-analysis.service';
 export { FixtureSwingAnalysisService } from './fixture-swing-analysis.service';
 export { ChipCandidateAnalysisService } from './chip-candidate-analysis.service';
+export {
+  PickEnrichmentService,
+  type EnrichedPick,
+  type PickEnrichmentResult,
+} from './pick-enrichment.service';
 export {
   FantasyDashboardService,
   type FantasyDashboardViewModel,
