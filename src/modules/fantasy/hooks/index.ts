@@ -10,3 +10,4 @@ export {
   type UseEnrichedManagerPicksState,
 } from './useEnrichedManagerPicks';
 export { useManagerLeagues, type UseManagerLeaguesState } from './useManagerLeagues';
+export { useLeagueDetail, type LeagueDetailState } from './useLeagueDetail';

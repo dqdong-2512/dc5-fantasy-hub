@@ -40,3 +40,8 @@ export {
   type LeagueSnapshotData,
   type NextActionData,
 } from './fantasy-dashboard.service';
+export {
+  DifferentialsService,
+  type PlayerDifferential,
+  type DifferentialsAnalysis,
+} from './differentials.service';

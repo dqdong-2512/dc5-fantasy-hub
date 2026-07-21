@@ -25,13 +25,24 @@ import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { fantasyGameFixtures } from '../fixtures';
 import { useFantasyGame, useManagerData, useEnrichedManagerPicks } from '../hooks';
-import { FootballPitch, Bench, TeamSummary, GameweekSummaryCard } from '../components';
+import {
+  FootballPitch,
+  Bench,
+  TeamSummary,
+  GameweekSummaryCard,
+  GameweekHistory,
+  PlayerPointBreakdown,
+} from '../components';
 import { BootstrapRepository } from '@repositories/bootstrap';
+import type { PointBreakdownData } from '../components/PlayerPointBreakdown';
 
 export const MyTeamPage: React.FC = () => {
   const navigate = useNavigate();
   const gameState = useFantasyGame();
   const [manualGameweekOverride, setManualGameweekOverride] = useState<number | null>(null);
+  const [selectedPlayerBreakdown, setSelectedPlayerBreakdown] = useState<PointBreakdownData | null>(
+    null
+  );
 
   // Determine which gameweek to display
   const displayGameweek = manualGameweekOverride || gameState.displayGameweek;
@@ -251,7 +262,7 @@ export const MyTeamPage: React.FC = () => {
 
         {/* Team Summary Stats */}
         {!picks.isLoading && (
-          <>
+          <Stack spacing={ThemeTokens.spacing.lg}>
             <TeamSummary
               teamName={teamName ?? 'Team'}
               gameweekNumber={gameweekNumber ?? 0}
@@ -283,13 +294,30 @@ export const MyTeamPage: React.FC = () => {
               />
             )}
 
+            {/* Gameweek History (for connected users) */}
+            {isUsingRealData && gameState.history && (
+              <GameweekHistory
+                history={gameState.history}
+                currentGameweek={displayGameweek ?? undefined}
+                onSelectGameweek={handleGameweekChange}
+                isLoading={picks.isLoading}
+              />
+            )}
+
             {/* Football Pitch */}
             <FootballPitch squad={squadForComponents} />
 
             {/* Bench */}
             <Bench squad={squadForComponents} />
-          </>
+          </Stack>
         )}
+
+        {/* Point Breakdown Modal */}
+        <PlayerPointBreakdown
+          open={selectedPlayerBreakdown !== null}
+          onClose={() => setSelectedPlayerBreakdown(null)}
+          breakdown={selectedPlayerBreakdown}
+        />
       </PageContainer>
     </Box>
   );

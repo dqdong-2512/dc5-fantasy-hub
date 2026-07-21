@@ -28,3 +28,14 @@ export { PointsBreakdown, type PointsBreakdownProps } from './PointsBreakdown';
 export { FixturesList, type FixturesListProps } from './FixturesList';
 export { LiveLeagueRace, type LiveLeagueRaceProps } from './LiveLeagueRace';
 export { ManagerHeadToHeadPage, type ManagerHeadToHeadPageProps } from './ManagerHeadToHeadPage';
+export { PlayerPointBreakdown, type PlayerPointBreakdownProps } from './PlayerPointBreakdown';
+export { GameweekHistory, type GameweekHistoryProps } from './GameweekHistory';
+
+// League Detail Components
+export {
+  LeagueDetailHeader,
+  LeagueStandingsPanel,
+  MyTeamPanel,
+  OpponentTeamPanel,
+  PlayerDifferentialsPanel,
+} from './league-detail';
