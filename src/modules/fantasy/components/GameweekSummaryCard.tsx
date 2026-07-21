@@ -82,20 +82,37 @@ export const GameweekSummaryCard: React.FC<GameweekSummaryCardProps> = ({
               gap: ThemeTokens.spacing.md,
             }}
           >
-            {/* Total Points */}
+            {/* Total Points (Gross) */}
             <Box>
               <Typography
                 variant="caption"
                 color="textSecondary"
                 sx={{ display: 'block', marginBottom: 0.5 }}
               >
-                Total Points
+                Gross Points
               </Typography>
               <Typography
                 variant="h6"
                 sx={{ fontWeight: 700, color: '#4caf50', fontSize: '1.5rem' }}
               >
                 {totalPoints}
+              </Typography>
+            </Box>
+
+            {/* Net Points (After Transfer Cost) */}
+            <Box>
+              <Typography
+                variant="caption"
+                color="textSecondary"
+                sx={{ display: 'block', marginBottom: 0.5 }}
+              >
+                Net Points
+              </Typography>
+              <Typography
+                variant="h6"
+                sx={{ fontWeight: 700, color: '#2196f3', fontSize: '1.5rem' }}
+              >
+                {totalPoints - transferCost}
               </Typography>
             </Box>
 
