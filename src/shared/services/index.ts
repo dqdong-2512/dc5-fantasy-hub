@@ -11,6 +11,14 @@ export {
 } from './fpl-client';
 export { FantasyGameLiveService } from './fantasy-game-live.service';
 export { FantasyGameLiveLeagueService } from './fantasy-game-live-league.service';
+export {
+  LiveGameweekEngine,
+  type LiveGameweekPerformance,
+  type LivePlayerPerformance,
+  type SquadSection,
+  type GameStatus,
+  type MatchStatus,
+} from './live-gameweek-engine.service';
 
 // Data freshness and season services
 export {

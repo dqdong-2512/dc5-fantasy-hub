@@ -11,3 +11,8 @@ export {
 } from './useEnrichedManagerPicks';
 export { useManagerLeagues, type UseManagerLeaguesState } from './useManagerLeagues';
 export { useLeagueDetail, type LeagueDetailState } from './useLeagueDetail';
+export {
+  useLiveGameweek,
+  useDifferentialImpact,
+  type UseLiveGameweekState,
+} from './useLiveGameweek';

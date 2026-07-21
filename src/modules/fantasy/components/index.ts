@@ -30,6 +30,9 @@ export { LiveLeagueRace, type LiveLeagueRaceProps } from './LiveLeagueRace';
 export { ManagerHeadToHeadPage, type ManagerHeadToHeadPageProps } from './ManagerHeadToHeadPage';
 export { PlayerPointBreakdown, type PlayerPointBreakdownProps } from './PlayerPointBreakdown';
 export { GameweekHistory, type GameweekHistoryProps } from './GameweekHistory';
+export { LiveImpactFeed, type LiveImpactFeedProps } from './LiveImpactFeed';
+export { LiveTeamPoints, type LiveTeamPointsProps } from './LiveTeamPoints';
+export { LiveLeagueStandings, type LiveLeagueStandingsProps } from './LiveLeagueStandings';
 
 // League Detail Components
 export {
