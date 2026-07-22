@@ -35,6 +35,7 @@ export { PlayerPointBreakdown, type PlayerPointBreakdownProps } from './PlayerPo
 export { GameweekHistory, type GameweekHistoryProps } from './GameweekHistory';
 export { LiveImpactFeed, type LiveImpactFeedProps } from './LiveImpactFeed';
 export { LiveTeamPoints, type LiveTeamPointsProps } from './LiveTeamPoints';
+export { PlayersRemaining, type PlayersRemainingProps } from './PlayersRemaining';
 export { LiveLeagueStandings, type LiveLeagueStandingsProps } from './LiveLeagueStandings';
 
 // League Detail Components

@@ -64,14 +64,14 @@ export function FantasyGameHeader({
   onChangeTeam,
   onDisconnect,
 }: FantasyGameHeaderProps): React.ReactElement {
+  const rankMovement = useMemo(
+    () => calculateRankMovement(entry?.manager.overallRank ?? null, gameweekHistory),
+    [entry?.manager.overallRank, gameweekHistory]
+  );
+
   if (!entry) {
     return <Box />;
   }
-
-  const rankMovement = useMemo(
-    () => calculateRankMovement(entry.manager.overallRank, gameweekHistory),
-    [entry.manager.overallRank, gameweekHistory]
-  );
 
   return (
     <Box

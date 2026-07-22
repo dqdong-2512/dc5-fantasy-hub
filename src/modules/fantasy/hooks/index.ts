@@ -16,3 +16,7 @@ export {
   useDifferentialImpact,
   type UseLiveGameweekState,
 } from './useLiveGameweek';
+export {
+  useGameweekLivePolling,
+  type UseGameweekLivePollingOptions,
+} from './useGameweekLivePolling';
