@@ -6,7 +6,7 @@
 
 import React, { useState, useEffect, useMemo } from 'react';
 import { Box, Tabs, Tab, Stack, Alert, FormControl, Select, MenuItem } from '@mui/material';
-import type { FantasyGameweekHistory, LiveSquadPerformance } from '@domain/models';
+import type { LiveSquadPerformance } from '@domain/models';
 import { FantasyGameRepository } from '@repositories/fantasy';
 import { BootstrapRepository } from '@repositories/bootstrap';
 import { FantasyGameHeader, FantasyOverview, MyTeam, Leagues } from '../components';
@@ -23,11 +23,9 @@ export interface FantasyWorkspaceProps {
  */
 export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.ReactElement {
   const [activeTab, setActiveTab] = useState(0);
-  const [history, setHistory] = useState<FantasyGameweekHistory[] | null>(null);
   const [liveSquadPerformance, setLiveSquadPerformance] = useState<LiveSquadPerformance | null>(
     null
   );
-  const [isLoadingHistory, setIsLoadingHistory] = useState(false);
   const [isLoadingLive, setIsLoadingLive] = useState(false);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
 
@@ -35,7 +33,8 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
   const [liveError, setLiveError] = useState<string | null>(null);
   const [isRefreshing, setIsRefreshing] = useState(false);
 
-  const repository = new FantasyGameRepository();
+  // Stable repository instance (memoized to prevent recreation on every render)
+  const repository = useMemo(() => new FantasyGameRepository(), []);
   const bootstrapRepository = useMemo(() => new BootstrapRepository(), []);
   const bootstrap = useMemo(() => bootstrapRepository.getBootstrap(), [bootstrapRepository]);
 
@@ -47,25 +46,6 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
     }
     return gw?.id ?? null;
   }, [bootstrap]);
-
-  // Load history
-  useEffect(() => {
-    if (!gameState.connectedEntryId) return;
-
-    const loadHistory = async () => {
-      try {
-        setIsLoadingHistory(true);
-        const data = await repository.getEntryHistory(gameState.connectedEntryId!);
-        setHistory(data);
-      } catch (err) {
-        // History loading failed silently, will retry on refresh
-      } finally {
-        setIsLoadingHistory(false);
-      }
-    };
-
-    loadHistory();
-  }, [gameState.connectedEntryId, repository]);
 
   // Initialize selected gameweek
   useEffect(() => {
@@ -131,16 +111,19 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
 
   return (
     <PageContent>
-      <PageHeader>
+      <PageHeader
+        sx={{ paddingBottom: ThemeTokens.spacing.xs, marginBottom: ThemeTokens.spacing.xs }}
+      >
         <FantasyGameHeader
           entry={gameState.entry}
+          gameweekHistory={gameState.history}
           onChangeTeam={handleChangeTeam}
           onDisconnect={handleDisconnect}
         />
       </PageHeader>
 
       {/* Tabs */}
-      <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: ThemeTokens.spacing.lg }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', marginBottom: ThemeTokens.spacing.xs }}>
         <Tabs
           value={activeTab}
           onChange={(_, newValue) => setActiveTab(newValue)}
@@ -158,7 +141,7 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
       </Box>
 
       {/* Tab Content */}
-      <Stack spacing={ThemeTokens.spacing.xl}>
+      <Stack spacing={ThemeTokens.spacing.sm}>
         {gameState.error && (
           <Alert severity="error" onClose={() => gameState.clearError()}>
             {gameState.error}
@@ -169,8 +152,8 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
         {activeTab === 0 && (
           <FantasyOverview
             entry={gameState.entry}
-            history={history}
-            isLoading={gameState.isLoading || isLoadingHistory}
+            history={gameState.history}
+            isLoading={gameState.isLoading}
           />
         )}
 

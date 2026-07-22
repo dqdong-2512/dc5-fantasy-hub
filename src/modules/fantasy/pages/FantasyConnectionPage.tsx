@@ -5,19 +5,27 @@
  */
 
 import React, { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ConnectTeam } from '../components/ConnectTeam';
 import { useFantasyGame } from '../hooks';
 
 export const FantasyConnectionPage: React.FC = () => {
   const gameState = useFantasyGame();
+  const navigate = useNavigate();
 
   const handleConnect = useCallback(
     async (entryId: number) => {
-      await gameState.connectEntry(entryId);
-      // Navigation back to dashboard happens automatically via redirect
-      // in Fantasy.tsx when isConnected becomes true
+      try {
+        await gameState.connectEntry(entryId);
+        // Connection successful - navigate to fantasy game dashboard
+        // Use replace: true to prevent back button returning to connection form
+        navigate('/premier-league/fantasy-game', { replace: true });
+      } catch {
+        // Error is handled by gameState.error and displayed in ConnectTeam
+        // Remain on connection form for retry
+      }
     },
-    [gameState]
+    [gameState, navigate]
   );
 
   return (

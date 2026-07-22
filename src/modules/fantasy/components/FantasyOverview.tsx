@@ -8,8 +8,6 @@ import {
   Box,
   Typography,
   Stack,
-  Card,
-  CardContent,
   Paper,
   Table,
   TableBody,
@@ -19,7 +17,7 @@ import {
   TableRow,
 } from '@mui/material';
 import type { FantasyEntry, FantasyGameweekHistory } from '@domain/models';
-import { LoadingState } from '@shared/components';
+import { OverviewSkeleton } from './OverviewSkeleton';
 import { ThemeTokens } from '@shared/theme/tokens';
 
 export interface FantasyOverviewProps {
@@ -27,29 +25,6 @@ export interface FantasyOverviewProps {
   history: FantasyGameweekHistory[] | null;
   isLoading: boolean;
 }
-
-interface StatBoxProps {
-  label: string;
-  value: string | number;
-  color?: string;
-}
-
-const StatBox: React.FC<StatBoxProps> = ({ label, value, color = '#1976d2' }) => (
-  <Card>
-    <CardContent>
-      <Typography
-        variant="caption"
-        color="textSecondary"
-        sx={{ display: 'block', marginBottom: 0.5 }}
-      >
-        {label}
-      </Typography>
-      <Typography variant="h6" sx={{ fontWeight: 700, color }} noWrap>
-        {value}
-      </Typography>
-    </CardContent>
-  </Card>
-);
 
 /**
  * Fantasy Overview Component
@@ -65,8 +40,9 @@ export function FantasyOverview({
     return history.slice(-5).reverse();
   }, [history]);
 
-  if (isLoading) {
-    return <LoadingState label="Loading overview..." />;
+  // Show skeleton only on initial load when no data exists
+  if (isLoading && !entry) {
+    return <OverviewSkeleton />;
   }
 
   if (!entry) {
@@ -78,29 +54,11 @@ export function FantasyOverview({
   }
 
   return (
-    <Stack spacing={ThemeTokens.spacing.xl}>
-      {/* Key Metrics Grid */}
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr 1fr', md: '1fr 1fr 1fr 1fr' },
-          gap: ThemeTokens.spacing.lg,
-        }}
-      >
-        <StatBox label="Overall Points" value={entry.manager.totalPoints} color="#4caf50" />
-        <StatBox
-          label="Overall Rank"
-          value={entry.manager.overallRank ? `#${entry.manager.overallRank.toLocaleString()}` : '—'}
-          color="#2196f3"
-        />
-        <StatBox label="Manager" value={entry.manager.name} color="#ff9800" />
-        <StatBox label="Team" value={entry.team.name} color="#9c27b0" />
-      </Box>
-
+    <Stack spacing={ThemeTokens.spacing.sm}>
       {/* Recent Gameweek History */}
       {recentHistory.length > 0 && (
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: ThemeTokens.spacing.md }}>
+          <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: ThemeTokens.spacing.xs }}>
             Recent Gameweek Performance
           </Typography>
           <TableContainer component={Paper} sx={{ borderRadius: ThemeTokens.borderRadius.md }}>

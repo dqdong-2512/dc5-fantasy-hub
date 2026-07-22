@@ -109,9 +109,7 @@ export class FantasyGameRepository {
     const joinDate = data.manager?.join_date;
 
     if (!managerName || managerName.trim().length === 0) {
-      throw new Error(
-        `Failed to map entry data: Manager name not found. Entry ID: ${data.id}`
-      );
+      throw new Error(`Failed to map entry data: Manager name not found. Entry ID: ${data.id}`);
     }
 
     const manager: FantasyManager = {

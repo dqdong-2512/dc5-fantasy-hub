@@ -59,7 +59,8 @@ const ManagerInspectionDrawer: React.FC<{
 }> = ({ standing, open, onClose, gameweekId }) => {
   const [squadPerformance, setSquadPerformance] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const repository = new FantasyGameRepository();
+  // Use useMemo to prevent new repository instance on every render
+  const repository = useMemo(() => new FantasyGameRepository(), []);
 
   useEffect(() => {
     if (!open || !standing) return;

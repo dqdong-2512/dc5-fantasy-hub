@@ -151,12 +151,20 @@ export function ConnectTeam({
                       },
                     }}
                     sx={{
-                      marginBottom: validationError ? ThemeTokens.spacing.xs : ThemeTokens.spacing.sm,
+                      marginBottom: validationError
+                        ? ThemeTokens.spacing.xs
+                        : ThemeTokens.spacing.sm,
                     }}
                   />
 
                   {error && (
-                    <Alert severity="error" sx={{ marginBottom: ThemeTokens.spacing.sm, marginTop: ThemeTokens.spacing.xs }}>
+                    <Alert
+                      severity="error"
+                      sx={{
+                        marginBottom: ThemeTokens.spacing.sm,
+                        marginTop: ThemeTokens.spacing.xs,
+                      }}
+                    >
                       {error}
                     </Alert>
                   )}
