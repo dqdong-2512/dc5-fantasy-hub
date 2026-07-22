@@ -27,9 +27,11 @@ import RefreshIcon from '@mui/icons-material/Refresh';
 import CloseIcon from '@mui/icons-material/Close';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import TrendingDownIcon from '@mui/icons-material/TrendingDown';
+import CompareIcon from '@mui/icons-material/Compare';
 import type {
   FantasyEntry,
   FantasyLeagueStandings,
+  FantasyLeagueStanding,
   LiveLeagueStandingsResult,
   LiveLeagueStanding,
 } from '@domain/models';
@@ -38,6 +40,7 @@ import { FantasyGameLiveLeagueService } from '@shared/services';
 import { LoadingState, ErrorState, EmptyState } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { MyTeam } from './MyTeam';
+import { HeadToHeadGameweekComparison } from './HeadToHeadGameweekComparison';
 
 export interface LeaguesProps {
   entry: FantasyEntry | null;
@@ -179,6 +182,8 @@ export function Leagues({
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [selectedManager, setSelectedManager] = useState<LiveLeagueStanding | null>(null);
   const [inspectionDrawerOpen, setInspectionDrawerOpen] = useState(false);
+  const [comparisonMode, setComparisonMode] = useState(false);
+  const [comparisonOpponent, setComparisonOpponent] = useState<FantasyLeagueStanding | null>(null);
 
   const repository = new FantasyGameRepository();
   const liveLeagueService = useMemo(() => new FantasyGameLiveLeagueService(), []);
@@ -284,6 +289,20 @@ export function Leagues({
     setInspectionDrawerOpen(true);
   };
 
+  const handleStartComparison = (opponent: FantasyLeagueStanding) => {
+    // Don't compare against self
+    if (opponent.entryId === connectedEntryId) {
+      return;
+    }
+    setComparisonOpponent(opponent);
+    setComparisonMode(true);
+  };
+
+  const handleCloseComparison = () => {
+    setComparisonMode(false);
+    setComparisonOpponent(null);
+  };
+
   if (isLoading) {
     return <LoadingState label="Loading leagues..." />;
   }
@@ -299,6 +318,33 @@ export function Leagues({
 
   return (
     <Stack spacing={ThemeTokens.spacing.xl}>
+      {/* Head-to-Head Comparison Mode */}
+      {comparisonMode && comparisonOpponent && connectedEntryId && selectedLeagueId && (
+        <Box>
+          <HeadToHeadGameweekComparison
+            myManager={
+              {
+                entryId: connectedEntryId,
+                rank:
+                  leagueStandings?.standings.find((s) => s.entryId === connectedEntryId)?.rank ?? 0,
+                playerName: entry?.manager.name ?? 'You',
+                teamName: entry?.team.name ?? 'Your Team',
+                eventPoints:
+                  leagueStandings?.standings.find((s) => s.entryId === connectedEntryId)
+                    ?.eventPoints ?? 0,
+                totalPoints: entry?.manager.totalPoints ?? 0,
+                prevRank: leagueStandings?.standings.find((s) => s.entryId === connectedEntryId)
+                  ?.prevRank,
+              } as FantasyLeagueStanding
+            }
+            opponentManager={comparisonOpponent}
+            connectedEntryId={connectedEntryId}
+            selectedLeagueId={selectedLeagueId}
+            onClose={handleCloseComparison}
+          />
+        </Box>
+      )}
+
       {/* League Selector */}
       <Box>
         <Typography
@@ -521,6 +567,9 @@ export function Leagues({
                           <TableCell align="right" sx={{ fontWeight: 600 }}>
                             Total
                           </TableCell>
+                          <TableCell align="right" sx={{ fontWeight: 600 }}>
+                            Actions
+                          </TableCell>
                         </>
                       ) : (
                         <>
@@ -540,6 +589,9 @@ export function Leagues({
                           <TableCell align="right" sx={{ fontWeight: 600 }}>
                             Total
                           </TableCell>
+                          <TableCell align="right" sx={{ fontWeight: 600 }}>
+                            Actions
+                          </TableCell>
                         </>
                       )}
                     </TableRow>
@@ -554,7 +606,7 @@ export function Leagues({
                               key={standing.entryId}
                               sx={{
                                 backgroundColor: isCurrentUser ? '#e3f2fd' : undefined,
-                                '&:hover': { backgroundColor: '#f9f9f9', cursor: 'pointer' },
+                                '&:hover': { backgroundColor: '#f9f9f9' },
                                 fontWeight: isCurrentUser ? 600 : undefined,
                               }}
                             >
@@ -593,6 +645,21 @@ export function Leagues({
                               <TableCell align="right" sx={{ fontWeight: 700 }}>
                                 {standing.totalPoints}
                               </TableCell>
+                              <TableCell align="right" sx={{ padding: ThemeTokens.spacing.xs }}>
+                                {!isCurrentUser && (
+                                  <Button
+                                    size="small"
+                                    variant="outlined"
+                                    startIcon={<CompareIcon />}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleStartComparison(standing);
+                                    }}
+                                  >
+                                    Compare
+                                  </Button>
+                                )}
+                              </TableCell>
                             </TableRow>
                           );
                         })
@@ -605,7 +672,7 @@ export function Leagues({
                               sx={{
                                 backgroundColor: isCurrentUser ? '#e3f2fd' : undefined,
                                 opacity: standing.isLoaded && !standing.error ? 1 : 0.6,
-                                '&:hover': { backgroundColor: '#f9f9f9', cursor: 'pointer' },
+                                '&:hover': { backgroundColor: '#f9f9f9' },
                                 fontWeight: isCurrentUser ? 600 : undefined,
                               }}
                               onClick={() => handleManagerClick(standing)}
@@ -674,6 +741,31 @@ export function Leagues({
                               </TableCell>
                               <TableCell align="right" sx={{ fontWeight: 700 }}>
                                 {standing.calculatedLiveTotal}
+                              </TableCell>
+                              <TableCell align="right" sx={{ padding: ThemeTokens.spacing.xs }}>
+                                {!isCurrentUser && (
+                                  <Button
+                                    size="small"
+                                    variant="outlined"
+                                    startIcon={<CompareIcon />}
+                                    onClick={(e) => {
+                                      e.stopPropagation();
+                                      handleStartComparison({
+                                        entryId: standing.entryId,
+                                        rank: standing.calculatedLiveRank ?? 0,
+                                        playerName: standing.playerName,
+                                        teamName: standing.teamName,
+                                        eventPoints: standing.liveGameweekPoints,
+                                        totalPoints: standing.calculatedLiveTotal,
+                                        prevRank: null,
+                                        entryName: standing.teamName,
+                                        points: standing.calculatedLiveTotal,
+                                      } as FantasyLeagueStanding);
+                                    }}
+                                  >
+                                    Compare
+                                  </Button>
+                                )}
                               </TableCell>
                             </TableRow>
                           );

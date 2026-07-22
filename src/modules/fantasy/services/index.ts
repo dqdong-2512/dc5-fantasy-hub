@@ -19,6 +19,7 @@ export { GameweekPlanInsightService } from './gameweek-plan-insight.service';
 export { GameweekPlanRepository } from './gameweek-plan-repository.service';
 export { SquadSourceResolver, type ResolvedSquadSource } from './squad-source-resolver.service';
 export { LeagueDetailService } from './LeagueDetailService';
+export { GameweekHeadToHeadService } from './GameweekHeadToHeadService';
 export { SeasonPlanRepository } from './season-plan-repository';
 export { SeasonPlanService } from './season-plan.service';
 export { SeasonSquadSimulationService } from './season-squad-simulation.service';
