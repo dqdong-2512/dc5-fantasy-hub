@@ -172,6 +172,7 @@ export function Leagues({
   selectedGameweek,
 }: LeaguesProps): React.ReactElement {
   const [selectedLeagueId, setSelectedLeagueId] = useState<number | null>(null);
+  const [leagueMetadata, setLeagueMetadata] = useState<Map<number, string>>(new Map());
   const [leagueStandings, setLeagueStandings] = useState<FantasyLeagueStandings | null>(null);
   const [liveStandings, setLiveStandings] = useState<LiveLeagueStandingsResult | null>(null);
   const [isLoadingStandings, setIsLoadingStandings] = useState(false);
@@ -185,8 +186,32 @@ export function Leagues({
   const [comparisonMode, setComparisonMode] = useState(false);
   const [comparisonOpponent, setComparisonOpponent] = useState<FantasyLeagueStanding | null>(null);
 
-  const repository = new FantasyGameRepository();
+  // Memoize repository instance to prevent recreation on every render
+  const repository = useMemo(() => new FantasyGameRepository(), []);
   const liveLeagueService = useMemo(() => new FantasyGameLiveLeagueService(), []);
+
+  // Load league metadata (names) for all joined leagues
+  useEffect(() => {
+    if (!entry || entry.joinedLeaguesIds.length === 0) return;
+
+    const loadMetadata = async () => {
+      try {
+        const leagues = await repository.getEntryLeagues(entry.id);
+        const metadata = new Map(leagues.map((league) => [league.id, league.name]));
+        setLeagueMetadata(metadata);
+
+        // Auto-select first league if none selected
+        if (selectedLeagueId === null && leagues.length > 0) {
+          setSelectedLeagueId(leagues[0].id);
+        }
+      } catch (err) {
+        console.error('Failed to load league metadata:', err);
+        // Fallback: metadata will be empty, names will show as "League {id}"
+      }
+    };
+
+    loadMetadata();
+  }, [entry?.id, entry?.joinedLeaguesIds, repository, selectedLeagueId]);
 
   // Load official standings when league is selected
   useEffect(() => {
@@ -361,7 +386,7 @@ export function Leagues({
               onClick={() => setSelectedLeagueId(leagueId)}
               sx={{ textTransform: 'none' }}
             >
-              League {leagueId}
+              {leagueMetadata.get(leagueId) || `League ${leagueId}`}
             </Button>
           ))}
         </Box>
@@ -370,8 +395,12 @@ export function Leagues({
       {/* Standings */}
       {selectedLeagueId && (
         <Box>
-          {isLoadingStandings ? (
-            <LoadingState label="Loading standings..." />
+          {isLoadingStandings && !leagueStandings ? (
+            <Card>
+              <CardContent>
+                <LoadingState label="Loading standings..." />
+              </CardContent>
+            </Card>
           ) : standingsError ? (
             <ErrorState title="Failed to load standings" message={standingsError} />
           ) : leagueStandings ? (
@@ -429,7 +458,11 @@ export function Leagues({
               {viewMode === 'live' && (
                 <Stack spacing={ThemeTokens.spacing.sm}>
                   {isLoadingLive && !liveStandings ? (
-                    <LoadingState label="Calculating live standings..." />
+                    <Card>
+                      <CardContent>
+                        <LoadingState label="Calculating live standings..." />
+                      </CardContent>
+                    </Card>
                   ) : liveError ? (
                     <ErrorState title="Failed to calculate live standings" message={liveError} />
                   ) : liveStandings ? (
