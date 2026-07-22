@@ -94,33 +94,34 @@ export function ConnectTeam({
         sx={{
           display: 'grid',
           gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-          gap: ThemeTokens.spacing.xl,
+          gap: ThemeTokens.spacing.lg,
+          alignItems: 'start',
         }}
       >
         {/* Main Content */}
         <Box>
           <Card>
-            <CardContent sx={{ padding: ThemeTokens.spacing.lg }}>
-              <Stack spacing={ThemeTokens.spacing.lg}>
+            <CardContent sx={{ padding: ThemeTokens.spacing.md }}>
+              <Stack spacing={ThemeTokens.spacing.md}>
                 {/* Benefits */}
                 <Box>
                   <Typography
                     variant="h6"
-                    sx={{ fontWeight: 600, marginBottom: ThemeTokens.spacing.md }}
+                    sx={{ fontWeight: 600, marginBottom: ThemeTokens.spacing.xs }}
                   >
                     Connect to access:
                   </Typography>
-                  <Stack spacing={ThemeTokens.spacing.sm} component="ul" sx={{ paddingLeft: 2 }}>
-                    <Typography component="li" variant="body2">
+                  <Stack component="ul" sx={{ paddingLeft: 2, gap: 0, margin: 0 }}>
+                    <Typography component="li" variant="body2" sx={{ margin: 0 }}>
                       My Team
                     </Typography>
-                    <Typography component="li" variant="body2">
+                    <Typography component="li" variant="body2" sx={{ margin: 0 }}>
                       Gameweek Picks
                     </Typography>
-                    <Typography component="li" variant="body2">
+                    <Typography component="li" variant="body2" sx={{ margin: 0 }}>
                       Mini Leagues
                     </Typography>
-                    <Typography component="li" variant="body2">
+                    <Typography component="li" variant="body2" sx={{ margin: 0 }}>
                       League Standings
                     </Typography>
                   </Stack>
@@ -130,7 +131,7 @@ export function ConnectTeam({
                 <Box>
                   <Typography
                     variant="subtitle2"
-                    sx={{ fontWeight: 600, marginBottom: ThemeTokens.spacing.sm }}
+                    sx={{ fontWeight: 600, marginBottom: ThemeTokens.spacing.xs }}
                   >
                     FPL Team ID
                   </Typography>
@@ -150,12 +151,12 @@ export function ConnectTeam({
                       },
                     }}
                     sx={{
-                      marginBottom: ThemeTokens.spacing.md,
+                      marginBottom: validationError ? ThemeTokens.spacing.xs : ThemeTokens.spacing.sm,
                     }}
                   />
 
                   {error && (
-                    <Alert severity="error" sx={{ marginBottom: ThemeTokens.spacing.md }}>
+                    <Alert severity="error" sx={{ marginBottom: ThemeTokens.spacing.sm, marginTop: ThemeTokens.spacing.xs }}>
                       {error}
                     </Alert>
                   )}
@@ -189,10 +190,10 @@ export function ConnectTeam({
 
         {/* Help Section */}
         <Box>
-          <Card>
+          <Card sx={{ height: 'fit-content' }}>
             <Box
               sx={{
-                padding: ThemeTokens.spacing.lg,
+                padding: ThemeTokens.spacing.md,
                 backgroundColor: '#f5f5f5',
                 display: 'flex',
                 justifyContent: 'space-between',

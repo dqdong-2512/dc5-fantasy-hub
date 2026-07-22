@@ -308,10 +308,18 @@ const ENDPOINTS = {
 
 export class FplClient {
   private httpClient: HttpClient;
+  private fplApiBaseUrl: string;
 
   constructor() {
+    // Use environment variable if available, otherwise use direct FPL API
+    // Supports both:
+    // - Development: /api/fpl (proxied via Vite dev server to FPL API)
+    // - Production: /api/fpl (proxied via Cloudflare Pages Function to FPL API)
+    // - Fallback: https://fantasy.premierleague.com/api (direct - may have CORS issues)
+    this.fplApiBaseUrl = import.meta.env.VITE_FPL_API_BASE_URL || '/api/fpl';
+
     this.httpClient = new HttpClient({
-      baseUrl: 'https://fantasy.premierleague.com/api',
+      baseUrl: this.fplApiBaseUrl,
       timeout: 30000,
     });
   }

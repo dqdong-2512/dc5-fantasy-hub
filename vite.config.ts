@@ -25,6 +25,16 @@ export default defineConfig({
   server: {
     port: 5173,
     open: true,
+    proxy: {
+      '/api/fpl': {
+        target: 'https://fantasy.premierleague.com',
+        changeOrigin: true,
+        rewrite: (path) => path.replace(/^\/api\/fpl/, '/api'),
+        headers: {
+          'User-Agent': 'DC5-Fantasy-Hub/1.0 (Development)',
+        },
+      },
+    },
   },
   build: {
     outDir: 'dist',

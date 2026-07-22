@@ -104,19 +104,29 @@ export class FantasyGameRepository {
   // Mappers
 
   private mapEntryToModel(data: EntryData): FantasyEntry {
+    // Defensive: Handle cases where manager object might be missing or incomplete
+    const managerName = data.manager?.name || `${data.player_first_name} ${data.player_last_name}`;
+    const joinDate = data.manager?.join_date;
+
+    if (!managerName || managerName.trim().length === 0) {
+      throw new Error(
+        `Failed to map entry data: Manager name not found. Entry ID: ${data.id}`
+      );
+    }
+
     const manager: FantasyManager = {
       id: data.id,
-      name: data.manager.name,
+      name: managerName,
       totalPoints: data.summary_overall_points,
       overallRank: data.summary_overall_rank,
       region: data.player_region_name,
-      joinedDate: data.manager.join_date,
+      joinedDate: joinDate,
     };
 
     const team: FantasyTeam = {
       id: data.id,
       entryId: data.id,
-      name: data.name,
+      name: data.name || 'Team',
       transfersMade: 0,
       transfersBudget: 0,
     };
