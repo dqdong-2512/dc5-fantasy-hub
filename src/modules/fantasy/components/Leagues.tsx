@@ -317,7 +317,7 @@ export function Leagues({
   }
 
   return (
-    <Stack spacing={ThemeTokens.spacing.xl}>
+    <Stack spacing={ThemeTokens.spacing.sm}>
       {/* Head-to-Head Comparison Mode */}
       {comparisonMode && comparisonOpponent && connectedEntryId && selectedLeagueId && (
         <Box>
@@ -375,7 +375,7 @@ export function Leagues({
           ) : standingsError ? (
             <ErrorState title="Failed to load standings" message={standingsError} />
           ) : leagueStandings ? (
-            <Stack spacing={ThemeTokens.spacing.lg}>
+            <Stack spacing={ThemeTokens.spacing.sm}>
               {/* League Info & View Toggle */}
               <Box
                 sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}
@@ -427,7 +427,7 @@ export function Leagues({
 
               {/* Live View - Summary & Loading */}
               {viewMode === 'live' && (
-                <Stack spacing={ThemeTokens.spacing.md}>
+                <Stack spacing={ThemeTokens.spacing.sm}>
                   {isLoadingLive && !liveStandings ? (
                     <LoadingState label="Calculating live standings..." />
                   ) : liveError ? (
@@ -437,7 +437,7 @@ export function Leagues({
                       {/* Live Summary */}
                       <Card>
                         <CardContent>
-                          <Stack spacing={ThemeTokens.spacing.md}>
+                          <Stack spacing={ThemeTokens.spacing.sm}>
                             <Box>
                               <Typography
                                 variant="caption"

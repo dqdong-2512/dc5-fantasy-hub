@@ -159,7 +159,7 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
 
         {/* My Team Tab */}
         {activeTab === 1 && (
-          <Stack spacing={ThemeTokens.spacing.lg}>
+          <Stack spacing={ThemeTokens.spacing.sm}>
             {/* Gameweek Selector */}
             <FormControl size="small" sx={{ minWidth: 150 }}>
               <Select

@@ -64,7 +64,7 @@ const GameweekSummaryCard: React.FC<{ performance: LiveSquadPerformance }> = ({ 
   return (
     <Card>
       <CardContent>
-        <Stack spacing={ThemeTokens.spacing.md}>
+        <Stack spacing={ThemeTokens.spacing.sm}>
           <Typography variant="h6" sx={{ fontWeight: 600 }}>
             GW {summary.gameweekId} — {summary.isCompleted ? 'Final' : 'Live'}
           </Typography>
@@ -73,7 +73,7 @@ const GameweekSummaryCard: React.FC<{ performance: LiveSquadPerformance }> = ({ 
             sx={{
               display: 'grid',
               gridTemplateColumns: { xs: '1fr 1fr', md: 'repeat(4, 1fr)' },
-              gap: ThemeTokens.spacing.md,
+              gap: ThemeTokens.spacing.sm,
             }}
           >
             <Box>
@@ -142,7 +142,7 @@ const PerformanceHighlights: React.FC<{ performance: LiveSquadPerformance }> = (
   return (
     <Card>
       <CardContent>
-        <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: ThemeTokens.spacing.md }}>
+        <Typography variant="h6" sx={{ fontWeight: 600, marginBottom: ThemeTokens.spacing.sm }}>
           Performance Highlights
         </Typography>
 
@@ -531,7 +531,7 @@ export function MyTeam({
   const bench = livePerformance.bench;
 
   return (
-    <Stack spacing={ThemeTokens.spacing.xl}>
+    <Stack spacing={ThemeTokens.spacing.sm}>
       {/* Summary */}
       <GameweekSummaryCard performance={livePerformance} />
 
@@ -654,7 +654,7 @@ export function MyTeam({
         <Box>
           <Typography
             variant="subtitle2"
-            sx={{ fontWeight: 600, marginBottom: ThemeTokens.spacing.md }}
+            sx={{ fontWeight: 600, marginBottom: ThemeTokens.spacing.sm }}
           >
             Bench
           </Typography>
