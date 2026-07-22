@@ -3,7 +3,7 @@
  * Manages league detail state including standings, opponent selection, and picks
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { FantasyGameRepository } from '@repositories/fantasy';
 import type { FantasyLeagueStandings, FantasyGameweekPicks } from '@domain/models';
 
@@ -58,7 +58,8 @@ export function useLeagueDetail(
   const [standingsError, setStandingsError] = useState<string | null>(null);
   const [opponentError, setOpponentError] = useState<string | null>(null);
 
-  const repository = new FantasyGameRepository();
+  // Memoize repository instance
+  const repository = useMemo(() => new FantasyGameRepository(), []);
 
   // Load standings for current page
   useEffect(() => {

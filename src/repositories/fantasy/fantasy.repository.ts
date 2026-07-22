@@ -69,11 +69,43 @@ export class FantasyGameRepository {
   }
 
   /**
-   * Get league standings
+   * Get league standings with pagination support
    */
   async getLeagueStandings(leagueId: number, page?: number): Promise<FantasyLeagueStandings> {
     const data = await this.fplClient.getLeagueStandings(leagueId, page);
     return this.mapLeagueStandingsToModel(data);
+  }
+
+  /**
+   * Get all leagues for a connected entry
+   * Fetches league info for each joined league
+   */
+  async getEntryLeagues(entryId: number): Promise<Array<{ id: number; name: string }>> {
+    try {
+      const entry = await this.getEntry(entryId);
+      const leagues = await Promise.all(
+        entry.joinedLeaguesIds.map(async (leagueId) => {
+          try {
+            const standings = await this.fplClient.getLeagueStandings(leagueId, 1);
+            return {
+              id: leagueId,
+              name: standings.league.name,
+            };
+          } catch (err) {
+            // Fallback if league data fails
+            return {
+              id: leagueId,
+              name: `League ${leagueId}`,
+            };
+          }
+        })
+      );
+      return leagues;
+    } catch (err) {
+      throw new Error(
+        `Failed to get entry leagues: ${err instanceof Error ? err.message : 'Unknown error'}`
+      );
+    }
   }
 
   /**
