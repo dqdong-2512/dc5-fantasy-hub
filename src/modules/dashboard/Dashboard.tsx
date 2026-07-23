@@ -1,10 +1,10 @@
 import React from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Box, Typography } from '@mui/material';
-import { PageContent, DataSyncIndicator } from '@shared/components';
+import { PageContent } from '@shared/components';
 import type { CompetitionType } from '../../types/competition';
 import { COMPETITIONS } from '../../types/competition';
-import { DashboardHero } from './components/DashboardHero';
+import { DashboardHero, SyncStatus } from './components';
 import {
   CurrentGameweekSummary,
   TopPerformingPlayers,
@@ -47,9 +47,9 @@ export const Dashboard: React.FC = () => {
 
       {/* Dashboard Content Container */}
       <PageContent>
-        {/* Data Freshness Indicator */}
-        <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
-          <DataSyncIndicator compact={false} showWarning={true} />
+        {/* Sync Status - Right-Aligned */}
+        <Box sx={{ width: '100%', py: '2px', mb: '12px' }}>
+          <SyncStatus />
         </Box>
 
         {/* Widget Grid - First Row: Current GW (50%) + Top Players (50%) on lg+ */}

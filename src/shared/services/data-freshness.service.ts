@@ -38,8 +38,7 @@ export class DataFreshnessService {
   getDataQualityStatus(): DataQualityStatus {
     try {
       const dataFiles = getDataFiles();
-      const db = (dataFiles as any).__db__ || {};
-      const meta = db.meta || {};
+      const meta = dataFiles.meta || {};
 
       const syncedAt = meta.syncedAt || null;
       const qualityStatus = meta.dataQualityStatus || null;

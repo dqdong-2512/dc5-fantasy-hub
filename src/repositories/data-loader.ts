@@ -23,6 +23,11 @@ export interface DataFiles {
   fixtures: unknown;
   season: string;
   transfers?: unknown;
+  meta?: {
+    syncedAt?: string | null;
+    dataQualityStatus?: string | null;
+    [key: string]: unknown;
+  };
 }
 
 // Runtime cache
@@ -64,6 +69,7 @@ export function getDataFiles(): DataFiles {
       fixtures: cachedDb.fixtures || [],
       season: cachedDb.meta?.season || appConfig.activeSeason,
       transfers: cachedDb.transfers,
+      meta: cachedDb.meta,
     };
   }
 

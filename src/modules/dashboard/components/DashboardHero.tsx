@@ -22,36 +22,36 @@ export const DashboardHero: React.FC = () => {
       return '2025/26'; // Fallback
     }
   }, []);
+
   return (
     <Box
       sx={{
         background: 'linear-gradient(135deg, #7c3aed 0%, #3b82f6 50%, #06b6d4 100%)',
         width: '100%',
-        py: { xs: '16px', sm: '20px', md: '24px' },
-        px: { xs: '16px', sm: '20px', md: '20px' },
-        mb: ThemeTokens.spacing.xs,
+        py: { xs: ThemeTokens.spacing.sm, sm: ThemeTokens.spacing.md, md: '20px' },
+        px: { xs: ThemeTokens.spacing.md, sm: ThemeTokens.spacing.md, md: ThemeTokens.spacing.md },
+        mb: '8px',
       }}
     >
       <Box
         sx={{
           display: 'flex',
           flexDirection: { xs: 'column', sm: 'row' },
-          alignItems: 'center',
-          gap: { xs: '12px', sm: '20px' },
+          alignItems: { xs: 'center', sm: 'center' },
+          gap: { xs: ThemeTokens.spacing.sm, sm: ThemeTokens.spacing.md },
           width: '100%',
         }}
       >
-        {/* FPL Logo */}
+        {/* FPL Logo - Reduced Size */}
         <Box
           component="img"
           src="/fpl-logo.png"
           alt="Fantasy Premier League"
           onError={(e: any) => {
-            // Fallback if logo fails to load
             e.target.style.display = 'none';
           }}
           sx={{
-            height: { xs: '80px', sm: '100px', md: '120px' },
+            height: { xs: '60px', sm: '80px', md: '100px' },
             width: 'auto',
             maxWidth: '100%',
             objectFit: 'contain',
@@ -61,43 +61,58 @@ export const DashboardHero: React.FC = () => {
           }}
         />
 
-        {/* Title & Season */}
+        {/* Title & Season Block - Vertically Centered */}
         <Box
           sx={{
-            textAlign: { xs: 'center', md: 'left' },
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: { xs: 'center', sm: 'flex-start' },
+            minHeight: { xs: 'auto', sm: '100px' },
           }}
         >
-          <Typography
-            component="h1"
+          {/* Primary Title */}
+          <Box
             sx={{
-              fontSize: { xs: '24px', sm: '28px', md: '32px', lg: '36px' },
-              fontWeight: 700,
-              color: '#ffffff',
-              lineHeight: 1.2,
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '2px',
             }}
           >
-            Fantasy
-          </Typography>
+            <Typography
+              component="h1"
+              sx={{
+                fontSize: { xs: '22px', sm: '28px', md: '32px' },
+                fontWeight: 700,
+                color: '#ffffff',
+                lineHeight: 1,
+              }}
+            >
+              Fantasy
+            </Typography>
 
+            <Typography
+              component="h2"
+              sx={{
+                fontSize: { xs: '22px', sm: '28px', md: '32px' },
+                fontWeight: 700,
+                color: '#ffffff',
+                lineHeight: 1,
+              }}
+            >
+              Premier League
+            </Typography>
+          </Box>
+
+          {/* Secondary Info - Season */}
           <Typography
             component="div"
             sx={{
-              fontSize: { xs: '20px', sm: '24px', md: '28px', lg: '32px' },
-              fontWeight: 700,
-              color: '#ffffff',
-              lineHeight: 1.2,
-              marginBottom: ThemeTokens.spacing.xs,
-            }}
-          >
-            Premier League
-          </Typography>
-          <Typography
-            component="h2"
-            sx={{
-              fontSize: { xs: '14px', sm: '16px', md: '18px' },
+              fontSize: { xs: '13px', sm: '15px', md: '17px' },
               fontWeight: 500,
-              color: 'rgba(255, 255, 255, 0.75)',
-              lineHeight: 1.3,
+              color: 'rgba(255, 255, 255, 0.8)',
+              lineHeight: 1,
+              mt: '6px',
             }}
           >
             Season {seasonLabel}
