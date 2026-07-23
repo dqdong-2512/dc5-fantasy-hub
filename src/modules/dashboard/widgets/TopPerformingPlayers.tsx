@@ -18,6 +18,7 @@ import {
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { DashboardWidget } from '../components/DashboardWidget';
 import { PlayerRepository } from '@repositories/players';
+import { BootstrapRepository } from '@repositories/bootstrap';
 import { PlayerPresenter } from '@shared/presentation';
 import { getPlayerImageUrl } from '@shared/assets';
 
@@ -30,15 +31,26 @@ export interface TopPerformingPlayersProps {
  * Shows top 10 players by total points
  */
 export const TopPerformingPlayers: React.FC<TopPerformingPlayersProps> = ({ onPlayerClick }) => {
-  const topPlayers = useMemo(() => {
+  const { topPlayers, isPreSeason } = useMemo(() => {
     try {
+      const bootstrapRepo = new BootstrapRepository();
+      const preSeasonFlag = bootstrapRepo.isPreSeason();
+
+      // During pre-season, don't show performance data
+      if (preSeasonFlag) {
+        return { topPlayers: [], isPreSeason: true };
+      }
+
       const repo = new PlayerRepository();
       const all = repo.getAll();
       const sorted = all.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 10);
-      return PlayerPresenter.toListPresentations(sorted);
+      return {
+        topPlayers: PlayerPresenter.toListPresentations(sorted),
+        isPreSeason: false,
+      };
     } catch (error) {
       console.error('Error loading top players:', error);
-      return [];
+      return { topPlayers: [], isPreSeason: false };
     }
   }, []);
 
@@ -128,8 +140,10 @@ export const TopPerformingPlayers: React.FC<TopPerformingPlayersProps> = ({ onPl
           </Table>
         </TableContainer>
       ) : (
-        <Typography color="textSecondary" sx={{ textAlign: 'center', padding: 2 }}>
-          No players data available
+        <Typography color="textSecondary\" sx={{ textAlign: 'center', padding: 2 }}>
+          {isPreSeason
+            ? 'Player performance will appear after Gameweek 1'
+            : 'No players data available'}
         </Typography>
       )}
     </DashboardWidget>

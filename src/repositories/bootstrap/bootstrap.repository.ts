@@ -97,4 +97,31 @@ export class BootstrapRepository {
     const normalized = this.loadData();
     return normalized.elementTypes.find((et: NormalizedElementType) => et.id === id) || null;
   }
+
+  /**
+   * Detect current season state
+   * Returns 'pre-season' | 'active' | 'completed'
+   */
+  getSeasonState(): 'pre-season' | 'active' | 'completed' {
+    const normalized = this.loadData();
+    if (!normalized.gameweeks || normalized.gameweeks.length === 0) {
+      return 'pre-season';
+    }
+
+    // Find first unfinished gameweek
+    const unfinishedGw = normalized.gameweeks.find((gw: NormalizedGameweek) => !gw.finished);
+
+    if (!unfinishedGw) {
+      return 'completed';
+    }
+
+    return 'active';
+  }
+
+  /**
+   * Check if season is in pre-season state
+   */
+  isPreSeason(): boolean {
+    return this.getSeasonState() === 'pre-season';
+  }
 }

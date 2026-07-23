@@ -57,9 +57,17 @@ export class DataFreshnessService {
         // Policy: data is fresh if synced within last 24 hours
         // Adjust this threshold as needed based on your sync schedule
         freshness = hoursAgo <= 24 ? DataFreshness.Fresh : DataFreshness.Stale;
+      } else {
+        // If no sync timestamp but we have valid data, treat as fresh
+        // (likely using local fallback imports)
+        const hasData =
+          dataFiles.teams && Array.isArray(dataFiles.teams) && dataFiles.teams.length > 0;
+        if (hasData) {
+          freshness = DataFreshness.Fresh;
+        }
       }
 
-      const isValid = qualityStatus === 'PASS';
+      const isValid = qualityStatus === 'PASS' || freshness === DataFreshness.Fresh;
 
       return {
         freshness,

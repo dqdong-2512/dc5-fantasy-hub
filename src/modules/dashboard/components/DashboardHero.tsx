@@ -46,12 +46,18 @@ export const DashboardHero: React.FC = () => {
           component="img"
           src="/fpl-logo.png"
           alt="Fantasy Premier League"
+          onError={(e: any) => {
+            // Fallback if logo fails to load
+            e.target.style.display = 'none';
+          }}
           sx={{
             height: { xs: '80px', sm: '100px', md: '120px' },
             width: 'auto',
             maxWidth: '100%',
             objectFit: 'contain',
             flexShrink: 0,
+            backgroundColor: 'rgba(255, 255, 255, 0.1)',
+            borderRadius: '4px',
           }}
         />
 

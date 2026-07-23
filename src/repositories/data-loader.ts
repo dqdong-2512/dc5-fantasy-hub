@@ -22,6 +22,7 @@ export interface DataFiles {
   elementTypes: unknown;
   fixtures: unknown;
   season: string;
+  transfers?: unknown;
 }
 
 // Runtime cache
@@ -62,6 +63,7 @@ export function getDataFiles(): DataFiles {
       elementTypes: cachedDb.elementTypes,
       fixtures: cachedDb.fixtures || [],
       season: cachedDb.meta?.season || appConfig.activeSeason,
+      transfers: cachedDb.transfers,
     };
   }
 

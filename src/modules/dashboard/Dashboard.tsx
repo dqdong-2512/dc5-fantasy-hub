@@ -11,6 +11,7 @@ import {
   MostSelectedPlayers,
   PlayerFormRankings,
   TopClubs,
+  LatestTransfers,
 } from './widgets';
 import { ThemeTokens } from '@shared/theme/tokens';
 
@@ -84,6 +85,11 @@ export const Dashboard: React.FC = () => {
           <Box>
             <PlayerFormRankings />
           </Box>
+        </Box>
+
+        {/* Row 2.5: Latest Squad Changes */}
+        <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
+          <LatestTransfers />
         </Box>
 
         {/* Row 3: Club Intelligence */}

@@ -212,6 +212,87 @@ async function main(): Promise<void> {
       }
     }
 
+    // Step 3.5: Detect transfers by comparing with previous dataset
+    console.log('STEP 3.5: Detecting transfers and squad changes...\n');
+    let detectedTransfers: TransferEvent[] = [];
+    let existingTransfers: TransferEvent[] = [];
+
+    // Load previous db.json if it exists for this season
+    if (fs.existsSync(dbPath)) {
+      try {
+        const prevDb = JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
+        if (prevDb.transfers && Array.isArray(prevDb.transfers)) {
+          existingTransfers = prevDb.transfers;
+        }
+
+        // Compare players with previous snapshot
+        const prevPlayers = prevDb.players || [];
+        if (prevPlayers.length > 0) {
+          const prevMap = new Map<number, any>();
+          prevPlayers.forEach((p: any) => {
+            prevMap.set(p.id, p);
+          });
+
+          // Detect team changes
+          const teamMap = new Map<number, string>();
+          teams.forEach((t: any) => {
+            teamMap.set(t.id, t.name);
+          });
+
+          players.forEach((player: any) => {
+            const prevPlayer = prevMap.get(player.id);
+            if (prevPlayer && prevPlayer.team !== player.team) {
+              // Player changed team
+              const fromTeamName = teamMap.get(prevPlayer.team) || `Team ${prevPlayer.team}`;
+              const toTeamName = teamMap.get(player.team) || `Team ${player.team}`;
+              const playerName =
+                player.webName || player.web_name || `${player.firstName} ${player.secondName}`;
+
+              const transfer: TransferEvent = {
+                playerId: player.id,
+                playerName: playerName,
+                fromTeamId: prevPlayer.team,
+                toTeamId: player.team,
+                detectedAt: new Date().toISOString(),
+              };
+
+              // Avoid duplicates - check if this exact transfer already exists
+              const isDuplicate = existingTransfers.some(
+                (t) =>
+                  t.playerId === transfer.playerId &&
+                  t.fromTeamId === transfer.fromTeamId &&
+                  t.toTeamId === transfer.toTeamId
+              );
+
+              if (!isDuplicate) {
+                detectedTransfers.push(transfer);
+              }
+            }
+          });
+        }
+      } catch (err) {
+        console.log(
+          '  (No previous db.json or error reading it - treating current sync as baseline)\n'
+        );
+      }
+    } else {
+      console.log('  (Initial sync - current data treated as baseline)\n');
+    }
+
+    // Merge detected transfers with existing ones (newest first)
+    const allTransfers = [...detectedTransfers, ...existingTransfers];
+    if (detectedTransfers.length > 0) {
+      console.log(`✓ Detected ${detectedTransfers.length} new squad changes\n`);
+      detectedTransfers.forEach((t) => {
+        const fromTeam = teams.find((team: any) => team.id === t.fromTeamId)?.name || 'Unknown';
+        const toTeam = teams.find((team: any) => team.id === t.toTeamId)?.name || 'Unknown';
+        console.log(`  - ${t.playerName}: ${fromTeam} → ${toTeam}`);
+      });
+      console.log('');
+    } else {
+      console.log('  No new squad changes detected\n');
+    }
+
     // Step 4: Write atomic db.json
     if (config.writeDb) {
       console.log('STEP 4: Writing atomic db.json...\n');
@@ -264,6 +345,7 @@ async function main(): Promise<void> {
         gameweeks,
         elementTypes,
         fixtures,
+        transfers: allTransfers.length > 0 ? allTransfers : undefined,
       };
 
       const writer = new AtomicDbWriter(dbPath);

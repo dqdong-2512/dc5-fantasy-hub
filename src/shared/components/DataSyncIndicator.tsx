@@ -34,7 +34,9 @@ export const DataSyncIndicator: React.FC<DataSyncIndicatorProps> = ({
   }, []);
 
   // Determine icon and color
-  const isFresh = freshness.freshness === DataFreshness.Fresh;
+  // Treat Unknown as Fresh if valid data exists (local sync available)
+  const isUnknownWithData = freshness.freshness === DataFreshness.Unknown && freshness.isValid;
+  const isFresh = freshness.freshness === DataFreshness.Fresh || isUnknownWithData;
   const isStale = freshness.freshness === DataFreshness.Stale;
 
   const icon = isFresh ? (

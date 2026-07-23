@@ -10,6 +10,7 @@ export { TeamRepository } from './teams';
 export { PlayerRepository } from './players';
 export { FantasyGameRepository } from './fantasy';
 export { FixtureRepository } from './fixtures';
+export { TransferRepository, type PlayerTransfer } from './transfers';
 
 // Singleton factory functions for application-wide cache reuse
 export {
