@@ -320,9 +320,14 @@ export class FplClient {
 
     let baseUrl = '/api/fpl'; // Default for browser
 
-    // Check if running in Node.js by seeing if we have a process object with env
+    // Check if running in Node.js by checking for process.versions.node
+    // This is more reliable than checking typeof process, as some bundlers
+    // polyfill process in browser context
     const globalAny = globalThis as any;
-    const isNodeJs = typeof globalAny.process !== 'undefined' && globalAny.process.env;
+    const isNodeJs =
+      typeof globalAny.process !== 'undefined' &&
+      globalAny.process.versions &&
+      typeof globalAny.process.versions.node === 'string';
 
     if (isNodeJs) {
       // Node.js environment - use direct FPL API or env var

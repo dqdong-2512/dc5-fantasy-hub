@@ -16,7 +16,6 @@ import {
   Checkbox,
   Avatar,
   Box,
-  Chip,
   Typography,
 } from '@mui/material';
 import type { Player } from '@domain/models';
@@ -24,7 +23,6 @@ import { Position } from '@domain/enums';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { getPlayerImageUrl, getTeamBadgeUrl } from '@shared/assets';
 import { PlayerFixtureIntelligenceService } from '../services';
-import { getDifficultyColor } from '@shared/presentation/fixture-formats';
 
 export interface PlayerTableProps {
   players: Player[];
@@ -50,20 +48,26 @@ export function PlayerTable({
   const [selectedIds, setSelectedIds] = useState<number[]>([]);
   const fixtureService = useMemo(() => new PlayerFixtureIntelligenceService(), []);
 
+  // Only calculate fixture data for visible players (paginated set)
+  // This prevents expensive calculations on full 841-player dataset
   const playerFixtureData = useMemo(() => {
     const data = new Map<number, { nextFixture: string; fixtureRun: string; avgFdr: number }>();
-    players.forEach((player) => {
-      const summary = fixtureService.getPlayerFixtureSummary(player);
-      const nextFixture = summary.upcomingFixtures[0]
-        ? `${summary.upcomingFixtures[0].opponent.shortName} (${summary.upcomingFixtures[0].homeAway})`
-        : '—';
-      const fixtureRun = fixtureService.formatFixtureSequence(summary.upcomingFixtures, 3);
-      data.set(player.id, {
-        nextFixture,
-        fixtureRun: fixtureRun || '—',
-        avgFdr: summary.avgDifficulty,
+    try {
+      players.forEach((player) => {
+        const summary = fixtureService.getPlayerFixtureSummary(player);
+        const nextFixture = summary.upcomingFixtures[0]
+          ? `${summary.upcomingFixtures[0].opponent.shortName} (${summary.upcomingFixtures[0].homeAway})`
+          : '—';
+        const fixtureRun = fixtureService.formatFixtureSequence(summary.upcomingFixtures, 3);
+        data.set(player.id, {
+          nextFixture,
+          fixtureRun: fixtureRun || '—',
+          avgFdr: summary.avgDifficulty,
+        });
       });
-    });
+    } catch (err) {
+      console.error('Error calculating fixture data:', err);
+    }
     return data;
   }, [players, fixtureService]);
 
@@ -102,32 +106,31 @@ export function PlayerTable({
       sx={{
         borderRadius: ThemeTokens.borderRadius.md,
         overflow: 'hidden',
-        maxHeight: 'calc(100vh - 300px)',
       }}
     >
-      <Table stickyHeader>
+      <Table stickyHeader size="small">
         <TableHead>
           <TableRow sx={{ backgroundColor: 'action.hover' }}>
-            <TableCell padding="checkbox">
+            <TableCell padding="checkbox" sx={{ width: 44 }}>
               <Checkbox
                 checked={selectedIds.length > 0 && selectedIds.length === players.length}
                 indeterminate={selectedIds.length > 0 && selectedIds.length < players.length}
                 onChange={handleSelectAll}
               />
             </TableCell>
-            <TableCell>Photo</TableCell>
+            <TableCell sx={{ width: 48 }}>Photo</TableCell>
             <TableCell>
               <TableSortLabel
-                active={sortBy === 'name'}
-                direction={sortBy === 'name' ? sortOrder : 'asc'}
-                onClick={() => handleSort('name')}
+                active={sortBy === 'displayName'}
+                direction={sortBy === 'displayName' ? sortOrder : 'asc'}
+                onClick={() => handleSort('displayName')}
               >
                 Player
               </TableSortLabel>
             </TableCell>
-            <TableCell>Position</TableCell>
-            <TableCell>Club</TableCell>
-            <TableCell align="right">
+            <TableCell sx={{ width: 70 }}>Position</TableCell>
+            <TableCell sx={{ width: 100 }}>Club</TableCell>
+            <TableCell align="right" sx={{ width: 70 }}>
               <TableSortLabel
                 active={sortBy === 'price'}
                 direction={sortBy === 'price' ? sortOrder : 'asc'}
@@ -136,7 +139,7 @@ export function PlayerTable({
                 Price
               </TableSortLabel>
             </TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{ width: 60 }}>
               <TableSortLabel
                 active={sortBy === 'form'}
                 direction={sortBy === 'form' ? sortOrder : 'asc'}
@@ -145,15 +148,17 @@ export function PlayerTable({
                 Form
               </TableSortLabel>
             </TableCell>
-            <TableCell align="right">Next Fixture</TableCell>
-            <TableCell>Fixture Run</TableCell>
-            <TableCell align="right">
+            <TableCell align="right" sx={{ width: 120 }}>
+              Next Fixture
+            </TableCell>
+            <TableCell sx={{ width: 100 }}>Fixture Run</TableCell>
+            <TableCell align="right" sx={{ width: 70 }}>
               <TableSortLabel
-                active={sortBy === 'avgFdr'}
-                direction={sortBy === 'avgFdr' ? sortOrder : 'asc'}
-                onClick={() => handleSort('avgFdr')}
+                active={sortBy === 'totalPoints'}
+                direction={sortBy === 'totalPoints' ? sortOrder : 'asc'}
+                onClick={() => handleSort('totalPoints')}
               >
-                Avg FDR
+                Pts
               </TableSortLabel>
             </TableCell>
           </TableRow>
@@ -168,9 +173,15 @@ export function PlayerTable({
                 onClick={() => onRowClick(player)}
                 sx={{
                   cursor: 'pointer',
+                  height: 44,
                   backgroundColor: selectedIds.includes(player.id)
                     ? 'action.selected'
                     : 'transparent',
+                  '&:hover': {
+                    backgroundColor: selectedIds.includes(player.id)
+                      ? 'action.selected'
+                      : 'action.hover',
+                  },
                 }}
               >
                 <TableCell
@@ -182,28 +193,31 @@ export function PlayerTable({
                 >
                   <Checkbox checked={selectedIds.includes(player.id)} />
                 </TableCell>
-                <TableCell>
+                <TableCell padding="none" sx={{ pl: 1, pr: 0.5 }}>
                   <Avatar
                     src={getPlayerImageUrl(player.id)}
-                    sx={{ width: 40, height: 40 }}
+                    sx={{ width: 36, height: 36 }}
                     alt={player.displayName}
                   >
                     {player.displayName.charAt(0)}
                   </Avatar>
                 </TableCell>
-                <TableCell sx={{ fontWeight: 600 }}>{player.displayName}</TableCell>
-                <TableCell>{getPositionDisplay(player.position)}</TableCell>
+                <TableCell sx={{ fontWeight: 600, fontSize: '0.9rem' }}>
+                  {player.displayName}
+                </TableCell>
+                <TableCell sx={{ fontSize: '0.9rem' }}>
+                  {getPositionDisplay(player.position)}
+                </TableCell>
                 <TableCell>
                   <Box
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
-                      gap: 1,
+                      gap: 0.75,
                       cursor: onClubClick ? 'pointer' : 'default',
                       '&:hover': onClubClick
                         ? {
                             opacity: 0.7,
-                            textDecoration: 'underline',
                           }
                         : {},
                     }}
@@ -219,10 +233,12 @@ export function PlayerTable({
                       sx={{ width: 24, height: 24 }}
                       alt={player.club}
                     />
-                    <span>{player.club}</span>
+                    <Typography sx={{ fontSize: '0.9rem' }} noWrap>
+                      {player.club}
+                    </Typography>
                   </Box>
                 </TableCell>
-                <TableCell align="right" sx={{ fontWeight: 600 }}>
+                <TableCell align="right" sx={{ fontWeight: 600, fontSize: '0.9rem' }}>
                   £{(player.price / 10).toFixed(1)}m
                 </TableCell>
                 <TableCell
@@ -234,41 +250,24 @@ export function PlayerTable({
                         : player.form && player.form > 3
                           ? 'warning.main'
                           : 'error.main',
+                    fontSize: '0.9rem',
+                    fontWeight: 600,
                   }}
                 >
-                  {player.form?.toFixed(2) || '—'}
+                  {player.form?.toFixed(1) || '—'}
                 </TableCell>
                 <TableCell align="right" sx={{ fontSize: '0.85rem' }}>
-                  <Typography
-                    sx={{
-                      fontSize: '0.85rem',
-                      fontWeight: 600,
-                    }}
-                  >
+                  <Typography sx={{ fontSize: '0.85rem', fontWeight: 500 }}>
                     {fixtureInfo?.nextFixture}
                   </Typography>
                 </TableCell>
-                <TableCell sx={{ fontSize: '0.8rem', maxWidth: 120 }}>
+                <TableCell sx={{ fontSize: '0.8rem' }}>
                   <Typography sx={{ fontSize: '0.8rem', color: 'text.secondary' }}>
                     {fixtureInfo?.fixtureRun}
                   </Typography>
                 </TableCell>
-                <TableCell align="right">
-                  {fixtureInfo && fixtureInfo.avgFdr > 0 ? (
-                    <Chip
-                      label={fixtureInfo.avgFdr.toFixed(1)}
-                      size="small"
-                      sx={{
-                        fontWeight: 600,
-                        backgroundColor: getDifficultyColor(Math.round(fixtureInfo.avgFdr)),
-                        color: 'white',
-                        height: 24,
-                        fontSize: '0.75rem',
-                      }}
-                    />
-                  ) : (
-                    <Typography sx={{ fontSize: '0.85rem' }}>—</Typography>
-                  )}
+                <TableCell align="right" sx={{ fontWeight: 600, fontSize: '0.9rem' }}>
+                  {player.totalPoints}
                 </TableCell>
               </TableRow>
             );

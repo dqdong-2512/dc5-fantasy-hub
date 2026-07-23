@@ -140,7 +140,7 @@ export const TopPerformingPlayers: React.FC<TopPerformingPlayersProps> = ({ onPl
           </Table>
         </TableContainer>
       ) : (
-        <Typography color="textSecondary\" sx={{ textAlign: 'center', padding: 2 }}>
+        <Typography color="textSecondary" sx={{ textAlign: 'center', py: 2 }}>
           {isPreSeason
             ? 'Player performance will appear after Gameweek 1'
             : 'No players data available'}

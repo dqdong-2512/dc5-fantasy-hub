@@ -3,11 +3,10 @@
  * Browse all FPL players with search, filtering, and sorting
  */
 
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import {
   Typography,
-  Stack,
   TextField,
   FormControl,
   Select,
@@ -16,8 +15,11 @@ import {
   CircularProgress,
   Alert,
   InputAdornment,
+  Button,
+  Pagination,
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 import { PageContainer } from '@shared/components';
 import { PlayerRepository } from '@repositories/players';
 import { TeamRepository } from '@repositories/teams';
@@ -25,8 +27,10 @@ import { PlayerTable } from './components/PlayerTable';
 import type { CompetitionType } from '../../types/competition';
 import { COMPETITIONS } from '../../types/competition';
 import { Position } from '@domain/enums';
+import { ThemeTokens } from '@shared/theme/tokens';
 
 type SortField = 'displayName' | 'price' | 'form' | 'totalPoints';
+const PLAYERS_PER_PAGE = 50;
 
 export const Players: React.FC = () => {
   const location = useLocation();
@@ -39,6 +43,7 @@ export const Players: React.FC = () => {
   const [selectedPosition, setSelectedPosition] = useState<string>('');
   const [sortBy, setSortBy] = useState<SortField>('totalPoints');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [currentPage, setCurrentPage] = useState(1);
 
   // Initialize repositories
   const playerRepo = useMemo(() => new PlayerRepository(), []);
@@ -139,9 +144,31 @@ export const Players: React.FC = () => {
     return result;
   }, [allPlayers, searchQuery, selectedTeam, selectedPosition, sortBy, sortOrder]);
 
+  // Reset to page 1 when filters/search changes
+  useEffect(() => {
+    // Intentional: Reset pagination when filters change for better UX
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setCurrentPage(1);
+  }, [searchQuery, selectedTeam, selectedPosition]);
+
+  // Calculate pagination
+  const totalPages = Math.ceil(filteredPlayers.length / PLAYERS_PER_PAGE);
+  const startIdx = (currentPage - 1) * PLAYERS_PER_PAGE;
+  const endIdx = startIdx + PLAYERS_PER_PAGE;
+  const paginatedPlayers = filteredPlayers.slice(startIdx, endIdx);
+
   const handleSort = (field: string, order: 'asc' | 'desc'): void => {
     setSortBy(field as SortField);
     setSortOrder(order);
+  };
+
+  const hasActiveFilters = searchQuery || selectedTeam || selectedPosition;
+
+  const handleClearFilters = (): void => {
+    setSearchQuery('');
+    setSelectedTeam('');
+    setSelectedPosition('');
+    setCurrentPage(1);
   };
 
   // Show loading state if no data yet
@@ -159,8 +186,12 @@ export const Players: React.FC = () => {
   return (
     <PageContainer>
       {/* Page Header */}
-      <Box sx={{ mb: 3 }}>
-        <Typography variant="h4" component="h1" sx={{ fontWeight: 600, mb: 1 }}>
+      <Box sx={{ mb: ThemeTokens.spacing.lg }}>
+        <Typography
+          variant="h4"
+          component="h1"
+          sx={{ fontWeight: 600, mb: ThemeTokens.spacing.xs }}
+        >
           Players
         </Typography>
         <Typography variant="body2" color="textSecondary">
@@ -168,13 +199,16 @@ export const Players: React.FC = () => {
         </Typography>
       </Box>
 
-      {/* Filters */}
-      <Stack spacing={2} sx={{ mb: 3 }}>
+      {/* Search & Filters */}
+      <Box sx={{ mb: ThemeTokens.spacing.md }}>
+        {/* Search + Clear Filters */}
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', sm: '2fr 1fr 1fr', md: '2fr 1fr 1fr' },
-            gap: 2,
+            gridTemplateColumns: { xs: '1fr', sm: '2fr auto 1fr 1fr', md: '2fr auto 1fr 1fr' },
+            gap: ThemeTokens.spacing.sm,
+            alignItems: 'flex-start',
+            mb: ThemeTokens.spacing.sm,
           }}
         >
           {/* Search */}
@@ -195,8 +229,23 @@ export const Players: React.FC = () => {
             variant="outlined"
           />
 
+          {/* Clear Filters Button */}
+          {hasActiveFilters && (
+            <Button
+              size="small"
+              startIcon={<ClearIcon />}
+              onClick={handleClearFilters}
+              sx={{
+                textTransform: 'none',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              Clear
+            </Button>
+          )}
+
           {/* Team Filter */}
-          <FormControl size="small">
+          <FormControl size="small" fullWidth>
             <Select
               value={selectedTeam}
               onChange={(e) => setSelectedTeam(e.target.value as string)}
@@ -212,7 +261,7 @@ export const Players: React.FC = () => {
           </FormControl>
 
           {/* Position Filter */}
-          <FormControl size="small">
+          <FormControl size="small" fullWidth>
             <Select
               value={selectedPosition}
               onChange={(e) => setSelectedPosition(e.target.value)}
@@ -229,24 +278,45 @@ export const Players: React.FC = () => {
 
         {/* Results Summary */}
         <Typography variant="caption" color="textSecondary">
-          Showing {filteredPlayers.length} of {allPlayers.length} players
+          Showing {paginatedPlayers.length > 0 ? startIdx + 1 : 0}–
+          {Math.min(endIdx, filteredPlayers.length)} of {filteredPlayers.length}{' '}
+          {filteredPlayers.length === allPlayers.length ? `players` : `filtered players`}
+          {filteredPlayers.length < allPlayers.length && ` (${allPlayers.length} total)`}
         </Typography>
-      </Stack>
+      </Box>
 
-      {/* Players Table */}
+      {/* Players Table or Empty State */}
       {filteredPlayers.length === 0 ? (
-        <Alert severity="info">No players match your filters. Try adjusting your search.</Alert>
+        <Alert severity="info">
+          {allPlayers.length === 0
+            ? 'No players available.'
+            : 'No players match your filters. Try adjusting your search.'}
+        </Alert>
       ) : (
-        <PlayerTable
-          players={filteredPlayers}
-          onRowClick={(player) => {
-            console.log('Clicked player:', player.id);
-            // Future: navigate to player detail page
-          }}
-          sortBy={sortBy}
-          sortOrder={sortOrder}
-          onSort={handleSort}
-        />
+        <>
+          <PlayerTable
+            players={paginatedPlayers}
+            onRowClick={(player) => {
+              console.log('Clicked player:', player.id);
+              // Future: navigate to player detail page
+            }}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSort={handleSort}
+          />
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: ThemeTokens.spacing.md }}>
+              <Pagination
+                count={totalPages}
+                page={currentPage}
+                onChange={(_, page) => setCurrentPage(page)}
+                size="small"
+              />
+            </Box>
+          )}
+        </>
       )}
     </PageContainer>
   );

@@ -50,7 +50,7 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
         <Box
           sx={{
             backgroundColor: '#f59e0b',
-            padding: { xs: 2, md: 4 },
+            padding: { xs: 1.5, md: 2.5 },
             display: 'flex',
             alignItems: 'center',
             gap: ThemeTokens.spacing.md,
@@ -120,8 +120,8 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
       {/* Widget Content */}
       <CardContent
         sx={{
-          padding: 4,
-          '&:last-child': { paddingBottom: 8 },
+          padding: 3,
+          '&:last-child': { paddingBottom: 4 },
           flex: 1,
           overflowY: 'auto',
         }}
