@@ -313,11 +313,28 @@ export class FplClient {
 
   constructor() {
     // Use environment variable if available, otherwise use direct FPL API
-    // Supports both:
-    // - Development: /api/fpl (proxied via Vite dev server to FPL API)
-    // - Production: /api/fpl (proxied via Cloudflare Pages Function to FPL API)
-    // - Fallback: https://fantasy.premierleague.com/api (direct - may have CORS issues)
-    this.fplApiBaseUrl = import.meta.env.VITE_FPL_API_BASE_URL || '/api/fpl';
+    // Supports:
+    // - Browser/Vite: import.meta.env.VITE_FPL_API_BASE_URL (e.g., /api/fpl for proxied dev)
+    // - Node.js scripts: process.env.VITE_FPL_API_BASE_URL or direct FPL API
+    // - Fallback: https://fantasy.premierleague.com/api (direct)
+
+    let baseUrl = '/api/fpl'; // Default for browser
+
+    // Check if running in Node.js by seeing if we have a process object with env
+    const globalAny = globalThis as any;
+    const isNodeJs = typeof globalAny.process !== 'undefined' && globalAny.process.env;
+
+    if (isNodeJs) {
+      // Node.js environment - use direct FPL API or env var
+      baseUrl =
+        globalAny.process.env.VITE_FPL_API_BASE_URL || 'https://fantasy.premierleague.com/api';
+    } else if (typeof import.meta !== 'undefined' && (import.meta as any).env) {
+      // Browser/Vite environment - try to use import.meta.env
+      const envUrl = (import.meta as any).env.VITE_FPL_API_BASE_URL;
+      if (envUrl) baseUrl = envUrl;
+    }
+
+    this.fplApiBaseUrl = baseUrl;
 
     this.httpClient = new HttpClient({
       baseUrl: this.fplApiBaseUrl,

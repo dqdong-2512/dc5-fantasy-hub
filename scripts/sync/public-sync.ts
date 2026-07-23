@@ -1,7 +1,8 @@
 /**
- * Public Data Synchronizer
+ * Public Data Synchronizer - SEASON AWARE
  * Downloads public FPL data (bootstrap, fixtures) and normalizes
  * No manager ID required - works standalone
+ * Supports multi-season sync
  */
 
 import fs from 'fs';
@@ -20,8 +21,6 @@ import type {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '../../');
-const rawDataDir = path.join(projectRoot, 'data', 'seasons', '2025-2026', 'raw');
-const normalizedDataDir = path.join(projectRoot, 'data', 'seasons', '2025-2026', 'normalized');
 
 interface NormalizedTeam {
   id: number;
@@ -83,8 +82,11 @@ interface NormalizedFixture {
   awayDifficulty: number;
 }
 
-export async function syncPublicData(): Promise<void> {
-  console.log('Syncing public FPL data...');
+export async function syncPublicData(season: string = '2026-2027'): Promise<void> {
+  const rawDataDir = path.join(projectRoot, 'data', 'seasons', season, 'raw');
+  const normalizedDataDir = path.join(projectRoot, 'data', 'seasons', season, 'normalized');
+
+  console.log(`Syncing public FPL data for ${season}...`);
 
   try {
     const client = new FplClient();

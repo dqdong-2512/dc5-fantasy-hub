@@ -10,6 +10,7 @@
  */
 
 import { getDataFiles } from '@repositories/data-loader';
+import { appConfig } from '@config/appConfig';
 import type { Season } from '@config/types';
 
 export interface SeasonMetadata {
@@ -64,8 +65,8 @@ export class DataSeasonService {
       const db = (dataFiles as any).__db__ || {};
       const meta = db.meta || {};
 
-      // Resolve season from metadata or fallback to config
-      const season = (meta.season || '2025-2026') as Season;
+      // Resolve season from metadata or use configured active season
+      const season = (meta.season || appConfig.activeSeason) as Season;
       const seasonLabel = this.formatSeasonLabel(season);
       const syncedAt = meta.syncedAt || null;
 
@@ -83,10 +84,11 @@ export class DataSeasonService {
 
       return this.metadata;
     } catch {
-      // Fallback to safe defaults
+      // Fallback to configured active season
+      const season = appConfig.activeSeason;
       return {
-        season: '2025-2026',
-        seasonLabel: '2025/26',
+        season,
+        seasonLabel: this.formatSeasonLabel(season),
         competition: 'fpl',
         competitionName: 'Fantasy Premier League',
         syncedAt: null,

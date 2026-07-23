@@ -18,8 +18,13 @@ import type {
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '../../');
-const rawDataDir = path.join(projectRoot, 'data', 'seasons', '2025-2026', 'raw');
-const normalizedDataDir = path.join(projectRoot, 'data', 'seasons', '2025-2026', 'normalized');
+
+function getNormalizeDataDirs(season: string) {
+  return {
+    rawDataDir: path.join(projectRoot, 'data', 'seasons', season, 'raw'),
+    normalizedDataDir: path.join(projectRoot, 'data', 'seasons', season, 'normalized'),
+  };
+}
 
 interface NormalizedTeam {
   id: number;
@@ -81,8 +86,9 @@ interface NormalizedFixture {
   awayDifficulty: number;
 }
 
-export async function normalize(): Promise<void> {
-  console.log('Generating normalized data...');
+export async function normalize(season: string = '2026-2027'): Promise<void> {
+  const { rawDataDir, normalizedDataDir } = getNormalizeDataDirs(season);
+  console.log(`Generating normalized data for ${season}...`);
 
   try {
     // Read raw bootstrap data

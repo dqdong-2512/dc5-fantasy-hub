@@ -7,8 +7,29 @@
 import type { AppConfig } from './types';
 
 export const appConfig: AppConfig = {
-  // Active season - Change here to switch to 2026-2027
-  activeSeason: '2025-2026',
+  // Active season - Change here to switch seasons
+  // Currently migrating to 2026-2027
+  activeSeason: '2026-2027',
+
+  // Available seasons
+  seasons: [
+    {
+      id: '2025-2026',
+      label: '2025/26',
+      startYear: 2025,
+      endYear: 2026,
+      isActive: false,
+      isHistorical: true,
+    },
+    {
+      id: '2026-2027',
+      label: '2026/27',
+      startYear: 2026,
+      endYear: 2027,
+      isActive: true,
+      isHistorical: false,
+    },
+  ],
 
   // Active competition - Change to switch between FPL and UCL
   activeCompetition: 'fpl',
@@ -18,9 +39,10 @@ export const appConfig: AppConfig = {
   assetsBaseUrl: 'https://resources.premierleague.com/premierleague',
 
   // Data file paths (relative to src directory)
+  // Now points to active season (2026-2027)
   dataPath: {
-    raw: `../../data/seasons/2025-2026/raw`,
-    normalized: `../../data/seasons/2025-2026/normalized`,
+    raw: `../../data/seasons/2026-2027/raw`,
+    normalized: `../../data/seasons/2026-2027/normalized`,
   },
 
   // Competition profiles and enabled modules
@@ -63,10 +85,24 @@ export function getActiveCompetition() {
 
 /**
  * Get the active season with proper formatting
- * Returns season in YYYY-YYYY format (e.g., 2025-2026)
+ * Returns season in YYYY-YYYY format (e.g., 2026-2027)
  */
 export function getActiveSeason(): string {
   return appConfig.activeSeason;
+}
+
+/**
+ * Get season metadata for the active season
+ */
+export function getActiveSeasonMetadata() {
+  return appConfig.seasons.find((s) => s.id === appConfig.activeSeason);
+}
+
+/**
+ * Get season metadata by ID
+ */
+export function getSeasonMetadata(seasonId: string) {
+  return appConfig.seasons.find((s) => s.id === seasonId);
 }
 
 /**

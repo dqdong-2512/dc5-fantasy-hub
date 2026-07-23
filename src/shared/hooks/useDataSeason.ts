@@ -4,6 +4,7 @@
  */
 
 import { useMemo } from 'react';
+import { getActiveSeasonMetadata } from '@config/appConfig';
 import { getCurrentSeasonLabel, getSeasonMetadata, type SeasonMetadata } from '@shared/services';
 
 /**
@@ -14,9 +15,10 @@ export function useDataSeason(): SeasonMetadata {
     try {
       return getSeasonMetadata();
     } catch {
+      const activeSeasonMetadata = getActiveSeasonMetadata();
       return {
-        season: '2025-2026',
-        seasonLabel: '2025/26',
+        season: activeSeasonMetadata?.id || '2026-2027',
+        seasonLabel: activeSeasonMetadata?.label || '2026/27',
         competition: 'fpl',
         competitionName: 'Fantasy Premier League',
         syncedAt: null,
@@ -27,14 +29,15 @@ export function useDataSeason(): SeasonMetadata {
 }
 
 /**
- * Hook to get current season label (e.g., "2025/26")
+ * Hook to get current season label (e.g., "2025/26" or "2026/27")
  */
 export function useSeasonLabel(): string {
   return useMemo(() => {
     try {
       return getCurrentSeasonLabel();
     } catch {
-      return '2025/26';
+      const activeSeasonMetadata = getActiveSeasonMetadata();
+      return activeSeasonMetadata?.label || '2026/27';
     }
   }, []);
 }

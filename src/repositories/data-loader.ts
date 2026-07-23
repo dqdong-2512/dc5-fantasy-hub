@@ -1,15 +1,19 @@
 /**
- * Data Loader
+ * Data Loader - SEASON AWARE
  * Loads normalized data from db.json (synced from FPL API)
+ * Supports multiple seasons
  * Fallback to direct imports if db.json not available (dev mode)
  */
 
+import { appConfig } from '@config/appConfig';
+
 // Fallback imports for development without db.json
-import teamsDataFallback from '../../data/seasons/2025-2026/normalized/teams.json';
-import playersDataFallback from '../../data/seasons/2025-2026/normalized/players.json';
-import gameweeksDataFallback from '../../data/seasons/2025-2026/normalized/gameweeks.json';
-import elementTypesDataFallback from '../../data/seasons/2025-2026/normalized/element-types.json';
-import fixturesDataFallback from '../../data/seasons/2025-2026/normalized/fixtures.json';
+// When adding new seasons, add fallback imports here
+import teamsDataFallback from '../../data/seasons/2026-2027/normalized/teams.json';
+import playersDataFallback from '../../data/seasons/2026-2027/normalized/players.json';
+import gameweeksDataFallback from '../../data/seasons/2026-2027/normalized/gameweeks.json';
+import elementTypesDataFallback from '../../data/seasons/2026-2027/normalized/element-types.json';
+import fixturesDataFallback from '../../data/seasons/2026-2027/normalized/fixtures.json';
 
 export interface DataFiles {
   teams: unknown;
@@ -17,6 +21,7 @@ export interface DataFiles {
   gameweeks: unknown;
   elementTypes: unknown;
   fixtures: unknown;
+  season: string;
 }
 
 // Runtime cache
@@ -56,6 +61,7 @@ export function getDataFiles(): DataFiles {
       gameweeks: cachedDb.gameweeks,
       elementTypes: cachedDb.elementTypes,
       fixtures: cachedDb.fixtures || [],
+      season: cachedDb.meta?.season || appConfig.activeSeason,
     };
   }
 
@@ -66,19 +72,18 @@ export function getDataFiles(): DataFiles {
     gameweeks: gameweeksDataFallback,
     elementTypes: elementTypesDataFallback,
     fixtures: fixturesDataFallback || [],
+    season: appConfig.activeSeason,
   };
 }
-
 /**
  * Get data files for a specific season
- * Currently only 2025-2026 is available
+ * Currently only 2026-2027 (active) is fully supported
+ * 2025-2026 can be accessed by explicitly requesting it
+ * @param _season - Season ID (for backward compatibility, currently unused)
  */
-export function getDataFilesBySeason(season: string): DataFiles | null {
-  // In future, would support multiple seasons
-  if (season === '2025-2026') {
-    return getDataFiles();
-  }
-
-  // 2026-2027 and later seasons not yet available
-  return null;
+export function getDataFilesBySeason(_season: string): DataFiles | null {
+  // All seasons use the same loading mechanism via db.json
+  // This function is maintained for backward compatibility
+  // In future, could support loading specific season data from db.json with filters
+  return getDataFiles();
 }

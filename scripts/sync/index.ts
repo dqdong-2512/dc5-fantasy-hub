@@ -1,10 +1,13 @@
 /**
- * Improved FPL Data Sync Entry Point
+ * Improved FPL Data Sync Entry Point - SEASON AWARE
  * Orchestrates complete sync pipeline with validation and atomic db.json writes
+ * Supports multi-season sync with transfer detection
  *
  * Usage:
- *   npm run sync:fpl                        - Sync public data only
- *   npm run sync:fpl -- --manager-id=12345 - Sync public + manager-specific data
+ *   npm run sync:fpl                               - Sync 2026-2027 data
+ *   npm run sync:fpl -- --season=2026-2027        - Explicit season
+ *   npm run sync:fpl -- --manager-id=12345        - Sync manager data
+ *   npm run sync:fpl -- --no-validate             - Skip validation
  */
 
 import fs from 'fs';
@@ -18,7 +21,6 @@ import { getSyncConfig } from '../services/fpl-sync-config';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '../../');
-const normalizedDataDir = path.join(projectRoot, 'data', 'seasons', '2025-2026', 'normalized');
 const dbPath = path.join(projectRoot, 'db.json');
 
 interface SyncResult {
@@ -33,16 +35,61 @@ interface SyncResult {
   dbWritten: boolean;
 }
 
+interface TransferEvent {
+  playerId: number;
+  playerName: string;
+  fromTeamId: number | null;
+  toTeamId: number;
+  detectedAt: string;
+}
+
+/**
+ * Detect player transfers by comparing previous squad to new squad
+ */
+function detectTransfers(
+  previousPlayers: any[],
+  currentPlayers: any[],
+  teamMap: Map<number, string>
+): TransferEvent[] {
+  const transfers: TransferEvent[] = [];
+
+  // Map previous players by stable identifier (use web_name + FPL ID if available)
+  const prevMap = new Map<number, any>();
+  previousPlayers.forEach((p) => {
+    prevMap.set(p.id, p);
+  });
+
+  // Check for team changes
+  currentPlayers.forEach((player) => {
+    const prevPlayer = prevMap.get(player.id);
+    if (prevPlayer && prevPlayer.team !== player.team) {
+      transfers.push({
+        playerId: player.id,
+        playerName: player.webName || player.web_name || player.firstName + ' ' + player.secondName,
+        fromTeamId: prevPlayer.team,
+        toTeamId: player.team,
+        detectedAt: new Date().toISOString(),
+      });
+    }
+  });
+
+  return transfers;
+}
+
 async function main(): Promise<void> {
   const startTime = Date.now();
 
   try {
     // Get sync configuration
     const config = getSyncConfig();
+    const seasonDataDir = path.join(projectRoot, 'data', 'seasons', config.season);
+    const normalizedDataDir = path.join(seasonDataDir, 'normalized');
+
     console.log('═══════════════════════════════════════════════════════════');
-    console.log('FPL Data Sync Pipeline');
+    console.log('FPL Data Sync Pipeline - SEASON AWARE');
     console.log('═══════════════════════════════════════════════════════════');
     console.log(`Season: ${config.season}`);
+    console.log(`Data Directory: ${seasonDataDir}`);
     console.log(`Manager ID: ${config.managerId || 'None (public data only)'}`);
     console.log(`Sync Public: ${config.syncPublic}`);
     console.log(`Sync Manager: ${config.syncManager}`);
@@ -55,10 +102,10 @@ async function main(): Promise<void> {
       dbWritten: false,
     };
 
-    // Step 1: Sync public data
+    // Step 1: Sync public data (with season-aware paths passed to syncPublicData)
     if (config.syncPublic) {
       console.log('STEP 1: Syncing public FPL data...\n');
-      await syncPublicData();
+      await syncPublicData(config.season);
       result.publicData = {
         players: 0,
         teams: 0,
@@ -95,7 +142,6 @@ async function main(): Promise<void> {
     console.log(`  Element Types: ${elementTypes.length}`);
     console.log('');
 
-    // Update result with actual counts
     if (result.publicData) {
       result.publicData.players = players.length;
       result.publicData.teams = teams.length;

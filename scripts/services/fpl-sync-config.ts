@@ -1,6 +1,7 @@
 /**
  * FPL Sync Configuration
  * Reads configuration from environment variables and CLI arguments
+ * Supports multi-season sync with explicit season specification
  * CLI arguments override environment variables
  */
 
@@ -17,10 +18,12 @@ export interface SyncConfig {
 /**
  * Get sync configuration from environment and CLI args
  * Usage:
- *   FPL_MANAGER_ID=12345 npm run sync:fpl         - Use env var
- *   npm run sync:fpl -- --manager-id=12345        - Use CLI arg (overrides env)
+ *   npm run sync:fpl                               - Use default (2026-2027)
+ *   npm run sync:fpl -- --season=2026-2027        - Explicit season
+ *   npm run sync:fpl -- --manager-id=12345        - Sync manager data
  *   npm run sync:fpl -- --no-validate             - Skip validation
  *   npm run sync:fpl -- --no-write-db             - Skip db.json write
+ *   FPL_SEASON=2026-2027 npm run sync:fpl         - Use env var
  */
 export function getSyncConfig(): SyncConfig {
   const managerIdEnv = process.env.FPL_MANAGER_ID;
@@ -28,13 +31,16 @@ export function getSyncConfig(): SyncConfig {
 
   // Parse CLI arguments
   const args = process.argv.slice(2);
+  let season = process.env.FPL_SEASON || '2026-2027'; // Default to 2026-2027
   let syncPublic = true;
   let syncManager = false;
   let validateData = true;
   let writeDb = true;
 
   for (const arg of args) {
-    if (arg.startsWith('--manager-id=')) {
+    if (arg.startsWith('--season=')) {
+      season = arg.split('=')[1];
+    } else if (arg.startsWith('--manager-id=')) {
       managerId = parseInt(arg.split('=')[1], 10);
     } else if (arg === '--no-validate') {
       validateData = false;
@@ -52,7 +58,7 @@ export function getSyncConfig(): SyncConfig {
   syncManager = managerId !== null;
 
   return {
-    season: process.env.FPL_SEASON || '2025-2026',
+    season,
     managerId,
     syncPublic,
     syncManager,

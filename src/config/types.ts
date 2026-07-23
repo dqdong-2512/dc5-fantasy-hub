@@ -6,6 +6,15 @@
 export type Season = '2025-2026' | '2026-2027';
 export type CompetitionId = 'fpl' | 'ucl';
 
+export interface SeasonMetadata {
+  id: Season;
+  label: string;
+  startYear: number;
+  endYear: number;
+  isActive: boolean;
+  isHistorical: boolean;
+}
+
 export interface CompetitionProfile {
   id: CompetitionId;
   name: string;
@@ -22,6 +31,7 @@ export interface CompetitionProfile {
 
 export interface AppConfig {
   activeSeason: Season;
+  seasons: SeasonMetadata[];
   activeCompetition: CompetitionId;
   apiBaseUrl: string;
   assetsBaseUrl: string;
