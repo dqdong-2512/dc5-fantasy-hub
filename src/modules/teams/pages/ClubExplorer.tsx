@@ -165,7 +165,7 @@ export function ClubExplorer(): React.ReactElement {
       </PageHeader>
 
       {selectedClubIds.length > 0 && (
-        <PageSection title="Comparison" sx={{ marginBottom: ThemeTokens.spacing.xxl }}>
+        <PageSection title="Comparison" sx={{ marginBottom: ThemeTokens.spacing.md }}>
           <ClubComparison
             selectedClubIds={selectedClubIds}
             onRemoveClub={handleRemoveFromComparison}
@@ -176,7 +176,7 @@ export function ClubExplorer(): React.ReactElement {
       <PageSection
         title="Premier League Clubs"
         subtitle={`${clubCount} clubs • Click to view intelligence • Select up to 3 for comparison`}
-        sx={{ marginBottom: ThemeTokens.spacing.xxl }}
+        sx={{ marginBottom: ThemeTokens.spacing.md }}
       >
         <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
           <Stack direction="row" spacing={ThemeTokens.spacing.sm} sx={{ flexWrap: 'wrap' }}>

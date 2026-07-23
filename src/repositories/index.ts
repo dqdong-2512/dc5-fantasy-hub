@@ -11,6 +11,13 @@ export { PlayerRepository } from './players';
 export { FantasyGameRepository } from './fantasy';
 export { FixtureRepository } from './fixtures';
 
+// Singleton factory functions for application-wide cache reuse
+export {
+  getBootstrapRepository,
+  getPlayerRepository,
+  getTeamRepository,
+} from './singleton-repositories';
+
 // Internal normalized types - not recommended for external use
 // These are exported only for internal repository implementation
 export type {

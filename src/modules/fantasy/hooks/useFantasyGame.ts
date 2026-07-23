@@ -4,10 +4,10 @@
  * Handles manager profile, history, and gameweek context
  */
 
-import { useState, useCallback, useEffect, useRef } from 'react';
+import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
 import { EntryStorage } from '@shared/services/entry-storage';
 import { FantasyGameRepository } from '@repositories/fantasy';
-import { BootstrapRepository } from '@repositories/bootstrap';
+import { getBootstrapRepository } from '@repositories/index';
 import type { FantasyEntry, FantasyGameweekHistory } from '@domain/models';
 
 export interface UseFantasyGameState {
@@ -49,16 +49,28 @@ export function useFantasyGame(): UseFantasyGameState {
   const [error, setError] = useState<string | null>(null);
 
   const repositoryRef = useRef(new FantasyGameRepository());
-  const bootstrapRepositoryRef = useRef(new BootstrapRepository());
+  const bootstrapRepositoryRef = useRef(getBootstrapRepository());
 
-  // Get bootstrap data for gameweek context
-  const bootstrap = bootstrapRepositoryRef.current.getBootstrap();
+  // Memoize bootstrap data access to prevent creation on every render
+  const bootstrap = useMemo(
+    // eslint-disable-next-line react-hooks/refs
+    () => bootstrapRepositoryRef.current.getBootstrap(),
+    [] // Bootstrap data is static per session
+  );
 
   // Determine display gameweek index and active status
-  const currentGameweekIndex = displayGameweek ? displayGameweek - 1 : 0;
-  const isCurrentGameweekActive = displayGameweek
-    ? !bootstrap.gameweeks.some((gw) => gw.id === displayGameweek && gw.finished)
-    : false;
+  const currentGameweekIndex = useMemo(
+    () => (displayGameweek ? displayGameweek - 1 : 0),
+    [displayGameweek]
+  );
+
+  const isCurrentGameweekActive = useMemo(
+    () =>
+      displayGameweek
+        ? !bootstrap.gameweeks.some((gw) => gw.id === displayGameweek && gw.finished)
+        : false,
+    [displayGameweek, bootstrap]
+  );
 
   // Load entry and history on startup or when ID changes
   useEffect(() => {

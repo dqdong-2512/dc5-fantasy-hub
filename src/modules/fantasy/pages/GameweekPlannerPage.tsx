@@ -33,8 +33,7 @@ import {
   GameweekPlanRepository,
   SquadSourceResolver,
 } from '@modules/fantasy/services';
-import { PlayerRepository } from '@repositories/players';
-import { BootstrapRepository } from '@repositories/bootstrap';
+import { getPlayerRepository, getBootstrapRepository } from '@repositories/index';
 import type { GameweekPlan } from '../domain/GameweekPlan';
 import {
   SquadSourceSelector,
@@ -54,8 +53,8 @@ export const GameweekPlannerPage: React.FC = () => {
   const insightService = useMemo(() => new GameweekPlanInsightService(), []);
   const repository = useMemo(() => new GameweekPlanRepository(), []);
   const sourceResolver = useMemo(() => new SquadSourceResolver(), []);
-  const bootstrapRepository = useMemo(() => new BootstrapRepository(), []);
-  const playerRepository = useMemo(() => new PlayerRepository(), []);
+  const bootstrapRepository = useMemo(() => getBootstrapRepository(), []);
+  const playerRepository = useMemo(() => getPlayerRepository(), []);
 
   // State
   const [availableGameweeks, setAvailableGameweeks] = useState<Array<{ id: number; name: string }>>(

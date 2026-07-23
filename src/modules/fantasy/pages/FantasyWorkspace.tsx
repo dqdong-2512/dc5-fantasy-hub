@@ -8,7 +8,7 @@ import React, { useState, useEffect, useMemo } from 'react';
 import { Box, Tabs, Tab, Stack, Alert, FormControl, Select, MenuItem } from '@mui/material';
 import type { LiveSquadPerformance } from '@domain/models';
 import { FantasyGameRepository } from '@repositories/fantasy';
-import { BootstrapRepository } from '@repositories/bootstrap';
+import { getBootstrapRepository } from '@repositories/index';
 import { FantasyGameHeader, FantasyOverview, MyTeam, Leagues } from '../components';
 import { PageContent, PageHeader } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
@@ -35,7 +35,7 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
 
   // Stable repository instance (memoized to prevent recreation on every render)
   const repository = useMemo(() => new FantasyGameRepository(), []);
-  const bootstrapRepository = useMemo(() => new BootstrapRepository(), []);
+  const bootstrapRepository = useMemo(() => getBootstrapRepository(), []);
   const bootstrap = useMemo(() => bootstrapRepository.getBootstrap(), [bootstrapRepository]);
 
   // Determine initial gameweek (current or most recent finished)

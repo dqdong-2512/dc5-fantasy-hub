@@ -26,9 +26,8 @@ export function LoadingState({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: ThemeTokens.spacing.xxl,
-        minHeight: 300,
-        gap: ThemeTokens.spacing.lg,
+        padding: ThemeTokens.spacing.md,
+        gap: ThemeTokens.spacing.sm,
         ...sx,
       }}
       {...props}

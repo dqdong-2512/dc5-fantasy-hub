@@ -32,24 +32,23 @@ export function EmptyState({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
-        padding: ThemeTokens.spacing.xxxl,
-        minHeight: 300,
+        padding: ThemeTokens.spacing.md,
         textAlign: 'center',
         ...sx,
       }}
       {...props}
     >
       {icon && (
-        <Box sx={{ marginBottom: ThemeTokens.spacing.lg, fontSize: 64, opacity: 0.5 }}>{icon}</Box>
+        <Box sx={{ marginBottom: ThemeTokens.spacing.sm, fontSize: 40, opacity: 0.5 }}>{icon}</Box>
       )}
-      <Typography variant="h6" sx={{ marginBottom: ThemeTokens.spacing.md, fontWeight: 600 }}>
+      <Typography variant="body1" sx={{ marginBottom: ThemeTokens.spacing.sm, fontWeight: 600 }}>
         {title}
       </Typography>
       {description && (
         <Typography
           variant={ThemeTokens.typography.bodyVariant}
           color="text.secondary"
-          sx={{ marginBottom: actionLabel ? ThemeTokens.spacing.lg : 0, maxWidth: 400 }}
+          sx={{ marginBottom: actionLabel ? ThemeTokens.spacing.md : 0, maxWidth: 400 }}
         >
           {description}
         </Typography>

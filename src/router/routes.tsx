@@ -1,14 +1,26 @@
-import React from 'react';
+import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { Box, CircularProgress } from '@mui/material';
 import { CompetitionSelection } from '../app/CompetitionSelection';
 import { Dashboard } from '../modules/dashboard/Dashboard';
 import { Fixtures } from '../modules/fixtures';
 import { PlayerExplorer } from '../modules/players';
 import { ClubExplorer } from '../modules/teams';
-import { Analytics } from '../modules/analytics';
 import { Fantasy } from '../modules/fantasy';
 import { AppLayout } from '../layouts/AppLayout';
 import { NotFound, ChampionsLeagueComingSoon } from '../shared/pages';
+
+// Lazy load Analytics module to reduce initial bundle size
+const Analytics = React.lazy(() =>
+  import('../modules/analytics/Analytics').then((module) => ({ default: module.Analytics }))
+);
+
+// Loading fallback component
+const AnalyticsLoadingFallback = () => (
+  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
+    <CircularProgress size={40} />
+  </Box>
+);
 
 const router = createBrowserRouter([
   {
@@ -44,7 +56,11 @@ const router = createBrowserRouter([
           },
           {
             path: 'analytics',
-            element: <Analytics />,
+            element: (
+              <Suspense fallback={<AnalyticsLoadingFallback />}>
+                <Analytics />
+              </Suspense>
+            ),
           },
           {
             path: 'fantasy-game',

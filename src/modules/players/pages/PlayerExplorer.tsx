@@ -169,7 +169,7 @@ export function PlayerExplorer(): React.ReactElement {
         </Stack>
       </PageHeader>
 
-      <PageSection title="Filter & Search" sx={{ marginBottom: ThemeTokens.spacing.xxl }}>
+      <PageSection title="Filter & Search" sx={{ marginBottom: ThemeTokens.spacing.md }}>
         <FilterToolbar
           filters={filters}
           onFiltersChange={setFilters}
@@ -177,14 +177,14 @@ export function PlayerExplorer(): React.ReactElement {
         />
       </PageSection>
 
-      <PageSection title="Intelligence" sx={{ marginBottom: ThemeTokens.spacing.xxl }}>
+      <PageSection title="Intelligence" sx={{ marginBottom: ThemeTokens.spacing.md }}>
         <PlayersWithFavorableFixtures players={allPlayers} onPlayerSelect={handlePlayerSelect} />
       </PageSection>
 
       <PageSection
         title="Players"
         subtitle={`Showing ${filteredPlayers.length} of ${playerCount} players`}
-        sx={{ marginBottom: ThemeTokens.spacing.xxl }}
+        sx={{ marginBottom: ThemeTokens.spacing.md }}
       >
         {filteredPlayers.length === 0 ? (
           <EmptyState

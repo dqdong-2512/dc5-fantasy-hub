@@ -511,14 +511,17 @@ export function MyTeam({
   const [selectedPlayer, setSelectedPlayer] = useState<LiveSquadPlayer | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
 
-  if (isLoading) {
+  // Show loading state only on initial load when no data exists
+  if (isLoading && !livePerformance) {
     return <LoadingState label="Loading squad..." />;
   }
 
-  if (error) {
+  // Show error state but preserve old data if it exists
+  if (error && !livePerformance) {
     return <ErrorState title="Failed to load squad" message={error} />;
   }
 
+  // Show empty state if truly no data
   if (!livePerformance) {
     return (
       <Typography color="textSecondary" sx={{ textAlign: 'center' }}>
@@ -532,6 +535,9 @@ export function MyTeam({
 
   return (
     <Stack spacing={ThemeTokens.spacing.sm}>
+      {/* Error alert if refresh failed but old data exists */}
+      {error && livePerformance && <Alert severity="warning">{error}</Alert>}
+
       {/* Summary */}
       <GameweekSummaryCard performance={livePerformance} />
 

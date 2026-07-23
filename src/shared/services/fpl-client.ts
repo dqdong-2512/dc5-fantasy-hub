@@ -309,6 +309,7 @@ const ENDPOINTS = {
 export class FplClient {
   private httpClient: HttpClient;
   private fplApiBaseUrl: string;
+  private inFlightRequests: Map<string, Promise<unknown>> = new Map();
 
   constructor() {
     // Use environment variable if available, otherwise use direct FPL API
@@ -324,12 +325,36 @@ export class FplClient {
     });
   }
 
+  /**
+   * Deduplicate concurrent requests with identical keys
+   * Returns existing in-flight Promise if request already started
+   * Automatically cleans up completed requests from cache
+   */
+  private withDeduplication<T>(key: string, fetcher: () => Promise<T>): Promise<T> {
+    const cached = this.inFlightRequests.get(key);
+    if (cached) {
+      return cached as Promise<T>;
+    }
+
+    const promise = fetcher().finally(() => {
+      // Clean up on completion (success or error)
+      this.inFlightRequests.delete(key);
+    });
+
+    this.inFlightRequests.set(key, promise);
+    return promise;
+  }
+
   async getBootstrap(): Promise<BootstrapStatic> {
-    return this.httpClient.get<BootstrapStatic>(ENDPOINTS.BOOTSTRAP_STATIC);
+    return this.withDeduplication('bootstrap', () =>
+      this.httpClient.get<BootstrapStatic>(ENDPOINTS.BOOTSTRAP_STATIC)
+    );
   }
 
   async getFixtures(): Promise<FPLFixture[]> {
-    return this.httpClient.get<FPLFixture[]>(ENDPOINTS.FIXTURES);
+    return this.withDeduplication('fixtures', () =>
+      this.httpClient.get<FPLFixture[]>(ENDPOINTS.FIXTURES)
+    );
   }
 
   async getElementSummary(elementId: number): Promise<unknown> {
@@ -342,27 +367,38 @@ export class FplClient {
    * Real-time player performance data
    */
   async getEventLive(eventId: number): Promise<EventLiveData> {
-    return this.httpClient.get<EventLiveData>(`/event/${eventId}/live/`);
+    return this.withDeduplication(`event-live-${eventId}`, () =>
+      this.httpClient.get<EventLiveData>(`/event/${eventId}/live/`)
+    );
   }
 
   // Personal Entry Endpoints
 
   async getEntry(entryId: number): Promise<EntryData> {
-    return this.httpClient.get<EntryData>(`/entry/${entryId}/`);
+    return this.withDeduplication(`entry-${entryId}`, () =>
+      this.httpClient.get<EntryData>(`/entry/${entryId}/`)
+    );
   }
 
   async getEntryHistory(entryId: number): Promise<EntryHistory> {
-    return this.httpClient.get<EntryHistory>(`/entry/${entryId}/history/`);
+    return this.withDeduplication(`entry-history-${entryId}`, () =>
+      this.httpClient.get<EntryHistory>(`/entry/${entryId}/history/`)
+    );
   }
 
   async getEntryPicks(entryId: number, eventId: number): Promise<EntryPicksData> {
-    return this.httpClient.get<EntryPicksData>(`/entry/${entryId}/event/${eventId}/picks/`);
+    return this.withDeduplication(`entry-picks-${entryId}-${eventId}`, () =>
+      this.httpClient.get<EntryPicksData>(`/entry/${entryId}/event/${eventId}/picks/`)
+    );
   }
 
   async getLeagueStandings(leagueId: number, page?: number): Promise<LeagueStandingsData> {
     const pageParam = page ? `?page_standings=${page}` : '';
-    return this.httpClient.get<LeagueStandingsData>(
-      `/leagues-classic/${leagueId}/standings/${pageParam}`
+    const cacheKey = `league-standings-${leagueId}-${page || 1}`;
+    return this.withDeduplication(cacheKey, () =>
+      this.httpClient.get<LeagueStandingsData>(
+        `/leagues-classic/${leagueId}/standings/${pageParam}`
+      )
     );
   }
 }

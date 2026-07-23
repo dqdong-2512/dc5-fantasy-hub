@@ -28,7 +28,7 @@ import SaveIcon from '@mui/icons-material/Save';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { SeasonPlanService, SeasonPlanRepository } from '../services';
-import { BootstrapRepository } from '@repositories/bootstrap';
+import { getBootstrapRepository } from '@repositories/index';
 import type { SeasonPlan } from '../domain/SeasonPlan';
 import type { BaseSquadSourceType } from '../domain/SeasonPlan';
 import {
@@ -52,7 +52,7 @@ export const SeasonPlannerPage: React.FC = () => {
   // Derive maximum gameweek from canonical repository (not hardcoded)
   const maxGameweek = useMemo(() => {
     try {
-      const bootstrapRepo = new BootstrapRepository();
+      const bootstrapRepo = getBootstrapRepository();
       const bootstrap = bootstrapRepo.getBootstrap();
       return bootstrap.gameweeks.length > 0
         ? bootstrap.gameweeks[bootstrap.gameweeks.length - 1].id

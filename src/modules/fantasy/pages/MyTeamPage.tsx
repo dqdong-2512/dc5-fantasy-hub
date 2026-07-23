@@ -33,7 +33,7 @@ import {
   GameweekHistory,
   PlayerPointBreakdown,
 } from '../components';
-import { BootstrapRepository } from '@repositories/bootstrap';
+import { getBootstrapRepository } from '@repositories/index';
 import type { PointBreakdownData } from '../components/PlayerPointBreakdown';
 
 export const MyTeamPage: React.FC = () => {
@@ -54,7 +54,7 @@ export const MyTeamPage: React.FC = () => {
   const managerData = useManagerData(gameState);
 
   // Get gameweek list for selector
-  const bootstrapRepo = useMemo(() => new BootstrapRepository(), []);
+  const bootstrapRepo = useMemo(() => getBootstrapRepository(), []);
   const bootstrap = useMemo(() => {
     try {
       return bootstrapRepo.getBootstrap();

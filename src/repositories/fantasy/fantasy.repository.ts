@@ -26,6 +26,7 @@ import type {
 export class FantasyGameRepository {
   private fplClient: FplClient;
   private liveService: FantasyGameLiveService;
+  private inFlightRequests: Map<string, Promise<unknown>> = new Map();
 
   constructor() {
     this.fplClient = new FplClient();
@@ -33,47 +34,75 @@ export class FantasyGameRepository {
   }
 
   /**
+   * Deduplicate concurrent requests with identical keys
+   * Returns existing in-flight Promise if request already started
+   * Automatically cleans up completed requests from cache
+   */
+  private withDeduplication<T>(key: string, fetcher: () => Promise<T>): Promise<T> {
+    const cached = this.inFlightRequests.get(key);
+    if (cached) {
+      return cached as Promise<T>;
+    }
+
+    const promise = fetcher().finally(() => {
+      // Clean up on completion (success or error)
+      this.inFlightRequests.delete(key);
+    });
+
+    this.inFlightRequests.set(key, promise);
+    return promise;
+  }
+
+  /**
    * Get entry profile and information
    */
   async getEntry(entryId: number): Promise<FantasyEntry> {
-    const data = await this.fplClient.getEntry(entryId);
-    return this.mapEntryToModel(data);
+    return this.withDeduplication(`entry-${entryId}`, async () => {
+      const data = await this.fplClient.getEntry(entryId);
+      return this.mapEntryToModel(data);
+    });
   }
 
   /**
    * Get entry gameweek history
    */
   async getEntryHistory(entryId: number): Promise<FantasyGameweekHistory[]> {
-    const data = await this.fplClient.getEntryHistory(entryId);
-    return data.current.map((h) => ({
-      event: h.event,
-      points: h.points,
-      totalPoints: h.total_points,
-      rank: h.rank,
-      prevRank: h.rank_sort,
-      rankSort: h.rank_sort,
-      transfers: h.transfers_made,
-      transfersCost: h.transfers_cost,
-      benchPoints: 0, // Not provided in history endpoint
-      eventTransfers: h.event_transfers,
-      eventTransfersCost: h.event_transfers_cost,
-    }));
+    return this.withDeduplication(`entry-history-${entryId}`, async () => {
+      const data = await this.fplClient.getEntryHistory(entryId);
+      return data.current.map((h) => ({
+        event: h.event,
+        points: h.points,
+        totalPoints: h.total_points,
+        rank: h.rank,
+        prevRank: h.rank_sort,
+        rankSort: h.rank_sort,
+        transfers: h.transfers_made,
+        transfersCost: h.transfers_cost,
+        benchPoints: 0, // Not provided in history endpoint
+        eventTransfers: h.event_transfers,
+        eventTransfersCost: h.event_transfers_cost,
+      }));
+    });
   }
 
   /**
    * Get gameweek picks for entry
    */
   async getEntryPicks(entryId: number, eventId: number): Promise<FantasyGameweekPicks> {
-    const data = await this.fplClient.getEntryPicks(entryId, eventId);
-    return this.mapPicksToModel(data, entryId, eventId);
+    return this.withDeduplication(`entry-picks-${entryId}-${eventId}`, async () => {
+      const data = await this.fplClient.getEntryPicks(entryId, eventId);
+      return this.mapPicksToModel(data, entryId, eventId);
+    });
   }
 
   /**
    * Get league standings with pagination support
    */
   async getLeagueStandings(leagueId: number, page?: number): Promise<FantasyLeagueStandings> {
-    const data = await this.fplClient.getLeagueStandings(leagueId, page);
-    return this.mapLeagueStandingsToModel(data);
+    return this.withDeduplication(`league-standings-${leagueId}-${page || 1}`, async () => {
+      const data = await this.fplClient.getLeagueStandings(leagueId, page);
+      return this.mapLeagueStandingsToModel(data);
+    });
   }
 
   /**

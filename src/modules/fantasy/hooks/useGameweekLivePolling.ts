@@ -88,6 +88,7 @@ export const useGameweekLivePolling = ({
       autoRefreshRef.current = false;
       stopPolling();
     },
+    // eslint-disable-next-line react-hooks/refs
     isAutoRefreshEnabled: autoRefreshRef.current,
   };
 };

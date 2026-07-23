@@ -328,7 +328,8 @@ export function Leagues({
     setComparisonOpponent(null);
   };
 
-  if (isLoading) {
+  // Show loading only on initial load when no entry data exists
+  if (isLoading && !entry) {
     return <LoadingState label="Loading leagues..." />;
   }
 

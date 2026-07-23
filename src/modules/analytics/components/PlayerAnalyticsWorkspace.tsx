@@ -4,12 +4,24 @@
  */
 
 import React, { useMemo, useState, useCallback } from 'react';
-import { Box, Tabs, Tab, Typography, CircularProgress, Alert } from '@mui/material';
+import {
+  Box,
+  Tabs,
+  Tab,
+  Typography,
+  Alert,
+  Table,
+  TableHead,
+  TableBody,
+  TableRow,
+  TableCell,
+  Skeleton,
+  Card,
+} from '@mui/material';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { PageHeader, PageContent } from '@shared/components';
 import type { Player } from '@domain/models';
-import { PlayerRepository } from '@repositories/players';
-import { BootstrapRepository } from '@repositories/bootstrap';
+import { getPlayerRepository } from '@repositories/index';
 import { PlayerAnalyticsService } from '../services/player-analytics.service';
 import { ShortlistService } from '../services/shortlist.service';
 import { PlayerFilterBar } from './PlayerFilterBar';
@@ -44,8 +56,8 @@ const VIEWS: ViewConfig[] = [
 ];
 
 export const PlayerAnalyticsWorkspace: React.FC = () => {
-  const playerRepository = useMemo(() => new PlayerRepository(), []);
-  const bootstrapRepository = useMemo(() => new BootstrapRepository(), []);
+  // Use singleton repository for shared cache across components
+  const playerRepository = useMemo(() => getPlayerRepository(), []);
   const shortlistService = useMemo(() => new ShortlistService(), []);
 
   const [activeView, setActiveView] = useState<ViewType>('overview');
@@ -73,7 +85,7 @@ export const PlayerAnalyticsWorkspace: React.FC = () => {
         error: err instanceof Error ? err.message : 'Unknown error',
       };
     }
-  }, [playerRepository, bootstrapRepository]);
+  }, [playerRepository]);
 
   // Build analytics for current view
   const analyticsService = useMemo(
@@ -140,10 +152,11 @@ export const PlayerAnalyticsWorkspace: React.FC = () => {
         viewFiltered = analytics.sort((a, b) => b.fixtureScore - a.fixtureScore).slice(0, 20);
         break;
 
-      case 'shortlist':
+      case 'shortlist': {
         const shortlistedIds = shortlistService.getShortlistedPlayerIds();
         viewFiltered = analytics.filter((a) => shortlistedIds.includes(a.playerId));
         break;
+      }
 
       case 'transfer_targets':
         viewFiltered = analyticsService
@@ -210,23 +223,7 @@ export const PlayerAnalyticsWorkspace: React.FC = () => {
     setFilters(DEFAULT_FILTERS);
   }, []);
 
-  if (isLoading) {
-    return (
-      <PageContent>
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '60vh',
-          }}
-        >
-          <CircularProgress />
-        </Box>
-      </PageContent>
-    );
-  }
-
+  // Early return only for errors
   if (error) {
     return (
       <PageContent>
@@ -281,32 +278,85 @@ export const PlayerAnalyticsWorkspace: React.FC = () => {
         />
       </Box>
 
-      {/* Player Table */}
+      {/* Player Table or Skeleton */}
       <Box sx={{ marginBottom: ThemeTokens.spacing.xs }}>
-        <Typography
-          variant="body2"
-          color="text.secondary"
-          sx={{ marginBottom: ThemeTokens.spacing.sm }}
-        >
-          Showing {viewData.players.length} of {viewData.count} players
-        </Typography>
-
-        {viewData.players.length === 0 ? (
-          <Alert severity="info">No players match your filters. Try adjusting your criteria.</Alert>
+        {isLoading && allPlayers.length === 0 ? (
+          // Initial loading skeleton
+          <Card>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell width="35%">
+                    <Skeleton height={24} />
+                  </TableCell>
+                  <TableCell width="15%">
+                    <Skeleton height={24} />
+                  </TableCell>
+                  <TableCell width="15%">
+                    <Skeleton height={24} />
+                  </TableCell>
+                  <TableCell width="20%">
+                    <Skeleton height={24} />
+                  </TableCell>
+                  <TableCell width="15%">
+                    <Skeleton height={24} />
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {Array.from({ length: 8 }).map((_, idx) => (
+                  <TableRow key={idx}>
+                    <TableCell>
+                      <Skeleton height={24} />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton height={24} />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton height={24} />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton height={24} />
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton height={24} />
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </Card>
         ) : (
-          <PlayerAnalyticsTable
-            players={viewData.players}
-            onPlayerClick={handlePlayerSelect}
-            sortBy={filters.sortBy}
-            sortOrder={filters.sortOrder}
-            onSort={(field, order) =>
-              setFilters({
-                ...filters,
-                sortBy: field as PlayerFilterConfig['sortBy'],
-                sortOrder: order,
-              })
-            }
-          />
+          // Content: Show count and table/empty message
+          <>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ marginBottom: ThemeTokens.spacing.sm }}
+            >
+              Showing {viewData.players.length} of {viewData.count} players
+            </Typography>
+
+            {viewData.players.length === 0 ? (
+              <Alert severity="info">
+                No players match your filters. Try adjusting your criteria.
+              </Alert>
+            ) : (
+              <PlayerAnalyticsTable
+                players={viewData.players}
+                onPlayerClick={handlePlayerSelect}
+                sortBy={filters.sortBy}
+                sortOrder={filters.sortOrder}
+                onSort={(field, order) =>
+                  setFilters({
+                    ...filters,
+                    sortBy: field as PlayerFilterConfig['sortBy'],
+                    sortOrder: order,
+                  })
+                }
+              />
+            )}
+          </>
         )}
       </Box>
 
