@@ -92,7 +92,7 @@ export function useLeagueDetail(
     };
 
     loadStandings();
-  }, [leagueId, connectedEntryId, currentPage]);
+  }, [leagueId, connectedEntryId, currentPage, repository]);
 
   // Load opponent picks when opponent is selected
   useEffect(() => {
@@ -114,7 +114,7 @@ export function useLeagueDetail(
     };
 
     loadOpponentPicks();
-  }, [selectedOpponentEntry, gameweekId]);
+  }, [selectedOpponentEntry, gameweekId, repository]);
 
   const selectOpponent = useCallback(
     async (opponentId: number) => {

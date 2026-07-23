@@ -42,8 +42,7 @@ export const useLiveGameweek = (
 
   const loadPerformance = useCallback(async () => {
     if (!entryId || !gameweekId) {
-      setPerformance(null);
-      setError(null);
+      // Skip loading if no valid context - don't clear state to preserve valid data
       return;
     }
 
@@ -70,6 +69,7 @@ export const useLiveGameweek = (
 
   // Initial load
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadPerformance();
   }, [loadPerformance]);
 

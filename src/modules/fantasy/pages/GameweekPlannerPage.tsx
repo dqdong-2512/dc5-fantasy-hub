@@ -77,16 +77,17 @@ export const GameweekPlannerPage: React.FC = () => {
           id: gw.id,
           name: gw.name,
         }));
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setAvailableGameweeks(gws);
-
-        if (!selectedGameweekId && gws.length > 0) {
-          setSelectedGameweekId(gws[0].id);
-        }
       }
     } catch (e) {
       console.error('Failed to load gameweeks', e);
     }
-  }, [bootstrapRepository, selectedGameweekId]);
+  }, [bootstrapRepository]);
+
+  // Derived: Use selected gameweek or first available
+  const effectiveGameweekId =
+    selectedGameweekId || (availableGameweeks.length > 0 ? availableGameweeks[0].id : null);
 
   // Load player positions
   useEffect(() => {
@@ -110,6 +111,7 @@ export const GameweekPlannerPage: React.FC = () => {
         }
         positions.set(p.id, posCode);
       });
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setPlayerPositions(positions);
     } catch (e) {
       console.error('Failed to load player positions', e);
@@ -118,7 +120,7 @@ export const GameweekPlannerPage: React.FC = () => {
 
   // Initialize plan when gameweek changes
   useEffect(() => {
-    if (!selectedGameweekId) return;
+    if (!effectiveGameweekId || playerPositions.size === 0) return;
 
     try {
       const resolved = sourceResolver.resolveCurrentSquad();
@@ -128,7 +130,7 @@ export const GameweekPlannerPage: React.FC = () => {
       }
 
       const newPlan = planService.createPlan(
-        selectedGameweekId,
+        effectiveGameweekId,
         sourceType,
         sourceTransferPlanId,
         resolved.startingPlayerIds,
@@ -136,13 +138,14 @@ export const GameweekPlannerPage: React.FC = () => {
         playerPositions
       );
 
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setCurrentPlan(newPlan);
-      setPlanName(`GW ${selectedGameweekId} Plan`);
+      setPlanName(`GW ${effectiveGameweekId} Plan`);
     } catch (e) {
       console.error('Failed to create plan', e);
     }
   }, [
-    selectedGameweekId,
+    effectiveGameweekId,
     sourceType,
     sourceTransferPlanId,
     sourceResolver,

@@ -129,6 +129,26 @@ export const LeagueStandingsPage: React.FC = () => {
     [managerIdNum, gameState.isConnected]
   );
 
+  // Prepare standings entries for table (must be before early returns)
+  const standingsEntries = useMemo(() => {
+    if (!standings) return [];
+
+    if (gameState.isConnected && realStandings) {
+      // Map real API standings to LeagueStandingEntry format
+      return (realStandings.standings || []).map((s: any) => ({
+        managerId: s.entryId,
+        currentRank: s.rank,
+        previousRank: s.prevRank,
+        gameweekPoints: s.eventPoints || 0,
+        totalPoints: s.points || s.totalPoints,
+        managerName: s.playerName,
+        teamName: s.entryName,
+      }));
+    }
+
+    return standings.entries || [];
+  }, [standings, gameState.isConnected, realStandings]);
+
   // Get current squad
   const currentSquad = fixtures.squad || [];
 
@@ -198,26 +218,6 @@ export const LeagueStandingsPage: React.FC = () => {
       </Box>
     );
   }
-
-  // Prepare standings entries for table
-  const standingsEntries = useMemo(() => {
-    if (!standings) return [];
-
-    if (gameState.isConnected && realStandings) {
-      // Map real API standings to LeagueStandingEntry format
-      return (realStandings.standings || []).map((s: any) => ({
-        managerId: s.entryId,
-        currentRank: s.rank,
-        previousRank: s.prevRank,
-        gameweekPoints: s.eventPoints || 0,
-        totalPoints: s.points || s.totalPoints,
-        managerName: s.playerName,
-        teamName: s.entryName,
-      }));
-    }
-
-    return standings.entries || [];
-  }, [standings, gameState.isConnected, realStandings]);
 
   // STANDINGS VIEW
   if (!managerIdNum) {

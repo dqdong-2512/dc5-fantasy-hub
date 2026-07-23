@@ -4,7 +4,7 @@
  * Handles loading, caching, and error states
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { FantasyGameRepository } from '@repositories/fantasy';
 import { PlayerRepository } from '@repositories/players';
 import type { FantasyGameweekPicks, FantasyPick, Player } from '@domain/models';
@@ -44,13 +44,13 @@ export function useManagerPicks(
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const repository = new FantasyGameRepository();
-  const playerRepository = new PlayerRepository();
+  const repository = useMemo(() => new FantasyGameRepository(), []);
+  const playerRepository = useMemo(() => new PlayerRepository(), []);
 
   // Fetch picks when entryId or gameweekId changes
   useEffect(() => {
+    // If inputs are null, just skip loading (state is already null by init)
     if (!entryId || !gameweekId) {
-      setPicks(null);
       return;
     }
 

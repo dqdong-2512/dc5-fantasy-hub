@@ -244,12 +244,12 @@ export const LiveImpactFeed: React.FC<LiveImpactFeedProps> = ({
         <Box sx={{ padding: ThemeTokens.spacing.md, backgroundColor: '#f9f9f9' }}>
           <Alert severity={totalImpact > 0 ? 'success' : 'warning'} sx={{ marginBottom: 1 }}>
             {totalImpact > 0
-              ? `You're ahead by ${totalImpact} points from differential ownership and captaincy`
-              : `You're behind by ${Math.abs(totalImpact)} points from differential ownership and captaincy`}
+              ? `You&apos;re ahead by ${totalImpact} points from differential ownership and captaincy`
+              : `You&apos;re behind by ${Math.abs(totalImpact)} points from differential ownership and captaincy`}
           </Alert>
           <Typography variant="caption" color="textSecondary">
-            <strong>How this works:</strong> Impact = (Your multiplier - Opponent's multiplier) ×
-            Player's points
+            <strong>How this works:</strong> Impact = (Your multiplier - Opponent&apos;s multiplier)
+            × Player&apos;s points
           </Typography>
         </Box>
       )}

@@ -4,7 +4,7 @@
  * Implements the complete workflow: select player → find replacements → compare → build plan → validate → preview
  */
 
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Box, Typography, Button, Stack, Alert, Tab, Tabs } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -90,19 +90,16 @@ export const TransferPlannerPage: React.FC = () => {
   });
   const [selectedInPlayerId, setSelectedInPlayerId] = useState<number | null>(null);
   const [currentBank] = useState(fantasyGameFixtures.manager.bank);
-  const [availableBudget, setAvailableBudget] = useState(currentBank);
   const [planName, setPlanName] = useState('');
   const [savedPlans, setSavedPlans] = useState<TransferPlan[]>(planRepository.loadAllPlans());
   const [isProcessing, setIsProcessing] = useState(false);
 
   // Calculate available budget when outgoing player changes
-  useEffect(() => {
+  const availableBudget = useMemo(() => {
     if (selectedOutPlayerId) {
-      const budget = budgetService.calculateAvailableBudget(currentBank, selectedOutPlayerId);
-      setAvailableBudget(budget);
-    } else {
-      setAvailableBudget(currentBank);
+      return budgetService.calculateAvailableBudget(currentBank, selectedOutPlayerId);
     }
+    return currentBank;
   }, [selectedOutPlayerId, currentBank, budgetService]);
 
   // Get planned squad IDs

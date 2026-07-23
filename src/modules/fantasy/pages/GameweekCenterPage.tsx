@@ -43,6 +43,17 @@ export const GameweekCenterPage: React.FC = () => {
     return service.getGameweekCenterData(gameweekIdNum);
   }, [gameweekIdNum, service]);
 
+  // Helper to get status display (must be before early returns)
+  const statusDisplay = useMemo(() => {
+    if (!gameweekData) return null;
+    return GameweekCenterService.formatStatus(gameweekData.status);
+  }, [gameweekData]);
+
+  const statusColor = useMemo(() => {
+    if (!gameweekData) return null;
+    return GameweekCenterService.getStatusColor(gameweekData.status);
+  }, [gameweekData]);
+
   // Determine if using real manager data
   const isUsingRealData =
     gameState.isConnected && managerPicks.enrichedPicks && !managerPicks.isLoading;
@@ -101,15 +112,6 @@ export const GameweekCenterPage: React.FC = () => {
   const handleBack = (): void => {
     navigate('/premier-league/fantasy-game', { replace: true });
   };
-
-  // Helper to get status display
-  const statusDisplay = useMemo(() => {
-    return GameweekCenterService.formatStatus(gameweekData.status);
-  }, [gameweekData.status]);
-
-  const statusColor = useMemo(() => {
-    return GameweekCenterService.getStatusColor(gameweekData.status);
-  }, [gameweekData.status]);
 
   return (
     <Box>

@@ -33,7 +33,30 @@ export const FantasyGameOverview: React.FC = () => {
   const navigate = useNavigate();
   const fixtures = useMemo(() => fantasyGameFixtures, []);
 
-  // Show not-connected state if user hasn't connected
+  // Initialize dashboard service (must be unconditional)
+  const dashboardService = useMemo(() => new FantasyDashboardService(), []);
+  const dashboardData = useMemo(
+    () => dashboardService.buildDashboardViewModel(),
+    [dashboardService]
+  );
+
+  // Prepare manager and gameweek data
+  // Use real data if connected, otherwise use fixtures
+  const managerData = useMemo(() => {
+    if (gameState.isConnected && gameState.entry) {
+      return FantasyGameDataAdapter.entryToManagerFixture(gameState.entry);
+    }
+    return fixtures.manager;
+  }, [gameState.isConnected, gameState.entry, fixtures.manager]);
+
+  const gameweekData = useMemo(() => {
+    if (gameState.isConnected && gameState.history && gameState.history.length > 0) {
+      return FantasyGameDataAdapter.getLatestGameweekFromHistory(gameState.history);
+    }
+    return fixtures.currentGameweek;
+  }, [gameState.isConnected, gameState.history, fixtures.currentGameweek]);
+
+  // Show not-connected state if user hasn't connected (conditional rendering)
   if (!gameState.isConnected) {
     return (
       <PageContainer>
@@ -69,29 +92,6 @@ export const FantasyGameOverview: React.FC = () => {
       </PageContainer>
     );
   }
-
-  // Initialize dashboard service
-  const dashboardService = useMemo(() => new FantasyDashboardService(), []);
-  const dashboardData = useMemo(
-    () => dashboardService.buildDashboardViewModel(),
-    [dashboardService]
-  );
-
-  // Prepare manager and gameweek data
-  // Use real data if connected, otherwise use fixtures
-  const managerData = useMemo(() => {
-    if (gameState.isConnected && gameState.entry) {
-      return FantasyGameDataAdapter.entryToManagerFixture(gameState.entry);
-    }
-    return fixtures.manager;
-  }, [gameState.isConnected, gameState.entry, fixtures.manager]);
-
-  const gameweekData = useMemo(() => {
-    if (gameState.isConnected && gameState.history && gameState.history.length > 0) {
-      return FantasyGameDataAdapter.getLatestGameweekFromHistory(gameState.history);
-    }
-    return fixtures.currentGameweek;
-  }, [gameState.isConnected, gameState.history, fixtures.currentGameweek]);
 
   // Navigation handlers
   const handleViewTeam = (): void => {

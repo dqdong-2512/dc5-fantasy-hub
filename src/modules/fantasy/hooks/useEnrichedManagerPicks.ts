@@ -4,7 +4,7 @@
  * Stores picks metadata separately for access
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { FantasyGameRepository } from '@repositories/fantasy';
 import { PlayerRepository } from '@repositories/players';
 import { PickEnrichmentService } from '../services/pick-enrichment.service';
@@ -78,14 +78,14 @@ export function useEnrichedManagerPicks(
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const fantasyRepo = new FantasyGameRepository();
-  const playerRepo = new PlayerRepository();
-  const enrichmentService = new PickEnrichmentService();
+  const fantasyRepo = useMemo(() => new FantasyGameRepository(), []);
+  const playerRepo = useMemo(() => new PlayerRepository(), []);
+  const enrichmentService = useMemo(() => new PickEnrichmentService(), []);
 
   // Fetch and enrich picks
   useEffect(() => {
     if (!entryId || !gameweekId) {
-      setEnrichedResult(null);
+      // Skip loading if no context - don't clear state to preserve valid data
       return;
     }
 
@@ -161,7 +161,7 @@ export function useEnrichedManagerPicks(
     };
 
     loadEnrichedPicks();
-  }, [entryId, gameweekId]);
+  }, [entryId, gameweekId, fantasyRepo, playerRepo, enrichmentService]);
 
   const refresh = useCallback(async () => {
     if (!entryId || !gameweekId) return;
@@ -227,7 +227,7 @@ export function useEnrichedManagerPicks(
     } finally {
       setIsLoading(false);
     }
-  }, [entryId, gameweekId]);
+  }, [entryId, gameweekId, fantasyRepo, playerRepo, enrichmentService]);
 
   return {
     enrichedPicks: enrichedResult,

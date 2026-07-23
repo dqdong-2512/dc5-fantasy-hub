@@ -47,16 +47,12 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
     return gw?.id ?? null;
   }, [bootstrap]);
 
-  // Initialize selected gameweek
-  useEffect(() => {
-    if (selectedGameweek === null && initialGameweek !== null) {
-      setSelectedGameweek(initialGameweek);
-    }
-  }, [initialGameweek, selectedGameweek]);
+  // Use derived gameweek: explicit selection or initial gameweek
+  const effectiveGameweek = selectedGameweek ?? initialGameweek;
 
   // Load live squad performance for selected gameweek
   useEffect(() => {
-    if (!gameState.connectedEntryId || selectedGameweek === null) return;
+    if (!gameState.connectedEntryId || effectiveGameweek === null) return;
 
     const loadLiveSquad = async () => {
       try {
@@ -65,7 +61,7 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
 
         const performance = await repository.getLiveSquadPerformance(
           gameState.connectedEntryId!,
-          selectedGameweek,
+          effectiveGameweek,
           new Map() // Could enrich with player map if available
         );
 
@@ -79,7 +75,7 @@ export function FantasyWorkspace({ gameState }: FantasyWorkspaceProps): React.Re
     };
 
     loadLiveSquad();
-  }, [gameState.connectedEntryId, selectedGameweek, repository]);
+  }, [gameState.connectedEntryId, effectiveGameweek, repository]);
 
   const handleChangeTeam = () => {
     gameState.disconnectEntry();

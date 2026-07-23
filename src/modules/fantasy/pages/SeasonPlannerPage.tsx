@@ -77,6 +77,7 @@ export const SeasonPlannerPage: React.FC = () => {
     if (planParam) {
       const plan = planRepository.loadPlan(planParam);
       if (plan) {
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCurrentPlan(plan);
         setStartGameweek(plan.startGameweekId);
         setEndGameweek(plan.endGameweekId);

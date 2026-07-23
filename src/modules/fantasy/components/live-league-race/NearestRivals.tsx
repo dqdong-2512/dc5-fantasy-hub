@@ -70,14 +70,15 @@ const RivalRow: React.FC<RivalRowProps> = ({
 };
 
 export const NearestRivals: React.FC<NearestRivalsProps> = ({ rivals }) => {
-  if (!rivals) {
-    return null;
-  }
-
   const rivalGaps = useMemo(() => {
+    if (!rivals) return new Map<number, number>();
     const service = new LeagueRaceService();
     return service.calculateRivalGaps(rivals);
   }, [rivals]);
+
+  if (!rivals) {
+    return null;
+  }
 
   return (
     <Paper

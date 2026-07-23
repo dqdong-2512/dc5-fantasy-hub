@@ -211,7 +211,7 @@ export function Leagues({
     };
 
     loadMetadata();
-  }, [entry?.id, entry?.joinedLeaguesIds, repository, selectedLeagueId]);
+  }, [entry, repository, selectedLeagueId]);
 
   // Load official standings when league is selected
   useEffect(() => {

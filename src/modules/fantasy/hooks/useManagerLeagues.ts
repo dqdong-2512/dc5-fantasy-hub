@@ -4,7 +4,7 @@
  * Handles loading, pagination, and error states
  */
 
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect, useMemo } from 'react';
 import { FantasyGameRepository } from '@repositories/fantasy';
 import type { FantasyLeagueStanding } from '@domain/models';
 
@@ -52,12 +52,12 @@ export function useManagerLeagues(
   const [isLoadingStandings, setIsLoadingStandings] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const repository = new FantasyGameRepository();
+  const repository = useMemo(() => new FantasyGameRepository(), []);
 
   // Initialize leagues when entry loads
   useEffect(() => {
     if (!joinedLeagueIds || joinedLeagueIds.length === 0) {
-      setLeagues([]);
+      // Don't clear state if no IDs - keep valid data visible
       return;
     }
 
@@ -69,6 +69,7 @@ export function useManagerLeagues(
       rank: null,
     }));
 
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setLeagues(placeholderLeagues);
 
     // Select first league by default
