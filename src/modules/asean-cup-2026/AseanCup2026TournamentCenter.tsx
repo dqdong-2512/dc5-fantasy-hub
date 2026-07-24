@@ -144,17 +144,200 @@ function renderTeamWithFlag(
   );
 }
 
-function getKnockoutChipProps(status: KnockoutTeam['status']): {
+function formatMatchDate(value: string): string {
+  return new Intl.DateTimeFormat('en-GB', {
+    day: '2-digit',
+    month: 'short',
+    year: 'numeric',
+  }).format(new Date(value));
+}
+
+function formatKickoffTime(value: string): string {
+  return new Intl.DateTimeFormat('en-GB', {
+    hour: '2-digit',
+    minute: '2-digit',
+    hour12: false,
+  }).format(new Date(value));
+}
+
+function resolveKnockoutStatus(match: KnockoutMatch): {
   label: string;
-  color: 'default' | 'success' | 'warning';
+  status: 'default' | 'success' | 'warning' | 'error' | 'info';
 } {
-  if (status === 'champion') {
-    return { label: 'Champion', color: 'success' };
+  const teamStates = [match.home.status, match.away.status];
+  if (teamStates.includes('champion')) {
+    return { label: 'Champion Confirmed', status: 'success' };
   }
-  if (status === 'qualified') {
-    return { label: 'Qualified', color: 'warning' };
+  if (teamStates.includes('qualified')) {
+    return { label: 'Finished', status: 'success' };
   }
-  return { label: 'Pending', color: 'default' };
+  return { label: 'Upcoming', status: 'info' };
+}
+
+function resolveKnockoutWinner(match: KnockoutMatch): KnockoutTeam | null {
+  const statusWinner = [match.home, match.away].find(
+    (team) => team.status === 'qualified' || team.status === 'champion'
+  );
+  if (statusWinner) {
+    return statusWinner;
+  }
+
+  if (match.home.score !== null && match.away.score !== null) {
+    if (match.home.score === match.away.score) {
+      return null;
+    }
+    return match.home.score > match.away.score ? match.home : match.away;
+  }
+
+  return null;
+}
+
+function resolveAggregateDisplay(match: KnockoutMatch): string {
+  if (match.home.aggregate !== '-' && match.home.aggregate === match.away.aggregate) {
+    return match.home.aggregate;
+  }
+  if (match.home.aggregate !== '-' || match.away.aggregate !== '-') {
+    return `${match.home.aggregate} / ${match.away.aggregate}`;
+  }
+  return 'TBD';
+}
+
+function resolveCurrentScoreDisplay(match: KnockoutMatch): string {
+  if (match.home.score === null || match.away.score === null) {
+    return 'TBD';
+  }
+  return `${match.home.score} - ${match.away.score}`;
+}
+
+function findPreferredFinalFixture(fixtures: TournamentFixture[]): TournamentFixture | null {
+  const finals = fixtures.filter((fixture) => /final/i.test(fixture.stage));
+  if (finals.length === 0) {
+    return null;
+  }
+
+  const active = finals.find(
+    (fixture) => fixture.status === 'live' || fixture.status === 'half-time'
+  );
+  if (active) {
+    return active;
+  }
+
+  const upcoming = finals
+    .filter((fixture) => fixture.status === 'upcoming')
+    .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime());
+  if (upcoming.length > 0) {
+    return upcoming[0];
+  }
+
+  return finals.sort(
+    (left, right) => new Date(right.kickoff).getTime() - new Date(left.kickoff).getTime()
+  )[0];
+}
+
+function renderKnockoutTeamRow(team: KnockoutTeam): React.ReactElement {
+  return (
+    <Box
+      sx={{
+        display: 'grid',
+        gridTemplateColumns: 'auto 1fr auto',
+        alignItems: 'center',
+        gap: 1,
+      }}
+    >
+      <CountryFlag code={team.team?.countryCode ?? 'TBD'} size={18} showTooltip />
+      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+        {team.team?.name ?? team.label}
+      </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 700 }}>
+        {team.score ?? '-'}
+      </Typography>
+    </Box>
+  );
+}
+
+function renderSemiFinalRoadCard(match: KnockoutMatch): React.ReactElement {
+  const status = resolveKnockoutStatus(match);
+  const winner = resolveKnockoutWinner(match);
+
+  return (
+    <Card variant="outlined" sx={{ height: '100%', borderRadius: ThemeTokens.borderRadius.md }}>
+      <CardContent sx={{ p: ThemeTokens.spacing.md }}>
+        <Stack spacing={1.25}>
+          <Box
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}
+          >
+            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
+              {match.title}
+            </Typography>
+            <StatusChip status={status.status} label={status.label} />
+          </Box>
+
+          <Stack spacing={0.75}>
+            {renderKnockoutTeamRow(match.home)}
+            <Box sx={{ textAlign: 'center' }}>
+              <Typography variant="caption" color="text.secondary">
+                vs
+              </Typography>
+            </Box>
+            {renderKnockoutTeamRow(match.away)}
+          </Stack>
+
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: 1,
+              pt: 0.5,
+              borderTop: '1px solid',
+              borderColor: 'divider',
+            }}
+          >
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                Date
+              </Typography>
+              <Typography variant="body2">{match.legDates}</Typography>
+            </Box>
+            <Box>
+              <Typography variant="caption" color="text.secondary">
+                Aggregate
+              </Typography>
+              <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                {resolveAggregateDisplay(match)}
+              </Typography>
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: 0.8,
+              p: 1,
+              borderRadius: ThemeTokens.borderRadius.sm,
+              bgcolor: 'action.hover',
+            }}
+          >
+            <Typography variant="caption" color="text.secondary">
+              Winner:
+            </Typography>
+            {winner ? (
+              <>
+                <CountryFlag code={winner.team?.countryCode ?? 'TBD'} size={16} showTooltip />
+                <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                  {winner.team?.name ?? winner.label}
+                </Typography>
+              </>
+            ) : (
+              <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                To be decided
+              </Typography>
+            )}
+          </Box>
+        </Stack>
+      </CardContent>
+    </Card>
+  );
 }
 
 function renderGroupTable(group: TournamentCenterData['groups'][number]): React.ReactElement {
@@ -219,77 +402,6 @@ function renderGroupTable(group: TournamentCenterData['groups'][number]): React.
             </TableBody>
           </Table>
         </TableContainer>
-      </CardContent>
-    </Card>
-  );
-}
-
-function renderKnockoutMatch(match: KnockoutMatch, emphasize = false): React.ReactElement {
-  return (
-    <Card
-      variant="outlined"
-      sx={{
-        height: '100%',
-        borderWidth: emphasize ? 2 : 1,
-        borderColor: emphasize ? 'primary.main' : 'divider',
-        backgroundColor: emphasize ? 'action.hover' : 'background.paper',
-      }}
-    >
-      <CardContent>
-        <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-          {match.title}
-        </Typography>
-        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1.25 }}>
-          {match.legDates}
-        </Typography>
-
-        <Stack spacing={1}>
-          {[match.home, match.away].map((team) => {
-            const chip = getKnockoutChipProps(team.status);
-            return (
-              <Box
-                key={`${match.title}-${team.label}`}
-                sx={{
-                  display: 'grid',
-                  gridTemplateColumns: 'auto 1fr auto',
-                  alignItems: 'center',
-                  gap: 1,
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  borderRadius: ThemeTokens.borderRadius.sm,
-                  p: ThemeTokens.spacing.sm,
-                }}
-              >
-                <CountryFlag code={team.team?.countryCode ?? 'TBD'} size={20} showTooltip />
-                <Box>
-                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {team.team?.name ?? team.label}
-                  </Typography>
-                  {team.team && team.label !== team.team.name && (
-                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
-                      {team.label}
-                    </Typography>
-                  )}
-                  <Typography variant="caption" color="text.secondary">
-                    Aggregate: {team.aggregate}
-                  </Typography>
-                </Box>
-                <Box sx={{ textAlign: 'right' }}>
-                  <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                    {team.score ?? '-'}
-                  </Typography>
-                  <Chip
-                    size="small"
-                    label={chip.label}
-                    color={chip.color}
-                    variant="outlined"
-                    sx={{ mt: 0.5, fontWeight: 500, opacity: chip.label === 'Pending' ? 0.8 : 1 }}
-                  />
-                </Box>
-              </Box>
-            );
-          })}
-        </Stack>
       </CardContent>
     </Card>
   );
@@ -517,6 +629,22 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
           ? 'info'
           : 'default';
 
+  const allKnockoutFixtures = [
+    ...data.fixtures.today,
+    ...data.fixtures.upcoming,
+    ...data.fixtures.completed,
+  ];
+  const finalFixture = findPreferredFinalFixture(allKnockoutFixtures);
+  const finalStatus = finalFixture
+    ? {
+        label: getFixtureStatusLabel(finalFixture),
+        status: getFixtureStatusColor(finalFixture.status),
+      }
+    : resolveKnockoutStatus(data.knockout.final);
+  const finalWinner = resolveKnockoutWinner(data.knockout.final);
+  const championTeam = data.knockout.champion.team;
+  const championName = championTeam?.name ?? data.knockout.champion.label;
+
   return (
     <PageContent>
       <PageHeader sx={{ mb: ThemeTokens.spacing.xxxl }}>
@@ -683,70 +811,231 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
       </PageHeader>
 
       <PageSection
-        title="Tournament Bracket"
-        subtitle="Semi-finals and final path (fixed layout)"
+        title="🏆 Road To The Final"
+        subtitle="Follow the knockout journey from the semi-finals to the championship."
         sx={{ mb: ThemeTokens.spacing.xxxl }}
       >
-        <Card variant="outlined">
-          <CardContent>
+        <Card
+          variant="outlined"
+          sx={{
+            borderRadius: ThemeTokens.borderRadius.lg,
+            background:
+              'linear-gradient(180deg, rgba(25,118,210,0.05) 0%, rgba(46,125,50,0.02) 60%, rgba(255,255,255,1) 100%)',
+          }}
+        >
+          <CardContent sx={{ p: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}>
             <Box
               sx={{
                 display: 'grid',
-                gridTemplateColumns: { xs: '1fr', xl: '1fr 1fr 1fr' },
-                gap: ThemeTokens.spacing.md,
+                gridTemplateColumns: { xs: '1fr', md: '1fr minmax(360px, 1.2fr) 1fr' },
+                gridTemplateAreas: {
+                  xs: '"semi1" "final" "semi2" "champion"',
+                  md: '"semi1 final semi2" ". champion ."',
+                },
+                alignItems: 'center',
+                columnGap: ThemeTokens.spacing.lg,
+                rowGap: ThemeTokens.spacing.md,
               }}
             >
-              {renderKnockoutMatch(data.knockout.semiFinal1)}
+              <Box sx={{ gridArea: 'semi1' }}>
+                {renderSemiFinalRoadCard(data.knockout.semiFinal1)}
+              </Box>
 
-              <Stack spacing={ThemeTokens.spacing.md}>
-                {renderKnockoutMatch(data.knockout.final, true)}
+              <Box sx={{ gridArea: 'final' }}>
+                <Card
+                  variant="outlined"
+                  sx={{
+                    borderWidth: 2,
+                    borderColor: 'primary.main',
+                    borderRadius: ThemeTokens.borderRadius.lg,
+                    boxShadow: '0 10px 26px rgba(13, 71, 161, 0.18)',
+                    overflow: 'hidden',
+                  }}
+                >
+                  <CardContent
+                    sx={{ p: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}
+                  >
+                    <Stack spacing={ThemeTokens.spacing.md}>
+                      <Box
+                        sx={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          justifyContent: 'space-between',
+                          gap: 1,
+                        }}
+                      >
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <EmojiEventsIcon color="warning" sx={{ fontSize: 28 }} />
+                          <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                            FINAL
+                          </Typography>
+                        </Box>
+                        <StatusChip status={finalStatus.status} label={finalStatus.label} />
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: 'grid',
+                          gridTemplateColumns: { xs: '1fr', sm: '1fr auto 1fr' },
+                          alignItems: 'center',
+                          gap: 1,
+                          p: ThemeTokens.spacing.sm,
+                          borderRadius: ThemeTokens.borderRadius.sm,
+                          bgcolor: 'action.hover',
+                        }}
+                      >
+                        {renderTeamWithFlag(
+                          {
+                            name:
+                              data.knockout.final.home.team?.name ?? data.knockout.final.home.label,
+                            countryCode: data.knockout.final.home.team?.countryCode ?? 'TBD',
+                          },
+                          'lg'
+                        )}
+                        <Typography
+                          variant="subtitle2"
+                          color="text.secondary"
+                          sx={{ textAlign: 'center', fontWeight: 700 }}
+                        >
+                          vs
+                        </Typography>
+                        <Box sx={{ justifySelf: { xs: 'start', sm: 'end' } }}>
+                          {renderTeamWithFlag(
+                            {
+                              name:
+                                data.knockout.final.away.team?.name ??
+                                data.knockout.final.away.label,
+                              countryCode: data.knockout.final.away.team?.countryCode ?? 'TBD',
+                            },
+                            'lg'
+                          )}
+                        </Box>
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: 'grid',
+                          gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                          gap: 1,
+                        }}
+                      >
+                        <Box>
+                          <Typography variant="caption" color="text.secondary">
+                            Date
+                          </Typography>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                            {finalFixture
+                              ? formatMatchDate(finalFixture.kickoff)
+                              : data.knockout.final.legDates}
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <Typography variant="caption" color="text.secondary">
+                            Kickoff
+                          </Typography>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                            {finalFixture
+                              ? `${formatKickoffTime(finalFixture.kickoff)} UTC`
+                              : 'TBD'}
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <Typography variant="caption" color="text.secondary">
+                            Venue
+                          </Typography>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                            {finalFixture?.venue ?? 'To be announced'}
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <Typography variant="caption" color="text.secondary">
+                            Aggregate Score
+                          </Typography>
+                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                            {resolveAggregateDisplay(data.knockout.final)}
+                          </Typography>
+                        </Box>
+                      </Box>
+
+                      <Box
+                        sx={{
+                          display: 'grid',
+                          gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                          gap: 1,
+                          pt: 0.5,
+                          borderTop: '1px solid',
+                          borderColor: 'divider',
+                        }}
+                      >
+                        <Box>
+                          <Typography variant="caption" color="text.secondary">
+                            Current Score
+                          </Typography>
+                          <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                            {finalFixture
+                              ? formatScore(finalFixture.homeScore, finalFixture.awayScore)
+                              : resolveCurrentScoreDisplay(data.knockout.final)}
+                          </Typography>
+                        </Box>
+                        <Box>
+                          <Typography variant="caption" color="text.secondary">
+                            Winner
+                          </Typography>
+                          <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                            {finalWinner?.team?.name ?? finalWinner?.label ?? 'To be decided'}
+                          </Typography>
+                        </Box>
+                      </Box>
+                    </Stack>
+                  </CardContent>
+                </Card>
+              </Box>
+
+              <Box sx={{ gridArea: 'semi2' }}>
+                {renderSemiFinalRoadCard(data.knockout.semiFinal2)}
+              </Box>
+
+              <Box sx={{ gridArea: 'champion' }}>
                 <Card
                   variant="outlined"
                   sx={{
                     borderWidth: 2,
                     borderColor: 'success.main',
+                    borderRadius: ThemeTokens.borderRadius.lg,
                     background:
-                      'linear-gradient(135deg, rgba(46,125,50,0.12) 0%, rgba(46,125,50,0.02) 100%)',
+                      'linear-gradient(135deg, rgba(46,125,50,0.18) 0%, rgba(46,125,50,0.06) 100%)',
+                    textAlign: 'center',
+                    boxShadow: '0 10px 24px rgba(46, 125, 50, 0.16)',
                   }}
                 >
-                  <CardContent>
-                    <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
-                      Champion
-                    </Typography>
-                    <Box
-                      sx={{
-                        display: 'grid',
-                        gridTemplateColumns: 'auto 1fr auto',
-                        alignItems: 'center',
-                        gap: 1,
-                        border: '1px solid',
-                        borderColor: 'success.light',
-                        borderRadius: ThemeTokens.borderRadius.sm,
-                        p: ThemeTokens.spacing.sm,
-                        bgcolor: 'background.paper',
-                      }}
-                    >
+                  <CardContent sx={{ py: ThemeTokens.spacing.lg }}>
+                    <Stack spacing={1.25} sx={{ alignItems: 'center' }}>
+                      <EmojiEventsIcon color="warning" sx={{ fontSize: 44 }} />
+                      <Typography
+                        variant="subtitle2"
+                        color="text.secondary"
+                        sx={{ letterSpacing: 1.2 }}
+                      >
+                        CHAMPION
+                      </Typography>
                       <CountryFlag
-                        code={data.knockout.champion.team?.countryCode ?? 'TBD'}
-                        size={20}
+                        code={championTeam?.countryCode ?? 'TBD'}
+                        size={36}
                         showTooltip
                       />
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                        {data.knockout.champion.label}
+                      <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                        {championName}
                       </Typography>
                       <Chip
                         size="small"
-                        label="Pending"
-                        color="default"
-                        variant="outlined"
-                        sx={{ opacity: 0.8 }}
+                        label={championTeam ? 'Crowned' : 'To Be Decided'}
+                        color={championTeam ? 'success' : 'default'}
+                        variant={championTeam ? 'filled' : 'outlined'}
                       />
-                    </Box>
+                    </Stack>
                   </CardContent>
                 </Card>
-              </Stack>
-
-              {renderKnockoutMatch(data.knockout.semiFinal2)}
+              </Box>
             </Box>
           </CardContent>
         </Card>
