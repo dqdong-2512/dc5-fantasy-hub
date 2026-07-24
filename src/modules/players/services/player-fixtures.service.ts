@@ -34,9 +34,8 @@ export class PlayerFixtureIntelligenceService {
    * Get player's team ID from their club name
    */
   private getPlayerTeamId(player: Player): number | null {
-    // Try using clubCode if available
-    if (player.clubCode) {
-      return player.clubCode;
+    if (player.teamId) {
+      return player.teamId;
     }
 
     // Otherwise, look up by team name

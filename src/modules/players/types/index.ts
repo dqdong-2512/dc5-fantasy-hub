@@ -8,16 +8,16 @@ import { Position } from '@domain/enums';
 
 export interface PlayerFilters {
   search: string;
-  positions: Position[];
-  clubs: number[];
-  priceRange: [number, number];
-  availability: 'all' | 'available' | 'expensive' | 'cheap';
-  sortBy: 'name' | 'price' | 'form' | 'points' | 'ownership' | 'avgFdr';
+  position: Position | 'all';
+  clubId: number | 'all';
+  priceBand: 'all' | 'budget' | 'mid' | 'premium';
+  availability: 'all' | 'available' | 'doubtful' | 'unavailable';
+  sortBy: 'displayName' | 'price' | 'form' | 'totalPoints' | 'ownership';
   sortOrder: 'asc' | 'desc';
 }
 
 export interface SortConfig {
-  field: keyof Player | 'ownership';
+  field: keyof Player | 'ownership' | 'displayName' | 'totalPoints';
   direction: 'asc' | 'desc';
 }
 

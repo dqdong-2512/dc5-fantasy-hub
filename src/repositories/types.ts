@@ -45,6 +45,9 @@ export interface NormalizedPlayer {
   penaltiesMissed: number;
   yellowCards: number;
   redCards: number;
+  transfersInEvent?: number;
+  transfersOutEvent?: number;
+  costChangeEvent?: number;
 }
 
 export interface NormalizedGameweek {

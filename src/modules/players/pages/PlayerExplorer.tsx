@@ -1,118 +1,78 @@
-/**
- * Player Explorer Page
- * Main interface for exploring and analyzing Fantasy Premier League players
- */
-
-import React, { useState, useMemo } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { Box, Typography, Stack } from '@mui/material';
-import type { Player } from '@domain/models';
-import { BootstrapRepository } from '@repositories/bootstrap';
-import { PlayerRepository } from '@repositories/players';
-import { PageContent, PageHeader, PageSection, EmptyState } from '@shared/components';
+import React, { useMemo, useState } from 'react';
+import { Alert, Box, Pagination, Stack, Typography } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
+import { PageContent, EmptyState } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { useSeasonLabel } from '@shared/hooks';
-import {
-  PlayerTable,
-  PlayerDetailDrawer,
-  FilterToolbar,
-  PlayersWithFavorableFixtures,
-} from '../components';
-import { PlayerFiltersUtil } from '../utils/filters';
+import { FilterToolbar, PlayerTable } from '../components';
+import { usePlayerResearchData } from '../context';
 import type { PlayerFilters } from '../types';
+import { applyPlayerFilters, hasActivePlayerFilters, sortPlayers } from '../utils';
+
+const PLAYERS_PER_PAGE = 50;
 
 const DEFAULT_FILTERS: PlayerFilters = {
   search: '',
-  positions: [],
-  clubs: [],
-  priceRange: [0, 15],
+  position: 'all',
+  clubId: 'all',
+  priceBand: 'all',
   availability: 'all',
-  sortBy: 'points',
+  sortBy: 'totalPoints',
   sortOrder: 'desc',
 };
 
-/**
- * Player Explorer
- * Production-quality analytics interface for player exploration
- */
 export function PlayerExplorer(): React.ReactElement {
-  const location = useLocation();
   const navigate = useNavigate();
-  const seasonLabel = useSeasonLabel();
-  const pathSegments = location.pathname.split('/').filter(Boolean);
-  const competition = pathSegments[0] || 'premier-league';
+  const { players, teams, teamById, totalPlayers, seasonState, errorMessage } =
+    usePlayerResearchData();
 
   const [filters, setFilters] = useState<PlayerFilters>(DEFAULT_FILTERS);
-  const [selectedPlayer, setSelectedPlayer] = useState<Player | null>(null);
-  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [page, setPage] = useState(1);
 
-  // Initialize repositories
-  const playerRepository = useMemo(() => new PlayerRepository(), []);
-  const bootstrapRepository = useMemo(() => new BootstrapRepository(), []);
+  const filteredPlayers = useMemo(
+    () => applyPlayerFilters(players, filters, teamById),
+    [players, filters, teamById]
+  );
 
-  // Load data
-  const { allPlayers, gameweek, playerCount } = useMemo(() => {
-    try {
-      const players = playerRepository.getAll();
-      const currentGw = bootstrapRepository.getCurrentGameweek();
+  const sortedPlayers = useMemo(
+    () => sortPlayers(filteredPlayers, filters.sortBy, filters.sortOrder),
+    [filteredPlayers, filters.sortBy, filters.sortOrder]
+  );
 
-      return {
-        allPlayers: players,
-        gameweek: currentGw,
-        playerCount: players.length,
-      };
-    } catch (error) {
-      console.error('Error loading player data:', error);
-      return {
-        allPlayers: [],
-        gameweek: null,
-        playerCount: 0,
-      };
-    }
-  }, [playerRepository, bootstrapRepository]);
+  const hasActiveFiltersState = useMemo(() => hasActivePlayerFilters(filters), [filters]);
 
-  // Apply filters and sorting
-  const filteredPlayers = useMemo(() => {
-    const filtered = PlayerFiltersUtil.applyFilters(allPlayers, filters);
-    return PlayerFiltersUtil.sortPlayers(filtered, filters.sortBy, filters.sortOrder);
-  }, [allPlayers, filters]);
+  const totalPages = Math.max(1, Math.ceil(sortedPlayers.length / PLAYERS_PER_PAGE));
+  const currentPage = Math.min(page, totalPages);
+  const startIndex = (currentPage - 1) * PLAYERS_PER_PAGE;
+  const paginatedPlayers = sortedPlayers.slice(startIndex, startIndex + PLAYERS_PER_PAGE);
 
-  const handlePlayerSelect = (player: Player): void => {
-    setSelectedPlayer(player);
-    setDrawerOpen(true);
+  const handleFiltersChange = (nextFilters: PlayerFilters): void => {
+    setFilters(nextFilters);
+    setPage(1);
   };
 
-  const handleClubClick = (clubCode: number): void => {
-    navigate(`/${competition}/teams?club=${clubCode}`);
+  const handleCompareClick = (playerId: number): void => {
+    navigate(`/premier-league/players/compare?players=${playerId}`);
   };
 
-  const handleDrawerClose = (): void => {
-    setDrawerOpen(false);
-  };
-
-  const handleResetFilters = (): void => {
-    setFilters(DEFAULT_FILTERS);
-  };
-
-  // Show empty state if no players available
-  if (playerCount === 0) {
+  if (errorMessage) {
     return (
       <PageContent>
         <EmptyState
-          title="No players available"
-          description="Unable to load player data. Please try refreshing the page."
+          title="Data unavailable"
+          description={errorMessage}
+          actionLabel="Back to Dashboard"
+          onAction={() => navigate('/premier-league/dashboard')}
         />
       </PageContent>
     );
   }
 
-  // Show error state if gameweek data is missing (should not happen)
-  if (!gameweek) {
+  if (totalPlayers === 0) {
     return (
       <PageContent>
         <EmptyState
-          title="Gameweek data unavailable"
-          description="Unable to load gameweek information. Please try refreshing the page."
+          title="No players available"
+          description="The active season player dataset is empty. Sync data and try again."
         />
       </PageContent>
     );
@@ -120,95 +80,85 @@ export function PlayerExplorer(): React.ReactElement {
 
   return (
     <PageContent>
-      <PageHeader>
-        <Stack spacing={ThemeTokens.spacing.md}>
-          <Typography variant={ThemeTokens.typography.pageTitleVariant} sx={{ fontWeight: 700 }}>
+      <Stack spacing={ThemeTokens.spacing.md}>
+        <Box>
+          <Typography variant="h4" sx={{ fontWeight: 700 }}>
             Player Explorer
           </Typography>
-          <Stack
-            direction="row"
-            spacing={ThemeTokens.spacing.xxl}
-            sx={{
-              flexWrap: 'wrap',
-              '& > div': { minWidth: 150 },
-            }}
-          >
-            <Box>
-              <Typography variant="caption" color="text.secondary">
-                Competition
-              </Typography>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                Fantasy Premier League
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" color="text.secondary">
-                Season
-              </Typography>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                {seasonLabel}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" color="text.secondary">
-                Current Gameweek
-              </Typography>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                {gameweek.name}
-              </Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" color="text.secondary">
-                Total Players
-              </Typography>
-              <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                {playerCount}
-              </Typography>
-            </Box>
-          </Stack>
-        </Stack>
-      </PageHeader>
+          <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
+            Discover and evaluate players for your next transfer decision.
+          </Typography>
+          <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 0.5 }}>
+            Season mode: {seasonState === 'pre-season' ? 'Pre-season' : 'In season'}
+          </Typography>
+        </Box>
 
-      <PageSection title="Filter & Search" sx={{ marginBottom: ThemeTokens.spacing.md }}>
         <FilterToolbar
           filters={filters}
-          onFiltersChange={setFilters}
-          onReset={handleResetFilters}
+          teams={teams}
+          hasActiveFilters={hasActiveFiltersState}
+          onFiltersChange={handleFiltersChange}
+          onReset={() => handleFiltersChange(DEFAULT_FILTERS)}
         />
-      </PageSection>
 
-      <PageSection title="Intelligence" sx={{ marginBottom: ThemeTokens.spacing.md }}>
-        <PlayersWithFavorableFixtures players={allPlayers} onPlayerSelect={handlePlayerSelect} />
-      </PageSection>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <Typography variant="body2" sx={{ fontWeight: 600 }}>
+            Showing {sortedPlayers.length} of {totalPlayers} players
+          </Typography>
+          <Typography variant="caption" color="text.secondary">
+            Sort: {filters.sortBy} ({filters.sortOrder})
+          </Typography>
+        </Box>
 
-      <PageSection
-        title="Players"
-        subtitle={`Showing ${filteredPlayers.length} of ${playerCount} players`}
-        sx={{ marginBottom: ThemeTokens.spacing.md }}
-      >
-        {filteredPlayers.length === 0 ? (
+        {sortedPlayers.length === 0 ? (
           <EmptyState
-            title="No players found"
-            description="Try adjusting your filters or search query"
-            actionLabel="Reset Filters"
-            onAction={handleResetFilters}
+            title="No players match filters"
+            description="Adjust search or filters to widen the player pool."
+            actionLabel="Clear filters"
+            onAction={() => handleFiltersChange(DEFAULT_FILTERS)}
           />
         ) : (
-          <PlayerTable
-            players={filteredPlayers}
-            onRowClick={handlePlayerSelect}
-            onClubClick={handleClubClick}
-            sortBy={filters.sortBy}
-            sortOrder={filters.sortOrder}
-            onSort={(field, order) =>
-              setFilters({ ...filters, sortBy: field as PlayerFilters['sortBy'], sortOrder: order })
-            }
-          />
-        )}
-      </PageSection>
+          <>
+            <PlayerTable
+              players={paginatedPlayers}
+              sortBy={filters.sortBy}
+              sortOrder={filters.sortOrder}
+              onSort={(field, order) =>
+                handleFiltersChange({ ...filters, sortBy: field, sortOrder: order })
+              }
+              onRowClick={(player) => navigate(`/premier-league/players/${player.id}`)}
+              onCompareClick={(player) => handleCompareClick(player.id)}
+            />
 
-      {/* Player Detail Drawer */}
-      <PlayerDetailDrawer player={selectedPlayer} open={drawerOpen} onClose={handleDrawerClose} />
+            {totalPages > 1 && (
+              <Box sx={{ display: 'flex', justifyContent: 'center' }}>
+                <Pagination
+                  page={currentPage}
+                  count={totalPages}
+                  size="small"
+                  onChange={(_, nextPage) => setPage(nextPage)}
+                />
+              </Box>
+            )}
+          </>
+        )}
+
+        {seasonState === 'pre-season' && (
+          <Alert severity="info">
+            Pre-season data can include many players with zero form or points. This is expected and
+            still useful for researching price, position, club, ownership, and availability.
+          </Alert>
+        )}
+
+        <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap' }}>
+          <Alert severity="info" sx={{ flex: 1, minWidth: 240 }}>
+            Tip: open a player to inspect fixtures and trends before comparing options.
+          </Alert>
+          <Alert severity="info" sx={{ flex: 1, minWidth: 240 }}>
+            Compare route supports shareable URLs for two-player research.
+          </Alert>
+        </Stack>
+      </Stack>
     </PageContent>
   );
 }

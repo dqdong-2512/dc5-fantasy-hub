@@ -10,6 +10,8 @@ export interface Player {
   lastName: string;
   displayName: string;
   position: Position;
+  teamId: number;
+  teamCode: number;
   club: string;
   clubCode?: number;
   price: number;
@@ -34,4 +36,7 @@ export interface Player {
   creativity?: number;
   threat?: number;
   ictIndex?: number;
+  transfersInEvent?: number;
+  transfersOutEvent?: number;
+  costChangeEvent?: number;
 }

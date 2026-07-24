@@ -14,6 +14,8 @@ export class PlayerMapper {
       lastName: player.secondName,
       displayName: player.webName,
       position: this.elementTypeIdToPosition(elementTypeId),
+      teamId: player.team,
+      teamCode: player.teamCode,
       club: teamName,
       clubCode: player.code,
       price: player.nowCost,
@@ -34,6 +36,9 @@ export class PlayerMapper {
       penaltiesMissed: player.penaltiesMissed,
       yellowCards: player.yellowCards,
       redCards: player.redCards,
+      transfersInEvent: player.transfersInEvent,
+      transfersOutEvent: player.transfersOutEvent,
+      costChangeEvent: player.costChangeEvent,
     };
   }
 

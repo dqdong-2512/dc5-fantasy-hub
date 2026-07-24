@@ -4,7 +4,12 @@ import { Box, CircularProgress } from '@mui/material';
 import { CompetitionSelection } from '../app/CompetitionSelection';
 import { Dashboard } from '../modules/dashboard/Dashboard';
 import { Fixtures } from '../modules/fixtures';
-import { PlayerExplorer } from '../modules/players';
+import {
+  PlayerComparePage,
+  PlayerDetailPage,
+  PlayerExplorer,
+  PlayerResearchHub,
+} from '../modules/players';
 import { ClubExplorer } from '../modules/teams';
 import {
   FantasyConnectionPage,
@@ -66,7 +71,21 @@ const router = createBrowserRouter([
           },
           {
             path: 'players',
-            element: <PlayerExplorer />,
+            element: <PlayerResearchHub />,
+            children: [
+              {
+                index: true,
+                element: <PlayerExplorer />,
+              },
+              {
+                path: 'compare',
+                element: <PlayerComparePage />,
+              },
+              {
+                path: ':playerId',
+                element: <PlayerDetailPage />,
+              },
+            ],
           },
           {
             path: 'analytics',

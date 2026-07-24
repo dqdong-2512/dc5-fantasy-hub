@@ -1,104 +1,131 @@
-/**
- * Player Explorer Utilities
- * Filtering, sorting, and search logic
- */
-
-import type { Player } from '@domain/models';
+import type { Team, Player } from '@domain/models';
 import type { PlayerFilters } from '../types';
-import { PlayerFixtureIntelligenceService } from '../services';
 
-export class PlayerFiltersUtil {
-  private static fixtureService: PlayerFixtureIntelligenceService | null = null;
+const AVAILABLE_STATUSES = new Set(['a']);
+const DOUBTFUL_STATUSES = new Set(['d']);
 
-  private static getFixtureService(): PlayerFixtureIntelligenceService {
-    if (!this.fixtureService) {
-      this.fixtureService = new PlayerFixtureIntelligenceService();
-    }
-    return this.fixtureService;
+export function getPlayerStatusLabel(status?: string): string {
+  const normalizedStatus = (status ?? 'u').toLowerCase();
+
+  if (AVAILABLE_STATUSES.has(normalizedStatus)) {
+    return 'Available';
   }
 
-  static applyFilters(players: Player[], filters: PlayerFilters): Player[] {
-    return players
-      .filter((player) => this.matchesSearch(player, filters.search))
-      .filter((player) => this.matchesPosition(player, filters.positions))
-      .filter((player) => this.matchesPriceRange(player, filters.priceRange))
-      .filter((player) => this.matchesAvailability(player, filters.availability));
+  if (DOUBTFUL_STATUSES.has(normalizedStatus)) {
+    return 'Doubtful';
   }
 
-  static sortPlayers(players: Player[], sortBy: string, sortOrder: 'asc' | 'desc'): Player[] {
-    const sorted = [...players].sort((a, b) => {
-      let aVal: number | string = 0;
-      let bVal: number | string = 0;
+  return 'Unavailable';
+}
 
-      switch (sortBy) {
-        case 'name':
-          aVal = a.displayName;
-          bVal = b.displayName;
-          break;
-        case 'price':
-          aVal = a.price;
-          bVal = b.price;
-          break;
-        case 'form':
-          aVal = a.form;
-          bVal = b.form;
-          break;
-        case 'points':
-          // Total points not yet available in domain model - use default 0 values
-          break;
-        case 'ownership':
-          aVal = a.ownership;
-          bVal = b.ownership;
-          break;
-        case 'avgFdr':
-          const fixtureService = this.getFixtureService();
-          const aSummary = fixtureService.getPlayerFixtureSummary(a);
-          const bSummary = fixtureService.getPlayerFixtureSummary(b);
-          aVal = aSummary.avgDifficulty;
-          bVal = bSummary.avgDifficulty;
-          break;
-        default:
-          return 0;
-      }
-
-      if (typeof aVal === 'string' && typeof bVal === 'string') {
-        return sortOrder === 'asc' ? aVal.localeCompare(bVal) : bVal.localeCompare(aVal);
-      }
-
-      const numA = typeof aVal === 'number' ? aVal : 0;
-      const numB = typeof bVal === 'number' ? bVal : 0;
-
-      return sortOrder === 'asc' ? numA - numB : numB - numA;
-    });
-
-    return sorted;
-  }
-
-  private static matchesSearch(player: Player, search: string): boolean {
-    if (!search.trim()) return true;
-
-    const query = search.toLowerCase();
-    return (
-      player.displayName.toLowerCase().includes(query) ||
-      player.firstName.toLowerCase().includes(query) ||
-      player.lastName.toLowerCase().includes(query)
-    );
-  }
-
-  private static matchesPosition(player: Player, positions: string[]): boolean {
-    if (!positions.length) return true;
-    return positions.includes(player.position);
-  }
-
-  private static matchesPriceRange(player: Player, [min, max]: [number, number]): boolean {
-    return player.price >= min && player.price <= max;
-  }
-
-  private static matchesAvailability(player: Player, availability: string): boolean {
-    if (availability === 'all') return true;
-    if (availability === 'expensive') return player.price >= 9;
-    if (availability === 'cheap') return player.price <= 5;
-    if (availability === 'available') return player.ownership < 50;
+function matchesAvailability(player: Player, availability: PlayerFilters['availability']): boolean {
+  if (availability === 'all') {
     return true;
   }
+
+  const statusLabel = getPlayerStatusLabel(player.status);
+
+  if (availability === 'available') {
+    return statusLabel === 'Available';
+  }
+
+  if (availability === 'doubtful') {
+    return statusLabel === 'Doubtful';
+  }
+
+  return statusLabel === 'Unavailable';
+}
+
+function matchesPriceBand(player: Player, priceBand: PlayerFilters['priceBand']): boolean {
+  if (priceBand === 'all') {
+    return true;
+  }
+
+  if (priceBand === 'budget') {
+    return player.price <= 55;
+  }
+
+  if (priceBand === 'mid') {
+    return player.price >= 56 && player.price <= 80;
+  }
+
+  return player.price >= 81;
+}
+
+export function applyPlayerFilters(
+  players: Player[],
+  filters: PlayerFilters,
+  teamById: Map<number, Team>
+): Player[] {
+  const normalizedSearch = filters.search.trim().toLowerCase();
+
+  return players.filter((player) => {
+    if (normalizedSearch) {
+      const teamName = teamById.get(player.teamId)?.name.toLowerCase() ?? player.club.toLowerCase();
+      const isSearchMatch =
+        player.displayName.toLowerCase().includes(normalizedSearch) ||
+        player.firstName.toLowerCase().includes(normalizedSearch) ||
+        player.lastName.toLowerCase().includes(normalizedSearch) ||
+        teamName.includes(normalizedSearch);
+
+      if (!isSearchMatch) {
+        return false;
+      }
+    }
+
+    if (filters.position !== 'all' && player.position !== filters.position) {
+      return false;
+    }
+
+    if (filters.clubId !== 'all' && player.teamId !== filters.clubId) {
+      return false;
+    }
+
+    if (!matchesPriceBand(player, filters.priceBand)) {
+      return false;
+    }
+
+    if (!matchesAvailability(player, filters.availability)) {
+      return false;
+    }
+
+    return true;
+  });
+}
+
+export function sortPlayers(
+  players: Player[],
+  sortBy: PlayerFilters['sortBy'],
+  sortOrder: PlayerFilters['sortOrder']
+): Player[] {
+  const direction = sortOrder === 'asc' ? 1 : -1;
+
+  return [...players].sort((a, b) => {
+    if (sortBy === 'displayName') {
+      return a.displayName.localeCompare(b.displayName) * direction;
+    }
+
+    const aValue = a[sortBy] ?? 0;
+    const bValue = b[sortBy] ?? 0;
+
+    if (aValue < bValue) {
+      return -1 * direction;
+    }
+
+    if (aValue > bValue) {
+      return 1 * direction;
+    }
+
+    return a.displayName.localeCompare(b.displayName);
+  });
+}
+
+export function hasActivePlayerFilters(filters: PlayerFilters): boolean {
+  return (
+    filters.search.trim().length > 0 ||
+    filters.position !== 'all' ||
+    filters.clubId !== 'all' ||
+    filters.priceBand !== 'all' ||
+    filters.availability !== 'all'
+  );
 }
