@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link as RouterLink } from 'react-router-dom';
 import {
   AppBar,
   Toolbar,
@@ -14,9 +15,11 @@ import {
   useTheme,
 } from '@mui/material';
 import BrightnessIcon from '@mui/icons-material/Brightness4';
+import LightModeIcon from '@mui/icons-material/LightMode';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import MenuIcon from '@mui/icons-material/Menu';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { useThemeMode } from '@theme/theme-mode';
 
 interface NavItem {
   label: string;
@@ -35,6 +38,7 @@ export const AppHeader: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const theme = useTheme();
+  const { resolvedMode, toggleResolvedMode } = useThemeMode();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const isActive = (path: string): boolean => {
@@ -50,9 +54,11 @@ export const AppHeader: React.FC = () => {
     <AppBar
       position="sticky"
       sx={{
-        backgroundColor: '#ffffff',
-        color: '#000000',
-        boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+        backgroundColor: 'background.paper',
+        color: 'text.primary',
+        borderBottom: '1px solid',
+        borderColor: 'divider',
+        boxShadow: 'none',
         zIndex: 1100,
       }}
     >
@@ -61,18 +67,31 @@ export const AppHeader: React.FC = () => {
           justifyContent: 'space-between',
           paddingX: { xs: 1, sm: 1.5 },
           minHeight: 56,
+          height: { xs: 56, sm: 65 },
           gap: 1,
         }}
       >
         {/* Logo */}
         <Typography
+          component={RouterLink}
+          to="/"
           variant="h6"
           sx={{
             fontWeight: 700,
-            color: '#1976d2',
+            color: 'primary.main',
             fontSize: { xs: '1rem', sm: '1.25rem' },
             whiteSpace: 'nowrap',
             flexShrink: 0,
+            textDecoration: 'none',
+
+            '&:hover': {
+              textDecoration: 'none',
+              opacity: 0.8,
+            },
+
+            '&:visited': {
+              color: 'primary.main',
+            },
           }}
         >
           DC5 Fantasy Hub
@@ -80,13 +99,13 @@ export const AppHeader: React.FC = () => {
 
         {/* Desktop Navigation */}
         {!isMobile && (
-          <Box sx={{ display: 'flex', gap: 0.5, flex: 1, marginLeft: 1.5 }}>
+          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 0.5, flex: 1 }}>
             {NAV_ITEMS.map((item) => (
               <Button
                 key={item.path}
                 onClick={() => handleNavigation(item.path)}
                 sx={{
-                  color: isActive(item.path) ? '#1976d2' : '#666',
+                  color: isActive(item.path) ? 'primary.main' : 'text.secondary',
                   fontWeight: isActive(item.path) ? 600 : 500,
                   fontSize: '0.9rem',
                   textTransform: 'none',
@@ -100,7 +119,7 @@ export const AppHeader: React.FC = () => {
                     left: 0,
                     right: 0,
                     height: 3,
-                    backgroundColor: '#1976d2',
+                    backgroundColor: 'primary.main',
                     transform: isActive(item.path) ? 'scaleX(1)' : 'scaleX(0)',
                     transformOrigin: 'center',
                     transition: 'transform 0.3s ease',
@@ -119,11 +138,17 @@ export const AppHeader: React.FC = () => {
             size="small"
             aria-label="theme toggle"
             title="Theme toggle"
-            sx={{ color: '#666' }}
+            sx={{ color: 'text.secondary' }}
+            onClick={toggleResolvedMode}
           >
-            <BrightnessIcon />
+            {resolvedMode === 'dark' ? <LightModeIcon /> : <BrightnessIcon />}
           </IconButton>
-          <IconButton size="small" aria-label="profile" title="Profile" sx={{ color: '#666' }}>
+          <IconButton
+            size="small"
+            aria-label="profile"
+            title="Profile"
+            sx={{ color: 'text.secondary' }}
+          >
             <AccountCircleIcon />
           </IconButton>
 
@@ -133,7 +158,7 @@ export const AppHeader: React.FC = () => {
               size="small"
               aria-label="menu"
               onClick={() => setMobileMenuOpen(true)}
-              sx={{ color: '#666' }}
+              sx={{ color: 'text.secondary' }}
             >
               <MenuIcon />
             </IconButton>
@@ -150,8 +175,8 @@ export const AppHeader: React.FC = () => {
                 selected={isActive(item.path)}
                 onClick={() => handleNavigation(item.path)}
                 sx={{
-                  backgroundColor: isActive(item.path) ? '#e3f2fd' : 'transparent',
-                  color: isActive(item.path) ? '#1976d2' : '#000',
+                  backgroundColor: isActive(item.path) ? 'action.selected' : 'transparent',
+                  color: isActive(item.path) ? 'primary.main' : 'text.primary',
                   fontWeight: isActive(item.path) ? 600 : 500,
                 }}
               >

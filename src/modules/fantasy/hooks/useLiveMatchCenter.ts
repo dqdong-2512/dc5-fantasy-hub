@@ -82,21 +82,28 @@ export function useLiveMatchCenter(options: UseLiveMatchCenterOptions): UseLiveM
   ]);
 
   useEffect(() => {
-    void refresh();
+    const timerId = window.setTimeout(() => {
+      void refresh();
+    }, 0);
+
+    return () => {
+      window.clearTimeout(timerId);
+    };
   }, [refresh]);
 
   useEffect(() => {
+    const service = serviceRef.current;
     const pollKey = `live-match-center-${options.connectedEntryId ?? 'public'}`;
 
     if (!options.autoRefresh) {
-      serviceRef.current.stopRefresh(pollKey);
+      service.stopRefresh(pollKey);
       return;
     }
 
     const intervalMs = options.refreshIntervalMs ?? 30000;
-    serviceRef.current.startBackgroundPolling(pollKey, intervalMs, async () => {
+    service.startBackgroundPolling(pollKey, intervalMs, async () => {
       try {
-        const data = await serviceRef.current.getLiveMatchCenterSnapshot({
+        const data = await service.getLiveMatchCenterSnapshot({
           gameweekId: options.gameweekId,
           connectedEntryId: options.connectedEntryId ?? null,
           connectedLeagueId: options.connectedLeagueId ?? null,
@@ -106,10 +113,10 @@ export function useLiveMatchCenter(options: UseLiveMatchCenterOptions): UseLiveM
         setSnapshot(data);
 
         if (selectedClubId !== null) {
-          setSelectedClubPanel(serviceRef.current.getClubLivePanel(selectedClubId));
+          setSelectedClubPanel(service.getClubLivePanel(selectedClubId));
         }
         if (selectedPlayerId !== null) {
-          setSelectedPlayerPanel(serviceRef.current.getPlayerLivePanel(selectedPlayerId));
+          setSelectedPlayerPanel(service.getPlayerLivePanel(selectedPlayerId));
         }
       } catch {
         // Keep last successful snapshot if polling fails.
@@ -117,7 +124,7 @@ export function useLiveMatchCenter(options: UseLiveMatchCenterOptions): UseLiveM
     });
 
     return () => {
-      serviceRef.current.stopRefresh(pollKey);
+      service.stopRefresh(pollKey);
     };
   }, [
     options.autoRefresh,

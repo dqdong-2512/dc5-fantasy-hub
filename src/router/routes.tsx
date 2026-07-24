@@ -2,13 +2,6 @@ import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate, useLocation } from 'react-router-dom';
 import { Box, Skeleton, Stack } from '@mui/material';
 import { CompetitionSelection } from '../app/CompetitionSelection';
-import { Dashboard } from '../modules/dashboard/Dashboard';
-import {
-  PlayerComparePage,
-  PlayerDetailPage,
-  PlayerExplorer,
-  PlayerResearchHub,
-} from '../modules/players';
 import {
   CaptainPage,
   DifferentialsPage,
@@ -19,31 +12,67 @@ import {
   TransfersPage,
   ValuePage,
 } from '../modules/analytics/pages';
-import { ClubExplorer } from '../modules/teams';
-import {
-  FantasyGameOverview,
-  MyTeamPage,
-  LeagueStandingsPage,
-  GameweekCenterPage,
-  LiveMatchCenterPage,
-  TransferPlannerPage,
-  GameweekPlannerPage,
-  SeasonPlannerPage,
-  GameweekHubShell,
-  PremierLeagueTablePage,
-} from '../modules/fantasy/pages';
 import { FplConnectionGate } from '../modules/fantasy/components';
 import { GameweekHubProvider } from '../modules/fantasy/context';
 import { AppLayout } from '../layouts/AppLayout';
 import { NotFound, ChampionsLeagueComingSoon } from '../shared/pages';
+
+const Dashboard = React.lazy(() =>
+  import('../modules/dashboard/Dashboard').then((module) => ({ default: module.Dashboard }))
+);
+const PlayerResearchHub = React.lazy(() =>
+  import('../modules/players').then((module) => ({ default: module.PlayerResearchHub }))
+);
+const PlayerExplorer = React.lazy(() =>
+  import('../modules/players').then((module) => ({ default: module.PlayerExplorer }))
+);
+const PlayerComparePage = React.lazy(() =>
+  import('../modules/players').then((module) => ({ default: module.PlayerComparePage }))
+);
+const PlayerDetailPage = React.lazy(() =>
+  import('../modules/players').then((module) => ({ default: module.PlayerDetailPage }))
+);
+const ClubExplorer = React.lazy(() =>
+  import('../modules/teams').then((module) => ({ default: module.ClubExplorer }))
+);
+
+const GameweekHubShell = React.lazy(() =>
+  import('../modules/fantasy/pages').then((module) => ({ default: module.GameweekHubShell }))
+);
+const FantasyGameOverview = React.lazy(() =>
+  import('../modules/fantasy/pages').then((module) => ({ default: module.FantasyGameOverview }))
+);
+const MyTeamPage = React.lazy(() =>
+  import('../modules/fantasy/pages').then((module) => ({ default: module.MyTeamPage }))
+);
+const LeagueStandingsPage = React.lazy(() =>
+  import('../modules/fantasy/pages').then((module) => ({ default: module.LeagueStandingsPage }))
+);
+const GameweekCenterPage = React.lazy(() =>
+  import('../modules/fantasy/pages').then((module) => ({ default: module.GameweekCenterPage }))
+);
+const LiveMatchCenterPage = React.lazy(() =>
+  import('../modules/fantasy/pages').then((module) => ({ default: module.LiveMatchCenterPage }))
+);
+const TransferPlannerPage = React.lazy(() =>
+  import('../modules/fantasy/pages').then((module) => ({ default: module.TransferPlannerPage }))
+);
+const GameweekPlannerPage = React.lazy(() =>
+  import('../modules/fantasy/pages').then((module) => ({ default: module.GameweekPlannerPage }))
+);
+const SeasonPlannerPage = React.lazy(() =>
+  import('../modules/fantasy/pages').then((module) => ({ default: module.SeasonPlannerPage }))
+);
+const PremierLeagueTablePage = React.lazy(() =>
+  import('../modules/fantasy/pages').then((module) => ({ default: module.PremierLeagueTablePage }))
+);
 
 // Lazy load Analytics module to reduce initial bundle size
 const Analytics = React.lazy(() =>
   import('../modules/analytics/Analytics').then((module) => ({ default: module.Analytics }))
 );
 
-// Loading fallback component
-const AnalyticsLoadingFallback = () => (
+const RouteLoadingFallback = () => (
   <Box sx={{ minHeight: '400px', p: 2 }}>
     <Stack spacing={1}>
       <Skeleton variant="text" width="28%" height={40} />
@@ -83,30 +112,50 @@ const router = createBrowserRouter([
           },
           {
             path: 'dashboard',
-            element: <Dashboard />,
+            element: (
+              <Suspense fallback={<RouteLoadingFallback />}>
+                <Dashboard />
+              </Suspense>
+            ),
           },
           {
             path: 'players',
-            element: <PlayerResearchHub />,
+            element: (
+              <Suspense fallback={<RouteLoadingFallback />}>
+                <PlayerResearchHub />
+              </Suspense>
+            ),
             children: [
               {
                 index: true,
-                element: <PlayerExplorer />,
+                element: (
+                  <Suspense fallback={<RouteLoadingFallback />}>
+                    <PlayerExplorer />
+                  </Suspense>
+                ),
               },
               {
                 path: 'compare',
-                element: <PlayerComparePage />,
+                element: (
+                  <Suspense fallback={<RouteLoadingFallback />}>
+                    <PlayerComparePage />
+                  </Suspense>
+                ),
               },
               {
                 path: ':playerId',
-                element: <PlayerDetailPage />,
+                element: (
+                  <Suspense fallback={<RouteLoadingFallback />}>
+                    <PlayerDetailPage />
+                  </Suspense>
+                ),
               },
             ],
           },
           {
             path: 'analytics',
             element: (
-              <Suspense fallback={<AnalyticsLoadingFallback />}>
+              <Suspense fallback={<RouteLoadingFallback />}>
                 <Analytics />
               </Suspense>
             ),
@@ -153,7 +202,9 @@ const router = createBrowserRouter([
             path: 'gameweek',
             element: (
               <GameweekHubProvider>
-                <GameweekHubShell />
+                <Suspense fallback={<RouteLoadingFallback />}>
+                  <GameweekHubShell />
+                </Suspense>
               </GameweekHubProvider>
             ),
             children: [
@@ -163,7 +214,11 @@ const router = createBrowserRouter([
               },
               {
                 path: 'overview',
-                element: <FantasyGameOverview />,
+                element: (
+                  <Suspense fallback={<RouteLoadingFallback />}>
+                    <FantasyGameOverview />
+                  </Suspense>
+                ),
               },
               {
                 path: 'connect',
@@ -173,7 +228,9 @@ const router = createBrowserRouter([
                 path: 'my-team',
                 element: (
                   <FplConnectionGate>
-                    <MyTeamPage />
+                    <Suspense fallback={<RouteLoadingFallback />}>
+                      <MyTeamPage />
+                    </Suspense>
                   </FplConnectionGate>
                 ),
               },
@@ -181,7 +238,9 @@ const router = createBrowserRouter([
                 path: 'league',
                 element: (
                   <FplConnectionGate>
-                    <LeagueStandingsPage />
+                    <Suspense fallback={<RouteLoadingFallback />}>
+                      <LeagueStandingsPage />
+                    </Suspense>
                   </FplConnectionGate>
                 ),
               },
@@ -189,7 +248,9 @@ const router = createBrowserRouter([
                 path: 'league/:leagueId',
                 element: (
                   <FplConnectionGate>
-                    <LeagueStandingsPage />
+                    <Suspense fallback={<RouteLoadingFallback />}>
+                      <LeagueStandingsPage />
+                    </Suspense>
                   </FplConnectionGate>
                 ),
               },
@@ -197,7 +258,9 @@ const router = createBrowserRouter([
                 path: 'league/:leagueId/live',
                 element: (
                   <FplConnectionGate>
-                    <LeagueStandingsPage />
+                    <Suspense fallback={<RouteLoadingFallback />}>
+                      <LeagueStandingsPage />
+                    </Suspense>
                   </FplConnectionGate>
                 ),
               },
@@ -205,21 +268,35 @@ const router = createBrowserRouter([
                 path: 'league/:leagueId/managers/:managerId',
                 element: (
                   <FplConnectionGate>
-                    <LeagueStandingsPage />
+                    <Suspense fallback={<RouteLoadingFallback />}>
+                      <LeagueStandingsPage />
+                    </Suspense>
                   </FplConnectionGate>
                 ),
               },
               {
                 path: 'fixtures',
-                element: <LiveMatchCenterPage />,
+                element: (
+                  <Suspense fallback={<RouteLoadingFallback />}>
+                    <LiveMatchCenterPage />
+                  </Suspense>
+                ),
               },
               {
                 path: 'clubs',
-                element: <ClubExplorer />,
+                element: (
+                  <Suspense fallback={<RouteLoadingFallback />}>
+                    <ClubExplorer />
+                  </Suspense>
+                ),
               },
               {
                 path: 'table',
-                element: <PremierLeagueTablePage />,
+                element: (
+                  <Suspense fallback={<RouteLoadingFallback />}>
+                    <PremierLeagueTablePage />
+                  </Suspense>
+                ),
               },
               {
                 path: 'gameweeks',
@@ -231,13 +308,19 @@ const router = createBrowserRouter([
               },
               {
                 path: 'gameweeks/:gameweekId',
-                element: <GameweekCenterPage />,
+                element: (
+                  <Suspense fallback={<RouteLoadingFallback />}>
+                    <GameweekCenterPage />
+                  </Suspense>
+                ),
               },
               {
                 path: 'transfers',
                 element: (
                   <FplConnectionGate>
-                    <TransferPlannerPage />
+                    <Suspense fallback={<RouteLoadingFallback />}>
+                      <TransferPlannerPage />
+                    </Suspense>
                   </FplConnectionGate>
                 ),
               },
@@ -245,7 +328,9 @@ const router = createBrowserRouter([
                 path: 'planner',
                 element: (
                   <FplConnectionGate>
-                    <GameweekPlannerPage />
+                    <Suspense fallback={<RouteLoadingFallback />}>
+                      <GameweekPlannerPage />
+                    </Suspense>
                   </FplConnectionGate>
                 ),
               },
@@ -253,7 +338,9 @@ const router = createBrowserRouter([
                 path: 'season-planner',
                 element: (
                   <FplConnectionGate>
-                    <SeasonPlannerPage />
+                    <Suspense fallback={<RouteLoadingFallback />}>
+                      <SeasonPlannerPage />
+                    </Suspense>
                   </FplConnectionGate>
                 ),
               },
@@ -273,7 +360,9 @@ const router = createBrowserRouter([
                 path: 'leagues/:leagueId',
                 element: (
                   <FplConnectionGate>
-                    <LeagueStandingsPage />
+                    <Suspense fallback={<RouteLoadingFallback />}>
+                      <LeagueStandingsPage />
+                    </Suspense>
                   </FplConnectionGate>
                 ),
               },
@@ -281,7 +370,9 @@ const router = createBrowserRouter([
                 path: 'leagues/:leagueId/live',
                 element: (
                   <FplConnectionGate>
-                    <LeagueStandingsPage />
+                    <Suspense fallback={<RouteLoadingFallback />}>
+                      <LeagueStandingsPage />
+                    </Suspense>
                   </FplConnectionGate>
                 ),
               },
@@ -289,7 +380,9 @@ const router = createBrowserRouter([
                 path: 'leagues/:leagueId/managers/:managerId',
                 element: (
                   <FplConnectionGate>
-                    <LeagueStandingsPage />
+                    <Suspense fallback={<RouteLoadingFallback />}>
+                      <LeagueStandingsPage />
+                    </Suspense>
                   </FplConnectionGate>
                 ),
               },

@@ -11,7 +11,7 @@ export const AppLayout: React.FC = () => {
         display: 'flex',
         flexDirection: 'column',
         minHeight: '100vh',
-        backgroundColor: '#fafafa',
+        backgroundColor: 'background.default',
       }}
     >
       <AppHeader />

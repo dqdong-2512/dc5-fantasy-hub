@@ -4,7 +4,7 @@
  * For pre-season: shows next gameweek and season start info
  */
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { Box, Typography, Stack } from '@mui/material';
 import { ThemeTokens } from '@shared/theme/tokens';
 import EventIcon from '@mui/icons-material/Event';
@@ -45,41 +45,40 @@ function getNextGameweek(gameweeks: any[]) {
  * Current Gameweek Summary Widget
  */
 export const CurrentGameweekSummary: React.FC = () => {
-  const gameweekData = useMemo(() => {
-    try {
-      const repo = new BootstrapRepository();
-      const bootstrap = repo.getBootstrap();
-      const seasonState = detectSeasonState(bootstrap.gameweeks);
-      const current = repo.getCurrentGameweek();
+  let gameweekData;
+  try {
+    const repo = new BootstrapRepository();
+    const bootstrap = repo.getBootstrap();
+    const seasonState = detectSeasonState(bootstrap.gameweeks);
+    const current = repo.getCurrentGameweek();
 
-      if (seasonState === 'pre-season') {
-        const nextGw = getNextGameweek(bootstrap.gameweeks);
-        return {
-          seasonState: 'pre-season' as const,
-          gameweek: nextGw?.id || 1,
-          deadline: nextGw?.deadline || null,
-          deadlineFormatted: formatDeadline(nextGw?.deadline || ''),
-          statusLabel: 'Upcoming',
-        };
-      }
-
-      return {
+    if (seasonState === 'pre-season') {
+      const nextGw = getNextGameweek(bootstrap.gameweeks);
+      gameweekData = {
+        seasonState: 'pre-season' as const,
+        gameweek: nextGw?.id || 1,
+        deadline: nextGw?.deadline || null,
+        deadlineFormatted: formatDeadline(nextGw?.deadline || ''),
+        statusLabel: 'Upcoming',
+      };
+    } else {
+      gameweekData = {
         seasonState: seasonState as 'active' | 'completed',
         gameweek: current?.id || 0,
         deadline: current?.deadline || null,
         deadlineFormatted: formatDeadline(current?.deadline || ''),
         statusLabel: current?.id ? 'Active' : 'Complete',
       };
-    } catch (error) {
-      return {
-        seasonState: 'pre-season' as const,
-        gameweek: 1,
-        deadline: null,
-        deadlineFormatted: 'TBA',
-        statusLabel: 'Upcoming',
-      };
     }
-  }, []);
+  } catch {
+    gameweekData = {
+      seasonState: 'pre-season' as const,
+      gameweek: 1,
+      deadline: null,
+      deadlineFormatted: 'TBA',
+      statusLabel: 'Upcoming',
+    };
+  }
 
   const title = gameweekData.seasonState === 'pre-season' ? 'Next Gameweek' : 'Current Gameweek';
   const titleColor = gameweekData.seasonState === 'pre-season' ? '#7c3aed' : '#1976d2';

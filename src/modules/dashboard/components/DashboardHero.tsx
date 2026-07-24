@@ -56,7 +56,6 @@ export const DashboardHero: React.FC = () => {
             maxWidth: '100%',
             objectFit: 'contain',
             flexShrink: 0,
-            backgroundColor: 'rgba(255, 255, 255, 0.1)',
             borderRadius: '4px',
           }}
         />
@@ -77,6 +76,7 @@ export const DashboardHero: React.FC = () => {
               display: 'flex',
               flexDirection: 'column',
               gap: '2px',
+              paddingBottom: '10px',
             }}
           >
             <Typography

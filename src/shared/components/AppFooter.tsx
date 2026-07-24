@@ -8,14 +8,15 @@ export const AppFooter: React.FC = () => {
     <Box
       component="footer"
       sx={{
-        backgroundColor: '#f5f5f5',
-        borderTop: '1px solid #e0e0e0',
+        backgroundColor: 'background.paper',
+        borderTop: '1px solid',
+        borderColor: 'divider',
         marginTop: 'auto',
         paddingY: 1,
       }}
     >
       <Container maxWidth="lg">
-        <Typography variant="body2" align="center" sx={{ color: '#666' }}>
+        <Typography variant="body2" align="center" sx={{ color: 'text.secondary' }}>
           DC5 Fantasy Hub © {currentYear}
         </Typography>
       </Container>

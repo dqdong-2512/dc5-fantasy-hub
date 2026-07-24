@@ -2,7 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { CssBaseline, ThemeProvider } from '@mui/material';
 import { App } from './App';
-import { appTheme } from './theme';
+import { createAppTheme } from './theme';
+import { ThemeModeProvider, useThemeMode } from './theme/theme-mode';
 
 const rootElement = document.getElementById('app');
 if (!rootElement) {
@@ -11,9 +12,20 @@ if (!rootElement) {
 
 ReactDOM.createRoot(rootElement).render(
   <React.StrictMode>
-    <ThemeProvider theme={appTheme}>
+    <ThemeModeProvider>
+      <AppThemeContainer />
+    </ThemeModeProvider>
+  </React.StrictMode>
+);
+
+function AppThemeContainer(): React.ReactElement {
+  const { resolvedMode } = useThemeMode();
+  const theme = React.useMemo(() => createAppTheme(resolvedMode), [resolvedMode]);
+
+  return (
+    <ThemeProvider theme={theme}>
       <CssBaseline />
       <App />
     </ThemeProvider>
-  </React.StrictMode>
-);
+  );
+}

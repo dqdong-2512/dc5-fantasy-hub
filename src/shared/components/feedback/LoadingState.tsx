@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, CircularProgress, Typography } from '@mui/material';
+import { Box, Skeleton, Stack, Typography } from '@mui/material';
 import type { BoxProps } from '@mui/material';
 import { ThemeTokens } from '@shared/theme/tokens';
 
@@ -32,7 +32,11 @@ export function LoadingState({
       }}
       {...props}
     >
-      <CircularProgress size={size} />
+      <Stack spacing={ThemeTokens.spacing.sm} sx={{ width: '100%', maxWidth: 320 }}>
+        <Skeleton variant="text" width="38%" height={28} />
+        <Skeleton variant="text" width="100%" />
+        <Skeleton variant="rounded" height={size * 1.6} />
+      </Stack>
       {label && (
         <Typography variant={ThemeTokens.typography.bodyVariant} color="text.secondary">
           {label}

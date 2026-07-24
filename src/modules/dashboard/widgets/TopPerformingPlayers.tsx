@@ -3,7 +3,7 @@
  * Displays top 10 players by total points
  */
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import {
   Box,
   Typography,
@@ -31,28 +31,25 @@ export interface TopPerformingPlayersProps {
  * Shows top 10 players by total points
  */
 export const TopPerformingPlayers: React.FC<TopPerformingPlayersProps> = ({ onPlayerClick }) => {
-  const { topPlayers, isPreSeason } = useMemo(() => {
-    try {
-      const bootstrapRepo = new BootstrapRepository();
-      const preSeasonFlag = bootstrapRepo.isPreSeason();
+  let topPlayers: ReturnType<typeof PlayerPresenter.toListPresentations> = [];
+  let isPreSeason = false;
 
-      // During pre-season, don't show performance data
-      if (preSeasonFlag) {
-        return { topPlayers: [], isPreSeason: true };
-      }
+  try {
+    const bootstrapRepo = new BootstrapRepository();
+    isPreSeason = bootstrapRepo.isPreSeason();
 
+    // During pre-season, don't show performance data
+    if (!isPreSeason) {
       const repo = new PlayerRepository();
       const all = repo.getAll();
       const sorted = all.sort((a, b) => b.totalPoints - a.totalPoints).slice(0, 10);
-      return {
-        topPlayers: PlayerPresenter.toListPresentations(sorted),
-        isPreSeason: false,
-      };
-    } catch (error) {
-      console.error('Error loading top players:', error);
-      return { topPlayers: [], isPreSeason: false };
+      topPlayers = PlayerPresenter.toListPresentations(sorted);
     }
-  }, []);
+  } catch (error) {
+    console.error('Error loading top players:', error);
+    topPlayers = [];
+    isPreSeason = false;
+  }
 
   return (
     <DashboardWidget
