@@ -1,24 +1,12 @@
 import React from 'react';
-import {
-  Alert,
-  Button,
-  Box,
-  Card,
-  CardContent,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Alert, Button, Box, Stack, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { ThemeTokens } from '@shared/theme/tokens';
+import { RankingTable } from '../components';
 import { useAnalyticsDecision } from '../context';
 
 export function TeamPage(): React.ReactElement {
-  const { connectedEntryId, teamSummary, teamRiskFlags } = useAnalyticsDecision();
+  const { connectedEntryId, teamSummary, teamRiskFlags, injuryWatch } = useAnalyticsDecision();
 
   if (!connectedEntryId) {
     return (
@@ -59,58 +47,66 @@ export function TeamPage(): React.ReactElement {
         </Box>
       </Box>
 
-      <Card>
-        <CardContent>
-          <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-            Risk Flags
-          </Typography>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Player</TableCell>
-                <TableCell>Reason</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {teamRiskFlags.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={2}>No immediate risk flags detected.</TableCell>
-                </TableRow>
-              ) : (
-                teamRiskFlags.map((flag, index) => (
-                  <TableRow key={`${flag.playerId}-${index}`} hover>
-                    <TableCell>
-                      <Button
-                        size="small"
-                        component={RouterLink}
-                        to={`/premier-league/players/${flag.playerId}`}
-                      >
-                        {flag.playerName}
-                      </Button>
-                    </TableCell>
-                    <TableCell>{flag.reason}</TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <RankingTable
+        title="Risk Flags"
+        rows={teamRiskFlags}
+        columns={[
+          {
+            id: 'reason',
+            label: 'Reason',
+            sortable: false,
+            render: (row: (typeof teamRiskFlags)[number]) => row.reason,
+          },
+        ]}
+        rowMeta={{
+          key: (row) => `${row.playerId}-${row.reason}`,
+          title: (row) => row.playerName,
+          subtitle: () => 'Squad Risk',
+          trend: () => 'down',
+          badges: () => ['Risk'],
+        }}
+      />
+
+      <RankingTable
+        title="Injury Watch"
+        rows={injuryWatch}
+        columns={[
+          {
+            id: 'status',
+            label: 'Status',
+            sortable: true,
+            sortValue: (row: (typeof injuryWatch)[number]) => row.status,
+            render: (row: (typeof injuryWatch)[number]) => row.status,
+          },
+          {
+            id: 'club',
+            label: 'Club',
+            sortable: true,
+            sortValue: (row: (typeof injuryWatch)[number]) => row.club,
+            render: (row: (typeof injuryWatch)[number]) => row.club,
+          },
+        ]}
+        rowMeta={{
+          key: (row) => row.playerId,
+          title: (row) => row.playerName,
+          subtitle: (row) => row.club,
+          trend: () => 'down',
+          badges: (row) => [row.status.toUpperCase()],
+        }}
+      />
     </Stack>
   );
 }
 
 function SummaryCard({ label, value }: { label: string; value: string }): React.ReactElement {
   return (
-    <Card>
-      <CardContent>
-        <Typography variant="caption" color="text.secondary">
-          {label}
-        </Typography>
-        <Typography variant="h6" sx={{ fontWeight: 700 }}>
-          {value}
-        </Typography>
-      </CardContent>
-    </Card>
+    <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: ThemeTokens.spacing.sm }}>
+      <Typography variant="caption" color="text.secondary">
+        {label}
+      </Typography>
+      <Typography variant="h6" sx={{ fontWeight: 700 }}>
+        {value}
+      </Typography>
+    </Box>
   );
 }

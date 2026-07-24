@@ -4,3 +4,6 @@ export { CaptainPage } from './CaptainPage';
 export { TransfersPage } from './TransfersPage';
 export { FixturesPage } from './FixturesPage';
 export { TeamPage } from './TeamPage';
+export { FormPage } from './FormPage';
+export { DifferentialsPage } from './DifferentialsPage';
+export { ValuePage } from './ValuePage';

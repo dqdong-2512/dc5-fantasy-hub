@@ -27,9 +27,15 @@ export interface PlayerFilterConfig {
 }
 
 export type {
+  FormBand,
+  FormTrend,
+  FormWindowStats,
+  PlayerFormProfile,
   CaptainCandidate,
   TransferCandidate,
   TeamFixtureRun,
+  DifferentialPick,
+  ValueIndexRecord,
   TeamInsightSummary,
   PlayerRiskFlag,
   AnalyticsDecisionSnapshot,

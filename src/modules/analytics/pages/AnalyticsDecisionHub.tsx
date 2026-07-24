@@ -7,6 +7,9 @@ import { ThemeTokens } from '@shared/theme/tokens';
 const ROUTE_TO_TAB: Record<string, string> = {
   '/premier-league/analytics': 'overview',
   '/premier-league/analytics/overview': 'overview',
+  '/premier-league/analytics/form': 'form',
+  '/premier-league/analytics/differentials': 'differentials',
+  '/premier-league/analytics/value': 'value',
   '/premier-league/analytics/captain': 'captain',
   '/premier-league/analytics/transfers': 'transfers',
   '/premier-league/analytics/fixtures': 'fixtures',
@@ -23,10 +26,11 @@ export function AnalyticsDecisionHub(): React.ReactElement {
     <PageContent>
       <PageHeader>
         <Typography variant="h4" sx={{ fontWeight: 700 }}>
-          Decision Hub
+          Decision Center
         </Typography>
         <Typography variant="body2" color="text.secondary" sx={{ mt: 0.5 }}>
-          Rule-based FPL insights for captaincy, transfers, fixtures, and team health.
+          Captaincy, transfers, form, fixtures, value, and differential intelligence in one
+          workspace.
         </Typography>
       </PageHeader>
 
@@ -44,7 +48,10 @@ export function AnalyticsDecisionHub(): React.ReactElement {
             },
           }}
         >
-          <Tab label="Overview" value="overview" />
+          <Tab label="Dashboard" value="overview" />
+          <Tab label="Form" value="form" />
+          <Tab label="Differentials" value="differentials" />
+          <Tab label="Value" value="value" />
           <Tab label="Captain" value="captain" />
           <Tab label="Transfers" value="transfers" />
           <Tab label="Fixtures" value="fixtures" />

@@ -1,28 +1,63 @@
 import React from 'react';
-import {
-  Alert,
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Alert, Button, Stack } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { ThemeTokens } from '@shared/theme/tokens';
+import { RankingTable } from '../components';
 import { useAnalyticsDecision } from '../context';
 
 export function TransfersPage(): React.ReactElement {
-  const { transferCandidates, connectedEntryId, managerBankInMillions } = useAnalyticsDecision();
+  const {
+    topBuyCandidates,
+    topSellCandidates,
+    topWatchlistCandidates,
+    connectedEntryId,
+    managerBankInMillions,
+  } = useAnalyticsDecision();
+
+  const columns = [
+    {
+      id: 'score',
+      label: 'Score',
+      align: 'right' as const,
+      sortable: true,
+      sortValue: (row: (typeof topBuyCandidates)[number]) => row.transferTargetScore,
+      render: (row: (typeof topBuyCandidates)[number]) => row.transferTargetScore.toFixed(1),
+    },
+    {
+      id: 'price',
+      label: 'Price',
+      align: 'right' as const,
+      sortable: true,
+      sortValue: (row: (typeof topBuyCandidates)[number]) => row.price,
+      render: (row: (typeof topBuyCandidates)[number]) => `${row.price.toFixed(1)}m`,
+    },
+    {
+      id: 'trend',
+      label: 'Price Trend',
+      align: 'right' as const,
+      sortable: true,
+      sortValue: (row: (typeof topBuyCandidates)[number]) => row.priceTrend,
+      render: (row: (typeof topBuyCandidates)[number]) =>
+        `${row.priceTrend > 0 ? '+' : ''}${row.priceTrend.toFixed(1)}`,
+    },
+    {
+      id: 'fixture',
+      label: 'Fixtures',
+      sortable: false,
+      render: (row: (typeof topBuyCandidates)[number]) => row.fixtureSummary,
+    },
+    {
+      id: 'form',
+      label: 'Form',
+      sortable: false,
+      render: (row: (typeof topBuyCandidates)[number]) => row.formSummary,
+    },
+  ];
 
   return (
     <Stack spacing={ThemeTokens.spacing.md}>
       <Alert severity="info">
-        Transfer targets are ranked by deterministic score. No transfers are executed automatically.
+        Recommendations are deterministic and categorized as Buy, Sell, Hold, or Watchlist.
       </Alert>
 
       {connectedEntryId ? (
@@ -43,51 +78,47 @@ export function TransfersPage(): React.ReactElement {
         </Alert>
       )}
 
-      <Card>
-        <CardContent>
-          <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-            Transfer Watchlist
-          </Typography>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Player</TableCell>
-                <TableCell>Club</TableCell>
-                <TableCell>Position</TableCell>
-                <TableCell align="right">Price</TableCell>
-                <TableCell align="right">Score</TableCell>
-                <TableCell>Methodology Summary</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {transferCandidates.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={6}>No transfer targets met the current criteria.</TableCell>
-                </TableRow>
-              ) : (
-                transferCandidates.map((candidate) => (
-                  <TableRow key={candidate.playerId} hover>
-                    <TableCell>
-                      <Button
-                        component={RouterLink}
-                        to={`/premier-league/players/${candidate.playerId}`}
-                        size="small"
-                      >
-                        {candidate.playerName}
-                      </Button>
-                    </TableCell>
-                    <TableCell>{candidate.club}</TableCell>
-                    <TableCell>{candidate.position}</TableCell>
-                    <TableCell align="right">{candidate.price.toFixed(1)}m</TableCell>
-                    <TableCell align="right">{candidate.transferTargetScore.toFixed(2)}</TableCell>
-                    <TableCell>{candidate.summary}</TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
+      <RankingTable
+        title="Buy Targets"
+        rows={topBuyCandidates}
+        columns={columns}
+        initialSortColumn="score"
+        rowMeta={{
+          key: (row) => `buy-${row.playerId}`,
+          title: (row) => row.playerName,
+          subtitle: (row) => `${row.club} • ${row.position}`,
+          badges: () => ['Buy'],
+          trend: (row) => (row.transferTargetScore >= 75 ? 'up' : 'flat'),
+        }}
+      />
+
+      <RankingTable
+        title="Sell Candidates"
+        rows={topSellCandidates}
+        columns={columns}
+        initialSortColumn="score"
+        rowMeta={{
+          key: (row) => `sell-${row.playerId}`,
+          title: (row) => row.playerName,
+          subtitle: (row) => `${row.club} • ${row.position}`,
+          badges: () => ['Sell'],
+          trend: () => 'down',
+        }}
+      />
+
+      <RankingTable
+        title="Watchlist"
+        rows={topWatchlistCandidates}
+        columns={columns}
+        initialSortColumn="score"
+        rowMeta={{
+          key: (row) => `watch-${row.playerId}`,
+          title: (row) => row.playerName,
+          subtitle: (row) => `${row.club} • ${row.position}`,
+          badges: () => ['Watchlist'],
+          trend: () => 'flat',
+        }}
+      />
 
       <Button
         component={RouterLink}

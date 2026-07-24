@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate, useLocation } from 'react-router-dom';
-import { Box, CircularProgress } from '@mui/material';
+import { Box, Skeleton, Stack } from '@mui/material';
 import { CompetitionSelection } from '../app/CompetitionSelection';
 import { Dashboard } from '../modules/dashboard/Dashboard';
 import { Fixtures } from '../modules/fixtures';
@@ -12,10 +12,13 @@ import {
 } from '../modules/players';
 import {
   CaptainPage,
+  DifferentialsPage,
   FixturesPage,
+  FormPage,
   OverviewPage,
   TeamPage,
   TransfersPage,
+  ValuePage,
 } from '../modules/analytics/pages';
 import { ClubExplorer } from '../modules/teams';
 import {
@@ -41,8 +44,14 @@ const Analytics = React.lazy(() =>
 
 // Loading fallback component
 const AnalyticsLoadingFallback = () => (
-  <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '400px' }}>
-    <CircularProgress size={40} />
+  <Box sx={{ minHeight: '400px', p: 2 }}>
+    <Stack spacing={1}>
+      <Skeleton variant="text" width="28%" height={40} />
+      <Skeleton variant="text" width="42%" />
+      <Skeleton variant="rounded" height={120} />
+      <Skeleton variant="rounded" height={120} />
+      <Skeleton variant="rounded" height={120} />
+    </Stack>
   </Box>
 );
 
@@ -113,6 +122,18 @@ const router = createBrowserRouter([
               {
                 path: 'captain',
                 element: <CaptainPage />,
+              },
+              {
+                path: 'form',
+                element: <FormPage />,
+              },
+              {
+                path: 'differentials',
+                element: <DifferentialsPage />,
+              },
+              {
+                path: 'value',
+                element: <ValuePage />,
               },
               {
                 path: 'transfers',

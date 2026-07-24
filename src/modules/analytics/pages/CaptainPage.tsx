@@ -1,28 +1,57 @@
 import React from 'react';
-import {
-  Alert,
-  Button,
-  Card,
-  CardContent,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import { Alert, Button, Stack } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { ThemeTokens } from '@shared/theme/tokens';
+import { RankingTable } from '../components';
 import { useAnalyticsDecision } from '../context';
+import { getPlayerHeadshotUrl } from '@shared/assets';
 
 export function CaptainPage(): React.ReactElement {
   const { captainCandidates, managerCaptainCandidates, connectedEntryId } = useAnalyticsDecision();
 
+  const columns = [
+    {
+      id: 'score',
+      label: 'Captain Score',
+      align: 'right' as const,
+      sortable: true,
+      sortValue: (row: (typeof captainCandidates)[number]) => row.score,
+      render: (row: (typeof captainCandidates)[number]) => row.score,
+    },
+    {
+      id: 'confidence',
+      label: 'Confidence',
+      sortable: true,
+      sortValue: (row: (typeof captainCandidates)[number]) => row.confidence,
+      render: (row: (typeof captainCandidates)[number]) => row.confidence,
+    },
+    {
+      id: 'ownership',
+      label: 'Own %',
+      align: 'right' as const,
+      sortable: true,
+      sortValue: (row: (typeof captainCandidates)[number]) => row.ownership,
+      render: (row: (typeof captainCandidates)[number]) => row.ownership.toFixed(1),
+    },
+    {
+      id: 'fixture',
+      label: 'Next Fixtures',
+      sortable: false,
+      render: (row: (typeof captainCandidates)[number]) => row.fixtureSummary,
+    },
+    {
+      id: 'reason',
+      label: 'Reason',
+      sortable: false,
+      render: (row: (typeof captainCandidates)[number]) => row.reason,
+    },
+  ];
+
   return (
     <Stack spacing={ThemeTokens.spacing.md}>
       <Alert severity="info">
-        Captain score = form + fixtures + reliability. Use this as decision support, not prediction.
+        Captain scores are deterministic (0-100), balancing form, fixtures, home/away, reliability,
+        involvement, and ownership profile.
       </Alert>
 
       {!connectedEntryId && (
@@ -39,70 +68,42 @@ export function CaptainPage(): React.ReactElement {
       )}
 
       {connectedEntryId && (
-        <CaptainTable
+        <RankingTable
           title="Your Squad Captain Matrix"
           rows={managerCaptainCandidates}
-          emptyMessage="No eligible players from your current squad."
+          columns={columns}
+          initialSortColumn="score"
+          rowMeta={{
+            key: (row) => `captain-squad-${row.playerId}`,
+            title: (row) => row.playerName,
+            subtitle: (row) => row.club,
+            badges: (row) => [row.confidence],
+            trend: (row) => (row.score >= 75 ? 'up' : row.score <= 50 ? 'down' : 'flat'),
+            avatar: {
+              src: () => getPlayerHeadshotUrl(),
+              alt: (row) => row.playerName,
+            },
+          }}
         />
       )}
 
-      <CaptainTable
+      <RankingTable
         title="Public Captain Shortlist"
         rows={captainCandidates}
-        emptyMessage="No captain candidates available in the current dataset."
+        columns={columns}
+        initialSortColumn="score"
+        rowMeta={{
+          key: (row) => `captain-global-${row.playerId}`,
+          title: (row) => row.playerName,
+          subtitle: (row) => row.club,
+          badges: (row) => [row.confidence],
+          trend: (row) => (row.score >= 75 ? 'up' : row.score <= 50 ? 'down' : 'flat'),
+          avatar: {
+            src: () => getPlayerHeadshotUrl(),
+            alt: (row) => row.playerName,
+          },
+        }}
       />
     </Stack>
-  );
-}
-
-function CaptainTable({
-  title,
-  rows,
-  emptyMessage,
-}: {
-  title: string;
-  rows: Array<{
-    playerId: number;
-    playerName: string;
-    club: string;
-    score: number;
-    reason: string;
-  }>;
-  emptyMessage: string;
-}): React.ReactElement {
-  return (
-    <Card>
-      <CardContent>
-        <Typography variant="h6" sx={{ fontWeight: 700, mb: 1 }}>
-          {title}
-        </Typography>
-        <Table size="small">
-          <TableHead>
-            <TableRow>
-              <TableCell>Player</TableCell>
-              <TableCell>Club</TableCell>
-              <TableCell align="right">Captain Score</TableCell>
-              <TableCell>Reason</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.length === 0 ? (
-              <TableRow>
-                <TableCell colSpan={4}>{emptyMessage}</TableCell>
-              </TableRow>
-            ) : (
-              rows.map((row) => (
-                <TableRow key={`${title}-${row.playerId}`} hover>
-                  <TableCell>{row.playerName}</TableCell>
-                  <TableCell>{row.club}</TableCell>
-                  <TableCell align="right">{row.score.toFixed(2)}</TableCell>
-                  <TableCell>{row.reason}</TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
   );
 }

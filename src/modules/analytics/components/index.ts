@@ -8,3 +8,4 @@ export { PlayerAnalyticsTable } from './PlayerAnalyticsTable';
 export { PlayerFilterBar } from './PlayerFilterBar';
 export { PlayerInsight } from './PlayerInsight';
 export { PlayerComparison } from './PlayerComparison';
+export { RankingTable, type RankingTableColumn } from './RankingTable';

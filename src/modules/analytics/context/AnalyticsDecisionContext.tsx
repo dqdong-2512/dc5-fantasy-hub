@@ -12,10 +12,13 @@ import { DecisionHubService } from '../services/decision-hub.service';
 import type {
   AnalyticsDecisionSnapshot,
   CaptainCandidate,
+  DifferentialPick,
+  PlayerFormProfile,
   PlayerRiskFlag,
   TeamFixtureRun,
   TeamInsightSummary,
   TransferCandidate,
+  ValueIndexRecord,
 } from '../types/decision-hub';
 
 interface AnalyticsDecisionContextValue extends AnalyticsDecisionSnapshot {
@@ -23,8 +26,28 @@ interface AnalyticsDecisionContextValue extends AnalyticsDecisionSnapshot {
   error: string | null;
   captainCandidates: CaptainCandidate[];
   managerCaptainCandidates: CaptainCandidate[];
-  transferCandidates: TransferCandidate[];
+  transferRecommendations: TransferCandidate[];
+  topBuyCandidates: TransferCandidate[];
+  topSellCandidates: TransferCandidate[];
+  topWatchlistCandidates: TransferCandidate[];
   fixtureRuns: TeamFixtureRun[];
+  fixtureSwings: TeamFixtureRun[];
+  differentialPicks: DifferentialPick[];
+  valueIndex: ValueIndexRecord[];
+  risingPlayers: PlayerFormProfile[];
+  fallingPlayers: PlayerFormProfile[];
+  injuryWatch: Array<{
+    playerId: number;
+    playerName: string;
+    status: string;
+    club: string;
+  }>;
+  latestTransferSignals: Array<{
+    playerId: number;
+    playerName: string;
+    direction: 'in' | 'out' | 'neutral';
+    score: number;
+  }>;
   managerRecords: ReturnType<PlayerAnalyticsService['buildAllAnalytics']>;
   teamSummary: TeamInsightSummary;
   teamRiskFlags: PlayerRiskFlag[];
@@ -102,27 +125,129 @@ export function AnalyticsDecisionProvider({
     [analyticsService, players]
   );
 
+  const formProfiles = useMemo(
+    () => decisionService.buildPlayerFormProfiles(players),
+    [decisionService, players]
+  );
+
   const managerRecords = useMemo(
     () => analytics.filter((record) => managerPlayerIds.includes(record.playerId)),
     [analytics, managerPlayerIds]
   );
 
   const captainCandidates = useMemo(
-    () => decisionService.getCaptainCandidates(analytics, false),
-    [analytics, decisionService]
+    () => decisionService.getCaptainCandidates(analytics, formProfiles, false),
+    [analytics, decisionService, formProfiles]
   );
 
   const managerCaptainCandidates = useMemo(
-    () => decisionService.getCaptainCandidates(analytics, true),
-    [analytics, decisionService]
+    () => decisionService.getCaptainCandidates(analytics, formProfiles, true),
+    [analytics, decisionService, formProfiles]
   );
 
-  const transferCandidates = useMemo(
-    () => decisionService.getTransferCandidates(analytics, managerPlayerIds, managerBankInMillions),
-    [analytics, decisionService, managerPlayerIds, managerBankInMillions]
+  const transferRecommendations = useMemo(
+    () =>
+      decisionService.buildTransferRecommendations(
+        analytics,
+        formProfiles,
+        managerPlayerIds,
+        managerBankInMillions
+      ),
+    [analytics, decisionService, formProfiles, managerPlayerIds, managerBankInMillions]
+  );
+
+  const topBuyCandidates = useMemo(
+    () => transferRecommendations.filter((candidate) => candidate.action === 'buy').slice(0, 12),
+    [transferRecommendations]
+  );
+
+  const topSellCandidates = useMemo(
+    () => transferRecommendations.filter((candidate) => candidate.action === 'sell').slice(0, 12),
+    [transferRecommendations]
+  );
+
+  const topWatchlistCandidates = useMemo(
+    () =>
+      transferRecommendations.filter((candidate) => candidate.action === 'watchlist').slice(0, 12),
+    [transferRecommendations]
   );
 
   const fixtureRuns = useMemo(() => decisionService.getFixtureRuns(), [decisionService]);
+
+  const fixtureSwings = useMemo(
+    () => [...fixtureRuns].sort((a, b) => Math.abs(b.swing) - Math.abs(a.swing)).slice(0, 8),
+    [fixtureRuns]
+  );
+
+  const differentialPicks = useMemo(
+    () => decisionService.getDifferentialPicks(analytics, formProfiles),
+    [analytics, decisionService, formProfiles]
+  );
+
+  const valueIndex = useMemo(
+    () => decisionService.getValueIndex(analytics, formProfiles),
+    [analytics, decisionService, formProfiles]
+  );
+
+  const risingPlayers = useMemo(
+    () =>
+      [...formProfiles]
+        .filter((profile) => profile.trend === 'rising')
+        .sort((a, b) => b.last5.averagePoints - a.last5.averagePoints)
+        .slice(0, 12),
+    [formProfiles]
+  );
+
+  const fallingPlayers = useMemo(
+    () =>
+      [...formProfiles]
+        .filter((profile) => profile.trend === 'falling')
+        .sort((a, b) => a.last5.averagePoints - b.last5.averagePoints)
+        .slice(0, 12),
+    [formProfiles]
+  );
+
+  const injuryWatch = useMemo(
+    () =>
+      players
+        .filter((player) => typeof player.status === 'string' && player.status !== 'a')
+        .slice(0, 12)
+        .map((player) => ({
+          playerId: player.id,
+          playerName: player.displayName,
+          status: player.status || 'unknown',
+          club: player.club,
+        })),
+    [players]
+  );
+
+  const latestTransferSignals = useMemo(
+    () =>
+      analytics
+        .map((record) => {
+          let direction: 'in' | 'out' | 'neutral' = 'neutral';
+          let score = 0;
+
+          if (record.formScore >= 7 && record.ownership <= 25) {
+            direction = 'in';
+            score = record.formScore * 10;
+          } else if (record.formScore <= 4 && record.ownership >= 18) {
+            direction = 'out';
+            score = (5 - record.formScore) * 12;
+          }
+
+          return {
+            playerId: record.playerId,
+            playerName: record.playerName,
+            direction,
+            score: Number(score.toFixed(1)),
+          };
+        })
+        .filter((signal) => signal.direction !== 'neutral')
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 12),
+    [analytics]
+  );
 
   const teamSummary = useMemo(
     () => decisionService.getTeamInsightSummary(managerRecords),
@@ -138,6 +263,7 @@ export function AnalyticsDecisionProvider({
     players,
     teams: teamRepository.getAll(),
     analytics,
+    formProfiles,
     isPreSeason: bootstrapRepository.isPreSeason(),
     connectedEntryId,
     managerPlayerIds,
@@ -146,8 +272,18 @@ export function AnalyticsDecisionProvider({
     error,
     captainCandidates,
     managerCaptainCandidates,
-    transferCandidates,
+    transferRecommendations,
+    topBuyCandidates,
+    topSellCandidates,
+    topWatchlistCandidates,
     fixtureRuns,
+    fixtureSwings,
+    differentialPicks,
+    valueIndex,
+    risingPlayers,
+    fallingPlayers,
+    injuryWatch,
+    latestTransferSignals,
     managerRecords,
     teamSummary,
     teamRiskFlags,

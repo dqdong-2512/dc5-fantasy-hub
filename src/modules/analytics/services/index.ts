@@ -5,3 +5,4 @@
 export { PlayerAnalyticsService } from './player-analytics.service';
 export { ShortlistService } from './shortlist.service';
 export { DecisionHubService } from './decision-hub.service';
+export { PlayerFormService } from './player-form.service';

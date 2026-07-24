@@ -1,154 +1,159 @@
-import React, { useMemo } from 'react';
-import {
-  Alert,
-  Box,
-  Button,
-  Card,
-  CardContent,
-  Chip,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableRow,
-  Typography,
-} from '@mui/material';
+import React from 'react';
+import { Alert, Box, Button, Card, CardContent, Skeleton, Stack, Typography } from '@mui/material';
 import { Link as RouterLink } from 'react-router-dom';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { useAnalyticsDecision } from '../context';
 
 export function OverviewPage(): React.ReactElement {
-  const { analytics, isPreSeason, isLoading, error } = useAnalyticsDecision();
-
-  const topOverall = useMemo(
-    () => [...analytics].sort((a, b) => b.overallScore - a.overallScore).slice(0, 12),
-    [analytics]
-  );
-
-  const formLeaders = useMemo(
-    () => [...analytics].sort((a, b) => b.formScore - a.formScore).slice(0, 3),
-    [analytics]
-  );
-
-  const valueLeaders = useMemo(
-    () => [...analytics].sort((a, b) => b.valueScore - a.valueScore).slice(0, 3),
-    [analytics]
-  );
-
-  const differentialLeaders = useMemo(
-    () =>
-      analytics
-        .filter((record) => record.isDifferential)
-        .sort((a, b) => b.differentialScore - a.differentialScore)
-        .slice(0, 3),
-    [analytics]
-  );
+  const {
+    captainCandidates,
+    risingPlayers,
+    fallingPlayers,
+    differentialPicks,
+    valueIndex,
+    fixtureSwings,
+    injuryWatch,
+    latestTransferSignals,
+    isPreSeason,
+    isLoading,
+    error,
+  } = useAnalyticsDecision();
 
   if (error) {
     return <Alert severity="error">{error}</Alert>;
   }
 
+  const cards = [
+    {
+      title: 'Captain Picks',
+      subtitle: captainCandidates.slice(0, 3).map((row) => row.playerName),
+      to: '/premier-league/analytics/captain',
+      accent: '#f57c00',
+    },
+    {
+      title: 'Rising Players',
+      subtitle: risingPlayers.slice(0, 3).map((row) => row.playerName),
+      to: '/premier-league/analytics/form',
+      accent: '#2e7d32',
+    },
+    {
+      title: 'Falling Players',
+      subtitle: fallingPlayers.slice(0, 3).map((row) => row.playerName),
+      to: '/premier-league/analytics/form',
+      accent: '#c62828',
+    },
+    {
+      title: 'Differentials',
+      subtitle: differentialPicks.slice(0, 3).map((row) => row.playerName),
+      to: '/premier-league/analytics/differentials',
+      accent: '#1565c0',
+    },
+    {
+      title: 'Value Picks',
+      subtitle: valueIndex.slice(0, 3).map((row) => row.playerName),
+      to: '/premier-league/analytics/value',
+      accent: '#6a1b9a',
+    },
+    {
+      title: 'Fixture Swings',
+      subtitle: fixtureSwings.slice(0, 3).map((row) => row.teamShortName),
+      to: '/premier-league/analytics/fixtures',
+      accent: '#00838f',
+    },
+    {
+      title: 'Injuries',
+      subtitle: injuryWatch.slice(0, 3).map((row) => row.playerName),
+      to: '/premier-league/analytics/team',
+      accent: '#ad1457',
+    },
+    {
+      title: 'Latest Transfers',
+      subtitle: latestTransferSignals.slice(0, 3).map((row) => row.playerName),
+      to: '/premier-league/analytics/transfers',
+      accent: '#283593',
+    },
+  ];
+
   return (
     <Stack spacing={ThemeTokens.spacing.md}>
       <Alert severity="info">
-        This hub is deterministic. Rankings use current dataset metrics only and do not guarantee
-        outcomes.
+        This dashboard is deterministic and explainable. It supports decisions without auto-actions.
       </Alert>
 
       {isPreSeason && (
         <Alert severity="info">
-          Pre-season mode is active. Form and points can be sparse; use price, role, and fixture
-          context together.
+          Pre-season mode is active. Form windows are estimated from currently available official
+          data.
         </Alert>
       )}
 
-      <Stack direction={{ xs: 'column', md: 'row' }} spacing={ThemeTokens.spacing.sm}>
-        <InsightCard title="Form Leaders" players={formLeaders.map((p) => p.playerName)} />
-        <InsightCard title="Value Leaders" players={valueLeaders.map((p) => p.playerName)} />
-        <InsightCard
-          title="Differential Leaders"
-          players={differentialLeaders.map((p) => p.playerName)}
-        />
-      </Stack>
+      <Box
+        sx={{
+          display: 'grid',
+          gridTemplateColumns: { xs: '1fr', md: '1fr 1fr', xl: 'repeat(4, 1fr)' },
+          gap: ThemeTokens.spacing.sm,
+        }}
+      >
+        {isLoading
+          ? Array.from({ length: 8 }).map((_, index) => (
+              <Card key={`dashboard-skeleton-${index}`}>
+                <CardContent>
+                  <Skeleton variant="text" width="60%" />
+                  <Skeleton variant="text" width="85%" />
+                  <Skeleton variant="text" width="70%" />
+                  <Skeleton variant="rounded" height={32} sx={{ mt: ThemeTokens.spacing.sm }} />
+                </CardContent>
+              </Card>
+            ))
+          : cards.map((card, index) => (
+              <Card
+                key={card.title}
+                sx={{
+                  borderTop: `3px solid ${card.accent}`,
+                  animation: 'decisionCenterReveal 520ms ease-out both',
+                  animationDelay: `${index * 40}ms`,
+                  '@keyframes decisionCenterReveal': {
+                    from: { opacity: 0, transform: 'translateY(6px)' },
+                    to: { opacity: 1, transform: 'translateY(0)' },
+                  },
+                }}
+              >
+                <CardContent sx={{ p: ThemeTokens.spacing.sm }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 0.5 }}>
+                    {card.title}
+                  </Typography>
+                  {card.subtitle.length === 0 ? (
+                    <Typography variant="caption" color="text.secondary">
+                      No strong signals right now.
+                    </Typography>
+                  ) : (
+                    <Stack spacing={0.25} sx={{ minHeight: 58 }}>
+                      {card.subtitle.map((line) => (
+                        <Typography
+                          key={`${card.title}-${line}`}
+                          variant="caption"
+                          color="text.secondary"
+                          noWrap
+                        >
+                          {line}
+                        </Typography>
+                      ))}
+                    </Stack>
+                  )}
 
-      <Card>
-        <CardContent>
-          <Typography variant="h6" sx={{ mb: ThemeTokens.spacing.sm, fontWeight: 700 }}>
-            Top Overall Targets
-          </Typography>
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Player</TableCell>
-                <TableCell>Club</TableCell>
-                <TableCell align="right">Form</TableCell>
-                <TableCell align="right">Value</TableCell>
-                <TableCell align="right">Fixtures</TableCell>
-                <TableCell align="right">Overall</TableCell>
-                <TableCell align="right">Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {isLoading ? (
-                <TableRow>
-                  <TableCell colSpan={7}>Loading analytics...</TableCell>
-                </TableRow>
-              ) : (
-                topOverall.map((record) => (
-                  <TableRow key={record.playerId} hover>
-                    <TableCell>
-                      {record.playerName}{' '}
-                      {record.isDifferential && (
-                        <Chip label="Diff" color="success" size="small" sx={{ ml: 1 }} />
-                      )}
-                    </TableCell>
-                    <TableCell>{record.club}</TableCell>
-                    <TableCell align="right">{record.formScore.toFixed(1)}</TableCell>
-                    <TableCell align="right">{record.valueScore.toFixed(1)}</TableCell>
-                    <TableCell align="right">{record.fixtureScore.toFixed(1)}</TableCell>
-                    <TableCell align="right">{record.overallScore.toFixed(1)}</TableCell>
-                    <TableCell align="right">
-                      <Button
-                        size="small"
-                        component={RouterLink}
-                        to={`/premier-league/players/${record.playerId}`}
-                      >
-                        Open
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
-        </CardContent>
-      </Card>
-
-      <Box>
-        <Button component={RouterLink} to="/premier-league/players" variant="outlined" size="small">
-          Go To Player Research
-        </Button>
+                  <Button
+                    component={RouterLink}
+                    to={card.to}
+                    size="small"
+                    variant="text"
+                    sx={{ p: 0, mt: ThemeTokens.spacing.xs, minWidth: 0 }}
+                  >
+                    Open Details
+                  </Button>
+                </CardContent>
+              </Card>
+            ))}
       </Box>
     </Stack>
-  );
-}
-
-function InsightCard({ title, players }: { title: string; players: string[] }): React.ReactElement {
-  return (
-    <Card sx={{ flex: 1 }}>
-      <CardContent>
-        <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
-          {title}
-        </Typography>
-        <Stack spacing={0.5}>
-          {players.map((name) => (
-            <Typography key={`${title}-${name}`} variant="body2" color="text.secondary">
-              {name}
-            </Typography>
-          ))}
-        </Stack>
-      </CardContent>
-    </Card>
   );
 }
