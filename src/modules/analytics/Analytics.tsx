@@ -1,6 +1,11 @@
 import React from 'react';
-import { PlayerAnalyticsWorkspace } from './components';
+import { AnalyticsDecisionProvider } from './context';
+import { AnalyticsDecisionHub } from './pages';
 
 export const Analytics: React.FC = () => {
-  return <PlayerAnalyticsWorkspace />;
+  return (
+    <AnalyticsDecisionProvider>
+      <AnalyticsDecisionHub />
+    </AnalyticsDecisionProvider>
+  );
 };

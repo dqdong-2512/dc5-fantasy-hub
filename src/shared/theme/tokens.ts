@@ -5,15 +5,15 @@
  */
 
 export const ThemeTokens = {
-  // Spacing - base unit 8px
+  // Spacing tokens are MUI spacing multipliers (theme.spacing unit = 8px)
   spacing: {
-    xs: 4,
-    sm: 8,
-    md: 12,
-    lg: 16,
-    xl: 24,
-    xxl: 32,
-    xxxl: 48,
+    xs: 0.5, // 4px
+    sm: 1, // 8px
+    md: 1.25, // 10px
+    lg: 1.5, // 12px
+    xl: 2, // 16px
+    xxl: 2.5, // 20px
+    xxxl: 3, // 24px
   },
 
   // Border Radius
@@ -36,10 +36,10 @@ export const ThemeTokens = {
   // Layout
   layout: {
     maxWidth: 1600,
-    pageHorizontalPadding: 24,
-    sectionGap: 16,
-    gridColumnGap: 12,
-    gridRowGap: 12,
+    pageHorizontalPadding: 2,
+    sectionGap: 1.5,
+    gridColumnGap: 1.25,
+    gridRowGap: 1.25,
   },
 
   // Typography - using MUI variants

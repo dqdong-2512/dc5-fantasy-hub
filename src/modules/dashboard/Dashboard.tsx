@@ -48,7 +48,7 @@ export const Dashboard: React.FC = () => {
       {/* Dashboard Content Container */}
       <PageContent>
         {/* Sync Status - Right-Aligned */}
-        <Box sx={{ width: '100%', py: '2px', mb: '12px' }}>
+        <Box sx={{ width: '100%', py: 0.5, mb: ThemeTokens.spacing.sm }}>
           <SyncStatus />
         </Box>
 

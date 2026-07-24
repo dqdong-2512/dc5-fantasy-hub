@@ -10,7 +10,6 @@ import { Navigate } from 'react-router-dom';
 import { useFantasyGame } from './hooks';
 import {
   FantasyWorkspace,
-  FantasyConnectionPage,
   FantasyGameOverview,
   MyTeamPage,
   LeagueStandingsPage,
@@ -31,11 +30,10 @@ export const Fantasy: React.FC = () => {
     return <FantasyWorkspace gameState={gameState} />;
   }
 
-  // Not connected - Show pages based on route
-  // Show connection page for root path or explicit connection navigation
+  // Not connected - route rendering falls back to overview, which now contains inline connection.
   const isRootPath = location.pathname === '/premier-league/gameweek';
   if (isRootPath) {
-    return <FantasyConnectionPage />;
+    return <FantasyGameOverview />;
   }
 
   // Redirect /leagues (without ID) to primary league
@@ -82,5 +80,3 @@ export const Fantasy: React.FC = () => {
   // This allows UI development and testing before real entry connection
   return <FantasyGameOverview />;
 };
-
-

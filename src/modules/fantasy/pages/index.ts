@@ -1,6 +1,5 @@
 export { FantasyWorkspace, type FantasyWorkspaceProps } from './FantasyWorkspace';
 export { GameweekHubShell } from './GameweekHubShell';
-export { FantasyConnectionPage } from './FantasyConnectionPage';
 export { FantasyGameOverview } from './FantasyGameOverview';
 export { MyTeamPage } from './MyTeamPage';
 export { MyLeaguesPage } from './MyLeaguesPage';

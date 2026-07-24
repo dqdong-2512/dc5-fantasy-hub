@@ -59,9 +59,9 @@ export const AppHeader: React.FC = () => {
       <Toolbar
         sx={{
           justifyContent: 'space-between',
-          paddingX: { xs: 2, sm: 3 },
-          minHeight: 64,
-          gap: 2,
+          paddingX: { xs: 1, sm: 1.5 },
+          minHeight: 56,
+          gap: 1,
         }}
       >
         {/* Logo */}
@@ -80,7 +80,7 @@ export const AppHeader: React.FC = () => {
 
         {/* Desktop Navigation */}
         {!isMobile && (
-          <Box sx={{ display: 'flex', gap: 0.5, flex: 1, marginLeft: 4 }}>
+          <Box sx={{ display: 'flex', gap: 0.5, flex: 1, marginLeft: 1.5 }}>
             {NAV_ITEMS.map((item) => (
               <Button
                 key={item.path}
@@ -91,7 +91,8 @@ export const AppHeader: React.FC = () => {
                   fontSize: '0.9rem',
                   textTransform: 'none',
                   position: 'relative',
-                  padding: '8px 12px',
+                  px: 1,
+                  py: 0.5,
                   '&::after': {
                     content: '""',
                     position: 'absolute',
@@ -142,7 +143,7 @@ export const AppHeader: React.FC = () => {
 
       {/* Mobile Navigation Drawer */}
       <Drawer anchor="right" open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)}>
-        <List sx={{ width: 250, paddingTop: 2 }}>
+        <List sx={{ width: 250, paddingTop: 1 }}>
           {NAV_ITEMS.map((item) => (
             <ListItem key={item.path} disablePadding>
               <ListItemButton

@@ -6,21 +6,25 @@ import { ThemeTokens } from '@shared/theme/tokens';
 export const PageContainer: React.FC<React.PropsWithChildren<ContainerProps>> = ({
   children,
   maxWidth = false,
+  sx,
   ...props
 }) => {
   return (
     <Container
       maxWidth={maxWidth}
-      sx={{
-        maxWidth: { xs: '100%', sm: '100%', md: '100%', lg: ThemeTokens.layout.maxWidth },
-        paddingX: {
-          xs: ThemeTokens.spacing.md,
-          sm: ThemeTokens.spacing.lg,
-          md: ThemeTokens.layout.pageHorizontalPadding,
+      sx={[
+        {
+          maxWidth: { xs: '100%', sm: '100%', md: '100%', lg: ThemeTokens.layout.maxWidth },
+          paddingX: {
+            xs: ThemeTokens.spacing.sm,
+            sm: ThemeTokens.spacing.md,
+            md: ThemeTokens.layout.pageHorizontalPadding,
+          },
+          paddingTop: ThemeTokens.spacing.xs,
+          paddingBottom: ThemeTokens.spacing.xs,
         },
-        paddingTop: ThemeTokens.spacing.xs,
-        paddingBottom: ThemeTokens.spacing.xs,
-      }}
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
       {...props}
     >
       {children}

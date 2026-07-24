@@ -1,4 +1,5 @@
 export { ConnectTeam, type ConnectTeamProps } from './ConnectTeam';
+export { FplConnectionGate, type FplConnectionGateProps } from './FplConnectionGate';
 export { FantasyGameHeader, type FantasyGameHeaderProps } from './FantasyGameHeader';
 export { FantasyOverview, type FantasyOverviewProps } from './FantasyOverview';
 export { MyTeam, type MyTeamProps } from './MyTeam';

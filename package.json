@@ -13,6 +13,7 @@
     "format:check": "prettier --check src",
     "type-check": "tsc --noEmit",
     "typecheck": "tsc --noEmit",
+    "test:analytics": "npx tsx scripts/tests/analytics-decision-engine.test.ts",
     "sync:fpl": "npx tsx scripts/sync/index.ts",
     "sync:bootstrap": "npx tsx scripts/sync/bootstrap.sync.ts"
   },

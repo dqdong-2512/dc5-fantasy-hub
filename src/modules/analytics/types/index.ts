@@ -25,3 +25,12 @@ export interface PlayerFilterConfig {
   sortBy?: 'overall' | 'form' | 'value' | 'differential' | 'fixtures' | 'name';
   sortOrder?: 'asc' | 'desc';
 }
+
+export type {
+  CaptainCandidate,
+  TransferCandidate,
+  TeamFixtureRun,
+  TeamInsightSummary,
+  PlayerRiskFlag,
+  AnalyticsDecisionSnapshot,
+} from './decision-hub';

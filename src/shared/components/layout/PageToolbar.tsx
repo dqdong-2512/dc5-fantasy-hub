@@ -23,11 +23,11 @@ export function PageToolbar({
     <Paper
       sx={{
         display: 'flex',
-        gap: ThemeTokens.spacing.md,
+        gap: ThemeTokens.spacing.sm,
         alignItems: 'center',
-        padding: ThemeTokens.spacing.md,
-        marginBottom: position === 'top' ? ThemeTokens.spacing.lg : 0,
-        marginTop: position === 'bottom' ? ThemeTokens.spacing.lg : 0,
+        padding: ThemeTokens.spacing.sm,
+        marginBottom: position === 'top' ? ThemeTokens.spacing.sm : 0,
+        marginTop: position === 'bottom' ? ThemeTokens.spacing.sm : 0,
         ...sx,
       }}
       {...props}

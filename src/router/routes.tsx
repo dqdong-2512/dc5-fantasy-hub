@@ -10,9 +10,15 @@ import {
   PlayerExplorer,
   PlayerResearchHub,
 } from '../modules/players';
+import {
+  CaptainPage,
+  FixturesPage,
+  OverviewPage,
+  TeamPage,
+  TransfersPage,
+} from '../modules/analytics/pages';
 import { ClubExplorer } from '../modules/teams';
 import {
-  FantasyConnectionPage,
   FantasyGameOverview,
   MyTeamPage,
   LeagueStandingsPage,
@@ -23,6 +29,7 @@ import {
   GameweekHubShell,
   PremierLeagueTablePage,
 } from '../modules/fantasy/pages';
+import { FplConnectionGate } from '../modules/fantasy/components';
 import { GameweekHubProvider } from '../modules/fantasy/context';
 import { AppLayout } from '../layouts/AppLayout';
 import { NotFound, ChampionsLeagueComingSoon } from '../shared/pages';
@@ -94,6 +101,32 @@ const router = createBrowserRouter([
                 <Analytics />
               </Suspense>
             ),
+            children: [
+              {
+                index: true,
+                element: <Navigate to="overview" replace />,
+              },
+              {
+                path: 'overview',
+                element: <OverviewPage />,
+              },
+              {
+                path: 'captain',
+                element: <CaptainPage />,
+              },
+              {
+                path: 'transfers',
+                element: <TransfersPage />,
+              },
+              {
+                path: 'fixtures',
+                element: <FixturesPage />,
+              },
+              {
+                path: 'team',
+                element: <TeamPage />,
+              },
+            ],
           },
           {
             path: 'gameweek',
@@ -105,31 +138,55 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
+                element: <Navigate to="overview" replace />,
+              },
+              {
+                path: 'overview',
                 element: <FantasyGameOverview />,
               },
               {
                 path: 'connect',
-                element: <FantasyConnectionPage />,
+                element: <Navigate to="../overview" replace />,
               },
               {
                 path: 'my-team',
-                element: <MyTeamPage />,
+                element: (
+                  <FplConnectionGate>
+                    <MyTeamPage />
+                  </FplConnectionGate>
+                ),
               },
               {
                 path: 'league',
-                element: <LeagueStandingsPage />,
+                element: (
+                  <FplConnectionGate>
+                    <LeagueStandingsPage />
+                  </FplConnectionGate>
+                ),
               },
               {
                 path: 'league/:leagueId',
-                element: <LeagueStandingsPage />,
+                element: (
+                  <FplConnectionGate>
+                    <LeagueStandingsPage />
+                  </FplConnectionGate>
+                ),
               },
               {
                 path: 'league/:leagueId/live',
-                element: <LeagueStandingsPage />,
+                element: (
+                  <FplConnectionGate>
+                    <LeagueStandingsPage />
+                  </FplConnectionGate>
+                ),
               },
               {
                 path: 'league/:leagueId/managers/:managerId',
-                element: <LeagueStandingsPage />,
+                element: (
+                  <FplConnectionGate>
+                    <LeagueStandingsPage />
+                  </FplConnectionGate>
+                ),
               },
               {
                 path: 'fixtures',
@@ -157,15 +214,27 @@ const router = createBrowserRouter([
               },
               {
                 path: 'transfers',
-                element: <TransferPlannerPage />,
+                element: (
+                  <FplConnectionGate>
+                    <TransferPlannerPage />
+                  </FplConnectionGate>
+                ),
               },
               {
                 path: 'planner',
-                element: <GameweekPlannerPage />,
+                element: (
+                  <FplConnectionGate>
+                    <GameweekPlannerPage />
+                  </FplConnectionGate>
+                ),
               },
               {
                 path: 'season-planner',
-                element: <SeasonPlannerPage />,
+                element: (
+                  <FplConnectionGate>
+                    <SeasonPlannerPage />
+                  </FplConnectionGate>
+                ),
               },
               {
                 path: 'transfer-planner',
@@ -181,15 +250,27 @@ const router = createBrowserRouter([
               },
               {
                 path: 'leagues/:leagueId',
-                element: <LeagueStandingsPage />,
+                element: (
+                  <FplConnectionGate>
+                    <LeagueStandingsPage />
+                  </FplConnectionGate>
+                ),
               },
               {
                 path: 'leagues/:leagueId/live',
-                element: <LeagueStandingsPage />,
+                element: (
+                  <FplConnectionGate>
+                    <LeagueStandingsPage />
+                  </FplConnectionGate>
+                ),
               },
               {
                 path: 'leagues/:leagueId/managers/:managerId',
-                element: <LeagueStandingsPage />,
+                element: (
+                  <FplConnectionGate>
+                    <LeagueStandingsPage />
+                  </FplConnectionGate>
+                ),
               },
             ],
           },

@@ -24,6 +24,7 @@ import {
   LeagueSnapshot,
   GameweekContext,
 } from '../widgets';
+import { FplConnectionGate } from '../components';
 import { FantasyDashboardService, FantasyGameDataAdapter } from '../services';
 import { useGameweekHubState } from '../context';
 import { fantasyGameFixtures } from '../fixtures';
@@ -60,35 +61,14 @@ export const FantasyGameOverview: React.FC = () => {
   if (!gameState.isConnected) {
     return (
       <PageContainer>
-        <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            textAlign: 'center',
-            py: 8,
-            gap: 3,
-          }}
-        >
-          <Typography variant="h5" sx={{ fontWeight: 600 }}>
-            Not Connected
-          </Typography>
-          <Typography variant="body2" color="textSecondary" sx={{ maxWidth: 500 }}>
-            To access your Fantasy Premier League team, you need to connect with your entry ID.
-          </Typography>
-          <Alert severity="info" sx={{ maxWidth: 500 }}>
-            Your entry ID is a unique number that identifies your FPL team. You can find it in your
-            FPL account or in the browser URL when viewing your team on fantasy.premierleague.com
-          </Alert>
-          <Button
-            variant="contained"
-            onClick={() => navigate('/premier-league/gameweek/connect')}
-            color="primary"
-            size="large"
-          >
-            Go to Connection Form
-          </Button>
-        </Box>
+        <FplConnectionGate
+          title="Connect your FPL team"
+          description="Connect inline to unlock My Team, League, transfers, and personalized gameweek insights."
+        />
+        <Alert severity="info" sx={{ mt: ThemeTokens.spacing.sm }}>
+          Your Entry ID identifies your FPL team. You can find it in your FPL URL when viewing your
+          team.
+        </Alert>
       </PageContainer>
     );
   }
@@ -143,7 +123,7 @@ export const FantasyGameOverview: React.FC = () => {
           sx={{
             display: 'flex',
             justifyContent: 'flex-end',
-            padding: ThemeTokens.spacing.md,
+            padding: ThemeTokens.spacing.sm,
             borderBottom: '1px solid #e0e0e0',
           }}
         >
@@ -169,7 +149,7 @@ export const FantasyGameOverview: React.FC = () => {
           alignItems: 'center',
           textAlign: 'center',
           paddingX: ThemeTokens.spacing.md,
-          paddingY: { xs: ThemeTokens.spacing.sm, md: '32px' },
+          paddingY: { xs: ThemeTokens.spacing.sm, md: ThemeTokens.spacing.xl },
         }}
       >
         {/* FPL Logo */}
@@ -183,7 +163,7 @@ export const FantasyGameOverview: React.FC = () => {
             maxWidth: '100%',
             objectFit: 'contain',
             flexShrink: 0,
-            marginBottom: { xs: '2', md: '4' },
+            marginBottom: { xs: ThemeTokens.spacing.sm, md: ThemeTokens.spacing.md },
           }}
         />
 

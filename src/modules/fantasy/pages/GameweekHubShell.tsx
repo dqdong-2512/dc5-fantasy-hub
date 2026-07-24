@@ -5,41 +5,76 @@ import { ThemeTokens } from '@shared/theme/tokens';
 import { FantasyGameHeader } from '../components';
 import { useGameweekHubState } from '../context';
 
+type HubTabValue = 'overview' | 'my-team' | 'league' | 'fixtures' | 'clubs' | 'table';
+
 interface HubTab {
+  value: HubTabValue;
   label: string;
   path: string;
 }
 
 const HUB_TABS: HubTab[] = [
-  { label: 'Overview', path: '/premier-league/gameweek' },
-  { label: 'My Team', path: '/premier-league/gameweek/my-team' },
-  { label: 'League', path: '/premier-league/gameweek/league' },
-  { label: 'Fixtures', path: '/premier-league/gameweek/fixtures' },
-  { label: 'Clubs', path: '/premier-league/gameweek/clubs' },
-  { label: 'Table', path: '/premier-league/gameweek/table' },
+  { value: 'overview', label: 'Overview', path: '/premier-league/gameweek/overview' },
+  { value: 'my-team', label: 'My Team', path: '/premier-league/gameweek/my-team' },
+  { value: 'league', label: 'League', path: '/premier-league/gameweek/league' },
+  { value: 'fixtures', label: 'Fixtures', path: '/premier-league/gameweek/fixtures' },
+  { value: 'clubs', label: 'Clubs', path: '/premier-league/gameweek/clubs' },
+  { value: 'table', label: 'Table', path: '/premier-league/gameweek/table' },
 ];
+
+function resolveHubTabValue(pathname: string): HubTabValue {
+  if (
+    pathname === '/premier-league/gameweek' ||
+    pathname === '/premier-league/gameweek/' ||
+    pathname === '/premier-league/gameweek/overview' ||
+    pathname === '/premier-league/gameweek/connect'
+  ) {
+    return 'overview';
+  }
+
+  if (
+    pathname.startsWith('/premier-league/gameweek/my-team') ||
+    pathname === '/premier-league/gameweek/team'
+  ) {
+    return 'my-team';
+  }
+
+  if (
+    pathname.startsWith('/premier-league/gameweek/league') ||
+    pathname.startsWith('/premier-league/gameweek/leagues')
+  ) {
+    return 'league';
+  }
+
+  if (pathname.startsWith('/premier-league/gameweek/fixtures')) {
+    return 'fixtures';
+  }
+
+  if (pathname.startsWith('/premier-league/gameweek/clubs')) {
+    return 'clubs';
+  }
+
+  if (pathname.startsWith('/premier-league/gameweek/table')) {
+    return 'table';
+  }
+
+  return 'overview';
+}
 
 export function GameweekHubShell(): React.ReactElement {
   const location = useLocation();
   const navigate = useNavigate();
   const gameState = useGameweekHubState();
 
-  const activeTab = useMemo(() => {
-    const currentPath = location.pathname;
-
-    if (currentPath === '/premier-league/gameweek') {
-      return 0;
-    }
-
-    const matchedIndex = HUB_TABS.findIndex(
-      (tab) => currentPath === tab.path || currentPath.startsWith(`${tab.path}/`)
-    );
-
-    return matchedIndex >= 0 ? matchedIndex : 0;
+  const activeTab = useMemo<HubTabValue>(() => {
+    return resolveHubTabValue(location.pathname);
   }, [location.pathname]);
 
-  const handleTabChange = (_event: React.SyntheticEvent, newValue: number): void => {
-    navigate(HUB_TABS[newValue].path);
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: HubTabValue): void => {
+    const selectedTab = HUB_TABS.find((tab) => tab.value === newValue);
+    if (selectedTab) {
+      navigate(selectedTab.path);
+    }
   };
 
   return (
@@ -77,7 +112,7 @@ export function GameweekHubShell(): React.ReactElement {
             }}
           >
             {HUB_TABS.map((tab) => (
-              <Tab key={tab.path} label={tab.label} />
+              <Tab key={tab.value} value={tab.value} label={tab.label} />
             ))}
           </Tabs>
         </Stack>
