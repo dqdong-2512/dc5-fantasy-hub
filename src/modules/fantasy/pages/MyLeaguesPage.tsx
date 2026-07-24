@@ -1,4 +1,4 @@
-/**
+﻿/**
  * My Leagues Page
  * Displays all leagues joined by the current manager
  */
@@ -38,7 +38,7 @@ export const MyLeaguesPage: React.FC = () => {
         {/* Back Button */}
         <Button
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/premier-league/fantasy-game')}
+          onClick={() => navigate('/premier-league/gameweek')}
           sx={{
             textTransform: 'none',
             marginBottom: 1.5,
@@ -76,3 +76,4 @@ export const MyLeaguesPage: React.FC = () => {
     </Box>
   );
 };
+

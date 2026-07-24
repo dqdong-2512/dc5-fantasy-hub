@@ -1,29 +1,59 @@
 /**
  * Club Explorer Page
  * Main interface for exploring Premier League clubs and their intelligence
+ * Includes Club Intelligence view and League Standings view
  */
 
 import React, { useState, useMemo } from 'react';
-import { Box, Stack, Typography, Button } from '@mui/material';
+import { Box, Stack, Typography, Button, Tab, Tabs } from '@mui/material';
 import type { Team } from '@domain/models';
 import { BootstrapRepository } from '@repositories/bootstrap';
 import { TeamRepository } from '@repositories/teams';
 import { PageContent, PageHeader, PageSection, LoadingState } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { useSeasonLabel } from '@shared/hooks';
-import { ClubOverview, ClubIntelligenceDrawer, ClubComparison } from '../components';
+import { useSeasonLabel, useStandings } from '@shared/hooks';
+import {
+  ClubOverview,
+  ClubIntelligenceDrawer,
+  ClubComparison,
+  StandingsTable,
+} from '../components';
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`clubs-tabpanel-${index}`}
+      aria-labelledby={`clubs-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box>{children}</Box>}
+    </div>
+  );
+}
 
 /**
  * Club Explorer
- * Production-quality analytics interface for club exploration
+ * Production-quality analytics interface for club exploration and standings
  */
 export function ClubExplorer(): React.ReactElement {
   const seasonLabel = useSeasonLabel();
+  const standingsState = useStandings();
   const [selectedClub, setSelectedClub] = useState<Team | null>(null);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [selectedClubIds, setSelectedClubIds] = useState<number[]>([]);
   const [sortBy, setSortBy] = useState('strength');
   const [sortOrder, setSortOrder] = useState<'asc' | 'desc'>('desc');
+  const [tabValue, setTabValue] = useState(0);
 
   // Initialize repositories
   const teamRepository = useMemo(() => new TeamRepository(), []);
@@ -105,6 +135,10 @@ export function ClubExplorer(): React.ReactElement {
     setSortOrder(order);
   };
 
+  const handleTabChange = (_event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
+
   if (!gameweek || clubCount === 0) {
     return (
       <PageContent>
@@ -118,7 +152,7 @@ export function ClubExplorer(): React.ReactElement {
       <PageHeader>
         <Stack spacing={ThemeTokens.spacing.md}>
           <Typography variant={ThemeTokens.typography.pageTitleVariant} sx={{ fontWeight: 700 }}>
-            Club Intelligence
+            Premier League
           </Typography>
           <Stack
             direction="row"
@@ -133,7 +167,7 @@ export function ClubExplorer(): React.ReactElement {
                 Competition
               </Typography>
               <Typography variant="subtitle2" sx={{ fontWeight: 600 }}>
-                Premier League
+                Fantasy Premier League
               </Typography>
             </Box>
             <Box>
@@ -164,52 +198,92 @@ export function ClubExplorer(): React.ReactElement {
         </Stack>
       </PageHeader>
 
-      {selectedClubIds.length > 0 && (
-        <PageSection title="Comparison" sx={{ marginBottom: ThemeTokens.spacing.md }}>
-          <ClubComparison
-            selectedClubIds={selectedClubIds}
-            onRemoveClub={handleRemoveFromComparison}
+      {/* Tab Navigation */}
+      <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: ThemeTokens.spacing.md }}>
+        <Tabs
+          value={tabValue}
+          onChange={handleTabChange}
+          aria-label="club views"
+          sx={{
+            '& .MuiTab-root': {
+              textTransform: 'none',
+              fontSize: '0.95rem',
+              fontWeight: 500,
+            },
+          }}
+        >
+          <Tab label="Club Intelligence" id="clubs-tab-0" aria-controls="clubs-tabpanel-0" />
+          <Tab label="League Standings" id="clubs-tab-1" aria-controls="clubs-tabpanel-1" />
+        </Tabs>
+      </Box>
+
+      {/* Club Intelligence Tab */}
+      <TabPanel value={tabValue} index={0}>
+        {selectedClubIds.length > 0 && (
+          <PageSection title="Comparison" sx={{ marginBottom: ThemeTokens.spacing.md }}>
+            <ClubComparison
+              selectedClubIds={selectedClubIds}
+              onRemoveClub={handleRemoveFromComparison}
+            />
+          </PageSection>
+        )}
+
+        <PageSection
+          title="Premier League Clubs"
+          subtitle={`${clubCount} clubs • Click to view intelligence • Select up to 3 for comparison`}
+          sx={{ marginBottom: ThemeTokens.spacing.md }}
+        >
+          <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
+            <Stack direction="row" spacing={ThemeTokens.spacing.sm} sx={{ flexWrap: 'wrap' }}>
+              {allClubs.map((club) => (
+                <Button
+                  key={club.id}
+                  variant={selectedClubIds.includes(club.id) ? 'contained' : 'outlined'}
+                  size="small"
+                  onClick={() => handleAddToComparison(club)}
+                >
+                  {club.shortName}
+                </Button>
+              ))}
+            </Stack>
+            {selectedClubIds.length > 0 && (
+              <Typography
+                variant="caption"
+                color="text.secondary"
+                sx={{ display: 'block', marginTop: ThemeTokens.spacing.sm }}
+              >
+                {selectedClubIds.length} of 3 selected for comparison
+              </Typography>
+            )}
+          </Box>
+
+          <ClubOverview
+            clubs={sortedClubs}
+            onClubSelect={handleClubSelect}
+            sortBy={sortBy}
+            sortOrder={sortOrder}
+            onSort={handleSort}
           />
         </PageSection>
-      )}
+      </TabPanel>
 
-      <PageSection
-        title="Premier League Clubs"
-        subtitle={`${clubCount} clubs • Click to view intelligence • Select up to 3 for comparison`}
-        sx={{ marginBottom: ThemeTokens.spacing.md }}
-      >
-        <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
-          <Stack direction="row" spacing={ThemeTokens.spacing.sm} sx={{ flexWrap: 'wrap' }}>
-            {allClubs.map((club) => (
-              <Button
-                key={club.id}
-                variant={selectedClubIds.includes(club.id) ? 'contained' : 'outlined'}
-                size="small"
-                onClick={() => handleAddToComparison(club)}
-              >
-                {club.shortName}
-              </Button>
-            ))}
-          </Stack>
-          {selectedClubIds.length > 0 && (
-            <Typography
-              variant="caption"
-              color="text.secondary"
-              sx={{ display: 'block', marginTop: ThemeTokens.spacing.sm }}
-            >
-              {selectedClubIds.length} of 3 selected for comparison
-            </Typography>
-          )}
-        </Box>
-
-        <ClubOverview
-          clubs={sortedClubs}
-          onClubSelect={handleClubSelect}
-          sortBy={sortBy}
-          sortOrder={sortOrder}
-          onSort={handleSort}
-        />
-      </PageSection>
+      {/* League Standings Tab */}
+      <TabPanel value={tabValue} index={1}>
+        <PageSection
+          title="League Standings"
+          subtitle={
+            standingsState.isPreSeason || standingsState.gameweekId === null
+              ? 'Standings update after completed matches'
+              : `After Gameweek ${standingsState.gameweekId}`
+          }
+        >
+          <StandingsTable
+            standings={standingsState.standings}
+            isPreSeason={standingsState.isPreSeason}
+            message={standingsState.message}
+          />
+        </PageSection>
+      </TabPanel>
 
       {/* Club Intelligence Drawer */}
       <ClubIntelligenceDrawer

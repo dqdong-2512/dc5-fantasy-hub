@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Fantasy Game Overview Page (Enhanced Dashboard)
  * Main entry point for Fantasy Premier League game management
  * Integrates all planning tools into one cohesive dashboard:
@@ -25,11 +25,11 @@ import {
   GameweekContext,
 } from '../widgets';
 import { FantasyDashboardService, FantasyGameDataAdapter } from '../services';
-import { useFantasyGame } from '../hooks';
+import { useGameweekHubState } from '../context';
 import { fantasyGameFixtures } from '../fixtures';
 
 export const FantasyGameOverview: React.FC = () => {
-  const gameState = useFantasyGame();
+  const gameState = useGameweekHubState();
   const navigate = useNavigate();
   const fixtures = useMemo(() => fantasyGameFixtures, []);
 
@@ -82,7 +82,7 @@ export const FantasyGameOverview: React.FC = () => {
           </Alert>
           <Button
             variant="contained"
-            onClick={() => navigate('/premier-league/fantasy-game')}
+            onClick={() => navigate('/premier-league/gameweek')}
             color="primary"
             size="large"
           >
@@ -95,44 +95,44 @@ export const FantasyGameOverview: React.FC = () => {
 
   // Navigation handlers
   const handleViewTeam = (): void => {
-    navigate('/premier-league/fantasy-game/team');
+    navigate('/premier-league/gameweek/my-team');
   };
 
   const handleViewGameweek = (): void => {
     const gameweekNum = gameState.isConnected
       ? gameState.displayGameweek
       : fantasyGameFixtures.currentGameweek.gameweek;
-    navigate(`/premier-league/fantasy-game/gameweeks/${gameweekNum}`);
+    navigate(`/premier-league/gameweek/gameweeks/${gameweekNum}`);
   };
 
   const handleViewLeagues = (): void => {
-    navigate('/premier-league/fantasy-game/leagues');
+    navigate('/premier-league/gameweek/league');
   };
 
   const handleLeagueClick = (leagueId: number): void => {
-    navigate(`/premier-league/fantasy-game/leagues/${leagueId}`);
+    navigate(`/premier-league/gameweek/league/${leagueId}`);
   };
 
   const handleTransferPlanClick = (): void => {
-    navigate('/premier-league/fantasy-game/transfer-planner');
+    navigate('/premier-league/gameweek/transfers');
   };
 
   const handleGameweekPlanClick = (): void => {
     const gw = dashboardData.gameweek.nextGameweekId ?? dashboardData.gameweek.currentGameweekId;
-    navigate(`/premier-league/fantasy-game/gameweek-planner?gw=${gw}`);
+    navigate(`/premier-league/gameweek/planner?gw=${gw}`);
   };
 
   const handleSeasonPlanClick = (): void => {
-    navigate('/premier-league/fantasy-game/season-planner');
+    navigate('/premier-league/gameweek/season-planner');
   };
 
   const handleGameweekCenterClick = (): void => {
-    navigate(`/premier-league/fantasy-game/gameweeks/${dashboardData.gameweek.currentGameweekId}`);
+    navigate(`/premier-league/gameweek/gameweeks/${dashboardData.gameweek.currentGameweekId}`);
   };
 
   const handleDisconnect = (): void => {
     gameState.disconnectEntry();
-    navigate('/premier-league/fantasy-game', { replace: true });
+    navigate('/premier-league/gameweek', { replace: true });
   };
 
   return (

@@ -1,7 +1,7 @@
-/**
+﻿/**
  * Transfer Planner Page
  * Main orchestration for transfer planning and squad optimization
- * Implements the complete workflow: select player → find replacements → compare → build plan → validate → preview
+ * Implements the complete workflow: select player -> find replacements -> compare -> build plan -> validate -> preview
  */
 
 import React, { useMemo, useState } from 'react';
@@ -210,7 +210,7 @@ export const TransferPlannerPage: React.FC = () => {
       <Box sx={{ padding: ThemeTokens.spacing.xs, borderBottom: '1px solid #e0e0e0' }}>
         <Button
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/premier-league/fantasy-game')}
+          onClick={() => navigate('/premier-league/gameweek')}
           sx={{
             textTransform: 'none',
             marginBottom: 1.5,
@@ -226,7 +226,7 @@ export const TransferPlannerPage: React.FC = () => {
           Transfer Planner
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          Plan transfers • Validate squad • Preview changes
+          Plan transfers - Validate squad - Preview changes
         </Typography>
       </Box>
 
@@ -263,7 +263,7 @@ export const TransferPlannerPage: React.FC = () => {
                 </Typography>
                 {currentPlan.validation.errors.map((err, idx) => (
                   <Typography key={idx} variant="body2">
-                    • {err.message}
+                    - {err.message}
                   </Typography>
                 ))}
               </Alert>

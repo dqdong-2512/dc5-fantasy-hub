@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Manager Comparison Page
  * Displays detailed comparison between current manager and selected opponent
  */
@@ -65,7 +65,7 @@ export const ManagerComparisonPage: React.FC = () => {
         <Typography variant="body1" color="textSecondary">
           League or manager not found
         </Typography>
-        <Button onClick={() => navigate('/premier-league/fantasy-game')} sx={{ marginTop: 2 }}>
+        <Button onClick={() => navigate('/premier-league/gameweek')} sx={{ marginTop: 2 }}>
           Back to Fantasy Game
         </Button>
       </Box>
@@ -79,7 +79,7 @@ export const ManagerComparisonPage: React.FC = () => {
           You cannot compare your team against yourself
         </Typography>
         <Button
-          onClick={() => navigate(`/premier-league/fantasy-game/leagues/${leagueId}`)}
+          onClick={() => navigate(`/premier-league/gameweek/league/${leagueId}`)}
           sx={{ marginTop: 2 }}
         >
           Back to League Standings
@@ -95,7 +95,7 @@ export const ManagerComparisonPage: React.FC = () => {
           Team data is not available for this manager
         </Typography>
         <Button
-          onClick={() => navigate(`/premier-league/fantasy-game/leagues/${leagueId}`)}
+          onClick={() => navigate(`/premier-league/gameweek/league/${leagueId}`)}
           sx={{ marginTop: 2 }}
         >
           Back to League Standings
@@ -116,7 +116,7 @@ export const ManagerComparisonPage: React.FC = () => {
         {/* Back Button */}
         <Button
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate(`/premier-league/fantasy-game/leagues/${leagueId}`)}
+          onClick={() => navigate(`/premier-league/gameweek/league/${leagueId}`)}
           sx={{
             textTransform: 'none',
             marginBottom: 1.5,
@@ -174,3 +174,5 @@ export const ManagerComparisonPage: React.FC = () => {
     </Box>
   );
 };
+
+

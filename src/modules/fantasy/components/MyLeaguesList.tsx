@@ -1,4 +1,4 @@
-/**
+﻿/**
  * My Leagues List Component
  * Displays leagues with stats and navigation to league standings
  */
@@ -17,7 +17,7 @@ export const MyLeaguesList: React.FC<MyLeaguesListProps> = ({ leagues }) => {
   const navigate = useNavigate();
 
   const handleLeagueClick = (leagueId: number): void => {
-    navigate(`/premier-league/fantasy-game/leagues/${leagueId}`);
+    navigate(`/premier-league/gameweek/league/${leagueId}`);
   };
 
   return (
@@ -180,3 +180,5 @@ export const MyLeaguesList: React.FC<MyLeaguesListProps> = ({ leagues }) => {
     </Box>
   );
 };
+
+

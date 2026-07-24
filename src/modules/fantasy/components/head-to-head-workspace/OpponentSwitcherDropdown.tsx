@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Opponent Switcher Dropdown
  * Allows quick switching between opponents in the same league
  */
@@ -34,7 +34,7 @@ export const OpponentSwitcherDropdown: React.FC<OpponentSwitcherDropdownProps> =
 
   const handleOpponentChange = (newOpponentId: number): void => {
     const gw = searchParams.get('gw');
-    const url = `/premier-league/fantasy-game/leagues/${leagueId}/managers/${newOpponentId}${
+    const url = `/premier-league/gameweek/league/${leagueId}/managers/${newOpponentId}${
       gw ? `?gw=${gw}` : ''
     }`;
     navigate(url);
@@ -74,3 +74,5 @@ export const OpponentSwitcherDropdown: React.FC<OpponentSwitcherDropdownProps> =
     </Box>
   );
 };
+
+

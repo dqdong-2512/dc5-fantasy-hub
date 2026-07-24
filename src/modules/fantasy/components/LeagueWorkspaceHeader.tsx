@@ -1,4 +1,4 @@
-/**
+﻿/**
  * League Workspace Header Component
  * Shared header for League Detail and Manager Comparison views
  * Includes back button, league switcher, league summary, and workspace navigation
@@ -40,7 +40,7 @@ export const LeagueWorkspaceHeader: React.FC<LeagueWorkspaceHeaderProps> = ({
       {/* Back Button */}
       <Button
         startIcon={<ArrowBackIcon />}
-        onClick={() => navigate('/premier-league/fantasy-game')}
+        onClick={() => navigate('/premier-league/gameweek')}
         sx={{
           textTransform: 'none',
           marginBottom: 1.5,
@@ -95,7 +95,7 @@ export const LeagueWorkspaceHeader: React.FC<LeagueWorkspaceHeaderProps> = ({
           </Typography>
 
           <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
-            •
+            -
           </Typography>
 
           <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
@@ -103,7 +103,7 @@ export const LeagueWorkspaceHeader: React.FC<LeagueWorkspaceHeaderProps> = ({
           </Typography>
 
           <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
-            •
+            -
           </Typography>
 
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>

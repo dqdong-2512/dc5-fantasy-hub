@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Fantasy Game Module
  * Personal FPL workspace for connected users
  * Displays team, picks, and leagues
@@ -33,16 +33,16 @@ export const Fantasy: React.FC = () => {
 
   // Not connected - Show pages based on route
   // Show connection page for root path or explicit connection navigation
-  const isRootPath = location.pathname === '/premier-league/fantasy-game';
+  const isRootPath = location.pathname === '/premier-league/gameweek';
   if (isRootPath) {
     return <FantasyConnectionPage />;
   }
 
   // Redirect /leagues (without ID) to primary league
-  if (location.pathname === '/premier-league/fantasy-game/leagues') {
+  if (location.pathname === '/premier-league/gameweek/league') {
     return (
       <Navigate
-        to={`/premier-league/fantasy-game/leagues/${fixtures.manager.primaryLeagueId}`}
+        to={`/premier-league/gameweek/league/${fixtures.manager.primaryLeagueId}`}
         replace
       />
     );
@@ -82,3 +82,5 @@ export const Fantasy: React.FC = () => {
   // This allows UI development and testing before real entry connection
   return <FantasyGameOverview />;
 };
+
+

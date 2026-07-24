@@ -1,12 +1,24 @@
 import React, { Suspense } from 'react';
-import { createBrowserRouter, RouterProvider, Navigate } from 'react-router-dom';
+import { createBrowserRouter, RouterProvider, Navigate, useLocation } from 'react-router-dom';
 import { Box, CircularProgress } from '@mui/material';
 import { CompetitionSelection } from '../app/CompetitionSelection';
 import { Dashboard } from '../modules/dashboard/Dashboard';
 import { Fixtures } from '../modules/fixtures';
 import { PlayerExplorer } from '../modules/players';
 import { ClubExplorer } from '../modules/teams';
-import { Fantasy } from '../modules/fantasy';
+import {
+  FantasyConnectionPage,
+  FantasyGameOverview,
+  MyTeamPage,
+  LeagueStandingsPage,
+  GameweekCenterPage,
+  TransferPlannerPage,
+  GameweekPlannerPage,
+  SeasonPlannerPage,
+  GameweekHubShell,
+  PremierLeagueTablePage,
+} from '../modules/fantasy/pages';
+import { GameweekHubProvider } from '../modules/fantasy/context';
 import { AppLayout } from '../layouts/AppLayout';
 import { NotFound, ChampionsLeagueComingSoon } from '../shared/pages';
 
@@ -21,6 +33,16 @@ const AnalyticsLoadingFallback = () => (
     <CircularProgress size={40} />
   </Box>
 );
+
+const LegacyFantasyRedirect: React.FC = () => {
+  const location = useLocation();
+  const nextPath = location.pathname.replace(
+    '/premier-league/fantasy-game',
+    '/premier-league/gameweek'
+  );
+
+  return <Navigate to={`${nextPath}${location.search}${location.hash}`} replace />;
+};
 
 const router = createBrowserRouter([
   {
@@ -43,16 +65,8 @@ const router = createBrowserRouter([
             element: <Dashboard />,
           },
           {
-            path: 'fixtures',
-            element: <Fixtures />,
-          },
-          {
             path: 'players',
             element: <PlayerExplorer />,
-          },
-          {
-            path: 'teams',
-            element: <ClubExplorer />,
           },
           {
             path: 'analytics',
@@ -63,46 +77,114 @@ const router = createBrowserRouter([
             ),
           },
           {
-            path: 'fantasy-game',
-            element: <Fantasy />,
+            path: 'gameweek',
+            element: (
+              <GameweekHubProvider>
+                <GameweekHubShell />
+              </GameweekHubProvider>
+            ),
             children: [
               {
-                path: 'team',
-                element: <Fantasy />,
+                index: true,
+                element: <FantasyGameOverview />,
+              },
+              {
+                path: 'connect',
+                element: <FantasyConnectionPage />,
+              },
+              {
+                path: 'my-team',
+                element: <MyTeamPage />,
+              },
+              {
+                path: 'league',
+                element: <LeagueStandingsPage />,
+              },
+              {
+                path: 'league/:leagueId',
+                element: <LeagueStandingsPage />,
+              },
+              {
+                path: 'league/:leagueId/live',
+                element: <LeagueStandingsPage />,
+              },
+              {
+                path: 'league/:leagueId/managers/:managerId',
+                element: <LeagueStandingsPage />,
+              },
+              {
+                path: 'fixtures',
+                element: <Fixtures />,
+              },
+              {
+                path: 'clubs',
+                element: <ClubExplorer />,
+              },
+              {
+                path: 'table',
+                element: <PremierLeagueTablePage />,
               },
               {
                 path: 'gameweeks',
-                element: <Fantasy />,
+                element: <Navigate to=".." replace />,
+              },
+              {
+                path: 'team',
+                element: <Navigate to="../my-team" replace />,
               },
               {
                 path: 'gameweeks/:gameweekId',
-                element: <Fantasy />,
+                element: <GameweekCenterPage />,
               },
               {
                 path: 'transfers',
-                element: <Fantasy />,
+                element: <TransferPlannerPage />,
               },
               {
                 path: 'planner',
-                element: <Fantasy />,
+                element: <GameweekPlannerPage />,
               },
               {
                 path: 'season-planner',
-                element: <Fantasy />,
+                element: <SeasonPlannerPage />,
+              },
+              {
+                path: 'transfer-planner',
+                element: <Navigate to="../transfers" replace />,
+              },
+              {
+                path: 'gameweek-planner',
+                element: <Navigate to="../planner" replace />,
               },
               {
                 path: 'leagues',
-                element: <Fantasy />,
+                element: <Navigate to="../league" replace />,
               },
               {
                 path: 'leagues/:leagueId',
-                element: <Fantasy />,
+                element: <LeagueStandingsPage />,
+              },
+              {
+                path: 'leagues/:leagueId/live',
+                element: <LeagueStandingsPage />,
               },
               {
                 path: 'leagues/:leagueId/managers/:managerId',
-                element: <Fantasy />,
+                element: <LeagueStandingsPage />,
               },
             ],
+          },
+          {
+            path: 'fixtures',
+            element: <Navigate to="gameweek/fixtures" replace />,
+          },
+          {
+            path: 'teams',
+            element: <Navigate to="gameweek/clubs" replace />,
+          },
+          {
+            path: 'fantasy-game/*',
+            element: <LegacyFantasyRedirect />,
           },
         ],
       },

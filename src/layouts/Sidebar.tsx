@@ -20,11 +20,9 @@ interface SidebarProps {
 
 const MENU_ITEMS = [
   { id: 'dashboard', label: 'Dashboard', path: 'dashboard' },
+  { id: 'gameweek', label: 'Gameweek', path: 'gameweek' },
   { id: 'players', label: 'Players', path: 'players' },
-  { id: 'fixtures', label: 'Fixtures', path: 'fixtures' },
-  { id: 'teams', label: 'Clubs', path: 'teams' },
   { id: 'analytics', label: 'Analytics', path: 'analytics' },
-  { id: 'fantasy-game', label: 'Fantasy Game', path: 'fantasy-game' },
   { id: 'champions', label: 'Champions League', path: 'champions-league/dashboard' },
 ];
 

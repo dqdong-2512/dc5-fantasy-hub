@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Opponent Selector Component
  * Dropdown to select an opponent manager for comparison
  * Filters out current manager
@@ -29,7 +29,7 @@ export const OpponentSelector: React.FC<OpponentSelectorProps> = ({
 
   const handleOpponentChange = useCallback(
     (managerId: number): void => {
-      navigate(`/premier-league/fantasy-game/leagues/${leagueId}/managers/${managerId}`);
+      navigate(`/premier-league/gameweek/league/${leagueId}/managers/${managerId}`);
     },
     [navigate, leagueId]
   );
@@ -71,7 +71,7 @@ export const OpponentSelector: React.FC<OpponentSelectorProps> = ({
         </MenuItem>
         {opponents.map((entry) => (
           <MenuItem key={entry.managerId} value={entry.managerId}>
-            {entry.teamName} — {entry.managerName} (#{entry.currentRank})
+            {entry.teamName} - {entry.managerName} (#{entry.currentRank})
           </MenuItem>
         ))}
       </Select>

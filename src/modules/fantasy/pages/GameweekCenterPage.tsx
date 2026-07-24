@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Gameweek Center Page
  * Central hub for gameweek-specific data and analysis
  * Displays manager performance, player contributions, fixtures, and captain impact
@@ -12,7 +12,8 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { GameweekCenterService } from '../services';
-import { useFantasyGame, useEnrichedManagerPicks } from '../hooks';
+import { useEnrichedManagerPicks } from '../hooks';
+import { useGameweekHubState } from '../context';
 import {
   GameweekSelector,
   GameweekSummary,
@@ -26,7 +27,7 @@ import {
 export const GameweekCenterPage: React.FC = () => {
   const { gameweekId: gameweekIdParam } = useParams<{ gameweekId: string }>();
   const navigate = useNavigate();
-  const gameState = useFantasyGame();
+  const gameState = useGameweekHubState();
 
   const gameweekIdNum = useMemo(() => {
     return gameweekIdParam ? parseInt(gameweekIdParam, 10) : null;
@@ -82,7 +83,7 @@ export const GameweekCenterPage: React.FC = () => {
       <Box sx={{ padding: 4 }}>
         <Button
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/premier-league/fantasy-game')}
+          onClick={() => navigate('/premier-league/gameweek')}
           sx={{
             textTransform: 'none',
             color: '#1976d2',
@@ -103,14 +104,14 @@ export const GameweekCenterPage: React.FC = () => {
     // Redirect to latest available gameweek
     const latest = service.getLatestGameweek();
     if (latest) {
-      return <Navigate to={`/premier-league/fantasy-game/gameweeks/${latest.id}`} replace />;
+      return <Navigate to={`/premier-league/gameweek/gameweeks/${latest.id}`} replace />;
     }
     // No gameweeks available, redirect to dashboard
-    return <Navigate to="/premier-league/fantasy-game" replace />;
+    return <Navigate to="/premier-league/gameweek" replace />;
   }
 
   const handleBack = (): void => {
-    navigate('/premier-league/fantasy-game', { replace: true });
+    navigate('/premier-league/gameweek', { replace: true });
   };
 
   return (

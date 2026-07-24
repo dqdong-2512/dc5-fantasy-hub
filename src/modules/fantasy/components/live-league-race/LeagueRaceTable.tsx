@@ -1,4 +1,4 @@
-/**
+﻿/**
  * League Race Table Component
  * Main standings table for Live League Race
  * Shows all managers with rank, movement, points, and gaps
@@ -32,12 +32,12 @@ interface RankMovementProps {
 
 const RankMovement: React.FC<RankMovementProps> = ({ movement }) => {
   if (movement === 0) {
-    return <Typography sx={{ fontWeight: 700, color: '#666' }}>—</Typography>;
+    return <Typography sx={{ fontWeight: 700, color: '#666' }}>--</Typography>;
   }
 
   const isUp = movement > 0;
   const color = isUp ? '#4caf50' : '#f44336';
-  const symbol = isUp ? '↑' : '↓';
+  const symbol = isUp ? 'UP' : 'DOWN';
 
   return (
     <Typography sx={{ fontWeight: 700, color }}>
@@ -59,7 +59,7 @@ export const LeagueRaceTable: React.FC<LeagueRaceTableProps> = ({
       return; // Don't self-compare
     }
 
-    navigate(`/premier-league/fantasy-game/leagues/${leagueId}/managers/${managerId}`);
+    navigate(`/premier-league/gameweek/league/${leagueId}/managers/${managerId}`);
   };
 
   const isClickable = (managerId: number): boolean => managerId !== currentManagerId;
@@ -143,7 +143,7 @@ export const LeagueRaceTable: React.FC<LeagueRaceTableProps> = ({
                         color: entry.gapToLeader < 0 ? '#f44336' : '#666',
                       }}
                     >
-                      {entry.gapToLeader < 0 ? entry.gapToLeader : '—'}
+                      {entry.gapToLeader < 0 ? entry.gapToLeader : '--'}
                     </Typography>
                   </TableCell>
                 </TableRow>

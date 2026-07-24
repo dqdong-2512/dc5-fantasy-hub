@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Gameweek Selector Component
  * Dropdown to switch between available gameweeks
  * URL is source of truth for selected gameweek
@@ -29,7 +29,7 @@ export const GameweekSelector: React.FC<GameweekSelectorProps> = ({ currentGamew
 
   const handleGameweekChange = (event: any): void => {
     const newGameweekId = event.target.value as number;
-    navigate(`/premier-league/fantasy-game/gameweeks/${newGameweekId}`, { replace: true });
+    navigate(`/premier-league/gameweek/gameweeks/${newGameweekId}`, { replace: true });
   };
 
   return (
@@ -53,3 +53,4 @@ export const GameweekSelector: React.FC<GameweekSelectorProps> = ({ currentGamew
     </Box>
   );
 };
+

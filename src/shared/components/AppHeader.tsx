@@ -25,10 +25,8 @@ interface NavItem {
 
 const NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', path: '/premier-league/dashboard' },
+  { label: 'Gameweek', path: '/premier-league/gameweek' },
   { label: 'Players', path: '/premier-league/players' },
-  { label: 'Fixtures', path: '/premier-league/fixtures' },
-  { label: 'Clubs', path: '/premier-league/teams' },
-  { label: 'Fantasy Game', path: '/premier-league/fantasy-game' },
   { label: 'Analytics', path: '/premier-league/analytics' },
 ];
 
@@ -40,7 +38,7 @@ export const AppHeader: React.FC = () => {
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
 
   const isActive = (path: string): boolean => {
-    return location.pathname === path;
+    return location.pathname === path || location.pathname.startsWith(`${path}/`);
   };
 
   const handleNavigation = (path: string): void => {

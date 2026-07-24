@@ -1,4 +1,4 @@
-/**
+﻿/**
  * League Workspace Page
  * Central workspace for all league-related features
  * Handles Standings, Manager Comparison, and future Live Race features
@@ -20,18 +20,19 @@ import {
   LiveLeagueRace,
   ManagerHeadToHeadPage,
 } from '../components';
-import { useFantasyGame } from '../hooks';
+import { useGameweekHubState } from '../context';
 import { FantasyGameRepository } from '@repositories/fantasy';
 
 export const LeagueStandingsPage: React.FC = () => {
   const { leagueId, managerId } = useParams<{ leagueId: string; managerId?: string }>();
   const location = useLocation();
   const fixtures = useMemo(() => fantasyGameFixtures, []);
-  const gameState = useFantasyGame();
+  const gameState = useGameweekHubState();
 
   // Parse IDs as numbers
   const leagueIdNum = useMemo(() => (leagueId ? parseInt(leagueId, 10) : null), [leagueId]);
   const managerIdNum = useMemo(() => (managerId ? parseInt(managerId, 10) : null), [managerId]);
+  const resolvedLeagueId = leagueIdNum ?? fixtures.manager.primaryLeagueId;
 
   // Detect if on Live Race view
   const isLiveRaceView = useMemo(() => location.pathname.includes('/live'), [location.pathname]);
@@ -188,13 +189,18 @@ export const LeagueStandingsPage: React.FC = () => {
   }
 
   // Error: Self-comparison
+  if (leagueIdNum === null) {
+    return <Navigate to={`/premier-league/gameweek/league/${resolvedLeagueId}`} replace />;
+  }
+
+  // Error: Self-comparison
   if (isSelfComparison) {
-    return <Navigate to={`/premier-league/fantasy-game/leagues/${leagueId}`} replace />;
+    return <Navigate to={`/premier-league/gameweek/league/${leagueIdNum}`} replace />;
   }
 
   // Error: Invalid manager
   if (managerIdNum && !opponentManager) {
-    return <Navigate to={`/premier-league/fantasy-game/leagues/${leagueId}`} replace />;
+    return <Navigate to={`/premier-league/gameweek/league/${leagueIdNum}`} replace />;
   }
 
   // Error: Missing opponent squad data (fixture mode only)
@@ -214,6 +220,29 @@ export const LeagueStandingsPage: React.FC = () => {
               Team data is not available for this manager
             </Typography>
           </Box>
+        </PageContainer>
+      </Box>
+    );
+  }
+
+  // LIVE RACE VIEW
+  if (isLiveRaceView) {
+    return (
+      <Box>
+        <LeagueWorkspaceHeader
+          leagues={gameState.isConnected ? [] : fixtures.leagues}
+          selectedLeagueId={leagueIdNum}
+          currentManagerEntry={currentManagerEntry}
+          standingsEntryCount={standingsEntries.length}
+          workspaceNavigation={<WorkspaceNavigation leagueId={leagueIdNum || 0} />}
+        />
+
+        <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
+          <LiveLeagueRace
+            leagueId={leagueIdNum || 0}
+            standings={standings.entries}
+            currentManagerId={fixtures.manager.id}
+          />
         </PageContainer>
       </Box>
     );
@@ -303,29 +332,6 @@ export const LeagueStandingsPage: React.FC = () => {
             opponentManagerName={opponentManager?.managerName || 'Unknown'}
             currentSquad={currentSquad}
             opponentSquad={opponentSquad || []}
-          />
-        </PageContainer>
-      </Box>
-    );
-  }
-
-  // LIVE RACE VIEW
-  if (isLiveRaceView) {
-    return (
-      <Box>
-        <LeagueWorkspaceHeader
-          leagues={gameState.isConnected ? [] : fixtures.leagues}
-          selectedLeagueId={leagueIdNum}
-          currentManagerEntry={currentManagerEntry}
-          standingsEntryCount={standingsEntries.length}
-          workspaceNavigation={<WorkspaceNavigation leagueId={leagueIdNum || 0} />}
-        />
-
-        <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
-          <LiveLeagueRace
-            leagueId={leagueIdNum || 0}
-            standings={standings.entries}
-            currentManagerId={fixtures.manager.id}
           />
         </PageContainer>
       </Box>

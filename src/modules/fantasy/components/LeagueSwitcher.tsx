@@ -1,4 +1,4 @@
-/**
+﻿/**
  * League Switcher Component
  * Dropdown to switch between joined leagues
  * Navigates URL without page reload
@@ -19,7 +19,7 @@ export const LeagueSwitcher: React.FC<LeagueSwitcherProps> = ({ leagues, selecte
 
   const handleLeagueChange = useCallback(
     (leagueId: number): void => {
-      navigate(`/premier-league/fantasy-game/leagues/${leagueId}`);
+      navigate(`/premier-league/gameweek/league/${leagueId}`);
     },
     [navigate]
   );
@@ -64,3 +64,5 @@ export const LeagueSwitcher: React.FC<LeagueSwitcherProps> = ({ leagues, selecte
     </Box>
   );
 };
+
+

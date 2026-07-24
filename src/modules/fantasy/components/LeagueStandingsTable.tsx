@@ -1,4 +1,4 @@
-/**
+﻿/**
  * League Standings Table Component
  * Displays league manager standings in a responsive format
  * Non-current managers are clickable to navigate to comparison page
@@ -24,7 +24,7 @@ export const LeagueStandingsTable: React.FC<LeagueStandingsTableProps> = ({
 
   const handleManagerClick = (managerId: number): void => {
     if (managerId !== currentManagerId && leagueId) {
-      navigate(`/premier-league/fantasy-game/leagues/${leagueId}/managers/${managerId}`);
+      navigate(`/premier-league/gameweek/league/${leagueId}/managers/${managerId}`);
     }
   };
   return (
@@ -223,3 +223,5 @@ export const LeagueStandingsTable: React.FC<LeagueStandingsTableProps> = ({
     </Box>
   );
 };
+
+

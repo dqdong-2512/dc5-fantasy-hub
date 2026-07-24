@@ -1,4 +1,5 @@
 export { FantasyWorkspace, type FantasyWorkspaceProps } from './FantasyWorkspace';
+export { GameweekHubShell } from './GameweekHubShell';
 export { FantasyConnectionPage } from './FantasyConnectionPage';
 export { FantasyGameOverview } from './FantasyGameOverview';
 export { MyTeamPage } from './MyTeamPage';
@@ -8,3 +9,4 @@ export { GameweekCenterPage } from './GameweekCenterPage';
 export { TransferPlannerPage } from './TransferPlannerPage';
 export { GameweekPlannerPage } from './GameweekPlannerPage';
 export { SeasonPlannerPage } from './SeasonPlannerPage';
+export { PremierLeagueTablePage } from './PremierLeagueTablePage';

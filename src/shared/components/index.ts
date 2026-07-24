@@ -28,3 +28,4 @@ export * from './overlay';
 
 // Data Status Components
 export { DataSyncIndicator } from './DataSyncIndicator';
+export { StandingsTable, type StandingsTableProps } from './StandingsTable';

@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Fantasy Connection Page
  * Entry point for connecting FPL Entry ID
  * Shows connection form when user is not connected
@@ -7,10 +7,10 @@
 import React, { useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ConnectTeam } from '../components/ConnectTeam';
-import { useFantasyGame } from '../hooks';
+import { useGameweekHubState } from '../context';
 
 export const FantasyConnectionPage: React.FC = () => {
-  const gameState = useFantasyGame();
+  const gameState = useGameweekHubState();
   const navigate = useNavigate();
 
   const handleConnect = useCallback(
@@ -19,7 +19,7 @@ export const FantasyConnectionPage: React.FC = () => {
         await gameState.connectEntry(entryId);
         // Connection successful - navigate to fantasy game dashboard
         // Use replace: true to prevent back button returning to connection form
-        navigate('/premier-league/fantasy-game', { replace: true });
+        navigate('/premier-league/gameweek', { replace: true });
       } catch {
         // Error is handled by gameState.error and displayed in ConnectTeam
         // Remain on connection form for retry

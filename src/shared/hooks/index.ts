@@ -8,3 +8,4 @@ export {
   useStaleDataMessage,
 } from './useDataFreshness';
 export { useGameweekState, useCurrentGameweek, useNextGameweek } from './useGameweekState';
+export { useStandings, useStandingsByGameweek } from './useStandings';

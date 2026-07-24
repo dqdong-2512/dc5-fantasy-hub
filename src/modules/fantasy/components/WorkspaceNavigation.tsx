@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Workspace Navigation Component
  * Tabs for workspace sections: Standings, Compare, Live Race
  * Active state derived from URL
@@ -31,15 +31,15 @@ export const WorkspaceNavigation: React.FC<WorkspaceNavigationProps> = ({ league
 
   const handleTabClick = (tab: WorkspaceTab): void => {
     if (tab === 'standings') {
-      navigate(`/premier-league/fantasy-game/leagues/${leagueId}`);
+      navigate(`/premier-league/gameweek/league/${leagueId}`);
     } else if (tab === 'compare') {
       // Stay on compare (user will select opponent)
       // Do nothing if already on compare without manager selected
       if (!managerId) {
-        navigate(`/premier-league/fantasy-game/leagues/${leagueId}`);
+        navigate(`/premier-league/gameweek/league/${leagueId}`);
       }
     } else if (tab === 'live-race') {
-      navigate(`/premier-league/fantasy-game/leagues/${leagueId}/live`);
+      navigate(`/premier-league/gameweek/league/${leagueId}/live`);
     }
   };
 
@@ -84,3 +84,5 @@ export const WorkspaceNavigation: React.FC<WorkspaceNavigationProps> = ({ league
     </Box>
   );
 };
+
+

@@ -40,3 +40,10 @@ export {
   type DataQualityStatus,
   getDataQualityStatus,
 } from './data-freshness.service';
+
+// Standings calculation
+export {
+  StandingsCalculatorService,
+  type StandingsRow,
+  type LeagueStandings,
+} from './standings-calculator.service';
