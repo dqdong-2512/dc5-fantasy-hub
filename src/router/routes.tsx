@@ -35,6 +35,11 @@ const PlayerDetailPage = React.lazy(() =>
 const ClubExplorer = React.lazy(() =>
   import('../modules/teams').then((module) => ({ default: module.ClubExplorer }))
 );
+const AseanCup2026TournamentCenter = React.lazy(() =>
+  import('../modules/asean-cup-2026').then((module) => ({
+    default: module.AseanCup2026TournamentCenter,
+  }))
+);
 
 const GameweekHubShell = React.lazy(() =>
   import('../modules/fantasy/pages').then((module) => ({ default: module.GameweekHubShell }))
@@ -102,6 +107,14 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <CompetitionSelection />,
+      },
+      {
+        path: 'asean-cup-2026',
+        element: (
+          <Suspense fallback={<RouteLoadingFallback />}>
+            <AseanCup2026TournamentCenter />
+          </Suspense>
+        ),
       },
       {
         path: 'premier-league',

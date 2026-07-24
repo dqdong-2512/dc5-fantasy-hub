@@ -2,6 +2,7 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   AppBar,
+  Avatar,
   Toolbar,
   Box,
   Typography,
@@ -24,6 +25,7 @@ import { useThemeMode } from '@theme/theme-mode';
 interface NavItem {
   label: string;
   path: string;
+  logoSrc?: string;
 }
 
 const NAV_ITEMS: NavItem[] = [
@@ -31,6 +33,7 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Gameweek', path: '/premier-league/gameweek' },
   { label: 'Players', path: '/premier-league/players' },
   { label: 'Analytics', path: '/premier-league/analytics' },
+  { label: 'ASEAN Cup 2026', path: '/asean-cup-2026', logoSrc: '/asean-cup-2026-logo.svg' },
 ];
 
 export const AppHeader: React.FC = () => {
@@ -99,35 +102,76 @@ export const AppHeader: React.FC = () => {
 
         {/* Desktop Navigation */}
         {!isMobile && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', gap: 0.5, flex: 1 }}>
-            {NAV_ITEMS.map((item) => (
-              <Button
-                key={item.path}
-                onClick={() => handleNavigation(item.path)}
-                sx={{
-                  color: isActive(item.path) ? 'primary.main' : 'text.secondary',
-                  fontWeight: isActive(item.path) ? 600 : 500,
-                  fontSize: '0.9rem',
-                  textTransform: 'none',
-                  position: 'relative',
-                  px: 1,
-                  py: 0.5,
-                  '&::after': {
-                    content: '""',
-                    position: 'absolute',
-                    bottom: 0,
-                    left: 0,
-                    right: 0,
-                    height: 3,
-                    backgroundColor: 'primary.main',
-                    transform: isActive(item.path) ? 'scaleX(1)' : 'scaleX(0)',
-                    transformOrigin: 'center',
-                    transition: 'transform 0.3s ease',
-                  },
-                }}
-              >
-                {item.label}
-              </Button>
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              flex: 1,
+            }}
+          >
+            {NAV_ITEMS.map((item, index) => (
+              <React.Fragment key={item.path}>
+                <Button
+                  onClick={() => handleNavigation(item.path)}
+                  startIcon={
+                    item.logoSrc ? (
+                      <Avatar
+                        src={item.logoSrc}
+                        alt={item.label}
+                        variant="rounded"
+                        sx={{
+                          width: 20,
+                          height: 20,
+                          borderRadius: 1,
+                        }}
+                      />
+                    ) : undefined
+                  }
+                  sx={{
+                    color: isActive(item.path) ? 'primary.main' : 'text.secondary',
+                    fontWeight: isActive(item.path) ? 600 : 500,
+                    fontSize: '0.9rem',
+                    textTransform: 'none',
+                    position: 'relative',
+                    px: 1,
+                    py: 0.5,
+                    minWidth: 'auto',
+
+                    '&::after': {
+                      content: '""',
+                      position: 'absolute',
+                      bottom: 0,
+                      left: 0,
+                      right: 0,
+                      height: 3,
+                      bgcolor: 'primary.main',
+                      transform: isActive(item.path) ? 'scaleX(1)' : 'scaleX(0)',
+                      transformOrigin: 'center',
+                      transition: 'transform 0.3s ease',
+                    },
+                  }}
+                >
+                  {item.label}
+                </Button>
+
+                {index < NAV_ITEMS.length - 1 && (
+                  <Typography
+                    component="span"
+                    sx={{
+                      mx: 1.2,
+                      color: 'text.secondary',
+                      fontWeight: 300,
+                      fontSize: '1rem',
+                      userSelect: 'none',
+                      pointerEvents: 'none',
+                      opacity: 0.7,
+                    }}
+                  >
+                    |
+                  </Typography>
+                )}
+              </React.Fragment>
             ))}
           </Box>
         )}
@@ -180,6 +224,14 @@ export const AppHeader: React.FC = () => {
                   fontWeight: isActive(item.path) ? 600 : 500,
                 }}
               >
+                {item.logoSrc && (
+                  <Avatar
+                    src={item.logoSrc}
+                    alt={item.label}
+                    variant="rounded"
+                    sx={{ width: 20, height: 20, borderRadius: 1, marginRight: 1 }}
+                  />
+                )}
                 {item.label}
               </ListItemButton>
             </ListItem>
