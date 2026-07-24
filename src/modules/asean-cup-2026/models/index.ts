@@ -1,6 +1,7 @@
 export type {
   TournamentFixtureStatusRaw,
   TournamentFixtureStatus,
+  TournamentCountryCode,
   TournamentPlayerPosition,
   TournamentTeamRaw,
   TournamentGroupStandingRaw,

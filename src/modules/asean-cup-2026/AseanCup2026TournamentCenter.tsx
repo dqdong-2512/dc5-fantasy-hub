@@ -26,6 +26,7 @@ import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import {
+  CountryFlag,
   DataSyncIndicator,
   ErrorState,
   FilterBar,
@@ -35,6 +36,7 @@ import {
   PageSection,
   SearchInput,
   StatCard,
+  StatusChip,
 } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import type {
@@ -127,6 +129,21 @@ function getFixtureStatusLabel(fixture: TournamentFixture): string {
   return 'Upcoming';
 }
 
+function renderTeamWithFlag(
+  team: { name: string; countryCode: string },
+  flagSize: 'sm' | 'md' | 'lg' | number,
+  textVariant: 'body2' | 'caption' = 'body2'
+): React.ReactElement {
+  return (
+    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.8, minWidth: 0 }}>
+      <CountryFlag code={team.countryCode} size={flagSize} showTooltip />
+      <Typography variant={textVariant} sx={{ lineHeight: 1.2 }}>
+        {team.name}
+      </Typography>
+    </Box>
+  );
+}
+
 function getKnockoutChipProps(status: KnockoutTeam['status']): {
   label: string;
   color: 'default' | 'success' | 'warning';
@@ -183,14 +200,7 @@ function renderGroupTable(group: TournamentCenterData['groups'][number]): React.
               {group.standings.map((row) => (
                 <TableRow key={`${group.id}-${row.team.id}`} hover>
                   <TableCell sx={{ fontWeight: 700 }}>{row.position}</TableCell>
-                  <TableCell>
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                      <Avatar sx={{ width: 24, height: 24, fontSize: '0.7rem' }}>
-                        {row.team.shortName}
-                      </Avatar>
-                      <Typography variant="body2">{row.team.name}</Typography>
-                    </Box>
-                  </TableCell>
+                  <TableCell>{renderTeamWithFlag(row.team, 'md')}</TableCell>
                   <TableCell align="right">{row.played}</TableCell>
                   <TableCell align="right">{row.won}</TableCell>
                   <TableCell align="right">{row.draw}</TableCell>
@@ -250,13 +260,16 @@ function renderKnockoutMatch(match: KnockoutMatch, emphasize = false): React.Rea
                   p: ThemeTokens.spacing.sm,
                 }}
               >
-                <Avatar sx={{ width: 28, height: 28, fontSize: '0.75rem' }}>
-                  {team.team?.shortName ?? 'TBD'}
-                </Avatar>
+                <CountryFlag code={team.team?.countryCode ?? 'TBD'} size={20} showTooltip />
                 <Box>
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {team.label}
+                    {team.team?.name ?? team.label}
                   </Typography>
+                  {team.team && team.label !== team.team.name && (
+                    <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+                      {team.label}
+                    </Typography>
+                  )}
                   <Typography variant="caption" color="text.secondary">
                     Aggregate: {team.aggregate}
                   </Typography>
@@ -319,20 +332,29 @@ function renderFixtureList(title: string, fixtures: TournamentFixture[]): React.
                       {fixture.stage}
                     </Typography>
                     <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                      {fixture.homeTeam.name} {formatScore(fixture.homeScore, fixture.awayScore)}{' '}
-                      {fixture.awayTeam.name}
+                      {formatScore(fixture.homeScore, fixture.awayScore)}
                     </Typography>
                   </Box>
-                  <Chip
-                    size="small"
-                    color={getFixtureStatusColor(fixture.status)}
+                  <StatusChip
+                    status={getFixtureStatusColor(fixture.status)}
                     label={getFixtureStatusLabel(fixture)}
-                    variant={
-                      fixture.status === 'live' || fixture.status === 'half-time'
-                        ? 'filled'
-                        : 'outlined'
-                    }
                   />
+                </Box>
+
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr auto 1fr',
+                    alignItems: 'center',
+                    gap: 1,
+                    mt: 0.75,
+                  }}
+                >
+                  {renderTeamWithFlag(fixture.homeTeam, 20)}
+                  <Typography variant="caption" color="text.secondary" sx={{ textAlign: 'center' }}>
+                    vs
+                  </Typography>
+                  <Box sx={{ justifySelf: 'end' }}>{renderTeamWithFlag(fixture.awayTeam, 20)}</Box>
                 </Box>
 
                 <Typography
@@ -704,11 +726,11 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                         bgcolor: 'background.paper',
                       }}
                     >
-                      <Avatar
-                        sx={{ width: 28, height: 28, fontSize: '0.75rem', bgcolor: 'success.main' }}
-                      >
-                        C
-                      </Avatar>
+                      <CountryFlag
+                        code={data.knockout.champion.team?.countryCode ?? 'TBD'}
+                        size={20}
+                        showTooltip
+                      />
                       <Typography variant="body2" sx={{ fontWeight: 700 }}>
                         {data.knockout.champion.label}
                       </Typography>
@@ -886,7 +908,12 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>{player.nation.name}</TableCell>
+                    <TableCell>
+                      <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
+                        <CountryFlag code={player.nation.countryCode} size="md" showTooltip />
+                        <Typography variant="body2">{player.nation.name}</Typography>
+                      </Box>
+                    </TableCell>
                     <TableCell>{player.club}</TableCell>
                     <TableCell>{player.position}</TableCell>
                     <TableCell align="right">{player.goals}</TableCell>

@@ -269,8 +269,7 @@ export class TournamentService {
     return {
       id,
       name: 'TBD',
-      shortName: 'TBD',
-      code: 'TBD',
+      countryCode: 'TBD',
     };
   }
 

@@ -6,11 +6,13 @@ export type TournamentFixtureStatus =
 
 export type TournamentPlayerPosition = 'GK' | 'DEF' | 'MID' | 'FWD';
 
+export type TournamentCountryCode =
+  'VN' | 'TH' | 'MY' | 'ID' | 'KH' | 'SG' | 'PH' | 'MM' | 'LA' | 'TL';
+
 export interface TournamentTeamRaw {
   id: number;
   name: string;
-  shortName: string;
-  code: string;
+  countryCode: TournamentCountryCode;
 }
 
 export interface TournamentGroupStandingRaw {
@@ -108,8 +110,7 @@ export interface TournamentRawDataset {
 export interface TournamentTeam {
   id: number;
   name: string;
-  shortName: string;
-  code: string;
+  countryCode: TournamentCountryCode | 'TBD';
 }
 
 export interface TournamentGroupStanding {
