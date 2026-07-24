@@ -13,16 +13,16 @@ import type {
   TournamentGroupStanding,
   TournamentHero,
   TournamentHighlight,
+  TournamentPlayerRaw,
   TournamentRawDataset,
+  TournamentStatisticRaw,
   TournamentStatistic,
   TournamentTeam,
 } from '../models/tournament.models';
 import { TournamentRepository } from '../repositories/TournamentRepository';
 
-interface RepositoryPayload {
-  data: TournamentRawDataset;
-  syncedAt: string;
-}
+const VIETNAM_TIMEZONE = 'Asia/Ho_Chi_Minh';
+const MATCH_DURATION_MS = 120 * 60 * 1000;
 
 export class TournamentService {
   private readonly repository: TournamentRepository;
@@ -33,11 +33,15 @@ export class TournamentService {
 
   public async getTournamentCenterData(forceRefresh = false): Promise<TournamentCenterData> {
     const payload = await this.repository.getSnapshot(forceRefresh);
-    const teamMap = this.createTeamMap(payload.data.teams);
+    const normalizedDataset = this.normalizeDataset(payload.data);
+    const teamMap = this.createTeamMap(normalizedDataset.teams);
 
-    const fixtures = payload.data.fixtures.map((fixture) => this.toFixture(fixture, teamMap));
-    const groups = payload.data.groups.map((group) => this.toGroup(group, teamMap));
-    const players = payload.data.players.map((player) => ({
+    const evaluatedFixtures = normalizedDataset.fixtures.map((fixture) =>
+      this.evaluateFixtureByTime(fixture)
+    );
+    const fixtures = evaluatedFixtures.map((fixture) => this.toFixture(fixture, teamMap));
+    const groups = normalizedDataset.groups.map((group) => this.toGroup(group, teamMap));
+    const players = normalizedDataset.players.map((player) => ({
       id: player.id,
       name: player.name,
       nation: teamMap.get(player.nationTeamId) ?? this.createUnknownTeam(player.nationTeamId),
@@ -51,24 +55,40 @@ export class TournamentService {
     }));
 
     const sortedFixtures = [...fixtures].sort(
-      (left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime()
+      (left, right) => this.getKickoffTimeMs(left.kickoff) - this.getKickoffTimeMs(right.kickoff)
     );
 
+    const browserTimezone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
     const today = new Date();
-    const fixturesToday = sortedFixtures.filter((fixture) =>
-      this.isSameDay(new Date(fixture.kickoff), today)
-    );
-    const upcomingFixtures = sortedFixtures.filter(
+    const todayKey = this.getDateKeyInTimezone(today, browserTimezone);
+    const fixturesToday = sortedFixtures.filter(
       (fixture) =>
-        fixture.status === 'upcoming' ||
-        fixture.status === 'postponed' ||
-        fixture.status === 'cancelled'
+        this.getDateKeyInTimezone(new Date(fixture.kickoff), browserTimezone) === todayKey
     );
-    const completedFixtures = sortedFixtures
-      .filter((fixture) => fixture.status === 'finished')
-      .sort((left, right) => new Date(right.kickoff).getTime() - new Date(left.kickoff).getTime());
+    const futureDateKeys = sortedFixtures
+      .map((fixture) => this.getDateKeyInTimezone(new Date(fixture.kickoff), browserTimezone))
+      .filter((fixtureDateKey) => fixtureDateKey > todayKey)
+      .sort((left, right) => left.localeCompare(right));
+    const nextMatchdayKey = futureDateKeys.length > 0 ? futureDateKeys[0] : null;
+    const upcomingFixtures =
+      nextMatchdayKey === null
+        ? []
+        : sortedFixtures.filter((fixture) => {
+            const fixtureDateKey = this.getDateKeyInTimezone(
+              new Date(fixture.kickoff),
+              browserTimezone
+            );
+            return fixtureDateKey === nextMatchdayKey && fixture.status !== 'finished';
+          });
+    const completedFixtures = sortedFixtures.filter((fixture) => fixture.status === 'finished');
 
-    const hero = this.buildHero(payload, sortedFixtures, completedFixtures, upcomingFixtures);
+    const hero = this.buildHero(
+      normalizedDataset,
+      payload.syncedAt,
+      sortedFixtures,
+      completedFixtures,
+      upcomingFixtures
+    );
 
     return {
       hero,
@@ -80,12 +100,12 @@ export class TournamentService {
       },
       players,
       knockout: {
-        semiFinal1: this.toKnockoutMatch(payload.data.knockout.semiFinal1, teamMap),
-        semiFinal2: this.toKnockoutMatch(payload.data.knockout.semiFinal2, teamMap),
-        final: this.toKnockoutMatch(payload.data.knockout.final, teamMap),
-        champion: this.toKnockoutTeam(payload.data.knockout.champion, teamMap),
+        semiFinal1: this.toKnockoutMatch(normalizedDataset.knockout.semiFinal1, teamMap),
+        semiFinal2: this.toKnockoutMatch(normalizedDataset.knockout.semiFinal2, teamMap),
+        final: this.toKnockoutMatch(normalizedDataset.knockout.final, teamMap),
+        champion: this.toKnockoutTeam(normalizedDataset.knockout.champion, teamMap),
       },
-      statistics: payload.data.statistics.map((stat): TournamentStatistic => ({
+      statistics: normalizedDataset.statistics.map((stat): TournamentStatistic => ({
         id: stat.id,
         title: stat.title,
         value: stat.value,
@@ -98,8 +118,159 @@ export class TournamentService {
     this.repository.invalidate();
   }
 
+  private normalizeDataset(dataset: TournamentRawDataset): TournamentRawDataset {
+    const normalizedFixtures = dataset.fixtures.map((fixture) => this.sanitizeFixture(fixture));
+    const hasPlayedMatch = normalizedFixtures.some(
+      (fixture) =>
+        fixture.status === 'FINISHED' || fixture.status === 'LIVE' || fixture.status === 'HALF_TIME'
+    );
+
+    if (hasPlayedMatch) {
+      return {
+        ...dataset,
+        fixtures: normalizedFixtures,
+      };
+    }
+
+    return {
+      ...dataset,
+      groups: dataset.groups.map((group) => this.zeroGroupStandings(group)),
+      fixtures: normalizedFixtures,
+      players: dataset.players.map((player) => this.zeroPlayerStats(player)),
+      knockout: this.resetKnockout(dataset.knockout),
+      statistics: dataset.statistics.map((stat) => this.resetStatistic(stat)),
+      meta: {
+        ...dataset.meta,
+        currentStage: 'Group Stage',
+        currentMatchday: 1,
+      },
+    };
+  }
+
+  private sanitizeFixture(fixture: TournamentFixtureRaw): TournamentFixtureRaw {
+    const kickoffTime = new Date(fixture.kickoff).getTime();
+    const hasValidKickoff = Number.isFinite(kickoffTime);
+    const now = Date.now();
+    const hasScore = fixture.homeScore !== null && fixture.awayScore !== null;
+    const isFutureKickoff = hasValidKickoff && kickoffTime > now;
+
+    if (fixture.status === 'LIVE' || fixture.status === 'HALF_TIME') {
+      if (isFutureKickoff) {
+        return {
+          ...fixture,
+          status: 'UPCOMING',
+          homeScore: null,
+          awayScore: null,
+          minute: undefined,
+          addedTime: undefined,
+          note: fixture.note,
+        };
+      }
+      return fixture;
+    }
+
+    if (fixture.status === 'FINISHED' && !hasScore) {
+      return {
+        ...fixture,
+        status: 'UPCOMING',
+        minute: undefined,
+        addedTime: undefined,
+      };
+    }
+
+    if (
+      fixture.status === 'UPCOMING' ||
+      fixture.status === 'POSTPONED' ||
+      fixture.status === 'CANCELLED'
+    ) {
+      return {
+        ...fixture,
+        homeScore: null,
+        awayScore: null,
+        minute: undefined,
+        addedTime: undefined,
+      };
+    }
+
+    return fixture;
+  }
+
+  private zeroGroupStandings(group: TournamentGroupRaw): TournamentGroupRaw {
+    return {
+      ...group,
+      standings: group.standings.map((row) => ({
+        ...row,
+        played: 0,
+        won: 0,
+        draw: 0,
+        lost: 0,
+        gf: 0,
+        ga: 0,
+        points: 0,
+      })),
+    };
+  }
+
+  private zeroPlayerStats(player: TournamentPlayerRaw): TournamentPlayerRaw {
+    return {
+      ...player,
+      goals: 0,
+      assists: 0,
+      minutes: 0,
+      yellowCards: 0,
+      redCards: 0,
+    };
+  }
+
+  private resetKnockout(
+    knockout: TournamentRawDataset['knockout']
+  ): TournamentRawDataset['knockout'] {
+    const resetTeam = (team: KnockoutTeamRaw): KnockoutTeamRaw => ({
+      ...team,
+      teamId: null,
+      score: null,
+      aggregate: '-',
+      status: 'pending',
+    });
+
+    return {
+      semiFinal1: {
+        ...knockout.semiFinal1,
+        home: resetTeam(knockout.semiFinal1.home),
+        away: resetTeam(knockout.semiFinal1.away),
+      },
+      semiFinal2: {
+        ...knockout.semiFinal2,
+        home: resetTeam(knockout.semiFinal2.home),
+        away: resetTeam(knockout.semiFinal2.away),
+      },
+      final: {
+        ...knockout.final,
+        home: resetTeam(knockout.final.home),
+        away: resetTeam(knockout.final.away),
+      },
+      champion: {
+        ...knockout.champion,
+        label: 'To Be Decided',
+        teamId: null,
+        score: null,
+        aggregate: '-',
+        status: 'champion',
+      },
+    };
+  }
+
+  private resetStatistic(stat: TournamentStatisticRaw): TournamentStatisticRaw {
+    return {
+      ...stat,
+      value: 'TBD',
+      subtitle: 'Tournament has not started',
+    };
+  }
+
   private buildHero(
-    payload: RepositoryPayload,
+    dataset: TournamentRawDataset,
+    syncedAt: string,
     fixtures: TournamentFixture[],
     completedFixtures: TournamentFixture[],
     upcomingFixtures: TournamentFixture[]
@@ -107,26 +278,102 @@ export class TournamentService {
     const liveFixture = fixtures.find(
       (fixture) => fixture.status === 'live' || fixture.status === 'half-time'
     );
-    const latestResult = completedFixtures[0];
+    const latestResult = completedFixtures[completedFixtures.length - 1];
     const nextFixture = upcomingFixtures[0];
 
     const highlight = this.resolveHighlight(liveFixture, latestResult, nextFixture);
 
     return {
-      tournamentName: payload.data.meta.name,
-      subtitle: payload.data.meta.subtitle,
-      currentStage: payload.data.meta.currentStage,
-      currentMatchday: payload.data.meta.currentMatchday,
+      tournamentName: dataset.meta.name,
+      subtitle: dataset.meta.subtitle,
+      currentStage: dataset.meta.currentStage,
+      currentMatchday: dataset.meta.currentMatchday,
       matchesCompleted: completedFixtures.length,
       matchesRemaining: fixtures.length - completedFixtures.length,
       nextFixture: nextFixture
         ? `${nextFixture.homeTeam.name} vs ${nextFixture.awayTeam.name}`
-        : 'To be announced',
+        : 'No upcoming fixture',
       latestResult: latestResult
         ? `${latestResult.homeTeam.name} ${this.formatScore(latestResult.homeScore, latestResult.awayScore)} ${latestResult.awayTeam.name}`
         : 'No finished fixture yet',
       highlight,
-      lastUpdated: payload.syncedAt,
+      lastUpdated: syncedAt,
+    };
+  }
+
+  private evaluateFixtureByTime(fixture: TournamentFixtureRaw): TournamentFixtureRaw {
+    if (fixture.status === 'POSTPONED' || fixture.status === 'CANCELLED') {
+      return {
+        ...fixture,
+        homeScore: null,
+        awayScore: null,
+        minute: undefined,
+        addedTime: undefined,
+      };
+    }
+
+    const kickoffTime = this.getKickoffTimeMs(fixture.kickoff);
+    if (!Number.isFinite(kickoffTime)) {
+      return {
+        ...fixture,
+        status: 'UPCOMING',
+        homeScore: null,
+        awayScore: null,
+        minute: undefined,
+        addedTime: undefined,
+      };
+    }
+
+    const now = Date.now();
+    const hasScore = fixture.homeScore !== null && fixture.awayScore !== null;
+
+    if (now < kickoffTime) {
+      return {
+        ...fixture,
+        status: 'UPCOMING',
+        homeScore: null,
+        awayScore: null,
+        minute: undefined,
+        addedTime: undefined,
+      };
+    }
+
+    if (hasScore && (fixture.status === 'FINISHED' || now >= kickoffTime + MATCH_DURATION_MS)) {
+      return {
+        ...fixture,
+        status: 'FINISHED',
+        minute: undefined,
+        addedTime: undefined,
+      };
+    }
+
+    const elapsedMinutes = Math.max(1, Math.floor((now - kickoffTime) / 60000));
+    if (elapsedMinutes >= 46 && elapsedMinutes <= 60) {
+      return {
+        ...fixture,
+        status: 'HALF_TIME',
+        homeScore: hasScore ? fixture.homeScore : null,
+        awayScore: hasScore ? fixture.awayScore : null,
+        minute: 45,
+        addedTime: undefined,
+      };
+    }
+
+    if (elapsedMinutes <= 120) {
+      return {
+        ...fixture,
+        status: 'LIVE',
+        homeScore: hasScore ? fixture.homeScore : null,
+        awayScore: hasScore ? fixture.awayScore : null,
+        minute: Math.min(elapsedMinutes, 120),
+      };
+    }
+
+    return {
+      ...fixture,
+      status: 'FINISHED',
+      minute: undefined,
+      addedTime: undefined,
     };
   }
 
@@ -223,8 +470,8 @@ export class TournamentService {
     return {
       id: fixture.id,
       stage: fixture.stage,
-      kickoff: fixture.kickoff,
-      venue: fixture.venue,
+      kickoff: this.normalizeKickoffToIsoUtc(fixture.kickoff),
+      venue: fixture.venue && fixture.venue.trim().length > 0 ? fixture.venue : 'TBD',
       homeTeam,
       awayTeam,
       homeScore: fixture.homeScore,
@@ -299,8 +546,9 @@ export class TournamentService {
   }
 
   private formatKickoff(kickoff: string): string {
-    const date = new Date(kickoff);
+    const date = new Date(this.normalizeKickoffToIsoUtc(kickoff));
     return new Intl.DateTimeFormat('en-GB', {
+      timeZone: VIETNAM_TIMEZONE,
       day: '2-digit',
       month: 'short',
       hour: '2-digit',
@@ -321,11 +569,50 @@ export class TournamentService {
     return `${fixture.minute}'`;
   }
 
-  private isSameDay(left: Date, right: Date): boolean {
-    return (
-      left.getFullYear() === right.getFullYear() &&
-      left.getMonth() === right.getMonth() &&
-      left.getDate() === right.getDate()
-    );
+  private getDateKeyInTimezone(date: Date, timeZone: string): string {
+    const formatter = new Intl.DateTimeFormat('en-CA', {
+      timeZone,
+      year: 'numeric',
+      month: '2-digit',
+      day: '2-digit',
+    });
+    return formatter.format(date);
+  }
+
+  private getKickoffTimeMs(kickoff: string): number {
+    const normalized = this.normalizeKickoffToIsoUtc(kickoff);
+    const value = new Date(normalized).getTime();
+    return Number.isFinite(value) ? value : Number.MAX_SAFE_INTEGER;
+  }
+
+  private normalizeKickoffToIsoUtc(kickoff: string): string {
+    const hasTimezone = /(?:Z|[+-]\d{2}:?\d{2})$/i.test(kickoff);
+    if (hasTimezone) {
+      return new Date(kickoff).toISOString();
+    }
+
+    const [datePart, timePart = '00:00:00'] = kickoff.trim().split('T');
+    const [yearRaw, monthRaw, dayRaw] = datePart.split('-');
+    const [hourRaw, minuteRaw = '0', secondRaw = '0'] = timePart.split(':');
+    const year = Number(yearRaw);
+    const month = Number(monthRaw);
+    const day = Number(dayRaw);
+    const hour = Number(hourRaw);
+    const minute = Number(minuteRaw);
+    const second = Number(secondRaw);
+
+    if (
+      !Number.isFinite(year) ||
+      !Number.isFinite(month) ||
+      !Number.isFinite(day) ||
+      !Number.isFinite(hour) ||
+      !Number.isFinite(minute) ||
+      !Number.isFinite(second)
+    ) {
+      return kickoff;
+    }
+
+    const utcMs = Date.UTC(year, month - 1, day, hour - 7, minute, second);
+    return new Date(utcMs).toISOString();
   }
 }

@@ -1,0 +1,382 @@
+{
+  "meta": {
+    "competition": "ASEAN Cup",
+    "season": "2026",
+    "name": "ASEAN Cup 2026",
+    "subtitle": "Official Tournament Center",
+    "currentStage": "Group Stage",
+    "currentMatchday": 1,
+    "updatedAt": "2026-07-24T12:00:00Z"
+  },
+  "teams": [
+    { "id": 1, "name": "Vietnam", "countryCode": "VN" },
+    { "id": 2, "name": "Indonesia", "countryCode": "ID" },
+    { "id": 3, "name": "Singapore", "countryCode": "SG" },
+    { "id": 4, "name": "Cambodia", "countryCode": "KH" },
+    { "id": 5, "name": "Timor-Leste", "countryCode": "TL" },
+    { "id": 6, "name": "Thailand", "countryCode": "TH" },
+    { "id": 7, "name": "Malaysia", "countryCode": "MY" },
+    { "id": 8, "name": "Philippines", "countryCode": "PH" },
+    { "id": 9, "name": "Myanmar", "countryCode": "MM" },
+    { "id": 10, "name": "Laos", "countryCode": "LA" }
+  ],
+  "groups": [
+    {
+      "id": "A",
+      "name": "Group A",
+      "standings": [
+        { "teamId": 1, "played": 0, "won": 0, "draw": 0, "lost": 0, "gf": 0, "ga": 0, "points": 0 },
+        { "teamId": 2, "played": 0, "won": 0, "draw": 0, "lost": 0, "gf": 0, "ga": 0, "points": 0 },
+        { "teamId": 3, "played": 0, "won": 0, "draw": 0, "lost": 0, "gf": 0, "ga": 0, "points": 0 },
+        { "teamId": 4, "played": 0, "won": 0, "draw": 0, "lost": 0, "gf": 0, "ga": 0, "points": 0 },
+        { "teamId": 5, "played": 0, "won": 0, "draw": 0, "lost": 0, "gf": 0, "ga": 0, "points": 0 }
+      ]
+    },
+    {
+      "id": "B",
+      "name": "Group B",
+      "standings": [
+        { "teamId": 6, "played": 0, "won": 0, "draw": 0, "lost": 0, "gf": 0, "ga": 0, "points": 0 },
+        { "teamId": 7, "played": 0, "won": 0, "draw": 0, "lost": 0, "gf": 0, "ga": 0, "points": 0 },
+        { "teamId": 8, "played": 0, "won": 0, "draw": 0, "lost": 0, "gf": 0, "ga": 0, "points": 0 },
+        { "teamId": 9, "played": 0, "won": 0, "draw": 0, "lost": 0, "gf": 0, "ga": 0, "points": 0 },
+        { "teamId": 10, "played": 0, "won": 0, "draw": 0, "lost": 0, "gf": 0, "ga": 0, "points": 0 }
+      ]
+    }
+  ],
+  "fixtures": [
+    {
+      "id": "A1",
+      "stage": "Group A",
+      "kickoff": "2026-07-25T12:00:00Z",
+      "venue": "National Olympic Stadium",
+      "homeTeamId": 4,
+      "awayTeamId": 3,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "A2",
+      "stage": "Group A",
+      "kickoff": "2026-07-25T12:30:00Z",
+      "venue": "My Dinh National Stadium",
+      "homeTeamId": 1,
+      "awayTeamId": 2,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "B1",
+      "stage": "Group B",
+      "kickoff": "2026-07-26T12:00:00Z",
+      "venue": "Bukit Jalil National Stadium",
+      "homeTeamId": 7,
+      "awayTeamId": 9,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "B2",
+      "stage": "Group B",
+      "kickoff": "2026-07-26T13:00:00Z",
+      "venue": "Rizal Memorial Stadium",
+      "homeTeamId": 8,
+      "awayTeamId": 6,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "SF1-L1",
+      "stage": "Semi-final 1 (Leg 1)",
+      "kickoff": "2026-08-15T12:00:00Z",
+      "venue": "TBD",
+      "homeTeamId": 0,
+      "awayTeamId": 0,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "SF1-L2",
+      "stage": "Semi-final 1 (Leg 2)",
+      "kickoff": "2026-08-19T12:00:00Z",
+      "venue": "TBD",
+      "homeTeamId": 0,
+      "awayTeamId": 0,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "SF2-L1",
+      "stage": "Semi-final 2 (Leg 1)",
+      "kickoff": "2026-08-16T12:00:00Z",
+      "venue": "TBD",
+      "homeTeamId": 0,
+      "awayTeamId": 0,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "SF2-L2",
+      "stage": "Semi-final 2 (Leg 2)",
+      "kickoff": "2026-08-19T13:30:00Z",
+      "venue": "TBD",
+      "homeTeamId": 0,
+      "awayTeamId": 0,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "F-L1",
+      "stage": "Final (Leg 1)",
+      "kickoff": "2026-08-22T12:00:00Z",
+      "venue": "TBD",
+      "homeTeamId": 0,
+      "awayTeamId": 0,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "F-L2",
+      "stage": "Final (Leg 2)",
+      "kickoff": "2026-08-26T12:00:00Z",
+      "venue": "TBD",
+      "homeTeamId": 0,
+      "awayTeamId": 0,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    }
+  ],
+  "players": [
+    {
+      "id": 1,
+      "name": "Nguyen Tien Linh",
+      "nationTeamId": 1,
+      "club": "Becamex Binh Duong",
+      "position": "FWD",
+      "goals": 0,
+      "assists": 0,
+      "minutes": 0,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 2,
+      "name": "Supachok Sarachat",
+      "nationTeamId": 6,
+      "club": "Hokkaido Consadole Sapporo",
+      "position": "MID",
+      "goals": 0,
+      "assists": 0,
+      "minutes": 0,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 3,
+      "name": "Rafael Struick",
+      "nationTeamId": 2,
+      "club": "ADO Den Haag",
+      "position": "FWD",
+      "goals": 0,
+      "assists": 0,
+      "minutes": 0,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 4,
+      "name": "Dion Cools",
+      "nationTeamId": 7,
+      "club": "Buriram United",
+      "position": "DEF",
+      "goals": 0,
+      "assists": 0,
+      "minutes": 0,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 5,
+      "name": "Stephan Schrock",
+      "nationTeamId": 8,
+      "club": "Mendiola FC",
+      "position": "MID",
+      "goals": 0,
+      "assists": 0,
+      "minutes": 0,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 6,
+      "name": "Ikhsan Fandi",
+      "nationTeamId": 3,
+      "club": "BG Pathum United",
+      "position": "FWD",
+      "goals": 0,
+      "assists": 0,
+      "minutes": 0,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 7,
+      "name": "Aung Kaung Mann",
+      "nationTeamId": 9,
+      "club": "Lamphun Warriors",
+      "position": "MID",
+      "goals": 0,
+      "assists": 0,
+      "minutes": 0,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 8,
+      "name": "Keo Sokpheng",
+      "nationTeamId": 4,
+      "club": "Visakha FC",
+      "position": "FWD",
+      "goals": 0,
+      "assists": 0,
+      "minutes": 0,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 9,
+      "name": "Soukaphone Vongchiengkham",
+      "nationTeamId": 10,
+      "club": "Ezra FC",
+      "position": "MID",
+      "goals": 0,
+      "assists": 0,
+      "minutes": 0,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 10,
+      "name": "Paulo Gali",
+      "nationTeamId": 5,
+      "club": "Karketu Dili",
+      "position": "MID",
+      "goals": 0,
+      "assists": 0,
+      "minutes": 0,
+      "yellowCards": 0,
+      "redCards": 0
+    }
+  ],
+  "knockout": {
+    "semiFinal1": {
+      "title": "Semi-final 1",
+      "legDates": "Aug 15-19, 2026 (Two-legged)",
+      "home": {
+        "label": "Winner Group A",
+        "teamId": null,
+        "score": null,
+        "aggregate": "-",
+        "status": "pending"
+      },
+      "away": {
+        "label": "Runner-up Group B",
+        "teamId": null,
+        "score": null,
+        "aggregate": "-",
+        "status": "pending"
+      }
+    },
+    "semiFinal2": {
+      "title": "Semi-final 2",
+      "legDates": "Aug 15-19, 2026 (Two-legged)",
+      "home": {
+        "label": "Winner Group B",
+        "teamId": null,
+        "score": null,
+        "aggregate": "-",
+        "status": "pending"
+      },
+      "away": {
+        "label": "Runner-up Group A",
+        "teamId": null,
+        "score": null,
+        "aggregate": "-",
+        "status": "pending"
+      }
+    },
+    "final": {
+      "title": "Final",
+      "legDates": "Aug 22-26, 2026 (Two-legged)",
+      "home": {
+        "label": "SF1 Winner",
+        "teamId": null,
+        "score": null,
+        "aggregate": "-",
+        "status": "pending"
+      },
+      "away": {
+        "label": "SF2 Winner",
+        "teamId": null,
+        "score": null,
+        "aggregate": "-",
+        "status": "pending"
+      }
+    },
+    "champion": {
+      "label": "To Be Decided",
+      "teamId": null,
+      "score": null,
+      "aggregate": "-",
+      "status": "champion"
+    }
+  },
+  "statistics": [
+    {
+      "id": "top-scorer",
+      "title": "Top Scorer",
+      "value": "TBD",
+      "subtitle": "Tournament has not started"
+    },
+    {
+      "id": "top-assists",
+      "title": "Top Assists",
+      "value": "TBD",
+      "subtitle": "Tournament has not started"
+    },
+    {
+      "id": "clean-sheets",
+      "title": "Most Clean Sheets",
+      "value": "TBD",
+      "subtitle": "Tournament has not started"
+    },
+    {
+      "id": "most-goals",
+      "title": "Most Goals Team",
+      "value": "TBD",
+      "subtitle": "Tournament has not started"
+    },
+    {
+      "id": "most-minutes",
+      "title": "Most Minutes",
+      "value": "TBD",
+      "subtitle": "Tournament has not started"
+    },
+    {
+      "id": "golden-boot",
+      "title": "Golden Boot Leader",
+      "value": "TBD",
+      "subtitle": "Tournament has not started"
+    }
+  ]
+}

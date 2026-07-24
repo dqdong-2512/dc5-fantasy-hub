@@ -68,8 +68,11 @@ const STAT_CARD_META: StatisticCardMeta[] = [
   { id: 'golden-boot', icon: <WorkspacePremiumIcon />, iconColor: '#6a1b9a' },
 ];
 
+const VIETNAM_TIMEZONE = 'Asia/Ho_Chi_Minh';
+
 function formatKickoff(value: string): string {
   return new Intl.DateTimeFormat('en-GB', {
+    timeZone: VIETNAM_TIMEZONE,
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -146,6 +149,7 @@ function renderTeamWithFlag(
 
 function formatMatchDate(value: string): string {
   return new Intl.DateTimeFormat('en-GB', {
+    timeZone: VIETNAM_TIMEZONE,
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -154,6 +158,7 @@ function formatMatchDate(value: string): string {
 
 function formatKickoffTime(value: string): string {
   return new Intl.DateTimeFormat('en-GB', {
+    timeZone: VIETNAM_TIMEZONE,
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
@@ -407,7 +412,11 @@ function renderGroupTable(group: TournamentCenterData['groups'][number]): React.
   );
 }
 
-function renderFixtureList(title: string, fixtures: TournamentFixture[]): React.ReactElement {
+function renderFixtureList(
+  title: string,
+  fixtures: TournamentFixture[],
+  emptyMessage = 'No fixtures in this section.'
+): React.ReactElement {
   return (
     <Card variant="outlined" sx={{ height: '100%' }}>
       <CardContent>
@@ -417,7 +426,7 @@ function renderFixtureList(title: string, fixtures: TournamentFixture[]): React.
 
         {fixtures.length === 0 ? (
           <Typography variant="body2" color="text.secondary">
-            No fixtures in this section.
+            {emptyMessage}
           </Typography>
         ) : (
           <Stack spacing={1}>
@@ -474,7 +483,7 @@ function renderFixtureList(title: string, fixtures: TournamentFixture[]): React.
                   color="text.secondary"
                   sx={{ display: 'block', mt: 0.75 }}
                 >
-                  Kickoff: {formatKickoff(fixture.kickoff)}
+                  Kickoff: {formatKickoff(fixture.kickoff)} (Vietnam Time)
                 </Typography>
                 <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
                   Venue: {fixture.venue}
@@ -935,7 +944,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                           </Typography>
                           <Typography variant="body2" sx={{ fontWeight: 600 }}>
                             {finalFixture
-                              ? `${formatKickoffTime(finalFixture.kickoff)} UTC`
+                              ? `${formatKickoffTime(finalFixture.kickoff)} (Vietnam Time)`
                               : 'TBD'}
                           </Typography>
                         </Box>
@@ -1059,19 +1068,22 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
 
       <PageSection
         title="Fixtures"
-        subtitle="Today, upcoming, and completed fixtures"
+        subtitle="Today's matches and the next upcoming schedule"
         sx={{ mb: ThemeTokens.spacing.xxxl }}
       >
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' },
+            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
             gap: ThemeTokens.spacing.md,
           }}
         >
-          {renderFixtureList("Today's Fixtures", data.fixtures.today)}
+          {renderFixtureList(
+            "Today's Fixtures",
+            data.fixtures.today,
+            'No matches scheduled today.'
+          )}
           {renderFixtureList('Upcoming Fixtures', data.fixtures.upcoming)}
-          {renderFixtureList('Completed Fixtures', data.fixtures.completed)}
         </Box>
       </PageSection>
 
