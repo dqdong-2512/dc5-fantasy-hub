@@ -177,6 +177,11 @@ export const LeagueStandingsPage: React.FC = () => {
     );
   }
 
+  // Default route without league id
+  if (leagueIdNum === null) {
+    return <Navigate to={`/premier-league/gameweek/league/${resolvedLeagueId}`} replace />;
+  }
+
   // Error: Invalid league
   if (!leagueData || !standings || !currentManagerEntry) {
     return (
@@ -186,11 +191,6 @@ export const LeagueStandingsPage: React.FC = () => {
         </Typography>
       </Box>
     );
-  }
-
-  // Error: Self-comparison
-  if (leagueIdNum === null) {
-    return <Navigate to={`/premier-league/gameweek/league/${resolvedLeagueId}`} replace />;
   }
 
   // Error: Self-comparison

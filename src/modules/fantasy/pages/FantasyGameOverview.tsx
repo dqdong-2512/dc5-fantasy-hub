@@ -82,7 +82,7 @@ export const FantasyGameOverview: React.FC = () => {
           </Alert>
           <Button
             variant="contained"
-            onClick={() => navigate('/premier-league/gameweek')}
+            onClick={() => navigate('/premier-league/gameweek/connect')}
             color="primary"
             size="large"
           >
