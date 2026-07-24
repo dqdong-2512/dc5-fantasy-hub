@@ -1,0 +1,1 @@
+export { TournamentRepository } from './TournamentRepository';

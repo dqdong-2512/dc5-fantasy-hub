@@ -24,8 +24,12 @@ import FlagIcon from '@mui/icons-material/Flag';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
+import RefreshIcon from '@mui/icons-material/Refresh';
 import {
+  DataSyncIndicator,
+  ErrorState,
   FilterBar,
+  LoadingState,
   PageContent,
   PageHeader,
   PageSection,
@@ -33,617 +37,36 @@ import {
   StatCard,
 } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
+import type {
+  KnockoutMatch,
+  KnockoutTeam,
+  TournamentCenterData,
+  TournamentFixture,
+  TournamentFixtureStatus,
+  TournamentPlayer,
+  TournamentPlayerPosition,
+} from './models';
+import { useTournamentCenter } from './hooks';
 
-type FixtureStatus = 'upcoming' | 'completed';
-type PlayerPosition = 'GK' | 'DEF' | 'MID' | 'FWD';
 type SortOrder = 'asc' | 'desc';
 type PlayerSortField = 'name' | 'goals' | 'assists' | 'minutes' | 'cards';
 
-interface GroupStandingRow {
-  position: number;
-  team: string;
-  played: number;
-  won: number;
-  draw: number;
-  lost: number;
-  gf: number;
-  ga: number;
-  gd: number;
-  points: number;
-}
-
-interface TournamentFixture {
+interface StatisticCardMeta {
   id: string;
-  stage: string;
-  kickoff: string;
-  venue: string;
-  homeTeam: string;
-  awayTeam: string;
-  homeScore: number | null;
-  awayScore: number | null;
-  status: FixtureStatus;
+  icon: React.ReactNode;
+  iconColor: string;
 }
 
-interface TournamentPlayer {
-  id: number;
-  name: string;
-  nation: string;
-  club: string;
-  position: PlayerPosition;
-  goals: number;
-  assists: number;
-  minutes: number;
-  yellowCards: number;
-  redCards: number;
-}
-
-interface BracketTeam {
-  name: string;
-  logoText: string;
-  score: number | null;
-  aggregate: string;
-  status: 'qualified' | 'pending' | 'champion';
-}
-
-interface BracketMatch {
-  title: string;
-  legDates: string;
-  home: BracketTeam;
-  away: BracketTeam;
-}
-
-const GROUP_A: GroupStandingRow[] = [
-  {
-    position: 1,
-    team: 'Vietnam',
-    played: 2,
-    won: 2,
-    draw: 0,
-    lost: 0,
-    gf: 5,
-    ga: 1,
-    gd: 4,
-    points: 6,
-  },
-  {
-    position: 2,
-    team: 'Indonesia',
-    played: 2,
-    won: 1,
-    draw: 1,
-    lost: 0,
-    gf: 3,
-    ga: 2,
-    gd: 1,
-    points: 4,
-  },
-  {
-    position: 3,
-    team: 'Singapore',
-    played: 2,
-    won: 0,
-    draw: 1,
-    lost: 1,
-    gf: 2,
-    ga: 3,
-    gd: -1,
-    points: 1,
-  },
-  {
-    position: 4,
-    team: 'Cambodia',
-    played: 2,
-    won: 0,
-    draw: 1,
-    lost: 1,
-    gf: 1,
-    ga: 3,
-    gd: -2,
-    points: 1,
-  },
-  {
-    position: 5,
-    team: 'Timor-Leste',
-    played: 2,
-    won: 0,
-    draw: 0,
-    lost: 2,
-    gf: 1,
-    ga: 3,
-    gd: -2,
-    points: 0,
-  },
-];
-
-const GROUP_B: GroupStandingRow[] = [
-  {
-    position: 1,
-    team: 'Thailand',
-    played: 2,
-    won: 2,
-    draw: 0,
-    lost: 0,
-    gf: 6,
-    ga: 1,
-    gd: 5,
-    points: 6,
-  },
-  {
-    position: 2,
-    team: 'Malaysia',
-    played: 2,
-    won: 1,
-    draw: 0,
-    lost: 1,
-    gf: 3,
-    ga: 3,
-    gd: 0,
-    points: 3,
-  },
-  {
-    position: 3,
-    team: 'Philippines',
-    played: 2,
-    won: 1,
-    draw: 0,
-    lost: 1,
-    gf: 2,
-    ga: 3,
-    gd: -1,
-    points: 3,
-  },
-  {
-    position: 4,
-    team: 'Myanmar',
-    played: 2,
-    won: 0,
-    draw: 1,
-    lost: 1,
-    gf: 2,
-    ga: 4,
-    gd: -2,
-    points: 1,
-  },
-  {
-    position: 5,
-    team: 'Laos',
-    played: 2,
-    won: 0,
-    draw: 1,
-    lost: 1,
-    gf: 1,
-    ga: 3,
-    gd: -2,
-    points: 1,
-  },
-];
-
-const FIXTURES: TournamentFixture[] = [
-  {
-    id: 'A1',
-    stage: 'Group A',
-    kickoff: '2026-08-01T19:00:00',
-    venue: 'My Dinh National Stadium',
-    homeTeam: 'Vietnam',
-    awayTeam: 'Singapore',
-    homeScore: 2,
-    awayScore: 1,
-    status: 'completed',
-  },
-  {
-    id: 'A2',
-    stage: 'Group A',
-    kickoff: '2026-08-02T19:30:00',
-    venue: 'Gelora Bung Karno Stadium',
-    homeTeam: 'Indonesia',
-    awayTeam: 'Cambodia',
-    homeScore: 1,
-    awayScore: 0,
-    status: 'completed',
-  },
-  {
-    id: 'B1',
-    stage: 'Group B',
-    kickoff: '2026-08-03T19:30:00',
-    venue: 'Rajamangala Stadium',
-    homeTeam: 'Thailand',
-    awayTeam: 'Laos',
-    homeScore: 3,
-    awayScore: 1,
-    status: 'completed',
-  },
-  {
-    id: 'B2',
-    stage: 'Group B',
-    kickoff: '2026-08-04T19:00:00',
-    venue: 'Bukit Jalil National Stadium',
-    homeTeam: 'Malaysia',
-    awayTeam: 'Myanmar',
-    homeScore: 2,
-    awayScore: 1,
-    status: 'completed',
-  },
-  {
-    id: 'A3',
-    stage: 'Group A',
-    kickoff: '2026-08-05T19:00:00',
-    venue: 'National Olympic Stadium',
-    homeTeam: 'Cambodia',
-    awayTeam: 'Timor-Leste',
-    homeScore: null,
-    awayScore: null,
-    status: 'upcoming',
-  },
-  {
-    id: 'A4',
-    stage: 'Group A',
-    kickoff: '2026-08-05T20:00:00',
-    venue: 'Jalan Besar Stadium',
-    homeTeam: 'Singapore',
-    awayTeam: 'Indonesia',
-    homeScore: null,
-    awayScore: null,
-    status: 'upcoming',
-  },
-  {
-    id: 'B3',
-    stage: 'Group B',
-    kickoff: '2026-08-06T19:30:00',
-    venue: 'Rizal Memorial Stadium',
-    homeTeam: 'Philippines',
-    awayTeam: 'Thailand',
-    homeScore: null,
-    awayScore: null,
-    status: 'upcoming',
-  },
-  {
-    id: 'B4',
-    stage: 'Group B',
-    kickoff: '2026-08-06T20:00:00',
-    venue: 'Thuwunna Stadium',
-    homeTeam: 'Myanmar',
-    awayTeam: 'Malaysia',
-    homeScore: null,
-    awayScore: null,
-    status: 'upcoming',
-  },
-  {
-    id: 'SF1-L1',
-    stage: 'Semi-final 1 (Leg 1)',
-    kickoff: '2026-08-15T20:00:00',
-    venue: 'Winner A Home Venue',
-    homeTeam: 'Winner Group A',
-    awayTeam: 'Runner-up Group B',
-    homeScore: null,
-    awayScore: null,
-    status: 'upcoming',
-  },
-  {
-    id: 'SF2-L1',
-    stage: 'Semi-final 2 (Leg 1)',
-    kickoff: '2026-08-16T20:00:00',
-    venue: 'Winner B Home Venue',
-    homeTeam: 'Winner Group B',
-    awayTeam: 'Runner-up Group A',
-    homeScore: null,
-    awayScore: null,
-    status: 'upcoming',
-  },
-  {
-    id: 'SF1-L2',
-    stage: 'Semi-final 1 (Leg 2)',
-    kickoff: '2026-08-19T20:00:00',
-    venue: 'Runner-up B Home Venue',
-    homeTeam: 'Runner-up Group B',
-    awayTeam: 'Winner Group A',
-    homeScore: null,
-    awayScore: null,
-    status: 'upcoming',
-  },
-  {
-    id: 'SF2-L2',
-    stage: 'Semi-final 2 (Leg 2)',
-    kickoff: '2026-08-19T20:30:00',
-    venue: 'Runner-up A Home Venue',
-    homeTeam: 'Runner-up Group A',
-    awayTeam: 'Winner Group B',
-    homeScore: null,
-    awayScore: null,
-    status: 'upcoming',
-  },
-  {
-    id: 'F-L1',
-    stage: 'Final (Leg 1)',
-    kickoff: '2026-08-22T20:00:00',
-    venue: 'Finalist 1 Home Venue',
-    homeTeam: 'Semi-final 1 Winner',
-    awayTeam: 'Semi-final 2 Winner',
-    homeScore: null,
-    awayScore: null,
-    status: 'upcoming',
-  },
-  {
-    id: 'F-L2',
-    stage: 'Final (Leg 2)',
-    kickoff: '2026-08-26T20:00:00',
-    venue: 'Finalist 2 Home Venue',
-    homeTeam: 'Semi-final 2 Winner',
-    awayTeam: 'Semi-final 1 Winner',
-    homeScore: null,
-    awayScore: null,
-    status: 'upcoming',
-  },
-];
-
-const TOURNAMENT_PLAYERS: TournamentPlayer[] = [
-  {
-    id: 1,
-    name: 'Nguyen Tien Linh',
-    nation: 'Vietnam',
-    club: 'Becamex Binh Duong',
-    position: 'FWD',
-    goals: 3,
-    assists: 1,
-    minutes: 180,
-    yellowCards: 1,
-    redCards: 0,
-  },
-  {
-    id: 2,
-    name: 'Supachok Sarachat',
-    nation: 'Thailand',
-    club: 'Hokkaido Consadole Sapporo',
-    position: 'MID',
-    goals: 2,
-    assists: 2,
-    minutes: 176,
-    yellowCards: 0,
-    redCards: 0,
-  },
-  {
-    id: 3,
-    name: 'Rafael Struick',
-    nation: 'Indonesia',
-    club: 'ADO Den Haag',
-    position: 'FWD',
-    goals: 2,
-    assists: 0,
-    minutes: 170,
-    yellowCards: 1,
-    redCards: 0,
-  },
-  {
-    id: 4,
-    name: 'Dion Cools',
-    nation: 'Malaysia',
-    club: 'Buriram United',
-    position: 'DEF',
-    goals: 1,
-    assists: 1,
-    minutes: 180,
-    yellowCards: 0,
-    redCards: 0,
-  },
-  {
-    id: 5,
-    name: 'Stephan Schrock',
-    nation: 'Philippines',
-    club: 'Mendiola FC',
-    position: 'MID',
-    goals: 1,
-    assists: 1,
-    minutes: 168,
-    yellowCards: 1,
-    redCards: 0,
-  },
-  {
-    id: 6,
-    name: 'Ikhsan Fandi',
-    nation: 'Singapore',
-    club: 'BG Pathum United',
-    position: 'FWD',
-    goals: 1,
-    assists: 0,
-    minutes: 155,
-    yellowCards: 0,
-    redCards: 0,
-  },
-  {
-    id: 7,
-    name: 'Aung Kaung Mann',
-    nation: 'Myanmar',
-    club: 'Lamphun Warriors',
-    position: 'MID',
-    goals: 1,
-    assists: 0,
-    minutes: 171,
-    yellowCards: 2,
-    redCards: 0,
-  },
-  {
-    id: 8,
-    name: 'Keo Sokpheng',
-    nation: 'Cambodia',
-    club: 'Visakha FC',
-    position: 'FWD',
-    goals: 0,
-    assists: 1,
-    minutes: 166,
-    yellowCards: 1,
-    redCards: 0,
-  },
-  {
-    id: 9,
-    name: 'Soukaphone Vongchiengkham',
-    nation: 'Laos',
-    club: 'Ezra FC',
-    position: 'MID',
-    goals: 0,
-    assists: 1,
-    minutes: 180,
-    yellowCards: 0,
-    redCards: 0,
-  },
-  {
-    id: 10,
-    name: 'Paulo Gali',
-    nation: 'Timor-Leste',
-    club: 'Karketu Dili',
-    position: 'MID',
-    goals: 0,
-    assists: 0,
-    minutes: 180,
-    yellowCards: 1,
-    redCards: 0,
-  },
-  {
-    id: 11,
-    name: 'Dang Van Lam',
-    nation: 'Vietnam',
-    club: 'Quy Nhon Binh Dinh',
-    position: 'GK',
-    goals: 0,
-    assists: 0,
-    minutes: 180,
-    yellowCards: 0,
-    redCards: 0,
-  },
-  {
-    id: 12,
-    name: 'Nadeo Argawinata',
-    nation: 'Indonesia',
-    club: 'Borneo FC',
-    position: 'GK',
-    goals: 0,
-    assists: 0,
-    minutes: 180,
-    yellowCards: 0,
-    redCards: 0,
-  },
-];
-
-const BRACKET_DATA: {
-  semiFinal1: BracketMatch;
-  semiFinal2: BracketMatch;
-  final: BracketMatch;
-  champion: BracketTeam;
-} = {
-  semiFinal1: {
-    title: 'Semi-final 1',
-    legDates: 'Aug 15-19, 2026 (Two-legged)',
-    home: {
-      name: 'Winner Group A',
-      logoText: 'A1',
-      score: null,
-      aggregate: '-',
-      status: 'pending',
-    },
-    away: {
-      name: 'Runner-up Group B',
-      logoText: 'B2',
-      score: null,
-      aggregate: '-',
-      status: 'pending',
-    },
-  },
-  semiFinal2: {
-    title: 'Semi-final 2',
-    legDates: 'Aug 15-19, 2026 (Two-legged)',
-    home: {
-      name: 'Winner Group B',
-      logoText: 'B1',
-      score: null,
-      aggregate: '-',
-      status: 'pending',
-    },
-    away: {
-      name: 'Runner-up Group A',
-      logoText: 'A2',
-      score: null,
-      aggregate: '-',
-      status: 'pending',
-    },
-  },
-  final: {
-    title: 'Final',
-    legDates: 'Aug 22-26, 2026 (Two-legged)',
-    home: {
-      name: 'SF1 Winner',
-      logoText: 'W1',
-      score: null,
-      aggregate: '-',
-      status: 'pending',
-    },
-    away: {
-      name: 'SF2 Winner',
-      logoText: 'W2',
-      score: null,
-      aggregate: '-',
-      status: 'pending',
-    },
-  },
-  champion: {
-    name: 'To Be Decided',
-    logoText: 'C',
-    score: null,
-    aggregate: '-',
-    status: 'champion',
-  },
-};
-
-const TOURNAMENT_STATS = [
-  {
-    id: 'top-scorer',
-    title: 'Top Scorer',
-    value: 'Nguyen Tien Linh (3)',
-    subtitle: 'Vietnam',
-    icon: <MilitaryTechIcon />,
-    iconColor: '#ef6c00',
-  },
-  {
-    id: 'top-assists',
-    title: 'Top Assists',
-    value: 'Supachok Sarachat (2)',
-    subtitle: 'Thailand',
-    icon: <TimelineIcon />,
-    iconColor: '#1565c0',
-  },
-  {
-    id: 'clean-sheets',
-    title: 'Most Clean Sheets',
-    value: 'Dang Van Lam (2)',
-    subtitle: 'Vietnam',
-    icon: <FlagIcon />,
-    iconColor: '#2e7d32',
-  },
-  {
-    id: 'most-goals',
-    title: 'Most Goals Team',
-    value: 'Thailand (6)',
-    subtitle: 'After 2 matches',
-    icon: <SportsSoccerIcon />,
-    iconColor: '#00897b',
-  },
-  {
-    id: 'most-minutes',
-    title: 'Most Minutes',
-    value: '3 Players (180)',
-    subtitle: 'Full match leaders',
-    icon: <TimelineIcon />,
-    iconColor: '#5d4037',
-  },
-  {
-    id: 'golden-boot',
-    title: 'Golden Boot Leader',
-    value: 'Nguyen Tien Linh',
-    subtitle: 'Current leader',
-    icon: <WorkspacePremiumIcon />,
-    iconColor: '#6a1b9a',
-  },
+const STAT_CARD_META: StatisticCardMeta[] = [
+  { id: 'top-scorer', icon: <MilitaryTechIcon />, iconColor: '#ef6c00' },
+  { id: 'top-assists', icon: <TimelineIcon />, iconColor: '#1565c0' },
+  { id: 'clean-sheets', icon: <FlagIcon />, iconColor: '#2e7d32' },
+  { id: 'most-goals', icon: <SportsSoccerIcon />, iconColor: '#00897b' },
+  { id: 'most-minutes', icon: <TimelineIcon />, iconColor: '#5d4037' },
+  { id: 'golden-boot', icon: <WorkspacePremiumIcon />, iconColor: '#6a1b9a' },
 ];
 
 function formatKickoff(value: string): string {
-  const date = new Date(value);
   return new Intl.DateTimeFormat('en-GB', {
     day: '2-digit',
     month: 'short',
@@ -651,79 +74,78 @@ function formatKickoff(value: string): string {
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
-  }).format(date);
-}
-
-function toDayKey(dateValue: Date): string {
-  return `${dateValue.getFullYear()}-${String(dateValue.getMonth() + 1).padStart(2, '0')}-${String(
-    dateValue.getDate()
-  ).padStart(2, '0')}`;
-}
-
-function isSameDay(left: Date, right: Date): boolean {
-  return toDayKey(left) === toDayKey(right);
-}
-
-function isAfterToday(dateValue: Date, now: Date): boolean {
-  const dateAtMidnight = new Date(
-    dateValue.getFullYear(),
-    dateValue.getMonth(),
-    dateValue.getDate()
-  );
-  const nowAtMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  return dateAtMidnight.getTime() > nowAtMidnight.getTime();
+  }).format(new Date(value));
 }
 
 function formatScore(homeScore: number | null, awayScore: number | null): string {
   if (homeScore === null || awayScore === null) {
     return 'vs';
   }
-
   return `${homeScore} - ${awayScore}`;
 }
 
-function getFixtureStatusLabel(fixture: TournamentFixture): string {
-  if (fixture.status === 'completed') {
-    return 'Completed';
+function getFixtureStatusColor(
+  status: TournamentFixtureStatus
+): 'default' | 'success' | 'warning' | 'error' | 'info' {
+  if (status === 'live') {
+    return 'error';
   }
-
-  if (isSameDay(new Date(fixture.kickoff), new Date())) {
-    return 'Today';
-  }
-
-  return 'Upcoming';
-}
-
-function getFixtureStatusColor(label: string): 'success' | 'warning' | 'info' {
-  if (label === 'Completed') {
-    return 'success';
-  }
-
-  if (label === 'Today') {
+  if (status === 'half-time') {
     return 'warning';
   }
-
-  return 'info';
-}
-
-function getTeamStatusChipColor(status: BracketTeam['status']): 'success' | 'warning' | 'default' {
-  if (status === 'champion') {
+  if (status === 'finished') {
     return 'success';
   }
-
-  if (status === 'qualified') {
-    return 'warning';
+  if (status === 'upcoming') {
+    return 'info';
   }
-
   return 'default';
 }
 
-function renderGroupTable(groupName: string, rows: GroupStandingRow[]): React.ReactElement {
+function getFixtureStatusLabel(fixture: TournamentFixture): string {
+  if (fixture.status === 'half-time') {
+    return 'Half Time';
+  }
+  if (fixture.status === 'live') {
+    if (fixture.minute !== null) {
+      if (fixture.addedTime !== null && fixture.addedTime > 0) {
+        return `${fixture.minute}+${fixture.addedTime}'`;
+      }
+      return `${fixture.minute}'`;
+    }
+    return 'Live';
+  }
+  if (fixture.status === 'finished') {
+    return 'Finished';
+  }
+  if (fixture.status === 'postponed') {
+    return 'Postponed';
+  }
+  if (fixture.status === 'cancelled') {
+    return 'Cancelled';
+  }
+  return 'Upcoming';
+}
+
+function getKnockoutChipProps(status: KnockoutTeam['status']): {
+  label: string;
+  color: 'default' | 'success' | 'warning';
+} {
+  if (status === 'champion') {
+    return { label: 'Champion', color: 'success' };
+  }
+  if (status === 'qualified') {
+    return { label: 'Qualified', color: 'warning' };
+  }
+  return { label: 'Pending', color: 'default' };
+}
+
+function renderGroupTable(group: TournamentCenterData['groups'][number]): React.ReactElement {
   return (
     <Card variant="outlined" sx={{ height: '100%' }}>
       <CardContent>
         <Typography variant="h6" sx={{ fontWeight: 700, mb: ThemeTokens.spacing.sm }}>
-          {groupName}
+          {group.name}
         </Typography>
         <TableContainer>
           <Table size="small">
@@ -758,10 +180,17 @@ function renderGroupTable(groupName: string, rows: GroupStandingRow[]): React.Re
               </TableRow>
             </TableHead>
             <TableBody>
-              {rows.map((row) => (
-                <TableRow key={`${groupName}-${row.team}`} hover>
+              {group.standings.map((row) => (
+                <TableRow key={`${group.id}-${row.team.id}`} hover>
                   <TableCell sx={{ fontWeight: 700 }}>{row.position}</TableCell>
-                  <TableCell>{row.team}</TableCell>
+                  <TableCell>
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                      <Avatar sx={{ width: 24, height: 24, fontSize: '0.7rem' }}>
+                        {row.team.shortName}
+                      </Avatar>
+                      <Typography variant="body2">{row.team.name}</Typography>
+                    </Box>
+                  </TableCell>
                   <TableCell align="right">{row.played}</TableCell>
                   <TableCell align="right">{row.won}</TableCell>
                   <TableCell align="right">{row.draw}</TableCell>
@@ -785,63 +214,68 @@ function renderGroupTable(groupName: string, rows: GroupStandingRow[]): React.Re
   );
 }
 
-function renderBracketMatch(match: BracketMatch): React.ReactElement {
-  const rows: BracketTeam[] = [match.home, match.away];
-
+function renderKnockoutMatch(match: KnockoutMatch, emphasize = false): React.ReactElement {
   return (
-    <Card variant="outlined" sx={{ height: '100%' }}>
+    <Card
+      variant="outlined"
+      sx={{
+        height: '100%',
+        borderWidth: emphasize ? 2 : 1,
+        borderColor: emphasize ? 'primary.main' : 'divider',
+        backgroundColor: emphasize ? 'action.hover' : 'background.paper',
+      }}
+    >
       <CardContent>
         <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
           {match.title}
         </Typography>
-        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1 }}>
+        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mb: 1.25 }}>
           {match.legDates}
         </Typography>
 
         <Stack spacing={1}>
-          {rows.map((team) => (
-            <Box
-              key={`${match.title}-${team.name}`}
-              sx={{
-                display: 'grid',
-                gridTemplateColumns: 'auto 1fr auto',
-                alignItems: 'center',
-                gap: 1,
-                border: '1px solid',
-                borderColor: 'divider',
-                borderRadius: ThemeTokens.borderRadius.sm,
-                p: ThemeTokens.spacing.sm,
-              }}
-            >
-              <Avatar sx={{ width: 28, height: 28, fontSize: '0.75rem' }}>{team.logoText}</Avatar>
-              <Box>
-                <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                  {team.name}
-                </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Aggregate: {team.aggregate}
-                </Typography>
+          {[match.home, match.away].map((team) => {
+            const chip = getKnockoutChipProps(team.status);
+            return (
+              <Box
+                key={`${match.title}-${team.label}`}
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: 'auto 1fr auto',
+                  alignItems: 'center',
+                  gap: 1,
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  borderRadius: ThemeTokens.borderRadius.sm,
+                  p: ThemeTokens.spacing.sm,
+                }}
+              >
+                <Avatar sx={{ width: 28, height: 28, fontSize: '0.75rem' }}>
+                  {team.team?.shortName ?? 'TBD'}
+                </Avatar>
+                <Box>
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    {team.label}
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Aggregate: {team.aggregate}
+                  </Typography>
+                </Box>
+                <Box sx={{ textAlign: 'right' }}>
+                  <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                    {team.score ?? '-'}
+                  </Typography>
+                  <Chip
+                    size="small"
+                    label={chip.label}
+                    color={chip.color}
+                    variant="outlined"
+                    sx={{ mt: 0.5, fontWeight: 500, opacity: chip.label === 'Pending' ? 0.8 : 1 }}
+                  />
+                </Box>
               </Box>
-              <Box sx={{ textAlign: 'right' }}>
-                <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                  {team.score ?? '-'}
-                </Typography>
-                <Chip
-                  size="small"
-                  label={
-                    team.status === 'pending'
-                      ? 'Pending'
-                      : team.status === 'qualified'
-                        ? 'Qualified'
-                        : 'Champion'
-                  }
-                  color={getTeamStatusChipColor(team.status)}
-                  variant="outlined"
-                  sx={{ mt: 0.5 }}
-                />
-              </Box>
-            </Box>
-          ))}
+            );
+          })}
         </Stack>
       </CardContent>
     </Card>
@@ -855,61 +289,69 @@ function renderFixtureList(title: string, fixtures: TournamentFixture[]): React.
         <Typography variant="h6" sx={{ fontWeight: 700, mb: 1.5 }}>
           {title}
         </Typography>
+
         {fixtures.length === 0 ? (
           <Typography variant="body2" color="text.secondary">
             No fixtures in this section.
           </Typography>
         ) : (
           <Stack spacing={1}>
-            {fixtures.map((fixture) => {
-              const statusLabel = getFixtureStatusLabel(fixture);
-              return (
+            {fixtures.map((fixture) => (
+              <Box
+                key={fixture.id}
+                sx={{
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  borderRadius: ThemeTokens.borderRadius.sm,
+                  p: ThemeTokens.spacing.sm,
+                }}
+              >
                 <Box
-                  key={fixture.id}
                   sx={{
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    borderRadius: ThemeTokens.borderRadius.sm,
-                    p: ThemeTokens.spacing.sm,
+                    display: 'flex',
+                    alignItems: 'flex-start',
+                    justifyContent: 'space-between',
+                    gap: 1,
                   }}
                 >
-                  <Box
-                    sx={{
-                      display: 'flex',
-                      alignItems: 'flex-start',
-                      justifyContent: 'space-between',
-                      gap: 1,
-                    }}
-                  >
-                    <Box>
-                      <Typography variant="caption" color="text.secondary">
-                        {fixture.stage}
-                      </Typography>
-                      <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                        {fixture.homeTeam} {formatScore(fixture.homeScore, fixture.awayScore)}{' '}
-                        {fixture.awayTeam}
-                      </Typography>
-                    </Box>
-                    <Chip
-                      size="small"
-                      color={getFixtureStatusColor(statusLabel)}
-                      label={statusLabel}
-                    />
+                  <Box>
+                    <Typography variant="caption" color="text.secondary">
+                      {fixture.stage}
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                      {fixture.homeTeam.name} {formatScore(fixture.homeScore, fixture.awayScore)}{' '}
+                      {fixture.awayTeam.name}
+                    </Typography>
                   </Box>
-
-                  <Typography
-                    variant="caption"
-                    color="text.secondary"
-                    sx={{ display: 'block', mt: 0.75 }}
-                  >
-                    Kickoff: {formatKickoff(fixture.kickoff)}
-                  </Typography>
-                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
-                    Venue: {fixture.venue}
-                  </Typography>
+                  <Chip
+                    size="small"
+                    color={getFixtureStatusColor(fixture.status)}
+                    label={getFixtureStatusLabel(fixture)}
+                    variant={
+                      fixture.status === 'live' || fixture.status === 'half-time'
+                        ? 'filled'
+                        : 'outlined'
+                    }
+                  />
                 </Box>
-              );
-            })}
+
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ display: 'block', mt: 0.75 }}
+                >
+                  Kickoff: {formatKickoff(fixture.kickoff)}
+                </Typography>
+                <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+                  Venue: {fixture.venue}
+                </Typography>
+                {fixture.note && (
+                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
+                    Note: {fixture.note}
+                  </Typography>
+                )}
+              </Box>
+            ))}
           </Stack>
         )}
       </CardContent>
@@ -917,108 +359,91 @@ function renderFixtureList(title: string, fixtures: TournamentFixture[]): React.
   );
 }
 
+function sortPlayers(
+  players: TournamentPlayer[],
+  search: string,
+  positionFilter: 'ALL' | TournamentPlayerPosition,
+  nationFilter: 'ALL' | string,
+  sortBy: PlayerSortField,
+  sortOrder: SortOrder
+): TournamentPlayer[] {
+  const normalizedQuery = search.trim().toLowerCase();
+
+  const filtered = players.filter((player) => {
+    if (positionFilter !== 'ALL' && player.position !== positionFilter) {
+      return false;
+    }
+
+    if (nationFilter !== 'ALL' && player.nation.name !== nationFilter) {
+      return false;
+    }
+
+    if (!normalizedQuery) {
+      return true;
+    }
+
+    return (
+      player.name.toLowerCase().includes(normalizedQuery) ||
+      player.nation.name.toLowerCase().includes(normalizedQuery) ||
+      player.club.toLowerCase().includes(normalizedQuery)
+    );
+  });
+
+  return filtered.sort((left, right) => {
+    const leftCards = left.yellowCards + left.redCards * 2;
+    const rightCards = right.yellowCards + right.redCards * 2;
+
+    if (sortBy === 'name') {
+      const result = left.name.localeCompare(right.name);
+      return sortOrder === 'asc' ? result : -result;
+    }
+    if (sortBy === 'goals') {
+      return sortOrder === 'asc' ? left.goals - right.goals : right.goals - left.goals;
+    }
+    if (sortBy === 'assists') {
+      return sortOrder === 'asc' ? left.assists - right.assists : right.assists - left.assists;
+    }
+    if (sortBy === 'minutes') {
+      return sortOrder === 'asc' ? left.minutes - right.minutes : right.minutes - left.minutes;
+    }
+
+    return sortOrder === 'asc' ? leftCards - rightCards : rightCards - leftCards;
+  });
+}
+
 export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => {
-  const today = useMemo(() => new Date(), []);
+  const { data, error, isLoading, isRefreshing, refresh } = useTournamentCenter({
+    autoRefresh: true,
+    refreshIntervalMs: 30000,
+  });
+
   const [search, setSearch] = useState('');
-  const [positionFilter, setPositionFilter] = useState<'ALL' | PlayerPosition>('ALL');
+  const [positionFilter, setPositionFilter] = useState<'ALL' | TournamentPlayerPosition>('ALL');
   const [nationFilter, setNationFilter] = useState<'ALL' | string>('ALL');
   const [sortBy, setSortBy] = useState<PlayerSortField>('goals');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
 
-  const completedFixtures = useMemo(
-    () =>
-      FIXTURES.filter((fixture) => fixture.status === 'completed').sort(
-        (a, b) => new Date(b.kickoff).getTime() - new Date(a.kickoff).getTime()
-      ),
-    []
-  );
-
-  const todayFixtures = useMemo(
-    () => FIXTURES.filter((fixture) => isSameDay(new Date(fixture.kickoff), today)),
-    [today]
-  );
-
-  const upcomingFixtures = useMemo(
-    () =>
-      FIXTURES.filter(
-        (fixture) =>
-          fixture.status !== 'completed' && isAfterToday(new Date(fixture.kickoff), today)
-      ).sort((a, b) => new Date(a.kickoff).getTime() - new Date(b.kickoff).getTime()),
-    [today]
-  );
-
-  const nextFixture = upcomingFixtures[0] ?? null;
-  const latestResult = completedFixtures[0] ?? null;
-
-  const currentStage = useMemo(() => {
-    const hasSemiStarted = FIXTURES.some(
-      (fixture) =>
-        fixture.stage.toLowerCase().includes('semi-final') && fixture.status === 'completed'
-    );
-
-    if (hasSemiStarted) {
-      return 'Knockout Stage';
-    }
-
-    return 'Group Stage';
-  }, []);
-
-  const currentMatchday = 2;
-  const matchesCompleted = completedFixtures.length;
-  const matchesRemaining = FIXTURES.length - completedFixtures.length;
-
   const nations = useMemo(() => {
-    const allNations = TOURNAMENT_PLAYERS.map((player) => player.nation);
-    return Array.from(new Set(allNations)).sort((a, b) => a.localeCompare(b));
-  }, []);
+    if (!data) {
+      return [];
+    }
+    return Array.from(new Set(data.players.map((player) => player.nation.name))).sort((a, b) =>
+      a.localeCompare(b)
+    );
+  }, [data]);
 
   const filteredPlayers = useMemo(() => {
-    const normalizedQuery = search.trim().toLowerCase();
+    if (!data) {
+      return [];
+    }
 
-    const filtered = TOURNAMENT_PLAYERS.filter((player) => {
-      if (positionFilter !== 'ALL' && player.position !== positionFilter) {
-        return false;
-      }
+    return sortPlayers(data.players, search, positionFilter, nationFilter, sortBy, sortOrder);
+  }, [data, nationFilter, positionFilter, search, sortBy, sortOrder]);
 
-      if (nationFilter !== 'ALL' && player.nation !== nationFilter) {
-        return false;
-      }
-
-      if (!normalizedQuery) {
-        return true;
-      }
-
-      return (
-        player.name.toLowerCase().includes(normalizedQuery) ||
-        player.nation.toLowerCase().includes(normalizedQuery) ||
-        player.club.toLowerCase().includes(normalizedQuery)
-      );
-    });
-
-    return filtered.sort((left, right) => {
-      const leftCards = left.yellowCards + left.redCards * 2;
-      const rightCards = right.yellowCards + right.redCards * 2;
-
-      if (sortBy === 'name') {
-        const result = left.name.localeCompare(right.name);
-        return sortOrder === 'asc' ? result : -result;
-      }
-
-      if (sortBy === 'goals') {
-        return sortOrder === 'asc' ? left.goals - right.goals : right.goals - left.goals;
-      }
-
-      if (sortBy === 'assists') {
-        return sortOrder === 'asc' ? left.assists - right.assists : right.assists - left.assists;
-      }
-
-      if (sortBy === 'minutes') {
-        return sortOrder === 'asc' ? left.minutes - right.minutes : right.minutes - left.minutes;
-      }
-
-      return sortOrder === 'asc' ? leftCards - rightCards : rightCards - leftCards;
-    });
-  }, [nationFilter, positionFilter, search, sortBy, sortOrder]);
+  const statisticMetaMap = useMemo(
+    () => new Map(STAT_CARD_META.map((item) => [item.id, item])),
+    []
+  );
 
   const handleSort = (field: PlayerSortField): void => {
     if (sortBy === field) {
@@ -1030,18 +455,58 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
     setSortOrder(field === 'name' ? 'asc' : 'desc');
   };
 
+  if (isLoading && !data) {
+    return (
+      <PageContent>
+        <LoadingState label="Loading ASEAN Cup 2026 data..." />
+      </PageContent>
+    );
+  }
+
+  if (error && !data) {
+    return (
+      <PageContent>
+        <ErrorState
+          title="Unable to load ASEAN Cup 2026"
+          message={error}
+          actionLabel="Retry"
+          onRetry={() => {
+            void refresh();
+          }}
+        />
+      </PageContent>
+    );
+  }
+
+  if (!data) {
+    return (
+      <PageContent>
+        <ErrorState title="ASEAN Cup 2026" message="No tournament data available." />
+      </PageContent>
+    );
+  }
+
+  const highlightColor =
+    data.hero.highlight.state === 'live'
+      ? 'error'
+      : data.hero.highlight.state === 'finished'
+        ? 'success'
+        : data.hero.highlight.state === 'upcoming'
+          ? 'info'
+          : 'default';
+
   return (
     <PageContent>
-      <PageHeader>
+      <PageHeader sx={{ mb: ThemeTokens.spacing.xxxl }}>
         <Card
           sx={{
-            borderRadius: ThemeTokens.borderRadius.md,
+            borderRadius: '24px',
             background: 'linear-gradient(135deg, #0d47a1 0%, #00695c 100%)',
             color: '#ffffff',
             overflow: 'hidden',
           }}
         >
-          <CardContent>
+          <CardContent sx={{ py: ThemeTokens.spacing.xxxl }}>
             <Stack spacing={ThemeTokens.spacing.md}>
               <Box
                 sx={{
@@ -1051,34 +516,53 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                   gap: ThemeTokens.spacing.md,
                 }}
               >
-                <Avatar
-                  src="/asean-cup-2026-logo.svg"
+                <Box
+                  component="img"
+                  src="/2026_ASEAN_Championship-logo.svg"
                   alt="ASEAN Cup 2026"
-                  variant="rounded"
-                  sx={{ width: 84, height: 84, borderRadius: 3, bgcolor: 'rgba(255,255,255,0.2)' }}
-                >
-                  AC
-                </Avatar>
+                  sx={{
+                    width: 92,
+                    height: 92,
+                    objectFit: 'contain',
+                    flexShrink: 0,
+                    display: 'block',
+                  }}
+                />
 
                 <Box sx={{ flex: 1 }}>
-                  <Typography variant="h4" sx={{ fontWeight: 700 }}>
-                    ASEAN Cup 2026
+                  <Typography variant="h4" sx={{ fontWeight: 700, lineHeight: 1.15 }}>
+                    {data.hero.tournamentName}
                   </Typography>
-                  <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.86)', mt: 0.5 }}>
-                    Tournament Center
+                  <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.86)', mt: 0.75 }}>
+                    {data.hero.subtitle}
                   </Typography>
                 </Box>
 
-                <Chip
-                  icon={<EmojiEventsIcon />}
-                  label={currentStage}
-                  sx={{
-                    color: '#ffffff',
-                    borderColor: 'rgba(255,255,255,0.5)',
-                    '& .MuiChip-icon': { color: '#ffffff' },
-                  }}
-                  variant="outlined"
-                />
+                <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                  <Chip
+                    icon={<EmojiEventsIcon />}
+                    label={data.hero.currentStage}
+                    variant="outlined"
+                    sx={{
+                      color: '#ffffff',
+                      borderColor: 'rgba(255,255,255,0.5)',
+                      '& .MuiChip-icon': { color: '#ffffff' },
+                    }}
+                  />
+                  <Chip
+                    icon={<RefreshIcon />}
+                    label={isRefreshing ? 'Refreshing' : 'Refresh'}
+                    onClick={() => {
+                      void refresh();
+                    }}
+                    variant="outlined"
+                    sx={{
+                      color: '#ffffff',
+                      borderColor: 'rgba(255,255,255,0.5)',
+                      '& .MuiChip-icon': { color: '#ffffff' },
+                    }}
+                  />
+                </Stack>
               </Box>
 
               <Box
@@ -1086,9 +570,9 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                   display: 'grid',
                   gridTemplateColumns: {
                     xs: 'repeat(2, minmax(0, 1fr))',
-                    md: 'repeat(5, minmax(0, 1fr))',
+                    lg: 'repeat(4, minmax(0, 1fr))',
                   },
-                  gap: ThemeTokens.spacing.sm,
+                  gap: ThemeTokens.spacing.md,
                 }}
               >
                 <Box>
@@ -1096,7 +580,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                     Current Matchday
                   </Typography>
                   <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                    MD {currentMatchday}
+                    MD {data.hero.currentMatchday}
                   </Typography>
                 </Box>
                 <Box>
@@ -1104,7 +588,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                     Matches Completed
                   </Typography>
                   <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                    {matchesCompleted}
+                    {data.hero.matchesCompleted}
                   </Typography>
                 </Box>
                 <Box>
@@ -1112,51 +596,97 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                     Matches Remaining
                   </Typography>
                   <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                    {matchesRemaining}
+                    {data.hero.matchesRemaining}
                   </Typography>
                 </Box>
-                <Box sx={{ gridColumn: { xs: '1 / -1', md: 'span 2' } }}>
+                <Box>
                   <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.78)' }}>
-                    Next Fixture
+                    Last Updated
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {nextFixture
-                      ? `${nextFixture.homeTeam} vs ${nextFixture.awayTeam} • ${formatKickoff(nextFixture.kickoff)}`
-                      : 'To be announced'}
+                    {formatKickoff(data.hero.lastUpdated)}
                   </Typography>
                 </Box>
-                <Box sx={{ gridColumn: '1 / -1' }}>
+
+                <Box sx={{ gridColumn: { xs: '1 / -1', lg: '1 / span 2' } }}>
+                  <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.78)' }}>
+                    Live Tournament Status
+                  </Typography>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: 1,
+                      mt: 0.4,
+                      flexWrap: 'wrap',
+                    }}
+                  >
+                    <Chip size="small" color={highlightColor} label={data.hero.highlight.label} />
+                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                      {data.hero.highlight.fixtureText}
+                    </Typography>
+                    {data.hero.highlight.minuteText && (
+                      <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.86)' }}>
+                        {data.hero.highlight.minuteText}
+                      </Typography>
+                    )}
+                  </Box>
+                </Box>
+
+                <Box>
                   <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.78)' }}>
                     Latest Result
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {latestResult
-                      ? `${latestResult.homeTeam} ${formatScore(latestResult.homeScore, latestResult.awayScore)} ${latestResult.awayTeam}`
-                      : 'No completed match yet'}
+                    {data.hero.latestResult}
                   </Typography>
                 </Box>
+
+                <Box>
+                  <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.78)' }}>
+                    Next Fixture
+                  </Typography>
+                  <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                    {data.hero.nextFixture}
+                  </Typography>
+                </Box>
+              </Box>
+
+              <Box sx={{ display: 'flex', justifyContent: 'flex-end' }}>
+                <DataSyncIndicator compact={false} showWarning={false} />
               </Box>
             </Stack>
           </CardContent>
         </Card>
       </PageHeader>
 
-      <PageSection title="Tournament Bracket" subtitle="Knockout stage path (fixed layout)">
+      <PageSection
+        title="Tournament Bracket"
+        subtitle="Semi-finals and final path (fixed layout)"
+        sx={{ mb: ThemeTokens.spacing.xxxl }}
+      >
         <Card variant="outlined">
           <CardContent>
             <Box
               sx={{
                 display: 'grid',
-                gridTemplateColumns: { xs: '1fr', lg: '1fr 1fr 1fr' },
+                gridTemplateColumns: { xs: '1fr', xl: '1fr 1fr 1fr' },
                 gap: ThemeTokens.spacing.md,
-                alignItems: 'stretch',
               }}
             >
-              <Box>{renderBracketMatch(BRACKET_DATA.semiFinal1)}</Box>
+              {renderKnockoutMatch(data.knockout.semiFinal1)}
 
               <Stack spacing={ThemeTokens.spacing.md}>
-                {renderBracketMatch(BRACKET_DATA.final)}
-                <Card variant="outlined">
+                {renderKnockoutMatch(data.knockout.final, true)}
+                <Card
+                  variant="outlined"
+                  sx={{
+                    borderWidth: 2,
+                    borderColor: 'success.main',
+                    background:
+                      'linear-gradient(135deg, rgba(46,125,50,0.12) 0%, rgba(46,125,50,0.02) 100%)',
+                  }}
+                >
                   <CardContent>
                     <Typography variant="subtitle1" sx={{ fontWeight: 700, mb: 1 }}>
                       Champion
@@ -1168,32 +698,43 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                         alignItems: 'center',
                         gap: 1,
                         border: '1px solid',
-                        borderColor: 'divider',
+                        borderColor: 'success.light',
                         borderRadius: ThemeTokens.borderRadius.sm,
                         p: ThemeTokens.spacing.sm,
+                        bgcolor: 'background.paper',
                       }}
                     >
                       <Avatar
                         sx={{ width: 28, height: 28, fontSize: '0.75rem', bgcolor: 'success.main' }}
                       >
-                        {BRACKET_DATA.champion.logoText}
+                        C
                       </Avatar>
                       <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                        {BRACKET_DATA.champion.name}
+                        {data.knockout.champion.label}
                       </Typography>
-                      <Chip size="small" label="Pending" color="default" variant="outlined" />
+                      <Chip
+                        size="small"
+                        label="Pending"
+                        color="default"
+                        variant="outlined"
+                        sx={{ opacity: 0.8 }}
+                      />
                     </Box>
                   </CardContent>
                 </Card>
               </Stack>
 
-              <Box>{renderBracketMatch(BRACKET_DATA.semiFinal2)}</Box>
+              {renderKnockoutMatch(data.knockout.semiFinal2)}
             </Box>
           </CardContent>
         </Card>
       </PageSection>
 
-      <PageSection title="Group Standings" subtitle="Group A and Group B">
+      <PageSection
+        title="Group Standings"
+        subtitle="Group A and Group B"
+        sx={{ mb: ThemeTokens.spacing.xxxl }}
+      >
         <Box
           sx={{
             display: 'grid',
@@ -1201,12 +742,15 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
             gap: ThemeTokens.spacing.md,
           }}
         >
-          {renderGroupTable('Group A', GROUP_A)}
-          {renderGroupTable('Group B', GROUP_B)}
+          {data.groups.map((group) => renderGroupTable(group))}
         </Box>
       </PageSection>
 
-      <PageSection title="Fixtures" subtitle="Today, upcoming, and completed matches">
+      <PageSection
+        title="Fixtures"
+        subtitle="Today, upcoming, and completed fixtures"
+        sx={{ mb: ThemeTokens.spacing.xxxl }}
+      >
         <Box
           sx={{
             display: 'grid',
@@ -1214,13 +758,17 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
             gap: ThemeTokens.spacing.md,
           }}
         >
-          {renderFixtureList("Today's Fixtures", todayFixtures)}
-          {renderFixtureList('Upcoming Fixtures', upcomingFixtures)}
-          {renderFixtureList('Completed Fixtures', completedFixtures)}
+          {renderFixtureList("Today's Fixtures", data.fixtures.today)}
+          {renderFixtureList('Upcoming Fixtures', data.fixtures.upcoming)}
+          {renderFixtureList('Completed Fixtures', data.fixtures.completed)}
         </Box>
       </PageSection>
 
-      <PageSection title="Players" subtitle="Search, sort, and filter player performance">
+      <PageSection
+        title="Players"
+        subtitle="Search, sort, and filter tournament players"
+        sx={{ mb: ThemeTokens.spacing.xxxl }}
+      >
         <Stack spacing={ThemeTokens.spacing.sm}>
           <FilterBar>
             <SearchInput
@@ -1235,7 +783,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
               <Select
                 value={positionFilter}
                 onChange={(event) =>
-                  setPositionFilter(event.target.value as 'ALL' | PlayerPosition)
+                  setPositionFilter(event.target.value as 'ALL' | TournamentPlayerPosition)
                 }
                 displayEmpty
               >
@@ -1321,7 +869,6 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                   </TableCell>
                 </TableRow>
               </TableHead>
-
               <TableBody>
                 {filteredPlayers.map((player) => (
                   <TableRow key={player.id} hover>
@@ -1339,7 +886,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                         </Typography>
                       </Box>
                     </TableCell>
-                    <TableCell>{player.nation}</TableCell>
+                    <TableCell>{player.nation.name}</TableCell>
                     <TableCell>{player.club}</TableCell>
                     <TableCell>{player.position}</TableCell>
                     <TableCell align="right">{player.goals}</TableCell>
@@ -1359,6 +906,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
       <PageSection
         title="Tournament Statistics"
         subtitle="Current leaders and tournament highlights"
+        sx={{ mb: ThemeTokens.spacing.xxxl }}
       >
         <Box
           sx={{
@@ -1371,16 +919,19 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
             gap: ThemeTokens.spacing.md,
           }}
         >
-          {TOURNAMENT_STATS.map((stat) => (
-            <StatCard
-              key={stat.id}
-              icon={stat.icon}
-              title={stat.title}
-              value={stat.value}
-              subtitle={stat.subtitle}
-              iconColor={stat.iconColor}
-            />
-          ))}
+          {data.statistics.map((stat) => {
+            const meta = statisticMetaMap.get(stat.id);
+            return (
+              <StatCard
+                key={stat.id}
+                icon={meta?.icon ?? <SportsSoccerIcon />}
+                title={stat.title}
+                value={stat.value}
+                subtitle={stat.subtitle}
+                iconColor={meta?.iconColor ?? '#1976d2'}
+              />
+            );
+          })}
         </Box>
       </PageSection>
     </PageContent>

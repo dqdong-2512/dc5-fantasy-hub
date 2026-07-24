@@ -1,0 +1,1 @@
+export { TournamentService } from './TournamentService';

@@ -33,7 +33,11 @@ const NAV_ITEMS: NavItem[] = [
   { label: 'Gameweek', path: '/premier-league/gameweek' },
   { label: 'Players', path: '/premier-league/players' },
   { label: 'Analytics', path: '/premier-league/analytics' },
-  { label: 'ASEAN Cup 2026', path: '/asean-cup-2026', logoSrc: '/asean-cup-2026-logo.svg' },
+  {
+    label: 'ASEAN Cup 2026',
+    path: '/asean-cup-2026',
+    logoSrc: '/2026_ASEAN_Championship-logo.svg',
+  },
 ];
 
 export const AppHeader: React.FC = () => {
