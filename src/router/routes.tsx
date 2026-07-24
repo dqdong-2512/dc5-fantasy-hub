@@ -3,7 +3,6 @@ import { createBrowserRouter, RouterProvider, Navigate, useLocation } from 'reac
 import { Box, Skeleton, Stack } from '@mui/material';
 import { CompetitionSelection } from '../app/CompetitionSelection';
 import { Dashboard } from '../modules/dashboard/Dashboard';
-import { Fixtures } from '../modules/fixtures';
 import {
   PlayerComparePage,
   PlayerDetailPage,
@@ -26,6 +25,7 @@ import {
   MyTeamPage,
   LeagueStandingsPage,
   GameweekCenterPage,
+  LiveMatchCenterPage,
   TransferPlannerPage,
   GameweekPlannerPage,
   SeasonPlannerPage,
@@ -211,7 +211,7 @@ const router = createBrowserRouter([
               },
               {
                 path: 'fixtures',
-                element: <Fixtures />,
+                element: <LiveMatchCenterPage />,
               },
               {
                 path: 'clubs',

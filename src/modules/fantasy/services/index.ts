@@ -47,3 +47,17 @@ export {
   type PlayerDifferential,
   type DifferentialsAnalysis,
 } from './differentials.service';
+export {
+  LiveDataService,
+  type LiveMatchCenterSnapshot,
+  type MatchCenterFixture,
+  type MatchTimelineEvent,
+  type MatchOwnedPlayerLive,
+  type LiveLeagueRow,
+  type LiveTeamView,
+  type LiveTeamPlayerCard,
+  type GameweekLiveHeader,
+  type LiveStatusBadge,
+  type ClubLivePanel,
+  type PlayerLivePanel,
+} from './live-data.service';

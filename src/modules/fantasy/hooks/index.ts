@@ -20,3 +20,4 @@ export {
   useGameweekLivePolling,
   type UseGameweekLivePollingOptions,
 } from './useGameweekLivePolling';
+export { useLiveMatchCenter, type UseLiveMatchCenterState } from './useLiveMatchCenter';
