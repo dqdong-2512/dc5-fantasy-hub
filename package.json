@@ -15,7 +15,8 @@
     "typecheck": "tsc --noEmit",
     "test:analytics": "npx tsx scripts/tests/analytics-decision-engine.test.ts",
     "sync:fpl": "npx tsx scripts/sync/index.ts",
-    "sync:bootstrap": "npx tsx scripts/sync/bootstrap.sync.ts"
+    "sync:bootstrap": "npx tsx scripts/sync/bootstrap.sync.ts",
+    "sync:asean": "npx tsx scripts/sync/asean.sync.ts"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",

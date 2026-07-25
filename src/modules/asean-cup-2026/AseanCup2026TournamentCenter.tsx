@@ -80,12 +80,12 @@ const STAT_CARD_META: StatisticCardMeta[] = [
   { id: 'remaining-matches', icon: <WorkspacePremiumIcon />, iconColor: '#6d4c41' },
 ];
 
-const TOURNAMENT_TIMEZONE = ASEAN_CUP_2026_TOURNAMENT_CONFIG.timezone;
+const VIETNAM_TIMEZONE = 'Asia/Ho_Chi_Minh';
 const TOURNAMENT_HERO_GRADIENT = `linear-gradient(135deg, #0d47a1 0%, ${ASEAN_CUP_2026_TOURNAMENT_CONFIG.brandColor} 100%)`;
 
 function formatKickoff(value: string): string {
   return new Intl.DateTimeFormat('en-GB', {
-    timeZone: TOURNAMENT_TIMEZONE,
+    timeZone: VIETNAM_TIMEZONE,
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -162,7 +162,7 @@ function renderTeamWithFlag(
 
 function formatMatchDate(value: string): string {
   return new Intl.DateTimeFormat('en-GB', {
-    timeZone: TOURNAMENT_TIMEZONE,
+    timeZone: VIETNAM_TIMEZONE,
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -171,7 +171,7 @@ function formatMatchDate(value: string): string {
 
 function formatKickoffTime(value: string): string {
   return new Intl.DateTimeFormat('en-GB', {
-    timeZone: TOURNAMENT_TIMEZONE,
+    timeZone: VIETNAM_TIMEZONE,
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,

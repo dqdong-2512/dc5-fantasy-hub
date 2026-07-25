@@ -1,0 +1,500 @@
+[
+  {
+    "fixtureId": "cp56m1ss73vveu0pwf7ri2rkk",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/cp56m1ss73vveu0pwf7ri2rkk/details",
+    "stage": "1st Leg",
+    "dateLabel": "Jun 02 2026",
+    "localTimeLabel": "08:15 PM",
+    "venue": "Stadium Sultan Hassanal Bolkiah",
+    "status": "FINISHED",
+    "homeTeam": "Brunei Darussalam",
+    "awayTeam": "Timor-Leste",
+    "homeScore": 0,
+    "awayScore": 3,
+    "goals": [
+      {
+        "playerName": "João Rangel",
+        "minute": 27,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "Zenivio Mota",
+        "minute": 43,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "Oatnasio da Silva",
+        "minute": 90,
+        "addedTime": 2,
+        "side": "away"
+      }
+    ]
+  },
+  {
+    "fixtureId": "cppl8u7ps0piqbne2hqem75lg",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/cppl8u7ps0piqbne2hqem75lg/details",
+    "stage": "2nd Leg",
+    "dateLabel": "Jun 09 2026",
+    "localTimeLabel": "05:00 PM",
+    "venue": "Kuala Lumpur Football Stadium",
+    "status": "FINISHED",
+    "homeTeam": "Timor-Leste",
+    "awayTeam": "Brunei Darussalam",
+    "homeScore": 3,
+    "awayScore": 1,
+    "goals": [
+      {
+        "playerName": "Zion Cruz",
+        "minute": 56,
+        "addedTime": null,
+        "side": "home"
+      },
+      {
+        "playerName": "Claudio Osorio",
+        "minute": 62,
+        "addedTime": null,
+        "side": "home"
+      },
+      {
+        "playerName": "Oatnasio da Silva",
+        "minute": 80,
+        "addedTime": null,
+        "side": "home"
+      },
+      {
+        "playerName": "A. Ali Rahman",
+        "minute": 43,
+        "addedTime": null,
+        "side": "away"
+      }
+    ]
+  },
+  {
+    "fixtureId": "5qwcsl59r8s96ylfl4y9tndp0",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/5qwcsl59r8s96ylfl4y9tndp0/details",
+    "stage": "Group A",
+    "dateLabel": "Jul 24 2026",
+    "localTimeLabel": "07:00 PM",
+    "venue": "Morodok Techo National Stadium",
+    "status": "FINISHED",
+    "homeTeam": "Cambodia",
+    "awayTeam": "Singapore",
+    "homeScore": 1,
+    "awayScore": 2,
+    "goals": [
+      {
+        "playerName": "Ouk Sovann",
+        "minute": 55,
+        "addedTime": null,
+        "side": "home"
+      },
+      {
+        "playerName": "S. Anuar",
+        "minute": 22,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "Ilhan Fandi",
+        "minute": 90,
+        "addedTime": 11,
+        "side": "away"
+      }
+    ]
+  },
+  {
+    "fixtureId": "aa1xjyzuguuao51etdbet2adw",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/aa1xjyzuguuao51etdbet2adw/details",
+    "stage": "Group A",
+    "dateLabel": "Jul 24 2026",
+    "localTimeLabel": "08:30 PM",
+    "venue": "Chonburi Stadium",
+    "status": "FINISHED",
+    "homeTeam": "Timor-Leste",
+    "awayTeam": "Vietnam",
+    "homeScore": 0,
+    "awayScore": 7,
+    "goals": [
+      {
+        "playerName": "Đỗ Hoàng Hên",
+        "minute": 7,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "Nguyễn Đình Bắc",
+        "minute": 31,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "Đỗ Hoàng Hên",
+        "minute": 41,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "Nguyễn Đình Bắc",
+        "minute": 42,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "Nguyễn Xuân Son",
+        "minute": 45,
+        "addedTime": 1,
+        "side": "away"
+      },
+      {
+        "playerName": "Nguyễn Đình Bắc",
+        "minute": 65,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "Nguyễn Quang Hải",
+        "minute": 79,
+        "addedTime": null,
+        "side": "away"
+      }
+    ]
+  },
+  {
+    "fixtureId": "9j6j1y7xg2hlna3zlktze58us",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/9j6j1y7xg2hlna3zlktze58us/details",
+    "stage": "Group B",
+    "dateLabel": "Jul 25 2026",
+    "localTimeLabel": "04:30 PM",
+    "venue": "Thuwunna Stadium",
+    "status": "UPCOMING",
+    "homeTeam": "Myanmar",
+    "awayTeam": "Malaysia",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/9jsdh9v3ygeotcwiar1klnspg/details",
+    "stage": "Group B",
+    "dateLabel": "Jul 25 2026",
+    "localTimeLabel": "08:00 PM",
+    "venue": "Lao National Stadium KM16",
+    "status": "UPCOMING",
+    "homeTeam": "Laos",
+    "awayTeam": "Thailand",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/5rhc9xl9z3dvgwlho4l19lams/details",
+    "stage": "Group A",
+    "dateLabel": "Jul 27 2026",
+    "localTimeLabel": "08:30 PM",
+    "venue": "Stadion Pakansari Bogor",
+    "status": "UPCOMING",
+    "homeTeam": "Indonesia",
+    "awayTeam": "Cambodia",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "cmmr7oa4oe5e2r75bp1pcp53o",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/cmmr7oa4oe5e2r75bp1pcp53o/details",
+    "stage": "Group A",
+    "dateLabel": "Jul 27 2026",
+    "localTimeLabel": "07:00 PM",
+    "venue": "Jalan Besar Stadium",
+    "status": "UPCOMING",
+    "homeTeam": "Singapore",
+    "awayTeam": "Timor-Leste",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "9kaz0vc8bs0voywdru0pvqcr8",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/9kaz0vc8bs0voywdru0pvqcr8/details",
+    "stage": "Group B",
+    "dateLabel": "Jul 28 2026",
+    "localTimeLabel": "09:00 PM",
+    "venue": "Kuala Lumpur Football Stadium",
+    "status": "UPCOMING",
+    "homeTeam": "Malaysia",
+    "awayTeam": "Laos",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "9knzp49imdbgo0bd8ajlo3kes",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/9knzp49imdbgo0bd8ajlo3kes/details",
+    "stage": "Group B",
+    "dateLabel": "Jul 28 2026",
+    "localTimeLabel": "06:00 PM",
+    "venue": "New Clark City Athletics Stadium",
+    "status": "UPCOMING",
+    "homeTeam": "Philippines",
+    "awayTeam": "Myanmar",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "5rw6azr4balbm0gww0706kges",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/5rw6azr4balbm0gww0706kges/details",
+    "stage": "Group A",
+    "dateLabel": "Jul 31 2026",
+    "localTimeLabel": "08:00 PM",
+    "venue": "Sân vận động quốc gia Mỹ Đình (Mỹ Đình National Stadium)",
+    "status": "UPCOMING",
+    "homeTeam": "Vietnam",
+    "awayTeam": "Singapore",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "e1na6zmpd13au6bv2ypxxdses",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/e1na6zmpd13au6bv2ypxxdses/details",
+    "stage": "Group A",
+    "dateLabel": "Jul 31 2026",
+    "localTimeLabel": "05:00 PM",
+    "venue": "Chonburi Stadium",
+    "status": "UPCOMING",
+    "homeTeam": "Timor-Leste",
+    "awayTeam": "Indonesia",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/9l3rzgyq8xakbmq01juwt3dw4/details",
+    "stage": "Group B",
+    "dateLabel": "Aug 01 2026",
+    "localTimeLabel": "05:00 PM",
+    "venue": "Lao National Stadium KM16",
+    "status": "UPCOMING",
+    "homeTeam": "Laos",
+    "awayTeam": "Philippines",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "9lgy1h5avy02d3eiakaez8nx0",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/9lgy1h5avy02d3eiakaez8nx0/details",
+    "stage": "Group B",
+    "dateLabel": "Aug 01 2026",
+    "localTimeLabel": "08:00 PM",
+    "venue": "Rajamangala National Stadium",
+    "status": "UPCOMING",
+    "homeTeam": "Thailand",
+    "awayTeam": "Malaysia",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "5sb6fxpeovc5hh0tdqd4lugwk",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/5sb6fxpeovc5hh0tdqd4lugwk/details",
+    "stage": "Group A",
+    "dateLabel": "Aug 03 2026",
+    "localTimeLabel": "08:30 PM",
+    "venue": "Stadion Pakansari Bogor",
+    "status": "UPCOMING",
+    "homeTeam": "Indonesia",
+    "awayTeam": "Vietnam",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "ct4uis3jogzmjmni969sgjdg",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/ct4uis3jogzmjmni969sgjdg/details",
+    "stage": "Group A",
+    "dateLabel": "Aug 03 2026",
+    "localTimeLabel": "05:30 PM",
+    "venue": "Morodok Techo National Stadium",
+    "status": "UPCOMING",
+    "homeTeam": "Cambodia",
+    "awayTeam": "Timor-Leste",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "9lu0iledwtdn6zu7smkjmtiqc",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/9lu0iledwtdn6zu7smkjmtiqc/details",
+    "stage": "Group B",
+    "dateLabel": "Aug 04 2026",
+    "localTimeLabel": "09:00 PM",
+    "venue": "New Clark City Athletics Stadium",
+    "status": "UPCOMING",
+    "homeTeam": "Philippines",
+    "awayTeam": "Thailand",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/9m7aeiwfdt10gun5z6bl8qtxw/details",
+    "stage": "Group B",
+    "dateLabel": "Aug 04 2026",
+    "localTimeLabel": "04:30 PM",
+    "venue": "Thuwunna Stadium",
+    "status": "UPCOMING",
+    "homeTeam": "Myanmar",
+    "awayTeam": "Laos",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "5sn8uut8jc8tu8nw9ssmhv8k4",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/5sn8uut8jc8tu8nw9ssmhv8k4/details",
+    "stage": "Group A",
+    "dateLabel": "Aug 07 2026",
+    "localTimeLabel": "08:00 PM",
+    "venue": "Sân vận động quốc gia Mỹ Đình (Mỹ Đình National Stadium)",
+    "status": "UPCOMING",
+    "homeTeam": "Vietnam",
+    "awayTeam": "Cambodia",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "5szfys598acemrhp2vkcft0d0",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/5szfys598acemrhp2vkcft0d0/details",
+    "stage": "Group A",
+    "dateLabel": "Aug 07 2026",
+    "localTimeLabel": "09:00 PM",
+    "venue": "Jalan Besar Stadium",
+    "status": "UPCOMING",
+    "homeTeam": "Singapore",
+    "awayTeam": "Indonesia",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "9mlpt8so52t0ljqv1gwxi38yc",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/9mlpt8so52t0ljqv1gwxi38yc/details",
+    "stage": "Group B",
+    "dateLabel": "Aug 08 2026",
+    "localTimeLabel": "08:00 PM",
+    "venue": "Rajamangala National Stadium",
+    "status": "UPCOMING",
+    "homeTeam": "Thailand",
+    "awayTeam": "Myanmar",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "9mz2zffybtyovpl76q5fkoys4",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/9mz2zffybtyovpl76q5fkoys4/details",
+    "stage": "Group B",
+    "dateLabel": "Aug 08 2026",
+    "localTimeLabel": "09:00 PM",
+    "venue": "Kuala Lumpur Football Stadium",
+    "status": "UPCOMING",
+    "homeTeam": "Malaysia",
+    "awayTeam": "Philippines",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "8q1tvn2o2tqoyqfxjxw2slyj8",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/8q1tvn2o2tqoyqfxjxw2slyj8/details",
+    "stage": "SF A Leg 1",
+    "dateLabel": "Aug 15 2026",
+    "localTimeLabel": null,
+    "venue": "",
+    "status": "UPCOMING",
+    "homeTeam": "Unknown Home",
+    "awayTeam": "Unknown Away",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "8qs2zeoa8k5kwv8tut3qedvdg",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/8qs2zeoa8k5kwv8tut3qedvdg/details",
+    "stage": "SF B Leg 1",
+    "dateLabel": "Aug 16 2026",
+    "localTimeLabel": null,
+    "venue": "",
+    "status": "UPCOMING",
+    "homeTeam": "Unknown Home",
+    "awayTeam": "Unknown Away",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "8rhjmea8xqqopxzwycfzlsduc",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/8rhjmea8xqqopxzwycfzlsduc/details",
+    "stage": "SF A Leg 2",
+    "dateLabel": "Aug 18 2026",
+    "localTimeLabel": null,
+    "venue": "",
+    "status": "UPCOMING",
+    "homeTeam": "Unknown Home",
+    "awayTeam": "Unknown Away",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "8s7nru8oa00ew2ccjd383vcwk",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/8s7nru8oa00ew2ccjd383vcwk/details",
+    "stage": "SF B Leg 2",
+    "dateLabel": "Aug 19 2026",
+    "localTimeLabel": null,
+    "venue": "",
+    "status": "UPCOMING",
+    "homeTeam": "Unknown Home",
+    "awayTeam": "Unknown Away",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "3860alcnfbut9fghyv01m4zdg",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/3860alcnfbut9fghyv01m4zdg/details",
+    "stage": "Final Leg 1",
+    "dateLabel": "Aug 22 2026",
+    "localTimeLabel": null,
+    "venue": "",
+    "status": "UPCOMING",
+    "homeTeam": "Unknown Home",
+    "awayTeam": "Unknown Away",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  },
+  {
+    "fixtureId": "38w3neiqa1x8wrv2ibhgum978",
+    "detailUrl": "https://aseanutdfc.com/asean-championship/match/38w3neiqa1x8wrv2ibhgum978/details",
+    "stage": "Final Leg 2",
+    "dateLabel": "Aug 26 2026",
+    "localTimeLabel": null,
+    "venue": "",
+    "status": "UPCOMING",
+    "homeTeam": "Unknown Home",
+    "awayTeam": "Unknown Away",
+    "homeScore": null,
+    "awayScore": null,
+    "goals": []
+  }
+]
