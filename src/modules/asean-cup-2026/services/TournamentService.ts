@@ -94,6 +94,7 @@ export class TournamentService {
       hero,
       groups,
       fixtures: {
+        all: sortedFixtures,
         today: fixturesToday,
         upcoming: upcomingFixtures,
         completed: completedFixtures,

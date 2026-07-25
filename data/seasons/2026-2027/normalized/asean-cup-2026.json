@@ -6,7 +6,7 @@
     "subtitle": "Official Tournament Center",
     "currentStage": "Group Stage",
     "currentMatchday": 1,
-    "updatedAt": "2026-07-24T12:00:00Z"
+    "updatedAt": "2026-07-25T00:00:00Z"
   },
   "teams": [
     { "id": 1, "name": "Vietnam", "countryCode": "VN" },
@@ -48,8 +48,8 @@
     {
       "id": "A1",
       "stage": "Group A",
-      "kickoff": "2026-07-25T12:00:00Z",
-      "venue": "National Olympic Stadium",
+      "kickoff": "2026-07-24T12:00:00Z",
+      "venue": "Morodok Techo National Stadium, Phnom Penh",
       "homeTeamId": 4,
       "awayTeamId": 3,
       "homeScore": null,
@@ -59,10 +59,10 @@
     {
       "id": "A2",
       "stage": "Group A",
-      "kickoff": "2026-07-25T12:30:00Z",
-      "venue": "My Dinh National Stadium",
-      "homeTeamId": 1,
-      "awayTeamId": 2,
+      "kickoff": "2026-07-24T13:30:00Z",
+      "venue": "Chonburi Stadium, Chonburi",
+      "homeTeamId": 5,
+      "awayTeamId": 1,
       "homeScore": null,
       "awayScore": null,
       "status": "UPCOMING"
@@ -70,8 +70,8 @@
     {
       "id": "B1",
       "stage": "Group B",
-      "kickoff": "2026-07-26T12:00:00Z",
-      "venue": "Bukit Jalil National Stadium",
+      "kickoff": "2026-07-25T10:00:00Z",
+      "venue": "Thuwunna Stadium, Yangon",
       "homeTeamId": 7,
       "awayTeamId": 9,
       "homeScore": null,
@@ -81,10 +81,186 @@
     {
       "id": "B2",
       "stage": "Group B",
-      "kickoff": "2026-07-26T13:00:00Z",
-      "venue": "Rizal Memorial Stadium",
+      "kickoff": "2026-07-25T13:00:00Z",
+      "venue": "Laos National Stadium KM16, Vientiane",
+      "homeTeamId": 10,
+      "awayTeamId": 6,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "A3",
+      "stage": "Group A",
+      "kickoff": "2026-07-27T11:00:00Z",
+      "venue": "Jalan Besar Stadium, Singapore",
+      "homeTeamId": 3,
+      "awayTeamId": 5,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "A4",
+      "stage": "Group A",
+      "kickoff": "2026-07-27T13:30:00Z",
+      "venue": "Pakansari Stadium, Bogor",
+      "homeTeamId": 2,
+      "awayTeamId": 4,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "B3",
+      "stage": "Group B",
+      "kickoff": "2026-07-28T13:00:00Z",
+      "venue": "Kuala Lumpur Football Stadium, Kuala Lumpur",
+      "homeTeamId": 7,
+      "awayTeamId": 10,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "B4",
+      "stage": "Group B",
+      "kickoff": "2026-07-28T10:00:00Z",
+      "venue": "New Clark City Athletics Stadium, Capas",
+      "homeTeamId": 8,
+      "awayTeamId": 9,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "A5",
+      "stage": "Group A",
+      "kickoff": "2026-07-31T11:00:00Z",
+      "venue": "Chonburi Stadium, Chonburi",
+      "homeTeamId": 5,
+      "awayTeamId": 2,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "A6",
+      "stage": "Group A",
+      "kickoff": "2026-07-31T13:00:00Z",
+      "venue": "My Dinh National Stadium, Hanoi",
+      "homeTeamId": 1,
+      "awayTeamId": 3,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "B5",
+      "stage": "Group B",
+      "kickoff": "2026-08-01T10:00:00Z",
+      "venue": "Laos National Stadium KM16, Vientiane",
+      "homeTeamId": 10,
+      "awayTeamId": 8,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "B6",
+      "stage": "Group B",
+      "kickoff": "2026-08-01T13:00:00Z",
+      "venue": "Rajamangala Stadium, Bangkok",
+      "homeTeamId": 6,
+      "awayTeamId": 7,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "A7",
+      "stage": "Group A",
+      "kickoff": "2026-08-03T13:30:00Z",
+      "venue": "Pakansari Stadium, Bogor",
+      "homeTeamId": 2,
+      "awayTeamId": 1,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "A8",
+      "stage": "Group A",
+      "kickoff": "2026-08-03T10:30:00Z",
+      "venue": "Morodok Techo National Stadium, Phnom Penh",
+      "homeTeamId": 4,
+      "awayTeamId": 5,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "B7",
+      "stage": "Group B",
+      "kickoff": "2026-08-04T13:00:00Z",
+      "venue": "New Clark City Athletics Stadium, Capas",
       "homeTeamId": 8,
       "awayTeamId": 6,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "B8",
+      "stage": "Group B",
+      "kickoff": "2026-08-04T10:00:00Z",
+      "venue": "Thuwunna Stadium, Yangon",
+      "homeTeamId": 9,
+      "awayTeamId": 10,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "A9",
+      "stage": "Group A",
+      "kickoff": "2026-08-07T13:00:00Z",
+      "venue": "My Dinh National Stadium, Hanoi",
+      "homeTeamId": 1,
+      "awayTeamId": 4,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "A10",
+      "stage": "Group A",
+      "kickoff": "2026-08-07T13:00:00Z",
+      "venue": "Jalan Besar Stadium, Singapore",
+      "homeTeamId": 3,
+      "awayTeamId": 2,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "B9",
+      "stage": "Group B",
+      "kickoff": "2026-08-08T13:00:00Z",
+      "venue": "Rajamangala Stadium, Bangkok",
+      "homeTeamId": 6,
+      "awayTeamId": 9,
+      "homeScore": null,
+      "awayScore": null,
+      "status": "UPCOMING"
+    },
+    {
+      "id": "B10",
+      "stage": "Group B",
+      "kickoff": "2026-08-08T13:00:00Z",
+      "venue": "Kuala Lumpur Football Stadium, Kuala Lumpur",
+      "homeTeamId": 7,
+      "awayTeamId": 8,
       "homeScore": null,
       "awayScore": null,
       "status": "UPCOMING"
@@ -103,7 +279,7 @@
     {
       "id": "SF1-L2",
       "stage": "Semi-final 1 (Leg 2)",
-      "kickoff": "2026-08-19T12:00:00Z",
+      "kickoff": "2026-08-18T12:00:00Z",
       "venue": "TBD",
       "homeTeamId": 0,
       "awayTeamId": 0,

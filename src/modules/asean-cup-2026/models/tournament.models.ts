@@ -206,6 +206,7 @@ export interface TournamentCenterData {
   hero: TournamentHero;
   groups: TournamentGroup[];
   fixtures: {
+    all: TournamentFixture[];
     today: TournamentFixture[];
     upcoming: TournamentFixture[];
     completed: TournamentFixture[];

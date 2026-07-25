@@ -25,6 +25,9 @@ import TimelineIcon from '@mui/icons-material/Timeline';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
 import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import RefreshIcon from '@mui/icons-material/Refresh';
+import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
+import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
+import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
 import {
   CountryFlag,
   DataSyncIndicator,
@@ -239,105 +242,100 @@ function findPreferredFinalFixture(fixtures: TournamentFixture[]): TournamentFix
   )[0];
 }
 
-function renderKnockoutTeamRow(team: KnockoutTeam): React.ReactElement {
+function getSemiFinalSlotLabels(fixture: TournamentFixture): [string, string] {
+  const isSecondLeg = /Leg 2/i.test(fixture.stage);
+
+  if (fixture.stage.includes('Semi-final 1')) {
+    return isSecondLeg
+      ? ['TBD (1st Group B)', 'TBD (2nd Group A)']
+      : ['TBD (2nd Group A)', 'TBD (1st Group B)'];
+  }
+
+  return isSecondLeg
+    ? ['TBD (1st Group A)', 'TBD (2nd Group B)']
+    : ['TBD (2nd Group B)', 'TBD (1st Group A)'];
+}
+
+function renderScheduledTeamRow(label: string, score: number | null): React.ReactElement {
   return (
-    <Box
-      sx={{
-        display: 'grid',
-        gridTemplateColumns: 'auto 1fr auto',
-        alignItems: 'center',
-        gap: 1,
-      }}
-    >
-      <CountryFlag code={team.team?.countryCode ?? 'TBD'} size={18} showTooltip />
-      <Typography variant="body2" sx={{ fontWeight: 600 }}>
-        {team.team?.name ?? team.label}
+    <Box sx={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 1 }}>
+      <Typography variant="body2" sx={{ fontWeight: 700 }}>
+        {label}
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 700 }}>
-        {team.score ?? '-'}
+      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 800 }}>
+        {score ?? '-'}
       </Typography>
     </Box>
   );
 }
 
-function renderSemiFinalRoadCard(match: KnockoutMatch): React.ReactElement {
-  const status = resolveKnockoutStatus(match);
-  const winner = resolveKnockoutWinner(match);
+function renderSemiFinalLegCard(fixture: TournamentFixture): React.ReactElement {
+  const kickoffDate = formatMatchDate(fixture.kickoff);
+  const kickoffTime = formatKickoffTime(fixture.kickoff);
+  const [homeLabel, awayLabel] = getSemiFinalSlotLabels(fixture);
 
   return (
-    <Card variant="outlined" sx={{ height: '100%', borderRadius: ThemeTokens.borderRadius.md }}>
-      <CardContent sx={{ p: ThemeTokens.spacing.md }}>
-        <Stack spacing={1.25}>
-          <Box
-            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}
-          >
-            <Typography variant="subtitle1" sx={{ fontWeight: 700 }}>
-              {match.title}
-            </Typography>
-            <StatusChip status={status.status} label={status.label} />
-          </Box>
-
-          <Stack spacing={0.75}>
-            {renderKnockoutTeamRow(match.home)}
-            <Box sx={{ textAlign: 'center' }}>
-              <Typography variant="caption" color="text.secondary">
-                vs
-              </Typography>
-            </Box>
-            {renderKnockoutTeamRow(match.away)}
-          </Stack>
-
-          <Box
-            sx={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr',
-              gap: 1,
-              pt: 0.5,
-              borderTop: '1px solid',
-              borderColor: 'divider',
-            }}
-          >
-            <Box>
-              <Typography variant="caption" color="text.secondary">
-                Date
-              </Typography>
-              <Typography variant="body2">{match.legDates}</Typography>
-            </Box>
-            <Box>
-              <Typography variant="caption" color="text.secondary">
-                Aggregate
-              </Typography>
-              <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                {resolveAggregateDisplay(match)}
-              </Typography>
-            </Box>
-          </Box>
+    <Card
+      variant="outlined"
+      sx={{
+        borderRadius: '8px',
+        borderColor: 'rgba(148, 163, 184, 0.36)',
+        boxShadow: '0 5px 16px rgba(15, 23, 42, 0.045)',
+        backgroundColor: '#ffffff',
+      }}
+    >
+      <CardContent sx={{ p: { xs: 1.5, md: ThemeTokens.spacing.md } }}>
+        <Stack spacing={1.1}>
+          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+            {fixture.stage}
+          </Typography>
 
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
-              gap: 0.8,
-              p: 1,
-              borderRadius: ThemeTokens.borderRadius.sm,
-              bgcolor: 'action.hover',
+              justifyContent: 'space-between',
+              gap: 1,
+              color: 'text.secondary',
+              flexWrap: { xs: 'wrap', sm: 'nowrap' },
             }}
           >
-            <Typography variant="caption" color="text.secondary">
-              Winner:
-            </Typography>
-            {winner ? (
-              <>
-                <CountryFlag code={winner.team?.countryCode ?? 'TBD'} size={16} showTooltip />
-                <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                  {winner.team?.name ?? winner.label}
-                </Typography>
-              </>
-            ) : (
-              <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                To be decided
+            <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
+              <CalendarMonthOutlinedIcon sx={{ fontSize: 14 }} />
+              <Typography variant="caption">{kickoffDate}</Typography>
+            </Box>
+            <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
+              <AccessTimeOutlinedIcon sx={{ fontSize: 14 }} />
+              <Typography variant="caption">{kickoffTime} (VN Time)</Typography>
+            </Box>
+            <StatusChip
+              status={getFixtureStatusColor(fixture.status)}
+              label={getFixtureStatusLabel(fixture)}
+            />
+          </Box>
+
+          <Stack spacing={0.7}>
+            {renderScheduledTeamRow(homeLabel, fixture.homeScore)}
+            {renderScheduledTeamRow(awayLabel, fixture.awayScore)}
+          </Stack>
+
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 1,
+              pt: 0.25,
+            }}
+          >
+            <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5, minWidth: 0 }}>
+              <LocationOnOutlinedIcon
+                sx={{ fontSize: 14, color: 'text.secondary', flexShrink: 0 }}
+              />
+              <Typography variant="caption" color="text.secondary" noWrap>
+                Sân vận động: {fixture.venue}
               </Typography>
-            )}
+            </Box>
           </Box>
         </Stack>
       </CardContent>
@@ -436,7 +434,7 @@ function renderFixtureList(
                 sx={{
                   border: '1px solid',
                   borderColor: 'divider',
-                  borderRadius: ThemeTokens.borderRadius.sm,
+                  borderRadius: '4px',
                   p: ThemeTokens.spacing.sm,
                 }}
               >
@@ -638,11 +636,8 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
           ? 'info'
           : 'default';
 
-  const allKnockoutFixtures = [
-    ...data.fixtures.today,
-    ...data.fixtures.upcoming,
-    ...data.fixtures.completed,
-  ];
+  // The bracket always needs the full published schedule, not only the next matchday.
+  const allKnockoutFixtures = data.fixtures.all;
   const finalFixture = findPreferredFinalFixture(allKnockoutFixtures);
   const finalStatus = finalFixture
     ? {
@@ -653,6 +648,15 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
   const finalWinner = resolveKnockoutWinner(data.knockout.final);
   const championTeam = data.knockout.champion.team;
   const championName = championTeam?.name ?? data.knockout.champion.label;
+  const semiFinal1Fixtures = allKnockoutFixtures
+    .filter((fixture) => fixture.stage.includes('Semi-final 1'))
+    .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime());
+  const semiFinal2Fixtures = allKnockoutFixtures
+    .filter((fixture) => fixture.stage.includes('Semi-final 2'))
+    .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime());
+  const finalFixtures = allKnockoutFixtures
+    .filter((fixture) => /^Final \(Leg \d+\)$/i.test(fixture.stage))
+    .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime());
 
   return (
     <PageContent>
@@ -827,16 +831,20 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
         <Card
           variant="outlined"
           sx={{
-            borderRadius: ThemeTokens.borderRadius.lg,
+            borderRadius: '16px',
             background:
-              'linear-gradient(180deg, rgba(25,118,210,0.05) 0%, rgba(46,125,50,0.02) 60%, rgba(255,255,255,1) 100%)',
+              'linear-gradient(180deg, rgba(248, 250, 252, 0.96) 0%, rgba(255,255,255,1) 100%)',
+            borderColor: 'rgba(148, 163, 184, 0.32)',
           }}
         >
           <CardContent sx={{ p: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}>
             <Box
               sx={{
                 display: 'grid',
-                gridTemplateColumns: { xs: '1fr', md: '1fr minmax(360px, 1.2fr) 1fr' },
+                gridTemplateColumns: {
+                  xs: '1fr',
+                  md: 'minmax(220px, 1fr) minmax(360px, 1.18fr) minmax(220px, 1fr)',
+                },
                 gridTemplateAreas: {
                   xs: '"semi1" "final" "semi2" "champion"',
                   md: '"semi1 final semi2" ". champion ."',
@@ -844,203 +852,398 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                 alignItems: 'center',
                 columnGap: ThemeTokens.spacing.lg,
                 rowGap: ThemeTokens.spacing.md,
+                position: 'relative',
               }}
             >
-              <Box sx={{ gridArea: 'semi1' }}>
-                {renderSemiFinalRoadCard(data.knockout.semiFinal1)}
+              <Box
+                sx={{
+                  display: { xs: 'none', md: 'block' },
+                  position: 'absolute',
+                  pointerEvents: 'none',
+                  left: '31%',
+                  top: '18%',
+                  width: '7.5%',
+                  height: '27%',
+                  borderRight: '2px solid #2563EB',
+                  borderRadius: 0,
+                  '&::before, &::after': {
+                    content: '""',
+                    position: 'absolute',
+                    left: 0,
+                    width: '100%',
+                    borderTop: '2px solid #2563EB',
+                  },
+                  '&::before': { top: 0 },
+                  '&::after': { bottom: 0 },
+                }}
+              />
+              <Box
+                sx={{
+                  display: { xs: 'none', md: 'block' },
+                  position: 'absolute',
+                  pointerEvents: 'none',
+                  right: '31%',
+                  top: '18%',
+                  width: '7.5%',
+                  height: '27%',
+                  borderLeft: '2px solid #2563EB',
+                  borderRadius: 0,
+                  '&::before, &::after': {
+                    content: '""',
+                    position: 'absolute',
+                    right: 0,
+                    width: '100%',
+                    borderTop: '2px solid #2563EB',
+                  },
+                  '&::before': { top: 0 },
+                  '&::after': { bottom: 0 },
+                }}
+              />
+              <Box sx={{ gridArea: 'semi1', zIndex: 1 }}>
+                <Stack spacing={ThemeTokens.spacing.sm}>
+                  <Chip
+                    label="SEMI-FINAL 1"
+                    size="small"
+                    sx={{
+                      alignSelf: 'flex-start',
+                      fontWeight: 700,
+                      bgcolor: 'rgba(37, 99, 235, 0.12)',
+                      color: '#1E40AF',
+                    }}
+                  />
+                  {semiFinal1Fixtures.length > 0 ? (
+                    semiFinal1Fixtures.map((fixture) => (
+                      <React.Fragment key={fixture.id}>
+                        {renderSemiFinalLegCard(fixture)}
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <Card variant="outlined">
+                      <CardContent>
+                        <Typography variant="body2" color="text.secondary">
+                          No semi-final 1 fixtures available.
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  )}
+                </Stack>
               </Box>
 
-              <Box sx={{ gridArea: 'final' }}>
-                <Card
-                  variant="outlined"
-                  sx={{
-                    borderWidth: 2,
-                    borderColor: 'primary.main',
-                    borderRadius: ThemeTokens.borderRadius.lg,
-                    boxShadow: '0 10px 26px rgba(13, 71, 161, 0.18)',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <CardContent
-                    sx={{ p: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}
+              <Box sx={{ gridArea: 'final', zIndex: 1 }}>
+                <Stack spacing={1.25} sx={{ alignItems: 'center' }}>
+                  <EmojiEventsIcon
+                    sx={{
+                      color: '#D97706',
+                      fontSize: 54,
+                      filter: 'drop-shadow(0 7px 8px rgba(245, 158, 11, 0.28))',
+                    }}
+                  />
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#B45309' }}>
+                    <Box sx={{ width: 26, borderTop: '1px solid #FBBF24' }} />
+                    <Typography variant="subtitle1" sx={{ fontWeight: 800, letterSpacing: 0.3 }}>
+                      THE FINAL
+                    </Typography>
+                    <Box sx={{ width: 26, borderTop: '1px solid #FBBF24' }} />
+                  </Box>
+                  <Card
+                    variant="outlined"
+                    sx={{
+                      borderWidth: 2,
+                      borderColor: '#F59E0B',
+                      borderRadius: '16px',
+                      boxShadow: '0 12px 28px rgba(245, 158, 11, 0.2)',
+                      overflow: 'hidden',
+                      background:
+                        'linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, rgba(255,255,255,1) 44%)',
+                    }}
                   >
-                    <Stack spacing={ThemeTokens.spacing.md}>
-                      <Box
-                        sx={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          justifyContent: 'space-between',
-                          gap: 1,
-                        }}
-                      >
-                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <EmojiEventsIcon color="warning" sx={{ fontSize: 28 }} />
-                          <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                            FINAL
-                          </Typography>
-                        </Box>
-                        <StatusChip status={finalStatus.status} label={finalStatus.label} />
-                      </Box>
-
-                      <Box
-                        sx={{
-                          display: 'grid',
-                          gridTemplateColumns: { xs: '1fr', sm: '1fr auto 1fr' },
-                          alignItems: 'center',
-                          gap: 1,
-                          p: ThemeTokens.spacing.sm,
-                          borderRadius: ThemeTokens.borderRadius.sm,
-                          bgcolor: 'action.hover',
-                        }}
-                      >
-                        {renderTeamWithFlag(
-                          {
-                            name:
-                              data.knockout.final.home.team?.name ?? data.knockout.final.home.label,
-                            countryCode: data.knockout.final.home.team?.countryCode ?? 'TBD',
-                          },
-                          'lg'
-                        )}
-                        <Typography
-                          variant="subtitle2"
-                          color="text.secondary"
-                          sx={{ textAlign: 'center', fontWeight: 700 }}
+                    <CardContent
+                      sx={{ p: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}
+                    >
+                      <Stack spacing={ThemeTokens.spacing.md}>
+                        <Box
+                          sx={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            justifyContent: 'center',
+                            gap: 1.5,
+                            color: 'text.secondary',
+                            flexWrap: 'wrap',
+                          }}
                         >
-                          vs
-                        </Typography>
-                        <Box sx={{ justifySelf: { xs: 'start', sm: 'end' } }}>
+                          <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
+                            <CalendarMonthOutlinedIcon sx={{ fontSize: 14 }} />
+                            <Typography variant="caption">
+                              {finalFixture
+                                ? formatMatchDate(finalFixture.kickoff)
+                                : data.knockout.final.legDates}
+                            </Typography>
+                          </Box>
+                          <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
+                            <AccessTimeOutlinedIcon sx={{ fontSize: 14 }} />
+                            <Typography variant="caption">
+                              {finalFixture
+                                ? `${formatKickoffTime(finalFixture.kickoff)} (VN Time)`
+                                : 'TBD'}
+                            </Typography>
+                          </Box>
+                        </Box>
+
+                        <Box
+                          sx={{
+                            display: 'grid',
+                            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                            gap: 0.75,
+                          }}
+                        >
+                          {finalFixtures.map((fixture) => (
+                            <Box
+                              key={fixture.id}
+                              sx={{
+                                border: '1px solid rgba(245, 158, 11, 0.24)',
+                                borderRadius: '4px',
+                                px: 1,
+                                py: 0.75,
+                                backgroundColor: 'rgba(255,255,255,0.74)',
+                              }}
+                            >
+                              <Typography
+                                variant="caption"
+                                sx={{ display: 'block', fontWeight: 700 }}
+                              >
+                                {fixture.stage}
+                              </Typography>
+                              <Typography variant="caption" color="text.secondary">
+                                {formatMatchDate(fixture.kickoff)} /{' '}
+                                {formatKickoffTime(fixture.kickoff)} (VN)
+                              </Typography>
+                            </Box>
+                          ))}
+                        </Box>
+
+                        <Box
+                          sx={{
+                            display: 'grid',
+                            gridTemplateColumns: { xs: '1fr', sm: '1fr auto 1fr' },
+                            alignItems: 'center',
+                            gap: 1,
+                            p: ThemeTokens.spacing.sm,
+                            borderRadius: '4px',
+                            bgcolor: '#ffffff',
+                            border: '1px solid',
+                            borderColor: 'rgba(245, 158, 11, 0.32)',
+                          }}
+                        >
                           {renderTeamWithFlag(
                             {
                               name:
-                                data.knockout.final.away.team?.name ??
-                                data.knockout.final.away.label,
-                              countryCode: data.knockout.final.away.team?.countryCode ?? 'TBD',
+                                data.knockout.final.home.team?.name ??
+                                data.knockout.final.home.label,
+                              countryCode: data.knockout.final.home.team?.countryCode ?? 'TBD',
                             },
                             'lg'
                           )}
+                          <Typography
+                            variant="subtitle2"
+                            color="text.secondary"
+                            sx={{ textAlign: 'center', fontWeight: 800 }}
+                          >
+                            vs
+                          </Typography>
+                          <Box sx={{ justifySelf: { xs: 'start', sm: 'end' } }}>
+                            {renderTeamWithFlag(
+                              {
+                                name:
+                                  data.knockout.final.away.team?.name ??
+                                  data.knockout.final.away.label,
+                                countryCode: data.knockout.final.away.team?.countryCode ?? 'TBD',
+                              },
+                              'lg'
+                            )}
+                          </Box>
                         </Box>
-                      </Box>
 
-                      <Box
-                        sx={{
-                          display: 'grid',
-                          gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-                          gap: 1,
-                        }}
-                      >
-                        <Box>
-                          <Typography variant="caption" color="text.secondary">
-                            Date
-                          </Typography>
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            {finalFixture
-                              ? formatMatchDate(finalFixture.kickoff)
-                              : data.knockout.final.legDates}
-                          </Typography>
+                        <Box
+                          sx={{
+                            display: 'none',
+                            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
+                            gap: 1,
+                          }}
+                        >
+                          <Box>
+                            <Typography variant="caption" color="text.secondary">
+                              Date
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                              {finalFixture
+                                ? formatMatchDate(finalFixture.kickoff)
+                                : data.knockout.final.legDates}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography variant="caption" color="text.secondary">
+                              Kickoff
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                              {finalFixture
+                                ? `${formatKickoffTime(finalFixture.kickoff)} (Vietnam Time)`
+                                : 'TBD'}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography variant="caption" color="text.secondary">
+                              Venue
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                              {finalFixture?.venue ?? 'To be announced'}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography variant="caption" color="text.secondary">
+                              Aggregate Score
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                              {resolveAggregateDisplay(data.knockout.final)}
+                            </Typography>
+                          </Box>
                         </Box>
-                        <Box>
-                          <Typography variant="caption" color="text.secondary">
-                            Kickoff
-                          </Typography>
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            {finalFixture
-                              ? `${formatKickoffTime(finalFixture.kickoff)} (Vietnam Time)`
-                              : 'TBD'}
-                          </Typography>
-                        </Box>
-                        <Box>
-                          <Typography variant="caption" color="text.secondary">
-                            Venue
-                          </Typography>
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            {finalFixture?.venue ?? 'To be announced'}
-                          </Typography>
-                        </Box>
-                        <Box>
-                          <Typography variant="caption" color="text.secondary">
-                            Aggregate Score
-                          </Typography>
-                          <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                            {resolveAggregateDisplay(data.knockout.final)}
-                          </Typography>
-                        </Box>
-                      </Box>
 
-                      <Box
-                        sx={{
-                          display: 'grid',
-                          gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-                          gap: 1,
-                          pt: 0.5,
-                          borderTop: '1px solid',
-                          borderColor: 'divider',
-                        }}
-                      >
-                        <Box>
-                          <Typography variant="caption" color="text.secondary">
-                            Current Score
-                          </Typography>
-                          <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                            {finalFixture
-                              ? formatScore(finalFixture.homeScore, finalFixture.awayScore)
-                              : resolveCurrentScoreDisplay(data.knockout.final)}
-                          </Typography>
+                        <Box
+                          sx={{
+                            display: 'grid',
+                            gridTemplateColumns: { xs: '1fr 1fr', md: '1fr 1fr auto' },
+                            alignItems: 'end',
+                            gap: 1,
+                            pt: 0.5,
+                            borderTop: '1px solid',
+                            borderColor: 'divider',
+                          }}
+                        >
+                          <Box>
+                            <Typography variant="caption" color="text.secondary">
+                              Current Score
+                            </Typography>
+                            <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                              {finalFixture
+                                ? formatScore(finalFixture.homeScore, finalFixture.awayScore)
+                                : resolveCurrentScoreDisplay(data.knockout.final)}
+                            </Typography>
+                          </Box>
+                          <Box>
+                            <Typography variant="caption" color="text.secondary">
+                              Winner
+                            </Typography>
+                            <Typography variant="body2" sx={{ fontWeight: 700 }}>
+                              {finalWinner?.team?.name ?? finalWinner?.label ?? 'To be decided'}
+                            </Typography>
+                          </Box>
+                          <Box
+                            sx={{
+                              display: 'flex',
+                              alignItems: 'flex-end',
+                              justifyContent: 'flex-end',
+                            }}
+                          >
+                            <StatusChip status={finalStatus.status} label={finalStatus.label} />
+                          </Box>
                         </Box>
-                        <Box>
-                          <Typography variant="caption" color="text.secondary">
-                            Winner
-                          </Typography>
-                          <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                            {finalWinner?.team?.name ?? finalWinner?.label ?? 'To be decided'}
-                          </Typography>
-                        </Box>
-                      </Box>
-                    </Stack>
-                  </CardContent>
-                </Card>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                </Stack>
               </Box>
 
-              <Box sx={{ gridArea: 'semi2' }}>
-                {renderSemiFinalRoadCard(data.knockout.semiFinal2)}
+              <Box sx={{ gridArea: 'semi2', zIndex: 1 }}>
+                <Stack spacing={ThemeTokens.spacing.sm}>
+                  <Chip
+                    label="SEMI-FINAL 2"
+                    size="small"
+                    sx={{
+                      alignSelf: 'flex-start',
+                      fontWeight: 700,
+                      bgcolor: 'rgba(37, 99, 235, 0.12)',
+                      color: '#1E40AF',
+                    }}
+                  />
+                  {semiFinal2Fixtures.length > 0 ? (
+                    semiFinal2Fixtures.map((fixture) => (
+                      <React.Fragment key={fixture.id}>
+                        {renderSemiFinalLegCard(fixture)}
+                      </React.Fragment>
+                    ))
+                  ) : (
+                    <Card variant="outlined">
+                      <CardContent>
+                        <Typography variant="body2" color="text.secondary">
+                          No semi-final 2 fixtures available.
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  )}
+                </Stack>
               </Box>
 
-              <Box sx={{ gridArea: 'champion' }}>
+              <Box
+                sx={{
+                  gridArea: 'champion',
+                  position: 'relative',
+                  zIndex: 1,
+                  mt: { xs: 3, md: 6 },
+                  '&::before': {
+                    content: '""',
+                    position: 'absolute',
+                    zIndex: -1,
+                    inset: '-44px -76px -38px',
+                    opacity: 0.9,
+                    background:
+                      'radial-gradient(circle at 10% 56%, #F59E0B 0 2px, transparent 3px), radial-gradient(circle at 18% 25%, #EF4444 0 2px, transparent 3px), radial-gradient(circle at 32% 72%, #2563EB 0 2px, transparent 3px), radial-gradient(circle at 68% 18%, #F59E0B 0 2px, transparent 3px), radial-gradient(circle at 84% 54%, #EF4444 0 2px, transparent 3px), radial-gradient(circle at 92% 28%, #2563EB 0 2px, transparent 3px)',
+                  },
+                }}
+              >
                 <Card
                   variant="outlined"
                   sx={{
                     borderWidth: 2,
-                    borderColor: 'success.main',
-                    borderRadius: ThemeTokens.borderRadius.lg,
+                    borderColor: '#F59E0B',
+                    borderRadius: '16px',
                     background:
-                      'linear-gradient(135deg, rgba(46,125,50,0.18) 0%, rgba(46,125,50,0.06) 100%)',
+                      'linear-gradient(180deg, rgba(245, 158, 11, 0.1) 0%, rgba(255,255,255,1) 46%)',
                     textAlign: 'center',
-                    boxShadow: '0 10px 24px rgba(46, 125, 50, 0.16)',
+                    boxShadow: '0 10px 24px rgba(245, 158, 11, 0.16)',
+                    position: 'relative',
                   }}
                 >
-                  <CardContent sx={{ py: ThemeTokens.spacing.lg }}>
-                    <Stack spacing={1.25} sx={{ alignItems: 'center' }}>
-                      <EmojiEventsIcon color="warning" sx={{ fontSize: 44 }} />
-                      <Typography
-                        variant="subtitle2"
-                        color="text.secondary"
-                        sx={{ letterSpacing: 1.2 }}
-                      >
-                        CHAMPION
-                      </Typography>
+                  <Box
+                    sx={{
+                      display: { xs: 'none', md: 'block' },
+                      position: 'absolute',
+                      top: '-52px',
+                      left: '50%',
+                      transform: 'translateX(-50%)',
+                      height: '44px',
+                      borderLeft: '2px dashed #F59E0B',
+                    }}
+                  />
+                  <CardContent sx={{ py: ThemeTokens.spacing.xl }}>
+                    <Stack spacing={1.1} sx={{ alignItems: 'center' }}>
+                      <img
+                        src="/champion_asean_cup_2026_final.png"
+                        alt="Champion Trophy"
+                        width={200}
+                        height={200}
+                        style={{ display: 'block' }}
+                      />
                       <CountryFlag
                         code={championTeam?.countryCode ?? 'TBD'}
-                        size={36}
+                        size={250}
                         showTooltip
                       />
-                      <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                      <Typography
+                        variant="h5"
+                        sx={{ fontWeight: 850, letterSpacing: 0.5, textTransform: 'uppercase' }}
+                      >
                         {championName}
                       </Typography>
-                      <Chip
-                        size="small"
-                        label={championTeam ? 'Crowned' : 'To Be Decided'}
-                        color={championTeam ? 'success' : 'default'}
-                        variant={championTeam ? 'filled' : 'outlined'}
-                      />
                     </Stack>
                   </CardContent>
                 </Card>
