@@ -42,6 +42,7 @@ import {
   StatusChip,
 } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
+import { ASEAN_CUP_2026_TOURNAMENT_CONFIG } from './config/tournament.config';
 import type {
   KnockoutMatch,
   KnockoutTeam,
@@ -54,7 +55,8 @@ import type {
 import { useTournamentCenter } from './hooks';
 
 type SortOrder = 'asc' | 'desc';
-type PlayerSortField = 'name' | 'goals' | 'assists' | 'minutes' | 'cards';
+type PlayerSortField =
+  'name' | 'appearances' | 'goals' | 'assists' | 'yellowCards' | 'redCards' | 'minutes' | 'age';
 
 interface StatisticCardMeta {
   id: string;
@@ -65,17 +67,25 @@ interface StatisticCardMeta {
 const STAT_CARD_META: StatisticCardMeta[] = [
   { id: 'top-scorer', icon: <MilitaryTechIcon />, iconColor: '#ef6c00' },
   { id: 'top-assists', icon: <TimelineIcon />, iconColor: '#1565c0' },
-  { id: 'clean-sheets', icon: <FlagIcon />, iconColor: '#2e7d32' },
+  { id: 'most-clean-sheets', icon: <FlagIcon />, iconColor: '#2e7d32' },
   { id: 'most-goals', icon: <SportsSoccerIcon />, iconColor: '#00897b' },
-  { id: 'most-minutes', icon: <TimelineIcon />, iconColor: '#5d4037' },
-  { id: 'golden-boot', icon: <WorkspacePremiumIcon />, iconColor: '#6a1b9a' },
+  { id: 'most-yellow-cards', icon: <FlagIcon />, iconColor: '#f9a825' },
+  { id: 'most-red-cards', icon: <FlagIcon />, iconColor: '#c62828' },
+  { id: 'best-attack', icon: <SportsSoccerIcon />, iconColor: '#2e7d32' },
+  { id: 'best-defence', icon: <WorkspacePremiumIcon />, iconColor: '#1565c0' },
+  { id: 'highest-scoring-match', icon: <SportsSoccerIcon />, iconColor: '#8e24aa' },
+  { id: 'average-goals-per-match', icon: <TimelineIcon />, iconColor: '#5d4037' },
+  { id: 'total-goals', icon: <SportsSoccerIcon />, iconColor: '#00897b' },
+  { id: 'completed-matches', icon: <WorkspacePremiumIcon />, iconColor: '#455a64' },
+  { id: 'remaining-matches', icon: <WorkspacePremiumIcon />, iconColor: '#6d4c41' },
 ];
 
-const VIETNAM_TIMEZONE = 'Asia/Ho_Chi_Minh';
+const TOURNAMENT_TIMEZONE = ASEAN_CUP_2026_TOURNAMENT_CONFIG.timezone;
+const TOURNAMENT_HERO_GRADIENT = `linear-gradient(135deg, #0d47a1 0%, ${ASEAN_CUP_2026_TOURNAMENT_CONFIG.brandColor} 100%)`;
 
 function formatKickoff(value: string): string {
   return new Intl.DateTimeFormat('en-GB', {
-    timeZone: VIETNAM_TIMEZONE,
+    timeZone: TOURNAMENT_TIMEZONE,
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -152,7 +162,7 @@ function renderTeamWithFlag(
 
 function formatMatchDate(value: string): string {
   return new Intl.DateTimeFormat('en-GB', {
-    timeZone: VIETNAM_TIMEZONE,
+    timeZone: TOURNAMENT_TIMEZONE,
     day: '2-digit',
     month: 'short',
     year: 'numeric',
@@ -161,7 +171,7 @@ function formatMatchDate(value: string): string {
 
 function formatKickoffTime(value: string): string {
   return new Intl.DateTimeFormat('en-GB', {
-    timeZone: VIETNAM_TIMEZONE,
+    timeZone: TOURNAMENT_TIMEZONE,
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
@@ -354,19 +364,20 @@ function renderGroupTable(group: TournamentCenterData['groups'][number]): React.
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: 700 }}>Pos</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Team</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Position</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Flag</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Country</TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  P
+                  Played
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  W
+                  Won
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  D
+                  Draw
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  L
+                  Lost
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
                   GF
@@ -378,15 +389,33 @@ function renderGroupTable(group: TournamentCenterData['groups'][number]): React.
                   GD
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  Pts
+                  Points
                 </TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
               {group.standings.map((row) => (
-                <TableRow key={`${group.id}-${row.team.id}`} hover>
+                <TableRow
+                  key={`${group.id}-${row.team.id}`}
+                  hover
+                  sx={
+                    row.position <= 2
+                      ? {
+                          backgroundColor: 'rgba(46, 125, 50, 0.08)',
+                          '&:hover': { backgroundColor: 'rgba(46, 125, 50, 0.14)' },
+                        }
+                      : undefined
+                  }
+                >
                   <TableCell sx={{ fontWeight: 700 }}>{row.position}</TableCell>
-                  <TableCell>{renderTeamWithFlag(row.team, 'md')}</TableCell>
+                  <TableCell>
+                    <CountryFlag code={row.team.countryCode} size="md" showTooltip />
+                  </TableCell>
+                  <TableCell>
+                    <Typography variant="body2" sx={{ fontWeight: row.position <= 2 ? 700 : 500 }}>
+                      {row.team.name}
+                    </Typography>
+                  </TableCell>
                   <TableCell align="right">{row.played}</TableCell>
                   <TableCell align="right">{row.won}</TableCell>
                   <TableCell align="right">{row.draw}</TableCell>
@@ -405,6 +434,9 @@ function renderGroupTable(group: TournamentCenterData['groups'][number]): React.
             </TableBody>
           </Table>
         </TableContainer>
+        <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
+          Top 2 teams qualify for the knockout stage.
+        </Typography>
       </CardContent>
     </Card>
   );
@@ -509,6 +541,30 @@ function sortPlayers(
   sortOrder: SortOrder
 ): TournamentPlayer[] {
   const normalizedQuery = search.trim().toLowerCase();
+  const getNumericValue = (player: TournamentPlayer): number => {
+    if (sortBy === 'goals') {
+      return player.goals;
+    }
+    if (sortBy === 'assists') {
+      return player.assists;
+    }
+    if (sortBy === 'minutes') {
+      return player.minutes;
+    }
+    if (sortBy === 'yellowCards') {
+      return player.yellowCards;
+    }
+    if (sortBy === 'redCards') {
+      return player.redCards;
+    }
+    if (sortBy === 'appearances') {
+      return player.appearances ?? -1;
+    }
+    if (sortBy === 'age') {
+      return player.age ?? -1;
+    }
+    return 0;
+  };
 
   const filtered = players.filter((player) => {
     if (positionFilter !== 'ALL' && player.position !== positionFilter) {
@@ -531,24 +587,18 @@ function sortPlayers(
   });
 
   return filtered.sort((left, right) => {
-    const leftCards = left.yellowCards + left.redCards * 2;
-    const rightCards = right.yellowCards + right.redCards * 2;
-
     if (sortBy === 'name') {
       const result = left.name.localeCompare(right.name);
       return sortOrder === 'asc' ? result : -result;
     }
-    if (sortBy === 'goals') {
-      return sortOrder === 'asc' ? left.goals - right.goals : right.goals - left.goals;
-    }
-    if (sortBy === 'assists') {
-      return sortOrder === 'asc' ? left.assists - right.assists : right.assists - left.assists;
-    }
-    if (sortBy === 'minutes') {
-      return sortOrder === 'asc' ? left.minutes - right.minutes : right.minutes - left.minutes;
+
+    const leftValue = getNumericValue(left);
+    const rightValue = getNumericValue(right);
+    if (leftValue === rightValue) {
+      return left.name.localeCompare(right.name);
     }
 
-    return sortOrder === 'asc' ? leftCards - rightCards : rightCards - leftCards;
+    return sortOrder === 'asc' ? leftValue - rightValue : rightValue - leftValue;
   });
 }
 
@@ -585,6 +635,33 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
     () => new Map(STAT_CARD_META.map((item) => [item.id, item])),
     []
   );
+  const completedFixturesPreview = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+
+    return [...data.fixtures.completed]
+      .sort((left, right) => new Date(right.kickoff).getTime() - new Date(left.kickoff).getTime())
+      .slice(0, 2);
+  }, [data]);
+  const todaysFixturesPreview = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+
+    return [...data.fixtures.today]
+      .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime())
+      .slice(0, 2);
+  }, [data]);
+  const upcomingFixturesPreview = useMemo(() => {
+    if (!data) {
+      return [];
+    }
+
+    return [...data.fixtures.upcoming]
+      .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime())
+      .slice(0, 2);
+  }, [data]);
 
   const handleSort = (field: PlayerSortField): void => {
     if (sortBy === field) {
@@ -664,7 +741,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
         <Card
           sx={{
             borderRadius: '24px',
-            background: 'linear-gradient(135deg, #0d47a1 0%, #00695c 100%)',
+            background: TOURNAMENT_HERO_GRADIENT,
             color: '#ffffff',
             overflow: 'hidden',
           }}
@@ -681,7 +758,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
               >
                 <Box
                   component="img"
-                  src="/2026_ASEAN_Championship-logo.svg"
+                  src={ASEAN_CUP_2026_TOURNAMENT_CONFIG.logoSrc}
                   alt="ASEAN Cup 2026"
                   sx={{
                     width: 92,
@@ -1227,7 +1304,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                   <CardContent sx={{ py: ThemeTokens.spacing.xl }}>
                     <Stack spacing={1.1} sx={{ alignItems: 'center' }}>
                       <img
-                        src="/champion_asean_cup_2026_final.png"
+                        src={ASEAN_CUP_2026_TOURNAMENT_CONFIG.championAssetSrc}
                         alt="Champion Trophy"
                         width={200}
                         height={200}
@@ -1271,22 +1348,27 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
 
       <PageSection
         title="Fixtures"
-        subtitle="Today's matches and the next upcoming schedule"
+        subtitle="Completed, today, and upcoming fixtures"
         sx={{ mb: ThemeTokens.spacing.xxxl }}
       >
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
+            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' },
             gap: ThemeTokens.spacing.md,
           }}
         >
           {renderFixtureList(
+            'Completed Fixtures',
+            completedFixturesPreview,
+            'No completed fixtures yet.'
+          )}
+          {renderFixtureList(
             "Today's Fixtures",
-            data.fixtures.today,
+            todaysFixturesPreview,
             'No matches scheduled today.'
           )}
-          {renderFixtureList('Upcoming Fixtures', data.fixtures.upcoming)}
+          {renderFixtureList('Upcoming Fixtures', upcomingFixturesPreview)}
         </Box>
       </PageSection>
 
@@ -1354,9 +1436,27 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                       Player
                     </TableSortLabel>
                   </TableCell>
-                  <TableCell>Nation</TableCell>
+                  <TableCell>National Flag</TableCell>
                   <TableCell>Club</TableCell>
                   <TableCell>Position</TableCell>
+                  <TableCell align="right">
+                    <TableSortLabel
+                      active={sortBy === 'age'}
+                      direction={sortBy === 'age' ? sortOrder : 'desc'}
+                      onClick={() => handleSort('age')}
+                    >
+                      Age
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell align="right">
+                    <TableSortLabel
+                      active={sortBy === 'appearances'}
+                      direction={sortBy === 'appearances' ? sortOrder : 'desc'}
+                      onClick={() => handleSort('appearances')}
+                    >
+                      Appearances
+                    </TableSortLabel>
+                  </TableCell>
                   <TableCell align="right">
                     <TableSortLabel
                       active={sortBy === 'goals'}
@@ -1377,20 +1477,29 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                   </TableCell>
                   <TableCell align="right">
                     <TableSortLabel
+                      active={sortBy === 'yellowCards'}
+                      direction={sortBy === 'yellowCards' ? sortOrder : 'desc'}
+                      onClick={() => handleSort('yellowCards')}
+                    >
+                      Yellow Cards
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell align="right">
+                    <TableSortLabel
+                      active={sortBy === 'redCards'}
+                      direction={sortBy === 'redCards' ? sortOrder : 'desc'}
+                      onClick={() => handleSort('redCards')}
+                    >
+                      Red Cards
+                    </TableSortLabel>
+                  </TableCell>
+                  <TableCell align="right">
+                    <TableSortLabel
                       active={sortBy === 'minutes'}
                       direction={sortBy === 'minutes' ? sortOrder : 'desc'}
                       onClick={() => handleSort('minutes')}
                     >
                       Minutes
-                    </TableSortLabel>
-                  </TableCell>
-                  <TableCell align="right">
-                    <TableSortLabel
-                      active={sortBy === 'cards'}
-                      direction={sortBy === 'cards' ? sortOrder : 'desc'}
-                      onClick={() => handleSort('cards')}
-                    >
-                      Cards
                     </TableSortLabel>
                   </TableCell>
                 </TableRow>
@@ -1420,12 +1529,13 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                     </TableCell>
                     <TableCell>{player.club}</TableCell>
                     <TableCell>{player.position}</TableCell>
+                    <TableCell align="right">{player.age ?? '-'}</TableCell>
+                    <TableCell align="right">{player.appearances ?? '-'}</TableCell>
                     <TableCell align="right">{player.goals}</TableCell>
                     <TableCell align="right">{player.assists}</TableCell>
+                    <TableCell align="right">{player.yellowCards}</TableCell>
+                    <TableCell align="right">{player.redCards}</TableCell>
                     <TableCell align="right">{player.minutes}</TableCell>
-                    <TableCell align="right">
-                      {player.yellowCards}Y/{player.redCards}R
-                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

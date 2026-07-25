@@ -1,4 +1,4 @@
-import type { TournamentRawDataset } from '../models/tournament.models';
+import type { TournamentRawDataset } from '../../tournament-engine/models/tournament-engine.models';
 
 export const ASEAN_CUP_2026_RAW_DATA: TournamentRawDataset = {
   meta: {
