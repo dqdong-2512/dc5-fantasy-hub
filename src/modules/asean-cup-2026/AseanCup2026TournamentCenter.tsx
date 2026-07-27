@@ -1,10 +1,13 @@
 import React, { useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
   Avatar,
   Box,
+  Button,
   Card,
   CardContent,
   Chip,
+  Divider,
   FormControl,
   MenuItem,
   Select,
@@ -23,11 +26,11 @@ import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
 import FlagIcon from '@mui/icons-material/Flag';
 import TimelineIcon from '@mui/icons-material/Timeline';
 import MilitaryTechIcon from '@mui/icons-material/MilitaryTech';
-import WorkspacePremiumIcon from '@mui/icons-material/WorkspacePremium';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import CalendarMonthOutlinedIcon from '@mui/icons-material/CalendarMonthOutlined';
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import {
   CountryFlag,
   DataSyncIndicator,
@@ -38,14 +41,13 @@ import {
   PageHeader,
   PageSection,
   SearchInput,
-  StatCard,
   StatusChip,
 } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { ASEAN_CUP_2026_TOURNAMENT_CONFIG } from './config/tournament.config';
+import { ASEAN_CUP_2026_RAW_DATA } from './data/asean-cup-2026.raw';
 import type {
   KnockoutMatch,
-  KnockoutTeam,
   TournamentCenterData,
   TournamentFixture,
   TournamentFixtureStatus,
@@ -69,22 +71,20 @@ const STAT_CARD_META: StatisticCardMeta[] = [
   { id: 'top-assists', icon: <TimelineIcon />, iconColor: '#1565c0' },
   { id: 'most-clean-sheets', icon: <FlagIcon />, iconColor: '#2e7d32' },
   { id: 'most-goals', icon: <SportsSoccerIcon />, iconColor: '#00897b' },
-  { id: 'most-yellow-cards', icon: <FlagIcon />, iconColor: '#f9a825' },
-  { id: 'most-red-cards', icon: <FlagIcon />, iconColor: '#c62828' },
   { id: 'best-attack', icon: <SportsSoccerIcon />, iconColor: '#2e7d32' },
-  { id: 'best-defence', icon: <WorkspacePremiumIcon />, iconColor: '#1565c0' },
   { id: 'highest-scoring-match', icon: <SportsSoccerIcon />, iconColor: '#8e24aa' },
-  { id: 'average-goals-per-match', icon: <TimelineIcon />, iconColor: '#5d4037' },
-  { id: 'total-goals', icon: <SportsSoccerIcon />, iconColor: '#00897b' },
-  { id: 'completed-matches', icon: <WorkspacePremiumIcon />, iconColor: '#455a64' },
-  { id: 'remaining-matches', icon: <WorkspacePremiumIcon />, iconColor: '#6d4c41' },
 ];
+const PLAYER_PAGE_SIZE = 10;
+const TOURNAMENT_STATISTIC_IDS = new Set(STAT_CARD_META.map((item) => item.id));
+const RAW_KNOCKOUT_FIXTURES = ASEAN_CUP_2026_RAW_DATA.fixtures.filter((fixture) =>
+  /Semi-final|Final/i.test(fixture.stage)
+);
 
 const VIETNAM_TIMEZONE = 'Asia/Ho_Chi_Minh';
 const TOURNAMENT_HERO_GRADIENT = `linear-gradient(135deg, #0d47a1 0%, ${ASEAN_CUP_2026_TOURNAMENT_CONFIG.brandColor} 100%)`;
 
 function formatKickoff(value: string): string {
-  return new Intl.DateTimeFormat('en-GB', {
+  return new Intl.DateTimeFormat('vi-VN', {
     timeZone: VIETNAM_TIMEZONE,
     day: '2-digit',
     month: 'short',
@@ -122,7 +122,7 @@ function getFixtureStatusColor(
 
 function getFixtureStatusLabel(fixture: TournamentFixture): string {
   if (fixture.status === 'half-time') {
-    return 'Half Time';
+    return 'Hết hiệp một';
   }
   if (fixture.status === 'live') {
     if (fixture.minute !== null) {
@@ -131,18 +131,103 @@ function getFixtureStatusLabel(fixture: TournamentFixture): string {
       }
       return `${fixture.minute}'`;
     }
-    return 'Live';
+    return 'Đang diễn ra';
   }
   if (fixture.status === 'finished') {
-    return 'Finished';
+    return 'Đã kết thúc';
   }
   if (fixture.status === 'postponed') {
-    return 'Postponed';
+    return 'Tạm hoãn';
   }
   if (fixture.status === 'cancelled') {
-    return 'Cancelled';
+    return 'Đã hủy';
   }
-  return 'Upcoming';
+  return 'Sắp diễn ra';
+}
+
+function translateStage(stage: string): string {
+  return stage
+    .replace(/Group Stage Round/gi, 'Vòng bảng - Lượt')
+    .replace(/Group ([AB])/gi, 'Bảng $1')
+    .replace(/Semi-final/gi, 'Bán kết')
+    .replace(/Final/gi, 'Chung kết')
+    .replace(/Leg 1/gi, 'Lượt đi')
+    .replace(/Leg 2/gi, 'Lượt về');
+}
+
+function translateStatisticTitle(id: string, fallback: string): string {
+  const titles: Record<string, string> = {
+    'top-scorer': 'Vua phá lưới',
+    'top-assists': 'Vua Kiến tạo',
+    'most-clean-sheets': 'Giữ sạch lưới nhiều nhất',
+    'most-goals': 'Đội ghi nhiều bàn nhất',
+    'best-attack': 'Hàng công xuất sắc nhất',
+    'highest-scoring-match': 'Trận đấu nhiều bàn thắng nhất',
+  };
+  return titles[id] ?? fallback;
+}
+
+function translateTeamName(name: string): string {
+  const teams: Record<string, string> = {
+    Vietnam: 'Việt Nam',
+    Thailand: 'Thái Lan',
+    Singapore: 'Singapore',
+    Malaysia: 'Malaysia',
+    Indonesia: 'Indonesia',
+    Myanmar: 'Myanmar',
+    Cambodia: 'Campuchia',
+    Laos: 'Lào',
+    'Timor-Leste': 'Đông Timor',
+    Philippines: 'Philippines',
+  };
+  return (
+    teams[name] ??
+    name
+      .replace(/Winner Semi-final 1/gi, 'Đội thắng bán kết 1')
+      .replace(/Winner Semi-final 2/gi, 'Đội thắng bán kết 2')
+      .replace(/Winner SF1/gi, 'Đội thắng bán kết 1')
+      .replace(/Winner SF2/gi, 'Đội thắng bán kết 2')
+      .replace(/^Champion$/gi, 'Nhà vô địch')
+      .replace(/^TBD$/gi, 'Chưa xác định')
+  );
+}
+
+function translateVenue(venue: string): string {
+  return venue
+    .replace(/Winner Group A Home Venue/gi, 'Sân nhà đội nhất bảng A')
+    .replace(/Winner Group B Home Venue/gi, 'Sân nhà đội nhất bảng B')
+    .replace(/Runner-up Group A Home Venue/gi, 'Sân nhà đội nhì bảng A')
+    .replace(/Runner-up Group B Home Venue/gi, 'Sân nhà đội nhì bảng B')
+    .replace(/Finalist 1 Home Venue/gi, 'Sân nhà đội vào chung kết 1')
+    .replace(/Finalist 2 Home Venue/gi, 'Sân nhà đội vào chung kết 2');
+}
+
+function translateSummary(value: string): string {
+  let translated = value
+    .replace('No upcoming fixture', 'Chưa có trận đấu sắp tới')
+    .replace('No finished fixture yet', 'Chưa có trận đấu kết thúc')
+    .replace('Schedule unavailable', 'Chưa có lịch thi đấu');
+  Object.entries({
+    Vietnam: 'Việt Nam',
+    Thailand: 'Thái Lan',
+    Cambodia: 'Campuchia',
+    Laos: 'Lào',
+    'Timor-Leste': 'Đông Timor',
+    'Brunei Darussalam': 'Brunei',
+  }).forEach(([english, vietnamese]) => {
+    translated = translated.replaceAll(english, vietnamese);
+  });
+  return translated.replaceAll(' vs ', ' - ');
+}
+
+function translatePosition(position: TournamentPlayerPosition): string {
+  const positions: Record<TournamentPlayerPosition, string> = {
+    GK: 'Thủ môn',
+    DEF: 'Hậu vệ',
+    MID: 'Tiền vệ',
+    FWD: 'Tiền đạo',
+  };
+  return positions[position];
 }
 
 function renderTeamWithFlag(
@@ -154,60 +239,36 @@ function renderTeamWithFlag(
     <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.8, minWidth: 0 }}>
       <CountryFlag code={team.countryCode} size={flagSize} showTooltip />
       <Typography variant={textVariant} sx={{ lineHeight: 1.2 }}>
-        {team.name}
+        {translateTeamName(team.name)}
       </Typography>
     </Box>
   );
 }
 
 function formatMatchDate(value: string): string {
-  return new Intl.DateTimeFormat('en-GB', {
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) {
+    return 'Chưa xác định';
+  }
+  return new Intl.DateTimeFormat('vi-VN', {
     timeZone: VIETNAM_TIMEZONE,
     day: '2-digit',
     month: 'short',
     year: 'numeric',
-  }).format(new Date(value));
+  }).format(date);
 }
 
 function formatKickoffTime(value: string): string {
-  return new Intl.DateTimeFormat('en-GB', {
+  const date = new Date(value);
+  if (!Number.isFinite(date.getTime())) {
+    return 'Chưa xác định';
+  }
+  return new Intl.DateTimeFormat('vi-VN', {
     timeZone: VIETNAM_TIMEZONE,
     hour: '2-digit',
     minute: '2-digit',
     hour12: false,
-  }).format(new Date(value));
-}
-
-function resolveKnockoutStatus(match: KnockoutMatch): {
-  label: string;
-  status: 'default' | 'success' | 'warning' | 'error' | 'info';
-} {
-  const teamStates = [match.home.status, match.away.status];
-  if (teamStates.includes('champion')) {
-    return { label: 'Champion Confirmed', status: 'success' };
-  }
-  if (teamStates.includes('qualified')) {
-    return { label: 'Finished', status: 'success' };
-  }
-  return { label: 'Upcoming', status: 'info' };
-}
-
-function resolveKnockoutWinner(match: KnockoutMatch): KnockoutTeam | null {
-  const statusWinner = [match.home, match.away].find(
-    (team) => team.status === 'qualified' || team.status === 'champion'
-  );
-  if (statusWinner) {
-    return statusWinner;
-  }
-
-  if (match.home.score !== null && match.away.score !== null) {
-    if (match.home.score === match.away.score) {
-      return null;
-    }
-    return match.home.score > match.away.score ? match.home : match.away;
-  }
-
-  return null;
+  }).format(date);
 }
 
 function resolveAggregateDisplay(match: KnockoutMatch): string {
@@ -217,60 +278,67 @@ function resolveAggregateDisplay(match: KnockoutMatch): string {
   if (match.home.aggregate !== '-' || match.away.aggregate !== '-') {
     return `${match.home.aggregate} / ${match.away.aggregate}`;
   }
-  return 'TBD';
-}
-
-function resolveCurrentScoreDisplay(match: KnockoutMatch): string {
-  if (match.home.score === null || match.away.score === null) {
-    return 'TBD';
-  }
-  return `${match.home.score} - ${match.away.score}`;
-}
-
-function findPreferredFinalFixture(fixtures: TournamentFixture[]): TournamentFixture | null {
-  const finals = fixtures.filter((fixture) => /final/i.test(fixture.stage));
-  if (finals.length === 0) {
-    return null;
-  }
-
-  const active = finals.find(
-    (fixture) => fixture.status === 'live' || fixture.status === 'half-time'
-  );
-  if (active) {
-    return active;
-  }
-
-  const upcoming = finals
-    .filter((fixture) => fixture.status === 'upcoming')
-    .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime());
-  if (upcoming.length > 0) {
-    return upcoming[0];
-  }
-
-  return finals.sort(
-    (left, right) => new Date(right.kickoff).getTime() - new Date(left.kickoff).getTime()
-  )[0];
+  return 'Chưa xác định';
 }
 
 function getSemiFinalSlotLabels(fixture: TournamentFixture): [string, string] {
   const isSecondLeg = /Leg 2/i.test(fixture.stage);
 
   if (fixture.stage.includes('Semi-final 1')) {
-    return isSecondLeg
-      ? ['TBD (1st Group B)', 'TBD (2nd Group A)']
-      : ['TBD (2nd Group A)', 'TBD (1st Group B)'];
+    return isSecondLeg ? ['Nhất bảng B', 'Nhì bảng A'] : ['Nhì bảng A', 'Nhất bảng B'];
   }
 
-  return isSecondLeg
-    ? ['TBD (1st Group A)', 'TBD (2nd Group B)']
-    : ['TBD (2nd Group B)', 'TBD (1st Group A)'];
+  return isSecondLeg ? ['Nhất bảng A', 'Nhì bảng B'] : ['Nhì bảng B', 'Nhất bảng A'];
+}
+
+function ensureTwoLegFixtures(
+  fixtures: TournamentFixture[],
+  stageName: string,
+  homeTeam: { id: number; name: string; countryCode: string },
+  awayTeam: { id: number; name: string; countryCode: string }
+): TournamentFixture[] {
+  return [1, 2].map((leg) => {
+    const existing = fixtures.find((fixture) => new RegExp(`Leg ${leg}`, 'i').test(fixture.stage));
+    const isSecondLeg = leg === 2;
+    const scheduledFixture = RAW_KNOCKOUT_FIXTURES.find(
+      (fixture) =>
+        fixture.stage.toLowerCase().includes(stageName.toLowerCase()) &&
+        new RegExp(`Leg ${leg}`, 'i').test(fixture.stage)
+    );
+    if (existing) {
+      return {
+        ...existing,
+        kickoff: existing.kickoff || scheduledFixture?.kickoff || '',
+        venue: existing.venue || scheduledFixture?.venue || '',
+        homeTeam:
+          existing.homeTeam.id === 0 ? (isSecondLeg ? awayTeam : homeTeam) : existing.homeTeam,
+        awayTeam:
+          existing.awayTeam.id === 0 ? (isSecondLeg ? homeTeam : awayTeam) : existing.awayTeam,
+      };
+    }
+
+    return {
+      id: scheduledFixture?.id ?? `${stageName.toLowerCase().replaceAll(' ', '-')}-leg-${leg}`,
+      stage: scheduledFixture?.stage ?? `${stageName} Leg ${leg}`,
+      kickoff: scheduledFixture?.kickoff ?? '',
+      venue: scheduledFixture?.venue ?? '',
+      homeTeam: isSecondLeg ? awayTeam : homeTeam,
+      awayTeam: isSecondLeg ? homeTeam : awayTeam,
+      homeScore: null,
+      awayScore: null,
+      status: 'upcoming',
+      minute: null,
+      addedTime: null,
+      note: null,
+    };
+  });
 }
 
 function renderScheduledTeamRow(label: string, score: number | null): React.ReactElement {
   return (
     <Box sx={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 1 }}>
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
-        {label}
+        {translateTeamName(label)}
       </Typography>
       <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 800 }}>
         {score ?? '-'}
@@ -279,10 +347,15 @@ function renderScheduledTeamRow(label: string, score: number | null): React.Reac
   );
 }
 
-function renderSemiFinalLegCard(fixture: TournamentFixture): React.ReactElement {
+function renderKnockoutLegCard(
+  fixture: TournamentFixture,
+  aggregateScore: string
+): React.ReactElement {
   const kickoffDate = formatMatchDate(fixture.kickoff);
   const kickoffTime = formatKickoffTime(fixture.kickoff);
-  const [homeLabel, awayLabel] = getSemiFinalSlotLabels(fixture);
+  const [fallbackHomeLabel, fallbackAwayLabel] = getSemiFinalSlotLabels(fixture);
+  const homeLabel = fixture.homeTeam?.name || fallbackHomeLabel;
+  const awayLabel = fixture.awayTeam?.name || fallbackAwayLabel;
 
   return (
     <Card
@@ -297,14 +370,14 @@ function renderSemiFinalLegCard(fixture: TournamentFixture): React.ReactElement 
       <CardContent sx={{ p: { xs: 1.5, md: ThemeTokens.spacing.md } }}>
         <Stack spacing={1.1}>
           <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-            {fixture.stage}
+            {translateStage(fixture.stage)}
           </Typography>
 
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'space-between',
+              justifyContent: 'center',
               gap: 1,
               color: 'text.secondary',
               flexWrap: { xs: 'wrap', sm: 'nowrap' },
@@ -316,7 +389,7 @@ function renderSemiFinalLegCard(fixture: TournamentFixture): React.ReactElement 
             </Box>
             <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
               <AccessTimeOutlinedIcon sx={{ fontSize: 14 }} />
-              <Typography variant="caption">{kickoffTime} (VN Time)</Typography>
+              <Typography variant="caption">{kickoffTime} (giờ Việt Nam)</Typography>
             </Box>
             <StatusChip
               status={getFixtureStatusColor(fixture.status)}
@@ -343,9 +416,19 @@ function renderSemiFinalLegCard(fixture: TournamentFixture): React.ReactElement 
                 sx={{ fontSize: 14, color: 'text.secondary', flexShrink: 0 }}
               />
               <Typography variant="caption" color="text.secondary" noWrap>
-                Sân vận động: {fixture.venue}
+                Sân vận động: {fixture.venue ? translateVenue(fixture.venue) : 'Sẽ được công bố'}
               </Typography>
             </Box>
+          </Box>
+          <Box
+            sx={{ textAlign: 'center', pt: 0.75, borderTop: '1px solid', borderColor: 'divider' }}
+          >
+            <Typography variant="caption" color="text.secondary">
+              Tổng tỷ số
+            </Typography>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+              {aggregateScore}
+            </Typography>
           </Box>
         </Stack>
       </CardContent>
@@ -353,43 +436,193 @@ function renderSemiFinalLegCard(fixture: TournamentFixture): React.ReactElement 
   );
 }
 
-function renderGroupTable(group: TournamentCenterData['groups'][number]): React.ReactElement {
+function renderFinalTieCard(
+  fixtures: TournamentFixture[],
+  aggregateScore: string
+): React.ReactElement {
+  return (
+    <Card
+      variant="outlined"
+      sx={{
+        width: '100%',
+        borderWidth: 2,
+        borderColor: '#F59E0B',
+        borderRadius: '16px',
+        boxShadow: '0 12px 28px rgba(245, 158, 11, 0.18)',
+        background: 'linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, rgba(255,255,255,1) 38%)',
+      }}
+    >
+      <CardContent sx={{ p: { xs: 1.5, md: ThemeTokens.spacing.md } }}>
+        <Stack spacing={1.5}>
+          {fixtures.map((fixture, index) => (
+            <React.Fragment key={fixture.id}>
+              {index > 0 && <Divider />}
+              <Stack spacing={1}>
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 1 }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+                    {index === 0 ? 'Lượt đi' : 'Lượt về'}
+                  </Typography>
+                  <StatusChip
+                    status={getFixtureStatusColor(fixture.status)}
+                    label={getFixtureStatusLabel(fixture)}
+                  />
+                </Box>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: 1.5,
+                    flexWrap: 'wrap',
+                    color: 'text.secondary',
+                  }}
+                >
+                  <Typography variant="caption">{formatMatchDate(fixture.kickoff)}</Typography>
+                  <Typography variant="caption">
+                    {formatKickoffTime(fixture.kickoff)} (giờ Việt Nam)
+                  </Typography>
+                </Box>
+                <Stack spacing={0.7}>
+                  {renderScheduledTeamRow(
+                    translateTeamName(fixture.homeTeam?.name || 'Đội vào chung kết 1'),
+                    fixture.homeScore
+                  )}
+                  {renderScheduledTeamRow(
+                    translateTeamName(fixture.awayTeam?.name || 'Đội vào chung kết 2'),
+                    fixture.awayScore
+                  )}
+                </Stack>
+                <Typography variant="caption" color="text.secondary" sx={{ textAlign: 'center' }}>
+                  Sân vận động: {fixture.venue ? translateVenue(fixture.venue) : 'Sẽ được công bố'}
+                </Typography>
+              </Stack>
+            </React.Fragment>
+          ))}
+          <Divider />
+          <Box sx={{ textAlign: 'center' }}>
+            <Typography variant="caption" color="text.secondary">
+              Tổng tỷ số
+            </Typography>
+            <Typography variant="h6" sx={{ fontWeight: 850 }}>
+              {aggregateScore}
+            </Typography>
+          </Box>
+        </Stack>
+      </CardContent>
+    </Card>
+  );
+}
+
+type MatchFormResult = 'W' | 'D' | 'L';
+
+function getLastFiveResults(teamId: number, fixtures: TournamentFixture[]): MatchFormResult[] {
+  return fixtures
+    .filter(
+      (fixture) =>
+        fixture.status === 'finished' &&
+        fixture.homeScore !== null &&
+        fixture.awayScore !== null &&
+        (fixture.homeTeam.id === teamId || fixture.awayTeam.id === teamId)
+    )
+    .sort((left, right) => new Date(right.kickoff).getTime() - new Date(left.kickoff).getTime())
+    .slice(0, 5)
+    .map((fixture) => {
+      if (fixture.homeScore === fixture.awayScore) {
+        return 'D';
+      }
+      const isHome = fixture.homeTeam.id === teamId;
+      const won = isHome
+        ? (fixture.homeScore ?? 0) > (fixture.awayScore ?? 0)
+        : (fixture.awayScore ?? 0) > (fixture.homeScore ?? 0);
+      return won ? 'W' : 'L';
+    })
+    .reverse();
+}
+
+function renderMatchForm(results: MatchFormResult[]): React.ReactElement {
+  const colors: Record<MatchFormResult, string> = {
+    W: '#16A34A',
+    D: '#CBD5E1',
+    L: '#DC2626',
+  };
+  const labels: Record<MatchFormResult, string> = {
+    W: 'Thắng',
+    D: 'Hòa',
+    L: 'Thua',
+  };
+
+  return (
+    <Box
+      sx={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'flex-end', gap: 0.5 }}
+    >
+      {results.length === 0 ? (
+        <Typography variant="caption" color="text.secondary">
+          —
+        </Typography>
+      ) : (
+        results.map((result, index) => (
+          <Box
+            key={`${result}-${index}`}
+            role="img"
+            aria-label={labels[result]}
+            title={labels[result]}
+            sx={{
+              width: 11,
+              height: 11,
+              borderRadius: '50%',
+              bgcolor: colors[result],
+              border: result === 'D' ? '1px solid #94A3B8' : 'none',
+              boxShadow: '0 1px 2px rgba(15, 23, 42, 0.18)',
+            }}
+          />
+        ))
+      )}
+    </Box>
+  );
+}
+
+function renderGroupTable(
+  group: TournamentCenterData['groups'][number],
+  fixtures: TournamentFixture[]
+): React.ReactElement {
   return (
     <Card variant="outlined" sx={{ height: '100%' }}>
       <CardContent>
         <Typography variant="h6" sx={{ fontWeight: 700, mb: ThemeTokens.spacing.sm }}>
-          {group.name}
+          {translateStage(group.name)}
         </Typography>
         <TableContainer>
           <Table size="small">
             <TableHead>
               <TableRow>
-                <TableCell sx={{ fontWeight: 700 }}>Position</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Flag</TableCell>
-                <TableCell sx={{ fontWeight: 700 }}>Country</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Hạng</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Quốc kỳ</TableCell>
+                <TableCell sx={{ fontWeight: 700 }}>Đội tuyển</TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  Played
+                  Trận
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  Won
+                  Thắng
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  Draw
+                  Hòa
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  Lost
+                  Thua
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  GF
+                  BT
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  GA
+                  BB
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  GD
+                  HS
                 </TableCell>
                 <TableCell align="right" sx={{ fontWeight: 700 }}>
-                  Points
+                  Điểm
+                </TableCell>
+                <TableCell align="right" sx={{ fontWeight: 700, whiteSpace: 'nowrap' }}>
+                  5 trận gần nhất
                 </TableCell>
               </TableRow>
             </TableHead>
@@ -413,7 +646,7 @@ function renderGroupTable(group: TournamentCenterData['groups'][number]): React.
                   </TableCell>
                   <TableCell>
                     <Typography variant="body2" sx={{ fontWeight: row.position <= 2 ? 700 : 500 }}>
-                      {row.team.name}
+                      {translateTeamName(row.team.name)}
                     </Typography>
                   </TableCell>
                   <TableCell align="right">{row.played}</TableCell>
@@ -429,13 +662,16 @@ function renderGroupTable(group: TournamentCenterData['groups'][number]): React.
                   <TableCell align="right" sx={{ fontWeight: 700 }}>
                     {row.points}
                   </TableCell>
+                  <TableCell align="right">
+                    {renderMatchForm(getLastFiveResults(row.team.id, fixtures))}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
         <Typography variant="caption" color="text.secondary" sx={{ display: 'block', mt: 1 }}>
-          Top 2 teams qualify for the knockout stage.
+          Hai đội đứng đầu mỗi bảng giành quyền vào vòng loại trực tiếp.
         </Typography>
       </CardContent>
     </Card>
@@ -445,7 +681,9 @@ function renderGroupTable(group: TournamentCenterData['groups'][number]): React.
 function renderFixtureList(
   title: string,
   fixtures: TournamentFixture[],
-  emptyMessage = 'No fixtures in this section.'
+  onExpandChange: (fixtureId: string | null) => void,
+  expandedFixtureId: string | null,
+  emptyMessage = 'Không có trận đấu trong mục này.'
 ): React.ReactElement {
   return (
     <Card variant="outlined" sx={{ height: '100%' }}>
@@ -461,67 +699,144 @@ function renderFixtureList(
         ) : (
           <Stack spacing={1}>
             {fixtures.map((fixture) => (
-              <Box
-                key={fixture.id}
-                sx={{
-                  border: '1px solid',
-                  borderColor: 'divider',
-                  borderRadius: '4px',
-                  p: ThemeTokens.spacing.sm,
-                }}
-              >
+              <Box key={fixture.id}>
                 <Box
+                  onClick={() =>
+                    onExpandChange(expandedFixtureId === fixture.id ? null : fixture.id)
+                  }
                   sx={{
-                    display: 'flex',
-                    alignItems: 'flex-start',
-                    justifyContent: 'space-between',
-                    gap: 1,
+                    border: '1px solid',
+                    borderColor: 'divider',
+                    borderRadius: '8px',
+                    p: ThemeTokens.spacing.md,
+                    cursor: 'pointer',
+                    transition: 'all 0.2s ease',
+                    backgroundColor: 'background.paper',
+                    '&:hover': {
+                      backgroundColor: 'action.hover',
+                      borderColor: 'primary.main',
+                    },
                   }}
                 >
-                  <Box>
-                    <Typography variant="caption" color="text.secondary">
-                      {fixture.stage}
+                  {/* Stage badge */}
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'space-between',
+                      gap: 1,
+                      mb: 0.75,
+                    }}
+                  >
+                    <Typography variant="caption" sx={{ fontWeight: 700, color: 'primary.main' }}>
+                      {translateStage(fixture.stage)}
                     </Typography>
-                    <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                      {formatScore(fixture.homeScore, fixture.awayScore)}
+                    <StatusChip
+                      status={
+                        title === 'Các trận hôm nay'
+                          ? 'info'
+                          : getFixtureStatusColor(fixture.status)
+                      }
+                      label={
+                        title === 'Các trận hôm nay' ? 'Hôm nay' : getFixtureStatusLabel(fixture)
+                      }
+                    />
+                  </Box>
+
+                  {/* Main fixture display */}
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr auto 1fr',
+                      alignItems: 'center',
+                      gap: ThemeTokens.spacing.md,
+                    }}
+                  >
+                    {/* Home Team */}
+                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+                      <CountryFlag code={fixture.homeTeam.countryCode} size={28} />
+                      <Typography variant="body2" sx={{ fontWeight: 700, minWidth: 0 }}>
+                        {translateTeamName(fixture.homeTeam.name)}
+                      </Typography>
+                    </Box>
+
+                    {/* Score */}
+                    <Box sx={{ textAlign: 'center', minWidth: '70px' }}>
+                      <Typography variant="h5" sx={{ fontWeight: 800 }}>
+                        {formatScore(fixture.homeScore, fixture.awayScore)}
+                      </Typography>
+                    </Box>
+
+                    {/* Away Team */}
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'flex-end',
+                        gap: 1,
+                        minWidth: 0,
+                      }}
+                    >
+                      <Typography variant="body2" sx={{ fontWeight: 700, minWidth: 0 }}>
+                        {translateTeamName(fixture.awayTeam.name)}
+                      </Typography>
+                      <CountryFlag code={fixture.awayTeam.countryCode} size={28} />
+                    </Box>
+                  </Box>
+
+                  {/* Time and Venue info */}
+                  <Box
+                    sx={{
+                      display: 'grid',
+                      gridTemplateColumns: '1fr 1fr',
+                      gap: ThemeTokens.spacing.md,
+                      mt: ThemeTokens.spacing.md,
+                    }}
+                  >
+                    <Box>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ display: 'block', mb: 0.25 }}
+                      >
+                        Ngày và giờ
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        {formatMatchDate(fixture.kickoff)} {formatKickoffTime(fixture.kickoff)}
+                      </Typography>
+                    </Box>
+                    <Box>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        sx={{ display: 'block', mb: 0.25 }}
+                      >
+                        Sân vận động
+                      </Typography>
+                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                        {fixture.venue ? translateVenue(fixture.venue) : 'Sẽ được công bố'}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </Box>
+
+                {expandedFixtureId === fixture.id && (
+                  <Box
+                    sx={{
+                      mt: 1,
+                      p: ThemeTokens.spacing.md,
+                      backgroundColor: 'action.hover',
+                      borderRadius: '8px',
+                      border: '1px solid',
+                      borderColor: 'divider',
+                    }}
+                  >
+                    <Typography variant="body2" color="text.secondary">
+                      {fixture.status === 'finished'
+                        ? 'Diễn biến, bàn thắng, thẻ phạt, thay người và đội hình có trong trang Lịch thi đấu và kết quả.'
+                        : 'Thông tin trước trận và dữ liệu chính thức có trong trang Lịch thi đấu và kết quả.'}
                     </Typography>
                   </Box>
-                  <StatusChip
-                    status={getFixtureStatusColor(fixture.status)}
-                    label={getFixtureStatusLabel(fixture)}
-                  />
-                </Box>
-
-                <Box
-                  sx={{
-                    display: 'grid',
-                    gridTemplateColumns: '1fr auto 1fr',
-                    alignItems: 'center',
-                    gap: 1,
-                    mt: 0.75,
-                  }}
-                >
-                  {renderTeamWithFlag(fixture.homeTeam, 20)}
-                  <Typography variant="caption" color="text.secondary" sx={{ textAlign: 'center' }}>
-                    vs
-                  </Typography>
-                  <Box sx={{ justifySelf: 'end' }}>{renderTeamWithFlag(fixture.awayTeam, 20)}</Box>
-                </Box>
-
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ display: 'block', mt: 0.75 }}
-                >
-                  Kickoff: {formatKickoff(fixture.kickoff)} (Vietnam Time)
-                </Typography>
-                <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
-                  Venue: {fixture.venue}
-                </Typography>
-                {fixture.note && (
-                  <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
-                    Note: {fixture.note}
-                  </Typography>
                 )}
               </Box>
             ))}
@@ -602,7 +917,217 @@ function sortPlayers(
   });
 }
 
+function renderPremiumStatisticCard(
+  statistic: TournamentCenterData['statistics'][number],
+  data: TournamentCenterData,
+  meta?: StatisticCardMeta
+): React.ReactElement {
+  const completedFixtures = data.fixtures.all.filter(
+    (fixture) =>
+      fixture.status === 'finished' && fixture.homeScore !== null && fixture.awayScore !== null
+  );
+  const topPlayer =
+    statistic.id === 'top-scorer'
+      ? [...data.players].sort((left, right) => right.goals - left.goals)[0]
+      : statistic.id === 'top-assists'
+        ? [...data.players].sort((left, right) => right.assists - left.assists)[0]
+        : undefined;
+  const teamTotals = new Map<
+    number,
+    { team: TournamentFixture['homeTeam']; goals: number; cleanSheets: number; played: number }
+  >();
+
+  completedFixtures.forEach((fixture) => {
+    const home = teamTotals.get(fixture.homeTeam.id) ?? {
+      team: fixture.homeTeam,
+      goals: 0,
+      cleanSheets: 0,
+      played: 0,
+    };
+    const away = teamTotals.get(fixture.awayTeam.id) ?? {
+      team: fixture.awayTeam,
+      goals: 0,
+      cleanSheets: 0,
+      played: 0,
+    };
+    home.goals += fixture.homeScore ?? 0;
+    away.goals += fixture.awayScore ?? 0;
+    home.played += 1;
+    away.played += 1;
+    if (fixture.awayScore === 0) home.cleanSheets += 1;
+    if (fixture.homeScore === 0) away.cleanSheets += 1;
+    teamTotals.set(home.team.id, home);
+    teamTotals.set(away.team.id, away);
+  });
+
+  const rankedTeams = [...teamTotals.values()];
+  const topTeam =
+    statistic.id === 'most-clean-sheets'
+      ? rankedTeams.sort((left, right) => right.cleanSheets - left.cleanSheets)[0]
+      : statistic.id === 'best-attack'
+        ? rankedTeams.sort(
+            (left, right) =>
+              right.goals / Math.max(1, right.played) - left.goals / Math.max(1, left.played)
+          )[0]
+        : statistic.id === 'most-goals'
+          ? rankedTeams.sort((left, right) => right.goals - left.goals)[0]
+          : undefined;
+  const highestScoringMatch =
+    statistic.id === 'highest-scoring-match'
+      ? [...completedFixtures].sort(
+          (left, right) =>
+            (right.homeScore ?? 0) +
+            (right.awayScore ?? 0) -
+            (left.homeScore ?? 0) -
+            (left.awayScore ?? 0)
+        )[0]
+      : undefined;
+
+  return (
+    <Card
+      key={statistic.id}
+      variant="outlined"
+      sx={{
+        minHeight: 190,
+        borderRadius: '16px',
+        overflow: 'hidden',
+        borderColor: 'rgba(37, 99, 235, 0.2)',
+        boxShadow: '0 12px 30px rgba(15, 23, 42, 0.08)',
+        background:
+          'linear-gradient(145deg, rgba(239, 246, 255, 0.96) 0%, #ffffff 52%, rgba(255, 247, 237, 0.72) 100%)',
+      }}
+    >
+      <CardContent sx={{ p: { xs: 2, md: 2.5 }, height: '100%' }}>
+        <Stack spacing={2} sx={{ height: '100%' }}>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: meta?.iconColor }}>
+            {meta?.icon ?? <SportsSoccerIcon />}
+            <Typography variant="h6" sx={{ fontWeight: 850, color: 'text.primary' }}>
+              {translateStatisticTitle(statistic.id, statistic.title)}
+            </Typography>
+          </Box>
+
+          {topPlayer && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+              <Avatar sx={{ width: 72, height: 72, bgcolor: meta?.iconColor, fontSize: '1.35rem' }}>
+                {topPlayer.name
+                  .split(' ')
+                  .slice(0, 2)
+                  .map((part) => part[0])
+                  .join('')}
+              </Avatar>
+              <Box sx={{ minWidth: 0, flex: 1 }}>
+                <Typography variant="h6" sx={{ fontWeight: 800 }}>
+                  {topPlayer.name}
+                </Typography>
+                <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.75, mt: 0.5 }}>
+                  <CountryFlag code={topPlayer.nation.countryCode} size="md" showTooltip />
+                  <Typography variant="body2" color="text.secondary">
+                    {translateTeamName(topPlayer.nation.name)}
+                  </Typography>
+                </Box>
+              </Box>
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="h3" sx={{ fontWeight: 900, color: meta?.iconColor }}>
+                  {statistic.id === 'top-scorer' ? topPlayer.goals : topPlayer.assists}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {statistic.id === 'top-scorer' ? 'Bàn thắng' : 'Kiến tạo'}
+                </Typography>
+              </Box>
+            </Box>
+          )}
+
+          {topTeam && (
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2, flex: 1 }}>
+              <CountryFlag code={topTeam.team.countryCode} size={76} showTooltip />
+              <Box sx={{ minWidth: 0, flex: 1 }}>
+                <Typography variant="h5" sx={{ fontWeight: 850 }}>
+                  {translateTeamName(topTeam.team.name)}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Đội tuyển quốc gia
+                </Typography>
+              </Box>
+              <Box sx={{ textAlign: 'center' }}>
+                <Typography variant="h3" sx={{ fontWeight: 900, color: meta?.iconColor }}>
+                  {statistic.id === 'most-clean-sheets'
+                    ? topTeam.cleanSheets
+                    : statistic.id === 'best-attack'
+                      ? (topTeam.goals / Math.max(1, topTeam.played)).toFixed(2)
+                      : topTeam.goals}
+                </Typography>
+                <Typography variant="caption" color="text.secondary">
+                  {statistic.id === 'most-clean-sheets'
+                    ? 'Trận sạch lưới'
+                    : statistic.id === 'best-attack'
+                      ? 'Bàn / trận'
+                      : 'Bàn thắng'}
+                </Typography>
+              </Box>
+            </Box>
+          )}
+
+          {highestScoringMatch && (
+            <Stack spacing={1.25} sx={{ alignItems: 'center', flex: 1, justifyContent: 'center' }}>
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: '1fr auto 1fr',
+                  alignItems: 'center',
+                  gap: 2,
+                  width: '100%',
+                }}
+              >
+                <Box sx={{ textAlign: 'center' }}>
+                  <CountryFlag
+                    code={highestScoringMatch.homeTeam.countryCode}
+                    size={54}
+                    showTooltip
+                  />
+                  <Typography variant="body2" sx={{ fontWeight: 700, mt: 0.5 }}>
+                    {translateTeamName(highestScoringMatch.homeTeam.name)}
+                  </Typography>
+                </Box>
+                <Typography variant="h3" sx={{ fontWeight: 900 }}>
+                  {highestScoringMatch.homeScore}–{highestScoringMatch.awayScore}
+                </Typography>
+                <Box sx={{ textAlign: 'center' }}>
+                  <CountryFlag
+                    code={highestScoringMatch.awayTeam.countryCode}
+                    size={54}
+                    showTooltip
+                  />
+                  <Typography variant="body2" sx={{ fontWeight: 700, mt: 0.5 }}>
+                    {translateTeamName(highestScoringMatch.awayTeam.name)}
+                  </Typography>
+                </Box>
+              </Box>
+              <Typography variant="caption" color="text.secondary">
+                {formatMatchDate(highestScoringMatch.kickoff)}
+              </Typography>
+            </Stack>
+          )}
+
+          {!topPlayer && !topTeam && !highestScoringMatch && (
+            <Box sx={{ flex: 1, display: 'flex', alignItems: 'center' }}>
+              <Box>
+                <Typography variant="h5" sx={{ fontWeight: 850 }}>
+                  {statistic.value === 'N/A' ? 'Chưa có' : statistic.value}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  Chưa có dữ liệu thống kê.
+                </Typography>
+              </Box>
+            </Box>
+          )}
+        </Stack>
+      </CardContent>
+    </Card>
+  );
+}
+
 export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => {
+  const navigate = useNavigate();
   const { data, error, isLoading, isRefreshing, refresh } = useTournamentCenter({
     autoRefresh: true,
     refreshIntervalMs: 30000,
@@ -613,6 +1138,8 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
   const [nationFilter, setNationFilter] = useState<'ALL' | string>('ALL');
   const [sortBy, setSortBy] = useState<PlayerSortField>('goals');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
+  const [playerPage, setPlayerPage] = useState(0);
+  const [expandedFixtureId, setExpandedFixtureId] = useState<string | null>(null);
 
   const nations = useMemo(() => {
     if (!data) {
@@ -630,6 +1157,16 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
 
     return sortPlayers(data.players, search, positionFilter, nationFilter, sortBy, sortOrder);
   }, [data, nationFilter, positionFilter, search, sortBy, sortOrder]);
+  const playerPageCount = Math.max(1, Math.ceil(filteredPlayers.length / PLAYER_PAGE_SIZE));
+  const visiblePlayerPage = Math.min(playerPage, playerPageCount - 1);
+  const paginatedPlayers = useMemo(
+    () =>
+      filteredPlayers.slice(
+        visiblePlayerPage * PLAYER_PAGE_SIZE,
+        (visiblePlayerPage + 1) * PLAYER_PAGE_SIZE
+      ),
+    [filteredPlayers, visiblePlayerPage]
+  );
 
   const statisticMetaMap = useMemo(
     () => new Map(STAT_CARD_META.map((item) => [item.id, item])),
@@ -676,7 +1213,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
   if (isLoading && !data) {
     return (
       <PageContent>
-        <LoadingState label="Loading ASEAN Cup 2026 data..." />
+        <LoadingState label="Đang tải dữ liệu ASEAN Cup 2026..." />
       </PageContent>
     );
   }
@@ -685,9 +1222,9 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
     return (
       <PageContent>
         <ErrorState
-          title="Unable to load ASEAN Cup 2026"
+          title="Không thể tải ASEAN Cup 2026"
           message={error}
-          actionLabel="Retry"
+          actionLabel="Thử lại"
           onRetry={() => {
             void refresh();
           }}
@@ -699,7 +1236,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
   if (!data) {
     return (
       <PageContent>
-        <ErrorState title="ASEAN Cup 2026" message="No tournament data available." />
+        <ErrorState title="ASEAN Cup 2026" message="Chưa có dữ liệu giải đấu." />
       </PageContent>
     );
   }
@@ -715,14 +1252,6 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
 
   // The bracket always needs the full published schedule, not only the next matchday.
   const allKnockoutFixtures = data.fixtures.all;
-  const finalFixture = findPreferredFinalFixture(allKnockoutFixtures);
-  const finalStatus = finalFixture
-    ? {
-        label: getFixtureStatusLabel(finalFixture),
-        status: getFixtureStatusColor(finalFixture.status),
-      }
-    : resolveKnockoutStatus(data.knockout.final);
-  const finalWinner = resolveKnockoutWinner(data.knockout.final);
   const championTeam = data.knockout.champion.team;
   const championName = championTeam?.name ?? data.knockout.champion.label;
   const semiFinal1Fixtures = allKnockoutFixtures
@@ -732,8 +1261,33 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
     .filter((fixture) => fixture.stage.includes('Semi-final 2'))
     .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime());
   const finalFixtures = allKnockoutFixtures
-    .filter((fixture) => /^Final \(Leg \d+\)$/i.test(fixture.stage))
+    .filter((fixture) => /^Final(?: \()?Leg [12]\)?$/i.test(fixture.stage))
     .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime());
+  const toDisplayTeam = (
+    team: TournamentCenterData['knockout']['final']['home']
+  ): TournamentFixture['homeTeam'] => ({
+    id: team.team?.id ?? 0,
+    name: team.team?.name ?? team.label,
+    countryCode: team.team?.countryCode ?? 'TBD',
+  });
+  const semiFinal1Legs = ensureTwoLegFixtures(
+    semiFinal1Fixtures,
+    'Semi-final 1',
+    toDisplayTeam(data.knockout.semiFinal1.home),
+    toDisplayTeam(data.knockout.semiFinal1.away)
+  );
+  const semiFinal2Legs = ensureTwoLegFixtures(
+    semiFinal2Fixtures,
+    'Semi-final 2',
+    toDisplayTeam(data.knockout.semiFinal2.home),
+    toDisplayTeam(data.knockout.semiFinal2.away)
+  );
+  const finalLegs = ensureTwoLegFixtures(
+    finalFixtures,
+    'Final',
+    toDisplayTeam(data.knockout.final.home),
+    toDisplayTeam(data.knockout.final.away)
+  );
 
   return (
     <PageContent>
@@ -774,14 +1328,14 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                     {data.hero.tournamentName}
                   </Typography>
                   <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.86)', mt: 0.75 }}>
-                    {data.hero.subtitle}
+                    Giải vô địch bóng đá Đông Nam Á 2026
                   </Typography>
                 </Box>
 
                 <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                   <Chip
                     icon={<EmojiEventsIcon />}
-                    label={data.hero.currentStage}
+                    label={translateStage(data.hero.currentStage)}
                     variant="outlined"
                     sx={{
                       color: '#ffffff',
@@ -791,7 +1345,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                   />
                   <Chip
                     icon={<RefreshIcon />}
-                    label={isRefreshing ? 'Refreshing' : 'Refresh'}
+                    label={isRefreshing ? 'Đang làm mới' : 'Làm mới'}
                     onClick={() => {
                       void refresh();
                     }}
@@ -817,15 +1371,15 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
               >
                 <Box>
                   <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.78)' }}>
-                    Current Matchday
+                    Lượt đấu hiện tại
                   </Typography>
                   <Typography variant="h6" sx={{ fontWeight: 700 }}>
-                    MD {data.hero.currentMatchday}
+                    Lượt {data.hero.currentMatchday}
                   </Typography>
                 </Box>
                 <Box>
                   <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.78)' }}>
-                    Matches Completed
+                    Trận đã hoàn thành
                   </Typography>
                   <Typography variant="h6" sx={{ fontWeight: 700 }}>
                     {data.hero.matchesCompleted}
@@ -833,7 +1387,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                 </Box>
                 <Box>
                   <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.78)' }}>
-                    Matches Remaining
+                    Trận còn lại
                   </Typography>
                   <Typography variant="h6" sx={{ fontWeight: 700 }}>
                     {data.hero.matchesRemaining}
@@ -841,7 +1395,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                 </Box>
                 <Box>
                   <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.78)' }}>
-                    Last Updated
+                    Cập nhật lần cuối
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
                     {formatKickoff(data.hero.lastUpdated)}
@@ -850,7 +1404,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
 
                 <Box sx={{ gridColumn: { xs: '1 / -1', lg: '1 / span 2' } }}>
                   <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.78)' }}>
-                    Live Tournament Status
+                    Trạng thái giải đấu
                   </Typography>
                   <Box
                     sx={{
@@ -861,9 +1415,21 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                       flexWrap: 'wrap',
                     }}
                   >
-                    <Chip size="small" color={highlightColor} label={data.hero.highlight.label} />
+                    <Chip
+                      size="small"
+                      color={highlightColor}
+                      label={
+                        data.hero.highlight.state === 'live'
+                          ? 'Đang diễn ra'
+                          : data.hero.highlight.state === 'finished'
+                            ? 'Đã kết thúc'
+                            : data.hero.highlight.state === 'upcoming'
+                              ? 'Sắp diễn ra'
+                              : 'Chưa có trận đấu'
+                      }
+                    />
                     <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                      {data.hero.highlight.fixtureText}
+                      {translateSummary(data.hero.highlight.fixtureText)}
                     </Typography>
                     {data.hero.highlight.minuteText && (
                       <Typography variant="body2" sx={{ color: 'rgba(255,255,255,0.86)' }}>
@@ -875,19 +1441,19 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
 
                 <Box>
                   <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.78)' }}>
-                    Latest Result
+                    Kết quả gần nhất
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {data.hero.latestResult}
+                    {translateSummary(data.hero.latestResult)}
                   </Typography>
                 </Box>
 
                 <Box>
                   <Typography variant="caption" sx={{ color: 'rgba(255,255,255,0.78)' }}>
-                    Next Fixture
+                    Trận tiếp theo
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {data.hero.nextFixture}
+                    {translateSummary(data.hero.nextFixture)}
                   </Typography>
                 </Box>
               </Box>
@@ -900,11 +1466,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
         </Card>
       </PageHeader>
 
-      <PageSection
-        title="🏆 Road To The Final"
-        subtitle="Follow the knockout journey from the semi-finals to the championship."
-        sx={{ mb: ThemeTokens.spacing.xxxl }}
-      >
+      <PageSection title="🏆 Đường đến chung kết" sx={{ mb: ThemeTokens.spacing.xxxl }}>
         <Card
           variant="outlined"
           sx={{
@@ -937,21 +1499,10 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                   display: { xs: 'none', md: 'block' },
                   position: 'absolute',
                   pointerEvents: 'none',
-                  left: '31%',
-                  top: '18%',
-                  width: '7.5%',
-                  height: '27%',
-                  borderRight: '2px solid #2563EB',
-                  borderRadius: 0,
-                  '&::before, &::after': {
-                    content: '""',
-                    position: 'absolute',
-                    left: 0,
-                    width: '100%',
-                    borderTop: '2px solid #2563EB',
-                  },
-                  '&::before': { top: 0 },
-                  '&::after': { bottom: 0 },
+                  left: '29%',
+                  top: '42%',
+                  width: '13%',
+                  borderTop: '2px solid #2563EB',
                 }}
               />
               <Box
@@ -959,27 +1510,16 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                   display: { xs: 'none', md: 'block' },
                   position: 'absolute',
                   pointerEvents: 'none',
-                  right: '31%',
-                  top: '18%',
-                  width: '7.5%',
-                  height: '27%',
-                  borderLeft: '2px solid #2563EB',
-                  borderRadius: 0,
-                  '&::before, &::after': {
-                    content: '""',
-                    position: 'absolute',
-                    right: 0,
-                    width: '100%',
-                    borderTop: '2px solid #2563EB',
-                  },
-                  '&::before': { top: 0 },
-                  '&::after': { bottom: 0 },
+                  right: '29%',
+                  top: '42%',
+                  width: '13%',
+                  borderTop: '2px solid #2563EB',
                 }}
               />
               <Box sx={{ gridArea: 'semi1', zIndex: 1 }}>
                 <Stack spacing={ThemeTokens.spacing.sm}>
                   <Chip
-                    label="SEMI-FINAL 1"
+                    label="BÁN KẾT 1"
                     size="small"
                     sx={{
                       alignSelf: 'flex-start',
@@ -988,18 +1528,64 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                       color: '#1E40AF',
                     }}
                   />
-                  {semiFinal1Fixtures.length > 0 ? (
-                    semiFinal1Fixtures.map((fixture) => (
+                  {semiFinal1Legs.length > 0 ? (
+                    semiFinal1Legs.map((fixture) => (
                       <React.Fragment key={fixture.id}>
-                        {renderSemiFinalLegCard(fixture)}
+                        {renderKnockoutLegCard(
+                          fixture,
+                          resolveAggregateDisplay(data.knockout.semiFinal1)
+                        )}
                       </React.Fragment>
                     ))
                   ) : (
                     <Card variant="outlined">
-                      <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                          No semi-final 1 fixtures available.
-                        </Typography>
+                      <CardContent
+                        sx={{ p: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}
+                      >
+                        <Stack spacing={ThemeTokens.spacing.sm}>
+                          <Typography variant="caption" color="text.secondary">
+                            {data.knockout.semiFinal1.legDates}
+                          </Typography>
+                          <Box
+                            sx={{
+                              display: 'grid',
+                              gridTemplateColumns: '1fr auto 1fr',
+                              alignItems: 'center',
+                              gap: 1,
+                            }}
+                          >
+                            {renderTeamWithFlag(
+                              {
+                                name: data.knockout.semiFinal1.home.label,
+                                countryCode: 'TBD',
+                              },
+                              'md',
+                              'caption'
+                            )}
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                              sx={{ textAlign: 'center' }}
+                            >
+                              vs
+                            </Typography>
+                            <Box sx={{ justifySelf: 'end' }}>
+                              {renderTeamWithFlag(
+                                {
+                                  name: data.knockout.semiFinal1.away.label,
+                                  countryCode: 'TBD',
+                                },
+                                'md',
+                                'caption'
+                              )}
+                            </Box>
+                          </Box>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <Typography variant="caption" color="text.secondary" sx={{ flex: 1 }}>
+                              Lịch thi đấu đang chờ công bố chính thức
+                            </Typography>
+                          </Box>
+                        </Stack>
                       </CardContent>
                     </Card>
                   )}
@@ -1018,222 +1604,18 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, color: '#B45309' }}>
                     <Box sx={{ width: 26, borderTop: '1px solid #FBBF24' }} />
                     <Typography variant="subtitle1" sx={{ fontWeight: 800, letterSpacing: 0.3 }}>
-                      THE FINAL
+                      CHUNG KẾT
                     </Typography>
                     <Box sx={{ width: 26, borderTop: '1px solid #FBBF24' }} />
                   </Box>
-                  <Card
-                    variant="outlined"
-                    sx={{
-                      borderWidth: 2,
-                      borderColor: '#F59E0B',
-                      borderRadius: '16px',
-                      boxShadow: '0 12px 28px rgba(245, 158, 11, 0.2)',
-                      overflow: 'hidden',
-                      background:
-                        'linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, rgba(255,255,255,1) 44%)',
-                    }}
-                  >
-                    <CardContent
-                      sx={{ p: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}
-                    >
-                      <Stack spacing={ThemeTokens.spacing.md}>
-                        <Box
-                          sx={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            gap: 1.5,
-                            color: 'text.secondary',
-                            flexWrap: 'wrap',
-                          }}
-                        >
-                          <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
-                            <CalendarMonthOutlinedIcon sx={{ fontSize: 14 }} />
-                            <Typography variant="caption">
-                              {finalFixture
-                                ? formatMatchDate(finalFixture.kickoff)
-                                : data.knockout.final.legDates}
-                            </Typography>
-                          </Box>
-                          <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
-                            <AccessTimeOutlinedIcon sx={{ fontSize: 14 }} />
-                            <Typography variant="caption">
-                              {finalFixture
-                                ? `${formatKickoffTime(finalFixture.kickoff)} (VN Time)`
-                                : 'TBD'}
-                            </Typography>
-                          </Box>
-                        </Box>
-
-                        <Box
-                          sx={{
-                            display: 'grid',
-                            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-                            gap: 0.75,
-                          }}
-                        >
-                          {finalFixtures.map((fixture) => (
-                            <Box
-                              key={fixture.id}
-                              sx={{
-                                border: '1px solid rgba(245, 158, 11, 0.24)',
-                                borderRadius: '4px',
-                                px: 1,
-                                py: 0.75,
-                                backgroundColor: 'rgba(255,255,255,0.74)',
-                              }}
-                            >
-                              <Typography
-                                variant="caption"
-                                sx={{ display: 'block', fontWeight: 700 }}
-                              >
-                                {fixture.stage}
-                              </Typography>
-                              <Typography variant="caption" color="text.secondary">
-                                {formatMatchDate(fixture.kickoff)} /{' '}
-                                {formatKickoffTime(fixture.kickoff)} (VN)
-                              </Typography>
-                            </Box>
-                          ))}
-                        </Box>
-
-                        <Box
-                          sx={{
-                            display: 'grid',
-                            gridTemplateColumns: { xs: '1fr', sm: '1fr auto 1fr' },
-                            alignItems: 'center',
-                            gap: 1,
-                            p: ThemeTokens.spacing.sm,
-                            borderRadius: '4px',
-                            bgcolor: '#ffffff',
-                            border: '1px solid',
-                            borderColor: 'rgba(245, 158, 11, 0.32)',
-                          }}
-                        >
-                          {renderTeamWithFlag(
-                            {
-                              name:
-                                data.knockout.final.home.team?.name ??
-                                data.knockout.final.home.label,
-                              countryCode: data.knockout.final.home.team?.countryCode ?? 'TBD',
-                            },
-                            'lg'
-                          )}
-                          <Typography
-                            variant="subtitle2"
-                            color="text.secondary"
-                            sx={{ textAlign: 'center', fontWeight: 800 }}
-                          >
-                            vs
-                          </Typography>
-                          <Box sx={{ justifySelf: { xs: 'start', sm: 'end' } }}>
-                            {renderTeamWithFlag(
-                              {
-                                name:
-                                  data.knockout.final.away.team?.name ??
-                                  data.knockout.final.away.label,
-                                countryCode: data.knockout.final.away.team?.countryCode ?? 'TBD',
-                              },
-                              'lg'
-                            )}
-                          </Box>
-                        </Box>
-
-                        <Box
-                          sx={{
-                            display: 'none',
-                            gridTemplateColumns: { xs: '1fr', sm: '1fr 1fr' },
-                            gap: 1,
-                          }}
-                        >
-                          <Box>
-                            <Typography variant="caption" color="text.secondary">
-                              Date
-                            </Typography>
-                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                              {finalFixture
-                                ? formatMatchDate(finalFixture.kickoff)
-                                : data.knockout.final.legDates}
-                            </Typography>
-                          </Box>
-                          <Box>
-                            <Typography variant="caption" color="text.secondary">
-                              Kickoff
-                            </Typography>
-                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                              {finalFixture
-                                ? `${formatKickoffTime(finalFixture.kickoff)} (Vietnam Time)`
-                                : 'TBD'}
-                            </Typography>
-                          </Box>
-                          <Box>
-                            <Typography variant="caption" color="text.secondary">
-                              Venue
-                            </Typography>
-                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                              {finalFixture?.venue ?? 'To be announced'}
-                            </Typography>
-                          </Box>
-                          <Box>
-                            <Typography variant="caption" color="text.secondary">
-                              Aggregate Score
-                            </Typography>
-                            <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                              {resolveAggregateDisplay(data.knockout.final)}
-                            </Typography>
-                          </Box>
-                        </Box>
-
-                        <Box
-                          sx={{
-                            display: 'grid',
-                            gridTemplateColumns: { xs: '1fr 1fr', md: '1fr 1fr auto' },
-                            alignItems: 'end',
-                            gap: 1,
-                            pt: 0.5,
-                            borderTop: '1px solid',
-                            borderColor: 'divider',
-                          }}
-                        >
-                          <Box>
-                            <Typography variant="caption" color="text.secondary">
-                              Current Score
-                            </Typography>
-                            <Typography variant="h6" sx={{ fontWeight: 800 }}>
-                              {finalFixture
-                                ? formatScore(finalFixture.homeScore, finalFixture.awayScore)
-                                : resolveCurrentScoreDisplay(data.knockout.final)}
-                            </Typography>
-                          </Box>
-                          <Box>
-                            <Typography variant="caption" color="text.secondary">
-                              Winner
-                            </Typography>
-                            <Typography variant="body2" sx={{ fontWeight: 700 }}>
-                              {finalWinner?.team?.name ?? finalWinner?.label ?? 'To be decided'}
-                            </Typography>
-                          </Box>
-                          <Box
-                            sx={{
-                              display: 'flex',
-                              alignItems: 'flex-end',
-                              justifyContent: 'flex-end',
-                            }}
-                          >
-                            <StatusChip status={finalStatus.status} label={finalStatus.label} />
-                          </Box>
-                        </Box>
-                      </Stack>
-                    </CardContent>
-                  </Card>
+                  {renderFinalTieCard(finalLegs, resolveAggregateDisplay(data.knockout.final))}
                 </Stack>
               </Box>
 
               <Box sx={{ gridArea: 'semi2', zIndex: 1 }}>
                 <Stack spacing={ThemeTokens.spacing.sm}>
                   <Chip
-                    label="SEMI-FINAL 2"
+                    label="BÁN KẾT 2"
                     size="small"
                     sx={{
                       alignSelf: 'flex-start',
@@ -1242,18 +1624,64 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                       color: '#1E40AF',
                     }}
                   />
-                  {semiFinal2Fixtures.length > 0 ? (
-                    semiFinal2Fixtures.map((fixture) => (
+                  {semiFinal2Legs.length > 0 ? (
+                    semiFinal2Legs.map((fixture) => (
                       <React.Fragment key={fixture.id}>
-                        {renderSemiFinalLegCard(fixture)}
+                        {renderKnockoutLegCard(
+                          fixture,
+                          resolveAggregateDisplay(data.knockout.semiFinal2)
+                        )}
                       </React.Fragment>
                     ))
                   ) : (
                     <Card variant="outlined">
-                      <CardContent>
-                        <Typography variant="body2" color="text.secondary">
-                          No semi-final 2 fixtures available.
-                        </Typography>
+                      <CardContent
+                        sx={{ p: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}
+                      >
+                        <Stack spacing={ThemeTokens.spacing.sm}>
+                          <Typography variant="caption" color="text.secondary">
+                            {data.knockout.semiFinal2.legDates}
+                          </Typography>
+                          <Box
+                            sx={{
+                              display: 'grid',
+                              gridTemplateColumns: '1fr auto 1fr',
+                              alignItems: 'center',
+                              gap: 1,
+                            }}
+                          >
+                            {renderTeamWithFlag(
+                              {
+                                name: data.knockout.semiFinal2.home.label,
+                                countryCode: 'TBD',
+                              },
+                              'md',
+                              'caption'
+                            )}
+                            <Typography
+                              variant="caption"
+                              color="text.secondary"
+                              sx={{ textAlign: 'center' }}
+                            >
+                              vs
+                            </Typography>
+                            <Box sx={{ justifySelf: 'end' }}>
+                              {renderTeamWithFlag(
+                                {
+                                  name: data.knockout.semiFinal2.away.label,
+                                  countryCode: 'TBD',
+                                },
+                                'md',
+                                'caption'
+                              )}
+                            </Box>
+                          </Box>
+                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                            <Typography variant="caption" color="text.secondary" sx={{ flex: 1 }}>
+                              Lịch thi đấu đang chờ công bố chính thức
+                            </Typography>
+                          </Box>
+                        </Stack>
                       </CardContent>
                     </Card>
                   )}
@@ -1305,7 +1733,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                     <Stack spacing={1.1} sx={{ alignItems: 'center' }}>
                       <img
                         src={ASEAN_CUP_2026_TOURNAMENT_CONFIG.championAssetSrc}
-                        alt="Champion Trophy"
+                        alt="Cúp vô địch"
                         width={200}
                         height={200}
                         style={{ display: 'block' }}
@@ -1319,7 +1747,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                         variant="h5"
                         sx={{ fontWeight: 850, letterSpacing: 0.5, textTransform: 'uppercase' }}
                       >
-                        {championName}
+                        {translateTeamName(championName)}
                       </Typography>
                     </Stack>
                   </CardContent>
@@ -1330,11 +1758,14 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
         </Card>
       </PageSection>
 
-      <PageSection
-        title="Group Standings"
-        subtitle="Group A and Group B"
-        sx={{ mb: ThemeTokens.spacing.xxxl }}
-      >
+      <Divider
+        sx={{
+          mt: ThemeTokens.spacing.xxxl,
+          mb: ThemeTokens.spacing.xxxl,
+        }}
+      />
+
+      <PageSection title="Bảng xếp hạng" sx={{ mb: ThemeTokens.spacing.xxxl }}>
         <Box
           sx={{
             display: 'grid',
@@ -1342,39 +1773,69 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
             gap: ThemeTokens.spacing.md,
           }}
         >
-          {data.groups.map((group) => renderGroupTable(group))}
+          {data.groups.map((group) => renderGroupTable(group, data.fixtures.all))}
         </Box>
       </PageSection>
 
-      <PageSection
-        title="Fixtures"
-        subtitle="Completed, today, and upcoming fixtures"
-        sx={{ mb: ThemeTokens.spacing.xxxl }}
-      >
-        <Box
-          sx={{
-            display: 'grid',
-            gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' },
-            gap: ThemeTokens.spacing.md,
-          }}
-        >
-          {renderFixtureList(
-            'Completed Fixtures',
-            completedFixturesPreview,
-            'No completed fixtures yet.'
-          )}
-          {renderFixtureList(
-            "Today's Fixtures",
-            todaysFixturesPreview,
-            'No matches scheduled today.'
-          )}
-          {renderFixtureList('Upcoming Fixtures', upcomingFixturesPreview)}
-        </Box>
+      <Divider
+        sx={{
+          mt: ThemeTokens.spacing.xxxl,
+          mb: ThemeTokens.spacing.xxxl,
+        }}
+      />
+
+      <PageSection title="Lịch thi đấu" sx={{ mb: ThemeTokens.spacing.xxxl }}>
+        <Stack spacing={ThemeTokens.spacing.md}>
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: '1fr', md: '1fr 1fr 1fr' },
+              gap: ThemeTokens.spacing.md,
+            }}
+          >
+            {renderFixtureList(
+              'Các trận đã kết thúc',
+              completedFixturesPreview,
+              setExpandedFixtureId,
+              expandedFixtureId,
+              'Chưa có trận đấu nào kết thúc.'
+            )}
+            {renderFixtureList(
+              'Các trận hôm nay',
+              todaysFixturesPreview,
+              setExpandedFixtureId,
+              expandedFixtureId,
+              'Hôm nay không có trận đấu.'
+            )}
+            {renderFixtureList(
+              'Các trận sắp tới',
+              upcomingFixturesPreview,
+              setExpandedFixtureId,
+              expandedFixtureId
+            )}
+          </Box>
+
+          <Button
+            variant="outlined"
+            endIcon={<ArrowForwardIcon />}
+            onClick={() => navigate('/asean-cup-2026/fixtures')}
+            sx={{ alignSelf: 'flex-start' }}
+          >
+            Xem toàn bộ lịch thi đấu
+          </Button>
+        </Stack>
       </PageSection>
 
+      <Divider
+        sx={{
+          mt: ThemeTokens.spacing.xxxl,
+          mb: ThemeTokens.spacing.xxxl,
+        }}
+      />
+
       <PageSection
-        title="Players"
-        subtitle="Search, sort, and filter tournament players"
+        title="Cầu thủ"
+        subtitle="Tìm kiếm, sắp xếp và lọc cầu thủ của giải"
         sx={{ mb: ThemeTokens.spacing.xxxl }}
       >
         <Stack spacing={ThemeTokens.spacing.sm}>
@@ -1382,34 +1843,41 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
             <SearchInput
               size="small"
               value={search}
-              onSearch={setSearch}
-              placeholder="Search player, nation, or club"
+              onSearch={(value) => {
+                setSearch(value);
+                setPlayerPage(0);
+              }}
+              placeholder="Tìm cầu thủ, đội tuyển hoặc câu lạc bộ"
               sx={{ minWidth: { xs: '100%', md: 280 } }}
             />
 
             <FormControl size="small" sx={{ minWidth: 140 }}>
               <Select
                 value={positionFilter}
-                onChange={(event) =>
-                  setPositionFilter(event.target.value as 'ALL' | TournamentPlayerPosition)
-                }
+                onChange={(event) => {
+                  setPositionFilter(event.target.value as 'ALL' | TournamentPlayerPosition);
+                  setPlayerPage(0);
+                }}
                 displayEmpty
               >
-                <MenuItem value="ALL">All Positions</MenuItem>
-                <MenuItem value="GK">Goalkeeper</MenuItem>
-                <MenuItem value="DEF">Defender</MenuItem>
-                <MenuItem value="MID">Midfielder</MenuItem>
-                <MenuItem value="FWD">Forward</MenuItem>
+                <MenuItem value="ALL">Tất cả vị trí</MenuItem>
+                <MenuItem value="GK">Thủ môn</MenuItem>
+                <MenuItem value="DEF">Hậu vệ</MenuItem>
+                <MenuItem value="MID">Tiền vệ</MenuItem>
+                <MenuItem value="FWD">Tiền đạo</MenuItem>
               </Select>
             </FormControl>
 
             <FormControl size="small" sx={{ minWidth: 170 }}>
               <Select
                 value={nationFilter}
-                onChange={(event) => setNationFilter(event.target.value as 'ALL' | string)}
+                onChange={(event) => {
+                  setNationFilter(event.target.value as 'ALL' | string);
+                  setPlayerPage(0);
+                }}
                 displayEmpty
               >
-                <MenuItem value="ALL">All Nations</MenuItem>
+                <MenuItem value="ALL">Tất cả đội tuyển</MenuItem>
                 {nations.map((nation) => (
                   <MenuItem key={nation} value={nation}>
                     {nation}
@@ -1419,7 +1887,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
             </FormControl>
 
             <Typography variant="caption" color="text.secondary" sx={{ ml: 'auto' }}>
-              {filteredPlayers.length} players
+              {filteredPlayers.length} cầu thủ
             </Typography>
           </FilterBar>
 
@@ -1433,19 +1901,19 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                       direction={sortBy === 'name' ? sortOrder : 'asc'}
                       onClick={() => handleSort('name')}
                     >
-                      Player
+                      Cầu thủ
                     </TableSortLabel>
                   </TableCell>
-                  <TableCell>National Flag</TableCell>
-                  <TableCell>Club</TableCell>
-                  <TableCell>Position</TableCell>
+                  <TableCell>Quốc kỳ</TableCell>
+                  <TableCell>Câu lạc bộ</TableCell>
+                  <TableCell>Vị trí</TableCell>
                   <TableCell align="right">
                     <TableSortLabel
                       active={sortBy === 'age'}
                       direction={sortBy === 'age' ? sortOrder : 'desc'}
                       onClick={() => handleSort('age')}
                     >
-                      Age
+                      Tuổi
                     </TableSortLabel>
                   </TableCell>
                   <TableCell align="right">
@@ -1454,7 +1922,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                       direction={sortBy === 'appearances' ? sortOrder : 'desc'}
                       onClick={() => handleSort('appearances')}
                     >
-                      Appearances
+                      Số trận
                     </TableSortLabel>
                   </TableCell>
                   <TableCell align="right">
@@ -1463,7 +1931,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                       direction={sortBy === 'goals' ? sortOrder : 'desc'}
                       onClick={() => handleSort('goals')}
                     >
-                      Goals
+                      Bàn thắng
                     </TableSortLabel>
                   </TableCell>
                   <TableCell align="right">
@@ -1472,7 +1940,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                       direction={sortBy === 'assists' ? sortOrder : 'desc'}
                       onClick={() => handleSort('assists')}
                     >
-                      Assists
+                      Kiến tạo
                     </TableSortLabel>
                   </TableCell>
                   <TableCell align="right">
@@ -1481,7 +1949,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                       direction={sortBy === 'yellowCards' ? sortOrder : 'desc'}
                       onClick={() => handleSort('yellowCards')}
                     >
-                      Yellow Cards
+                      Thẻ vàng
                     </TableSortLabel>
                   </TableCell>
                   <TableCell align="right">
@@ -1490,7 +1958,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                       direction={sortBy === 'redCards' ? sortOrder : 'desc'}
                       onClick={() => handleSort('redCards')}
                     >
-                      Red Cards
+                      Thẻ đỏ
                     </TableSortLabel>
                   </TableCell>
                   <TableCell align="right">
@@ -1499,13 +1967,13 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                       direction={sortBy === 'minutes' ? sortOrder : 'desc'}
                       onClick={() => handleSort('minutes')}
                     >
-                      Minutes
+                      Số phút
                     </TableSortLabel>
                   </TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {filteredPlayers.map((player) => (
+                {paginatedPlayers.map((player) => (
                   <TableRow key={player.id} hover>
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
@@ -1524,11 +1992,13 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                     <TableCell>
                       <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.8 }}>
                         <CountryFlag code={player.nation.countryCode} size="md" showTooltip />
-                        <Typography variant="body2">{player.nation.name}</Typography>
+                        <Typography variant="body2">
+                          {translateTeamName(player.nation.name)}
+                        </Typography>
                       </Box>
                     </TableCell>
                     <TableCell>{player.club}</TableCell>
-                    <TableCell>{player.position}</TableCell>
+                    <TableCell>{translatePosition(player.position)}</TableCell>
                     <TableCell align="right">{player.age ?? '-'}</TableCell>
                     <TableCell align="right">{player.appearances ?? '-'}</TableCell>
                     <TableCell align="right">{player.goals}</TableCell>
@@ -1541,12 +2011,47 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
               </TableBody>
             </Table>
           </TableContainer>
+          <Box
+            sx={{
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'flex-end',
+              gap: 1,
+            }}
+          >
+            <Typography variant="caption" color="text.secondary" sx={{ mr: 1 }}>
+              Trang {visiblePlayerPage + 1} / {playerPageCount}
+            </Typography>
+            <Button
+              size="small"
+              variant="outlined"
+              disabled={visiblePlayerPage === 0}
+              onClick={() => setPlayerPage((page) => Math.max(0, page - 1))}
+            >
+              Trước
+            </Button>
+            <Button
+              size="small"
+              variant="outlined"
+              disabled={visiblePlayerPage >= playerPageCount - 1 || filteredPlayers.length === 0}
+              onClick={() => setPlayerPage((page) => Math.min(playerPageCount - 1, page + 1))}
+            >
+              Sau
+            </Button>
+          </Box>
         </Stack>
       </PageSection>
 
+      <Divider
+        sx={{
+          mt: ThemeTokens.spacing.xxxl,
+          mb: ThemeTokens.spacing.xxxl,
+        }}
+      />
+
       <PageSection
-        title="Tournament Statistics"
-        subtitle="Current leaders and tournament highlights"
+        title="Thống kê giải đấu"
+        subtitle="Các cá nhân dẫn đầu và điểm nhấn của giải"
         sx={{ mb: ThemeTokens.spacing.xxxl }}
       >
         <Box
@@ -1554,25 +2059,17 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
             display: 'grid',
             gridTemplateColumns: {
               xs: '1fr',
-              sm: 'repeat(2, minmax(0, 1fr))',
-              xl: 'repeat(3, minmax(0, 1fr))',
+              md: 'repeat(2, minmax(0, 1fr))',
             },
-            gap: ThemeTokens.spacing.md,
+            gap: ThemeTokens.spacing.lg,
           }}
         >
-          {data.statistics.map((stat) => {
-            const meta = statisticMetaMap.get(stat.id);
-            return (
-              <StatCard
-                key={stat.id}
-                icon={meta?.icon ?? <SportsSoccerIcon />}
-                title={stat.title}
-                value={stat.value}
-                subtitle={stat.subtitle}
-                iconColor={meta?.iconColor ?? '#1976d2'}
-              />
-            );
-          })}
+          {data.statistics
+            .filter((stat) => TOURNAMENT_STATISTIC_IDS.has(stat.id))
+            .map((stat) => {
+              const meta = statisticMetaMap.get(stat.id);
+              return renderPremiumStatisticCard(stat, data, meta);
+            })}
         </Box>
       </PageSection>
     </PageContent>

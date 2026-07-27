@@ -168,12 +168,31 @@
     "dateLabel": "Jul 25 2026",
     "localTimeLabel": "04:30 PM",
     "venue": "Thuwunna Stadium",
-    "status": "UPCOMING",
+    "status": "FINISHED",
     "homeTeam": "Myanmar",
     "awayTeam": "Malaysia",
-    "homeScore": null,
-    "awayScore": null,
-    "goals": []
+    "homeScore": 1,
+    "awayScore": 2,
+    "goals": [
+      {
+        "playerName": "Myat Kaung Khant",
+        "minute": 10,
+        "addedTime": null,
+        "side": "home"
+      },
+      {
+        "playerName": "Paulo Josué",
+        "minute": 52,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "Paulo Josué",
+        "minute": 57,
+        "addedTime": null,
+        "side": "away"
+      }
+    ]
   },
   {
     "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
@@ -182,12 +201,43 @@
     "dateLabel": "Jul 25 2026",
     "localTimeLabel": "08:00 PM",
     "venue": "Lao National Stadium KM16",
-    "status": "UPCOMING",
+    "status": "FINISHED",
     "homeTeam": "Laos",
     "awayTeam": "Thailand",
-    "homeScore": null,
-    "awayScore": null,
-    "goals": []
+    "homeScore": 0,
+    "awayScore": 5,
+    "goals": [
+      {
+        "playerName": "T. Poeiphimai",
+        "minute": 11,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "K. Khamyok",
+        "minute": 27,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "Y. Burapha",
+        "minute": 49,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "S. Yooyen",
+        "minute": 52,
+        "addedTime": null,
+        "side": "away"
+      },
+      {
+        "playerName": "K. Khamyok",
+        "minute": 59,
+        "addedTime": null,
+        "side": "away"
+      }
+    ]
   },
   {
     "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",

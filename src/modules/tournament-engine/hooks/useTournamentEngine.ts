@@ -21,6 +21,8 @@ export function useTournamentEngine(
   options?: UseTournamentEngineOptions
 ): UseTournamentEngineResult {
   const serviceRef = useRef<TournamentEngineService>(service);
+  const dataRef = useRef<TournamentCenterData | null>(null);
+  const refreshPromiseRef = useRef<Promise<void> | null>(null);
   const [data, setData] = useState<TournamentCenterData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
@@ -31,27 +33,39 @@ export function useTournamentEngine(
     serviceRef.current = service;
   }, [service]);
 
-  const refresh = useCallback(async (): Promise<void> => {
-    if (data) {
+  const refresh = useCallback((): Promise<void> => {
+    if (refreshPromiseRef.current) {
+      return refreshPromiseRef.current;
+    }
+
+    if (dataRef.current) {
       setIsRefreshing(true);
     } else {
       setIsLoading(true);
     }
 
-    try {
-      const snapshot = await serviceRef.current.getTournamentCenterData(true);
-      setData(snapshot);
-      setError(null);
-      setLastUpdated(new Date());
-    } catch (refreshError) {
-      setError(
-        refreshError instanceof Error ? refreshError.message : 'Failed to load tournament data'
-      );
-    } finally {
-      setIsLoading(false);
-      setIsRefreshing(false);
-    }
-  }, [data]);
+    const refreshPromise = serviceRef.current
+      .getTournamentCenterData(true)
+      .then((snapshot) => {
+        dataRef.current = snapshot;
+        setData(snapshot);
+        setError(null);
+        setLastUpdated(new Date());
+      })
+      .catch((refreshError: unknown) => {
+        setError(
+          refreshError instanceof Error ? refreshError.message : 'Failed to load tournament data'
+        );
+      })
+      .finally(() => {
+        refreshPromiseRef.current = null;
+        setIsLoading(false);
+        setIsRefreshing(false);
+      });
+
+    refreshPromiseRef.current = refreshPromise;
+    return refreshPromise;
+  }, []);
 
   useEffect(() => {
     const timerId = window.setTimeout(() => {

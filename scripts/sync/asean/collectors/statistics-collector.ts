@@ -18,13 +18,34 @@ function topPlayer(
   return [...players].sort((a, b) => selector(b) - selector(a))[0] ?? null;
 }
 
+function calculateGoalDifference(
+  players: PlayerCollected[],
+  teamName: string
+): { goals: number; conceded: number } {
+  // Extract team goals from their players' goal counts
+  const teamGoals = players
+    .filter((p) => p.nationTeamName === teamName)
+    .reduce((sum, p) => sum + p.goals, 0);
+
+  // TODO: Conceded goals would require match details with scoring info
+  return { goals: teamGoals, conceded: 0 };
+}
+
+function calculateTeamCleanSheets(
+  players: PlayerCollected[],
+  teams: TeamCollected[]
+): Map<string, number> {
+  // TODO: Clean sheets require match details with goals per team
+  // For now, return empty map - to be populated from match details in future enhancement
+  return new Map();
+}
+
 export function collectStatistics(
   players: PlayerCollected[],
   teams: TeamCollected[]
 ): StatisticEntry[] {
   const goalsLeader = topPlayer(players, (player) => player.goals);
   const assistsLeader = topPlayer(players, (player) => player.assists);
-  const minutesLeader = topPlayer(players, (player) => player.minutes);
 
   const teamGoalCount = new Map<string, number>();
   for (const player of players) {
@@ -35,9 +56,18 @@ export function collectStatistics(
   }
 
   const teamWithMostGoals = [...teamGoalCount.entries()].sort((a, b) => b[1] - a[1])[0];
-  const knownTeamCount = teams.length;
+  const totalGoals = [...teamGoalCount.values()].reduce((sum, g) => sum + g, 0);
 
-  return [
+  // Find best attack (most goals scored by team)
+  const bestAttackTeam = teamWithMostGoals
+    ? teams.find((t) => t.name === teamWithMostGoals[0])
+    : null;
+
+  // TODO: Best defence requires match data with conceded goals per team
+  // TODO: Most clean sheets requires match details showing matches with 0 goals conceded
+  // TODO: Highest scoring match requires match events with all goal times
+
+  const stats: StatisticEntry[] = [
     {
       id: 'top-scorer',
       title: 'Top Scorer',
@@ -45,36 +75,50 @@ export function collectStatistics(
       subtitle: goalsLeader ? goalsLeader.nationTeamName : 'No official data yet',
     },
     {
-      id: 'top-assists',
-      title: 'Top Assists',
+      id: 'most-assists',
+      title: 'Most Assists',
       value: assistsLeader ? `${assistsLeader.name} (${assistsLeader.assists})` : 'Not Available',
       subtitle: assistsLeader ? assistsLeader.nationTeamName : 'No official data yet',
     },
     {
-      id: 'clean-sheets',
+      id: 'most-clean-sheets',
       title: 'Most Clean Sheets',
       value: 'Not Available',
-      subtitle: 'Official clean sheet ranking not published',
+      subtitle: 'Requires detailed match data',
     },
     {
       id: 'most-goals',
-      title: 'Most Goals Team',
+      title: 'Most Goals (Team)',
       value: teamWithMostGoals
         ? `${teamWithMostGoals[0]} (${teamWithMostGoals[1]})`
         : 'Not Available',
-      subtitle: `${knownTeamCount} teams tracked`,
+      subtitle: `${teams.length} teams tracked`,
     },
     {
-      id: 'most-minutes',
-      title: 'Most Minutes',
-      value: minutesLeader ? `${minutesLeader.name} (${minutesLeader.minutes})` : 'Not Available',
-      subtitle: minutesLeader ? minutesLeader.nationTeamName : 'No official data yet',
+      id: 'best-attack',
+      title: 'Best Attack',
+      value: teamWithMostGoals ? teamWithMostGoals[0] : 'Not Available',
+      subtitle: teamWithMostGoals ? `${teamWithMostGoals[1]} goals scored` : 'No official data yet',
     },
     {
-      id: 'golden-boot',
-      title: 'Golden Boot Leader',
-      value: goalsLeader ? goalsLeader.name : 'Not Available',
-      subtitle: goalsLeader ? `${goalsLeader.goals} goals` : 'No official data yet',
+      id: 'best-defence',
+      title: 'Best Defence',
+      value: 'Not Available',
+      subtitle: 'Requires detailed match data',
+    },
+    {
+      id: 'highest-scoring-match',
+      title: 'Highest Scoring Match',
+      value: 'Not Available',
+      subtitle: 'Requires detailed match data',
+    },
+    {
+      id: 'total-goals',
+      title: 'Total Goals',
+      value: `${totalGoals}`,
+      subtitle: 'Goals scored across all matches',
     },
   ];
+
+  return stats;
 }

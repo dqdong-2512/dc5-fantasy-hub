@@ -40,6 +40,11 @@ const AseanCup2026TournamentCenter = React.lazy(() =>
     default: module.AseanCup2026TournamentCenter,
   }))
 );
+const FixturesAndResultsPage = React.lazy(() =>
+  import('../modules/asean-cup-2026').then((module) => ({
+    default: module.FixturesAndResultsPage,
+  }))
+);
 
 const GameweekHubShell = React.lazy(() =>
   import('../modules/fantasy/pages').then((module) => ({ default: module.GameweekHubShell }))
@@ -110,11 +115,24 @@ const router = createBrowserRouter([
       },
       {
         path: 'asean-cup-2026',
-        element: (
-          <Suspense fallback={<RouteLoadingFallback />}>
-            <AseanCup2026TournamentCenter />
-          </Suspense>
-        ),
+        children: [
+          {
+            index: true,
+            element: (
+              <Suspense fallback={<RouteLoadingFallback />}>
+                <AseanCup2026TournamentCenter />
+              </Suspense>
+            ),
+          },
+          {
+            path: 'fixtures',
+            element: (
+              <Suspense fallback={<RouteLoadingFallback />}>
+                <FixturesAndResultsPage />
+              </Suspense>
+            ),
+          },
+        ],
       },
       {
         path: 'premier-league',

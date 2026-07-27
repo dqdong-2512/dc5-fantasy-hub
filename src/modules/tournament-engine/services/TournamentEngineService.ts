@@ -880,6 +880,15 @@ export class TournamentEngineService {
       null
     );
 
+    const highlightedStatisticIds = new Set([
+      'top-scorer',
+      'top-assists',
+      'most-clean-sheets',
+      'most-goals',
+      'best-attack',
+      'highest-scoring-match',
+    ]);
+
     return [
       {
         id: 'top-scorer',
@@ -979,7 +988,7 @@ export class TournamentEngineService {
         value: `${Math.max(0, fixtures.length - completedFixtures.length)}`,
         subtitle: `${fixtures.length} total scheduled fixtures`,
       },
-    ];
+    ].filter((statistic) => highlightedStatisticIds.has(statistic.id));
   }
 
   protected getTopPlayerBy(

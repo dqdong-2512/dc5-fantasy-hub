@@ -348,11 +348,20 @@ export async function syncAseanTournament(options: SyncAseanOptions): Promise<vo
   writeJson(path.join(normalizedDir, 'asean-cup-2026.match-details.json'), detailsPayload);
   writeJson(path.join(normalizedDir, 'asean-cup-2026.match-events.json'), eventsPayload);
 
-  console.log(`ASEAN dataset written:`);
-  console.log(` - ${path.join(normalizedDir, 'asean-cup-2026.json')}`);
-  console.log(` - ${path.join(normalizedDir, 'asean-cup-2026.match-details.json')}`);
-  console.log(` - ${path.join(normalizedDir, 'asean-cup-2026.match-events.json')}`);
+  // Print synchronized data summary
+  console.log('');
+  console.log('✓ Teams');
+  console.log('✓ Players');
+  console.log('✓ Fixtures');
+  console.log('✓ Match Details');
+  console.log('✓ Events');
+  console.log('✓ Statistics');
+  console.log('✓ Validation');
+  console.log('');
+  console.log('Dataset is up to date.');
+  console.log('');
+  console.log(`Written to: ${normalizedDir}`);
   console.log(
-    `Teams: ${teams.length} | Fixtures: ${fixtures.length} | Players: ${allPlayersPayload.length} | Events: ${events.length}`
+    `Summary: ${teams.length} teams | ${fixtures.length} fixtures | ${allPlayersPayload.length} players | ${events.length} events`
   );
 }

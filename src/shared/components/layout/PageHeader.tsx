@@ -15,8 +15,8 @@ export function PageHeader({ children, sx, ...props }: PageHeaderProps): React.R
   return (
     <Box
       sx={{
-        paddingBottom: ThemeTokens.spacing.sm,
-        marginBottom: ThemeTokens.spacing.sm,
+        paddingBottom: ThemeTokens.spacing.xxl,
+        marginBottom: ThemeTokens.spacing.xxl,
         borderBottom: '1px solid',
         borderColor: 'divider',
         ...sx,
