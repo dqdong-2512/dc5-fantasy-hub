@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Avatar,
@@ -147,6 +147,8 @@ function getFixtureStatusLabel(fixture: TournamentFixture): string {
 
 function translateStage(stage: string): string {
   return stage
+    .replace(/SF A/gi, 'Bán kết 1')
+    .replace(/SF B/gi, 'Bán kết 2')
     .replace(/Group Stage Round/gi, 'Vòng bảng - Lượt')
     .replace(/Group ([AB])/gi, 'Bảng $1')
     .replace(/Semi-final/gi, 'Bán kết')
@@ -271,20 +273,10 @@ function formatKickoffTime(value: string): string {
   }).format(date);
 }
 
-function resolveAggregateDisplay(match: KnockoutMatch): string {
-  if (match.home.aggregate !== '-' && match.home.aggregate === match.away.aggregate) {
-    return match.home.aggregate;
-  }
-  if (match.home.aggregate !== '-' || match.away.aggregate !== '-') {
-    return `${match.home.aggregate} / ${match.away.aggregate}`;
-  }
-  return 'Chưa xác định';
-}
-
 function getSemiFinalSlotLabels(fixture: TournamentFixture): [string, string] {
   const isSecondLeg = /Leg 2/i.test(fixture.stage);
 
-  if (fixture.stage.includes('Semi-final 1')) {
+  if (/Semi-final 1|SF A/i.test(fixture.stage)) {
     return isSecondLeg ? ['Nhất bảng B', 'Nhì bảng A'] : ['Nhì bảng A', 'Nhất bảng B'];
   }
 
@@ -306,14 +298,14 @@ function ensureTwoLegFixtures(
         new RegExp(`Leg ${leg}`, 'i').test(fixture.stage)
     );
     if (existing) {
+      const useMappedTeams =
+        existing.status === 'upcoming' || existing.homeTeam.id === 0 || existing.awayTeam.id === 0;
       return {
         ...existing,
-        kickoff: existing.kickoff || scheduledFixture?.kickoff || '',
-        venue: existing.venue || scheduledFixture?.venue || '',
-        homeTeam:
-          existing.homeTeam.id === 0 ? (isSecondLeg ? awayTeam : homeTeam) : existing.homeTeam,
-        awayTeam:
-          existing.awayTeam.id === 0 ? (isSecondLeg ? homeTeam : awayTeam) : existing.awayTeam,
+        kickoff: scheduledFixture?.kickoff || existing.kickoff || '',
+        venue: scheduledFixture?.venue || existing.venue || '',
+        homeTeam: useMappedTeams ? (isSecondLeg ? awayTeam : homeTeam) : existing.homeTeam,
+        awayTeam: useMappedTeams ? (isSecondLeg ? homeTeam : awayTeam) : existing.awayTeam,
       };
     }
 
@@ -336,21 +328,30 @@ function ensureTwoLegFixtures(
 
 function renderScheduledTeamRow(label: string, score: number | null): React.ReactElement {
   return (
-    <Box sx={{ display: 'grid', gridTemplateColumns: '1fr auto', alignItems: 'center', gap: 1 }}>
+    <Box
+      sx={{
+        minHeight: 32,
+        display: 'grid',
+        gridTemplateColumns: 'minmax(0, 1fr) 32px',
+        alignItems: 'center',
+        gap: 1,
+      }}
+    >
       <Typography variant="body2" sx={{ fontWeight: 700 }}>
         {translateTeamName(label)}
       </Typography>
-      <Typography variant="body2" color="text.secondary" sx={{ fontWeight: 800 }}>
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ fontWeight: 800, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}
+      >
         {score ?? '-'}
       </Typography>
     </Box>
   );
 }
 
-function renderKnockoutLegCard(
-  fixture: TournamentFixture,
-  aggregateScore: string
-): React.ReactElement {
+function renderKnockoutLegCard(fixture: TournamentFixture): React.ReactElement {
   const kickoffDate = formatMatchDate(fixture.kickoff);
   const kickoffTime = formatKickoffTime(fixture.kickoff);
   const [fallbackHomeLabel, fallbackAwayLabel] = getSemiFinalSlotLabels(fixture);
@@ -420,31 +421,192 @@ function renderKnockoutLegCard(
               </Typography>
             </Box>
           </Box>
-          <Box
-            sx={{ textAlign: 'center', pt: 0.75, borderTop: '1px solid', borderColor: 'divider' }}
-          >
-            <Typography variant="caption" color="text.secondary">
-              Tổng tỷ số
-            </Typography>
-            <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
-              {aggregateScore}
-            </Typography>
-          </Box>
         </Stack>
       </CardContent>
     </Card>
   );
 }
 
+interface KnockoutTieSummary {
+  teamA: TournamentFixture['homeTeam'];
+  teamB: TournamentFixture['awayTeam'];
+  teamAScore: number;
+  teamBScore: number;
+  hasScore: boolean;
+  isComplete: boolean;
+}
+
+function isSameTeam(
+  left: TournamentFixture['homeTeam'],
+  right: TournamentFixture['homeTeam']
+): boolean {
+  if (left.id !== 0 && right.id !== 0) {
+    return left.id === right.id;
+  }
+  return left.name === right.name;
+}
+
+function calculateTieSummary(
+  fixtures: TournamentFixture[],
+  teamA: TournamentFixture['homeTeam'],
+  teamB: TournamentFixture['awayTeam']
+): KnockoutTieSummary {
+  const scoredFixtures = fixtures.filter(
+    (fixture) => fixture.homeScore !== null && fixture.awayScore !== null
+  );
+  let teamAScore = 0;
+  let teamBScore = 0;
+
+  scoredFixtures.forEach((fixture) => {
+    if (isSameTeam(fixture.homeTeam, teamA)) {
+      teamAScore += fixture.homeScore ?? 0;
+      teamBScore += fixture.awayScore ?? 0;
+    } else if (isSameTeam(fixture.homeTeam, teamB)) {
+      teamBScore += fixture.homeScore ?? 0;
+      teamAScore += fixture.awayScore ?? 0;
+    }
+  });
+
+  return {
+    teamA,
+    teamB,
+    teamAScore,
+    teamBScore,
+    hasScore: scoredFixtures.length > 0,
+    isComplete:
+      fixtures.length === 2 &&
+      fixtures.every(
+        (fixture) =>
+          fixture.status === 'finished' && fixture.homeScore !== null && fixture.awayScore !== null
+      ),
+  };
+}
+
+function formatAggregateScore(summary: KnockoutTieSummary): string {
+  const teamAName = translateTeamName(summary.teamA.name);
+  const teamBName = translateTeamName(summary.teamB.name);
+
+  const teamAScore = summary.hasScore ? summary.teamAScore : 0;
+  const teamBScore = summary.hasScore ? summary.teamBScore : 0;
+
+  return `${teamAName} ${teamAScore} - ${teamBScore} ${teamBName}`;
+}
+
+function renderAggregateRow(summary: KnockoutTieSummary): React.ReactElement {
+  return (
+    <Box
+      sx={{
+        marginTop: 1,
+        px: 1.5,
+        py: 1.25,
+        textAlign: 'center',
+        border: '1px solid rgba(37, 99, 235, 0.2)',
+        borderRadius: '8px',
+        bgcolor: 'rgba(37, 99, 235, 0.06)',
+      }}
+    >
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{
+          fontWeight: 500,
+          mb: 0.5,
+        }}
+      >
+        Tổng tỷ số sau 2 lượt
+      </Typography>
+
+      <Typography
+        variant="h6"
+        sx={{
+          fontWeight: 800,
+          lineHeight: 1.3,
+        }}
+      >
+        {formatAggregateScore(summary)}
+      </Typography>
+    </Box>
+  );
+}
+
+function createPlaceholderTeam(id: number, name: string): TournamentFixture['homeTeam'] {
+  return { id, name, countryCode: 'TBD' };
+}
+
+function resolveGroupQualifiers(
+  group: TournamentCenterData['groups'][number] | undefined,
+  fixtures: TournamentFixture[],
+  firstPlaceholder: TournamentFixture['homeTeam'],
+  secondPlaceholder: TournamentFixture['homeTeam']
+): {
+  first: TournamentFixture['homeTeam'];
+  second: TournamentFixture['homeTeam'];
+} {
+  if (!group) {
+    return { first: firstPlaceholder, second: secondPlaceholder };
+  }
+
+  const teamIds = new Set(group.standings.map((standing) => standing.team.id));
+  const groupFixtures = fixtures.filter(
+    (fixture) =>
+      /Group/i.test(fixture.stage) &&
+      teamIds.has(fixture.homeTeam.id) &&
+      teamIds.has(fixture.awayTeam.id)
+  );
+  const qualificationConfirmed =
+    groupFixtures.length > 0 &&
+    groupFixtures.every(
+      (fixture) => fixture.status === 'finished' || fixture.status === 'cancelled'
+    );
+
+  if (!qualificationConfirmed) {
+    return { first: firstPlaceholder, second: secondPlaceholder };
+  }
+
+  const orderedStandings = [...group.standings].sort(
+    (left, right) => left.position - right.position
+  );
+  return {
+    first: orderedStandings[0]?.team ?? firstPlaceholder,
+    second: orderedStandings[1]?.team ?? secondPlaceholder,
+  };
+}
+
+function resolveTieWinner(
+  summary: KnockoutTieSummary,
+  knockoutMatch: KnockoutMatch
+): TournamentFixture['homeTeam'] | null {
+  const qualifiedKnockoutTeam = [knockoutMatch.home, knockoutMatch.away].find(
+    (team) => team.status === 'qualified' || team.status === 'champion'
+  )?.team;
+
+  if (qualifiedKnockoutTeam) {
+    if (isSameTeam(qualifiedKnockoutTeam, summary.teamA)) {
+      return summary.teamA;
+    }
+    if (isSameTeam(qualifiedKnockoutTeam, summary.teamB)) {
+      return summary.teamB;
+    }
+    return qualifiedKnockoutTeam;
+  }
+
+  if (!summary.isComplete || summary.teamAScore === summary.teamBScore) {
+    return null;
+  }
+
+  return summary.teamAScore > summary.teamBScore ? summary.teamA : summary.teamB;
+}
+
 function renderFinalTieCard(
   fixtures: TournamentFixture[],
-  aggregateScore: string
+  summary: KnockoutTieSummary
 ): React.ReactElement {
   return (
     <Card
       variant="outlined"
       sx={{
-        width: '100%',
+        width: { xs: '100%', md: 'min(100%, 460px)' },
+        mx: 'auto',
         borderWidth: 2,
         borderColor: '#F59E0B',
         borderRadius: '16px',
@@ -499,16 +661,145 @@ function renderFinalTieCard(
           ))}
           <Divider />
           <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="caption" color="text.secondary">
-              Tổng tỷ số
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 850 }}>
-              {aggregateScore}
+            <Typography variant="body1" sx={{ fontWeight: 850 }}>
+              {formatAggregateScore(summary)}
             </Typography>
           </Box>
         </Stack>
       </CardContent>
     </Card>
+  );
+}
+
+interface ConnectorPathState {
+  width: number;
+  height: number;
+  leftPath: string;
+  rightPath: string;
+}
+
+function BracketConnectorOverlay(): React.ReactElement {
+  const svgRef = useRef<SVGSVGElement | null>(null);
+  const [paths, setPaths] = useState<ConnectorPathState>({
+    width: 0,
+    height: 0,
+    leftPath: '',
+    rightPath: '',
+  });
+
+  useLayoutEffect(() => {
+    const svg = svgRef.current;
+    const container = svg?.parentElement;
+    if (!svg || !container) {
+      return;
+    }
+
+    let frameId = 0;
+    const updatePaths = (): void => {
+      const containerRect = container.getBoundingClientRect();
+      const findAnchor = (name: string): DOMRect | null =>
+        container
+          .querySelector<HTMLElement>(`[data-bracket-anchor="${name}"]`)
+          ?.getBoundingClientRect() ?? null;
+      const leftLeg1 = findAnchor('sf1-leg1');
+      const leftLeg2 = findAnchor('sf1-leg2');
+      const rightLeg1 = findAnchor('sf2-leg1');
+      const rightLeg2 = findAnchor('sf2-leg2');
+      const finalCard = findAnchor('final-card');
+
+      if (!leftLeg1 || !leftLeg2 || !rightLeg1 || !rightLeg2 || !finalCard) {
+        return;
+      }
+
+      const x = (value: number): number => value - containerRect.left;
+      const y = (rect: DOMRect): number => rect.top - containerRect.top + rect.height / 2;
+      const leftStart = Math.max(x(leftLeg1.right), x(leftLeg2.right));
+      const leftEnd = x(finalCard.left);
+      const leftJoin = leftStart + (leftEnd - leftStart) / 2;
+      const rightStart = Math.min(x(rightLeg1.left), x(rightLeg2.left));
+      const rightEnd = x(finalCard.right);
+      const rightJoin = rightEnd + (rightStart - rightEnd) / 2;
+      const finalCenterY = y(finalCard);
+
+      const nextPaths: ConnectorPathState = {
+        width: Math.max(0, containerRect.width),
+        height: Math.max(0, containerRect.height),
+        leftPath: [
+          `M ${x(leftLeg1.right)} ${y(leftLeg1)} H ${leftJoin}`,
+          `M ${x(leftLeg2.right)} ${y(leftLeg2)} H ${leftJoin}`,
+          `M ${leftJoin} ${y(leftLeg1)} V ${y(leftLeg2)}`,
+          `M ${leftJoin} ${finalCenterY} H ${leftEnd}`,
+        ].join(' '),
+        rightPath: [
+          `M ${x(rightLeg1.left)} ${y(rightLeg1)} H ${rightJoin}`,
+          `M ${x(rightLeg2.left)} ${y(rightLeg2)} H ${rightJoin}`,
+          `M ${rightJoin} ${y(rightLeg1)} V ${y(rightLeg2)}`,
+          `M ${rightEnd} ${finalCenterY} H ${rightJoin}`,
+        ].join(' '),
+      };
+
+      setPaths((current) =>
+        current.width === nextPaths.width &&
+        current.height === nextPaths.height &&
+        current.leftPath === nextPaths.leftPath &&
+        current.rightPath === nextPaths.rightPath
+          ? current
+          : nextPaths
+      );
+    };
+
+    const scheduleUpdate = (): void => {
+      window.cancelAnimationFrame(frameId);
+      frameId = window.requestAnimationFrame(updatePaths);
+    };
+    const resizeObserver = new ResizeObserver(scheduleUpdate);
+    resizeObserver.observe(container);
+    container.querySelectorAll<HTMLElement>('[data-bracket-anchor]').forEach((element) => {
+      resizeObserver.observe(element);
+    });
+    window.addEventListener('resize', scheduleUpdate);
+    scheduleUpdate();
+
+    return () => {
+      window.cancelAnimationFrame(frameId);
+      resizeObserver.disconnect();
+      window.removeEventListener('resize', scheduleUpdate);
+    };
+  }, []);
+
+  return (
+    <Box
+      component="svg"
+      ref={svgRef}
+      aria-hidden
+      viewBox={`0 0 ${paths.width} ${paths.height}`}
+      preserveAspectRatio="none"
+      sx={{
+        display: { xs: 'none', md: 'block' },
+        position: 'absolute',
+        inset: 0,
+        width: '100%',
+        height: '100%',
+        overflow: 'visible',
+        pointerEvents: 'none',
+        zIndex: 0,
+      }}
+    >
+      {[paths.leftPath, paths.rightPath].map(
+        (path, index) =>
+          path && (
+            <path
+              key={index}
+              d={path}
+              fill="none"
+              stroke="#2563EB"
+              strokeWidth={2}
+              strokeLinejoin="miter"
+              vectorEffect="non-scaling-stroke"
+            />
+          )
+      )}
+    </Box>
   );
 }
 
@@ -1255,39 +1546,61 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
   const championTeam = data.knockout.champion.team;
   const championName = championTeam?.name ?? data.knockout.champion.label;
   const semiFinal1Fixtures = allKnockoutFixtures
-    .filter((fixture) => fixture.stage.includes('Semi-final 1'))
+    .filter((fixture) => /Semi-final 1|SF A/i.test(fixture.stage))
     .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime());
   const semiFinal2Fixtures = allKnockoutFixtures
-    .filter((fixture) => fixture.stage.includes('Semi-final 2'))
+    .filter((fixture) => /Semi-final 2|SF B/i.test(fixture.stage))
     .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime());
   const finalFixtures = allKnockoutFixtures
     .filter((fixture) => /^Final(?: \()?Leg [12]\)?$/i.test(fixture.stage))
     .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime());
-  const toDisplayTeam = (
-    team: TournamentCenterData['knockout']['final']['home']
-  ): TournamentFixture['homeTeam'] => ({
-    id: team.team?.id ?? 0,
-    name: team.team?.name ?? team.label,
-    countryCode: team.team?.countryCode ?? 'TBD',
-  });
+  const groupAQualifiers = resolveGroupQualifiers(
+    data.groups.find((group) => group.id === 'A' || /Group A/i.test(group.name)),
+    data.fixtures.all,
+    createPlaceholderTeam(-101, 'Nhất bảng A'),
+    createPlaceholderTeam(-102, 'Nhì bảng A')
+  );
+  const groupBQualifiers = resolveGroupQualifiers(
+    data.groups.find((group) => group.id === 'B' || /Group B/i.test(group.name)),
+    data.fixtures.all,
+    createPlaceholderTeam(-103, 'Nhất bảng B'),
+    createPlaceholderTeam(-104, 'Nhì bảng B')
+  );
   const semiFinal1Legs = ensureTwoLegFixtures(
     semiFinal1Fixtures,
     'Semi-final 1',
-    toDisplayTeam(data.knockout.semiFinal1.home),
-    toDisplayTeam(data.knockout.semiFinal1.away)
+    groupAQualifiers.second,
+    groupBQualifiers.first
   );
   const semiFinal2Legs = ensureTwoLegFixtures(
     semiFinal2Fixtures,
     'Semi-final 2',
-    toDisplayTeam(data.knockout.semiFinal2.home),
-    toDisplayTeam(data.knockout.semiFinal2.away)
+    groupBQualifiers.second,
+    groupAQualifiers.first
   );
+  const semiFinal1Summary = calculateTieSummary(
+    semiFinal1Legs,
+    groupBQualifiers.first,
+    groupAQualifiers.second
+  );
+  const semiFinal2Summary = calculateTieSummary(
+    semiFinal2Legs,
+    groupAQualifiers.first,
+    groupBQualifiers.second
+  );
+  const semiFinal1Winner =
+    resolveTieWinner(semiFinal1Summary, data.knockout.semiFinal1) ??
+    createPlaceholderTeam(-201, 'Đội thắng bán kết 1');
+  const semiFinal2Winner =
+    resolveTieWinner(semiFinal2Summary, data.knockout.semiFinal2) ??
+    createPlaceholderTeam(-202, 'Đội thắng bán kết 2');
   const finalLegs = ensureTwoLegFixtures(
     finalFixtures,
     'Final',
-    toDisplayTeam(data.knockout.final.home),
-    toDisplayTeam(data.knockout.final.away)
+    semiFinal1Winner,
+    semiFinal2Winner
   );
+  const finalSummary = calculateTieSummary(finalLegs, semiFinal1Winner, semiFinal2Winner);
 
   return (
     <PageContent>
@@ -1482,118 +1795,144 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                 display: 'grid',
                 gridTemplateColumns: {
                   xs: '1fr',
-                  md: 'minmax(220px, 1fr) minmax(360px, 1.18fr) minmax(220px, 1fr)',
+                  md: 'minmax(220px, 1fr) minmax(320px, 460px) minmax(220px, 1fr)',
                 },
                 gridTemplateAreas: {
-                  xs: '"semi1" "final" "semi2" "champion"',
+                  xs: '"semi1" "semi2" "final" "champion"',
                   md: '"semi1 final semi2" ". champion ."',
                 },
                 alignItems: 'center',
-                columnGap: ThemeTokens.spacing.lg,
-                rowGap: ThemeTokens.spacing.md,
+                columnGap: { xs: 0, md: ThemeTokens.spacing.xxl },
+                rowGap: { xs: ThemeTokens.spacing.xxl, md: ThemeTokens.spacing.md },
+                pt: { xs: 0, md: 12 },
+                pb: { xs: 0, md: 8 },
                 position: 'relative',
               }}
             >
+              <BracketConnectorOverlay />
+
               <Box
                 sx={{
-                  display: { xs: 'none', md: 'block' },
-                  position: 'absolute',
-                  pointerEvents: 'none',
-                  left: '29%',
-                  top: '42%',
-                  width: '13%',
-                  borderTop: '2px solid #2563EB',
+                  gridArea: 'semi1',
+                  position: 'relative',
+                  alignSelf: 'center',
+                  justifySelf: 'center',
+                  width: { xs: '100%', md: '75%' },
+                  zIndex: 1,
                 }}
-              />
-              <Box
-                sx={{
-                  display: { xs: 'none', md: 'block' },
-                  position: 'absolute',
-                  pointerEvents: 'none',
-                  right: '29%',
-                  top: '42%',
-                  width: '13%',
-                  borderTop: '2px solid #2563EB',
-                }}
-              />
-              <Box sx={{ gridArea: 'semi1', zIndex: 1 }}>
-                <Stack spacing={ThemeTokens.spacing.sm}>
-                  <Chip
-                    label="BÁN KẾT 1"
-                    size="small"
-                    sx={{
-                      alignSelf: 'flex-start',
-                      fontWeight: 700,
-                      bgcolor: 'rgba(37, 99, 235, 0.12)',
-                      color: '#1E40AF',
-                    }}
-                  />
-                  {semiFinal1Legs.length > 0 ? (
-                    semiFinal1Legs.map((fixture) => (
-                      <React.Fragment key={fixture.id}>
-                        {renderKnockoutLegCard(
-                          fixture,
-                          resolveAggregateDisplay(data.knockout.semiFinal1)
-                        )}
-                      </React.Fragment>
-                    ))
-                  ) : (
-                    <Card variant="outlined">
-                      <CardContent
-                        sx={{ p: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}
-                      >
-                        <Stack spacing={ThemeTokens.spacing.sm}>
-                          <Typography variant="caption" color="text.secondary">
-                            {data.knockout.semiFinal1.legDates}
-                          </Typography>
-                          <Box
-                            sx={{
-                              display: 'grid',
-                              gridTemplateColumns: '1fr auto 1fr',
-                              alignItems: 'center',
-                              gap: 1,
-                            }}
+              >
+                <Chip
+                  label="BÁN KẾT 1"
+                  size="small"
+                  sx={{
+                    display: 'flex',
+                    width: 'fit-content',
+                    mx: 'auto',
+                    mb: { xs: ThemeTokens.spacing.sm, md: ThemeTokens.spacing.xl },
+                    position: { xs: 'static', md: 'absolute' },
+                    bottom: { md: `calc(100% + ${ThemeTokens.spacing.sm}px)` },
+                    left: { md: '50%' },
+                    transform: { md: 'translateX(-50%)' },
+                    fontWeight: 700,
+                    bgcolor: 'rgba(37, 99, 235, 0.12)',
+                    color: '#1E40AF',
+                  }}
+                />
+                {semiFinal1Legs.length > 0 ? (
+                  <>
+                    <Stack spacing={ThemeTokens.spacing.md}>
+                      {semiFinal1Legs.map((fixture, index) => (
+                        <Box key={fixture.id} data-bracket-anchor={`sf1-leg${index + 1}`}>
+                          {renderKnockoutLegCard(fixture)}
+                        </Box>
+                      ))}
+                    </Stack>
+                    <Box
+                      sx={{
+                        mt: { xs: ThemeTokens.spacing.sm, md: 0 },
+                        position: { xs: 'static', md: 'absolute' },
+                        top: { md: `calc(100% + ${ThemeTokens.spacing.sm}px)` },
+                        left: 0,
+                        width: '100%',
+                      }}
+                    >
+                      {renderAggregateRow(semiFinal1Summary)}
+                    </Box>
+                  </>
+                ) : (
+                  <Card variant="outlined">
+                    <CardContent
+                      sx={{ p: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}
+                    >
+                      <Stack spacing={ThemeTokens.spacing.sm}>
+                        <Typography variant="caption" color="text.secondary">
+                          {data.knockout.semiFinal1.legDates}
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: 'grid',
+                            gridTemplateColumns: '1fr auto 1fr',
+                            alignItems: 'center',
+                            gap: 1,
+                          }}
+                        >
+                          {renderTeamWithFlag(
+                            {
+                              name: data.knockout.semiFinal1.home.label,
+                              countryCode: 'TBD',
+                            },
+                            'md',
+                            'caption'
+                          )}
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ textAlign: 'center' }}
                           >
+                            vs
+                          </Typography>
+                          <Box sx={{ justifySelf: 'end' }}>
                             {renderTeamWithFlag(
                               {
-                                name: data.knockout.semiFinal1.home.label,
+                                name: data.knockout.semiFinal1.away.label,
                                 countryCode: 'TBD',
                               },
                               'md',
                               'caption'
                             )}
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
-                              sx={{ textAlign: 'center' }}
-                            >
-                              vs
-                            </Typography>
-                            <Box sx={{ justifySelf: 'end' }}>
-                              {renderTeamWithFlag(
-                                {
-                                  name: data.knockout.semiFinal1.away.label,
-                                  countryCode: 'TBD',
-                                },
-                                'md',
-                                'caption'
-                              )}
-                            </Box>
                           </Box>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <Typography variant="caption" color="text.secondary" sx={{ flex: 1 }}>
-                              Lịch thi đấu đang chờ công bố chính thức
-                            </Typography>
-                          </Box>
-                        </Stack>
-                      </CardContent>
-                    </Card>
-                  )}
-                </Stack>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <Typography variant="caption" color="text.secondary" sx={{ flex: 1 }}>
+                            Lịch thi đấu đang chờ công bố chính thức
+                          </Typography>
+                        </Box>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                )}
               </Box>
 
-              <Box sx={{ gridArea: 'final', zIndex: 1 }}>
-                <Stack spacing={1.25} sx={{ alignItems: 'center' }}>
+              <Box
+                sx={{
+                  gridArea: 'final',
+                  position: 'relative',
+                  alignSelf: 'center',
+                  zIndex: 1,
+                }}
+              >
+                <Stack
+                  spacing={1.25}
+                  sx={{
+                    alignItems: 'center',
+                    mb: { xs: ThemeTokens.spacing.sm, md: 0 },
+                    position: { xs: 'static', md: 'absolute' },
+                    bottom: { md: `calc(100% + ${ThemeTokens.spacing.sm}px)` },
+                    left: { md: '50%' },
+                    transform: { md: 'translateX(-50%)' },
+                    width: { md: 'max-content' },
+                  }}
+                >
                   <EmojiEventsIcon
                     sx={{
                       color: '#D97706',
@@ -1608,84 +1947,112 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                     </Typography>
                     <Box sx={{ width: 26, borderTop: '1px solid #FBBF24' }} />
                   </Box>
-                  {renderFinalTieCard(finalLegs, resolveAggregateDisplay(data.knockout.final))}
                 </Stack>
+                <Box data-bracket-anchor="final-card">
+                  {renderFinalTieCard(finalLegs, finalSummary)}
+                </Box>
               </Box>
 
-              <Box sx={{ gridArea: 'semi2', zIndex: 1 }}>
-                <Stack spacing={ThemeTokens.spacing.sm}>
-                  <Chip
-                    label="BÁN KẾT 2"
-                    size="small"
-                    sx={{
-                      alignSelf: 'flex-start',
-                      fontWeight: 700,
-                      bgcolor: 'rgba(37, 99, 235, 0.12)',
-                      color: '#1E40AF',
-                    }}
-                  />
-                  {semiFinal2Legs.length > 0 ? (
-                    semiFinal2Legs.map((fixture) => (
-                      <React.Fragment key={fixture.id}>
-                        {renderKnockoutLegCard(
-                          fixture,
-                          resolveAggregateDisplay(data.knockout.semiFinal2)
-                        )}
-                      </React.Fragment>
-                    ))
-                  ) : (
-                    <Card variant="outlined">
-                      <CardContent
-                        sx={{ p: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}
-                      >
-                        <Stack spacing={ThemeTokens.spacing.sm}>
-                          <Typography variant="caption" color="text.secondary">
-                            {data.knockout.semiFinal2.legDates}
-                          </Typography>
-                          <Box
-                            sx={{
-                              display: 'grid',
-                              gridTemplateColumns: '1fr auto 1fr',
-                              alignItems: 'center',
-                              gap: 1,
-                            }}
+              <Box
+                sx={{
+                  gridArea: 'semi2',
+                  position: 'relative',
+                  alignSelf: 'center',
+                  justifySelf: 'center',
+                  width: { xs: '100%', md: '75%' },
+                  zIndex: 1,
+                }}
+              >
+                <Chip
+                  label="BÁN KẾT 2"
+                  size="small"
+                  sx={{
+                    display: 'flex',
+                    width: 'fit-content',
+                    mx: 'auto',
+                    mb: { xs: ThemeTokens.spacing.sm, md: ThemeTokens.spacing.xl },
+                    position: { xs: 'static', md: 'absolute' },
+                    bottom: { md: `calc(100% + ${ThemeTokens.spacing.sm}px)` },
+                    left: { md: '50%' },
+                    transform: { md: 'translateX(-50%)' },
+                    fontWeight: 700,
+                    bgcolor: 'rgba(37, 99, 235, 0.12)',
+                    color: '#1E40AF',
+                  }}
+                />
+                {semiFinal2Legs.length > 0 ? (
+                  <>
+                    <Stack spacing={ThemeTokens.spacing.md}>
+                      {semiFinal2Legs.map((fixture, index) => (
+                        <Box key={fixture.id} data-bracket-anchor={`sf2-leg${index + 1}`}>
+                          {renderKnockoutLegCard(fixture)}
+                        </Box>
+                      ))}
+                    </Stack>
+                    <Box
+                      sx={{
+                        mt: { xs: ThemeTokens.spacing.sm, md: 0 },
+                        position: { xs: 'static', md: 'absolute' },
+                        top: { md: `calc(100% + ${ThemeTokens.spacing.sm}px)` },
+                        left: 0,
+                        width: '100%',
+                      }}
+                    >
+                      {renderAggregateRow(semiFinal2Summary)}
+                    </Box>
+                  </>
+                ) : (
+                  <Card variant="outlined">
+                    <CardContent
+                      sx={{ p: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg } }}
+                    >
+                      <Stack spacing={ThemeTokens.spacing.sm}>
+                        <Typography variant="caption" color="text.secondary">
+                          {data.knockout.semiFinal2.legDates}
+                        </Typography>
+                        <Box
+                          sx={{
+                            display: 'grid',
+                            gridTemplateColumns: '1fr auto 1fr',
+                            alignItems: 'center',
+                            gap: 1,
+                          }}
+                        >
+                          {renderTeamWithFlag(
+                            {
+                              name: data.knockout.semiFinal2.home.label,
+                              countryCode: 'TBD',
+                            },
+                            'md',
+                            'caption'
+                          )}
+                          <Typography
+                            variant="caption"
+                            color="text.secondary"
+                            sx={{ textAlign: 'center' }}
                           >
+                            vs
+                          </Typography>
+                          <Box sx={{ justifySelf: 'end' }}>
                             {renderTeamWithFlag(
                               {
-                                name: data.knockout.semiFinal2.home.label,
+                                name: data.knockout.semiFinal2.away.label,
                                 countryCode: 'TBD',
                               },
                               'md',
                               'caption'
                             )}
-                            <Typography
-                              variant="caption"
-                              color="text.secondary"
-                              sx={{ textAlign: 'center' }}
-                            >
-                              vs
-                            </Typography>
-                            <Box sx={{ justifySelf: 'end' }}>
-                              {renderTeamWithFlag(
-                                {
-                                  name: data.knockout.semiFinal2.away.label,
-                                  countryCode: 'TBD',
-                                },
-                                'md',
-                                'caption'
-                              )}
-                            </Box>
                           </Box>
-                          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                            <Typography variant="caption" color="text.secondary" sx={{ flex: 1 }}>
-                              Lịch thi đấu đang chờ công bố chính thức
-                            </Typography>
-                          </Box>
-                        </Stack>
-                      </CardContent>
-                    </Card>
-                  )}
-                </Stack>
+                        </Box>
+                        <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                          <Typography variant="caption" color="text.secondary" sx={{ flex: 1 }}>
+                            Lịch thi đấu đang chờ công bố chính thức
+                          </Typography>
+                        </Box>
+                      </Stack>
+                    </CardContent>
+                  </Card>
+                )}
               </Box>
 
               <Box
