@@ -246,12 +246,49 @@
     "dateLabel": "Jul 27 2026",
     "localTimeLabel": "08:30 PM",
     "venue": "Stadion Pakansari Bogor",
-    "status": "UPCOMING",
+    "status": "FINISHED",
     "homeTeam": "Indonesia",
     "awayTeam": "Cambodia",
-    "homeScore": null,
-    "awayScore": null,
-    "goals": []
+    "homeScore": 5,
+    "awayScore": 1,
+    "goals": [
+      {
+        "playerName": "M. Lee Baker",
+        "minute": 6,
+        "addedTime": null,
+        "side": "home"
+      },
+      {
+        "playerName": "M. Lee Baker",
+        "minute": 15,
+        "addedTime": null,
+        "side": "home"
+      },
+      {
+        "playerName": "S. Walsh",
+        "minute": 24,
+        "addedTime": null,
+        "side": "home"
+      },
+      {
+        "playerName": "M. Lee Baker",
+        "minute": 56,
+        "addedTime": null,
+        "side": "home"
+      },
+      {
+        "playerName": "J. Raven",
+        "minute": 86,
+        "addedTime": null,
+        "side": "home"
+      },
+      {
+        "playerName": "N. Argawinata",
+        "minute": 48,
+        "addedTime": null,
+        "side": "away"
+      }
+    ]
   },
   {
     "fixtureId": "cmmr7oa4oe5e2r75bp1pcp53o",
@@ -260,12 +297,25 @@
     "dateLabel": "Jul 27 2026",
     "localTimeLabel": "07:00 PM",
     "venue": "Jalan Besar Stadium",
-    "status": "UPCOMING",
+    "status": "FINISHED",
     "homeTeam": "Singapore",
     "awayTeam": "Timor-Leste",
-    "homeScore": null,
-    "awayScore": null,
-    "goals": []
+    "homeScore": 2,
+    "awayScore": 0,
+    "goals": [
+      {
+        "playerName": "Ilhan Fandi",
+        "minute": 41,
+        "addedTime": null,
+        "side": "home"
+      },
+      {
+        "playerName": "Song Ui-Young",
+        "minute": 56,
+        "addedTime": null,
+        "side": "home"
+      }
+    ]
   },
   {
     "fixtureId": "9kaz0vc8bs0voywdru0pvqcr8",

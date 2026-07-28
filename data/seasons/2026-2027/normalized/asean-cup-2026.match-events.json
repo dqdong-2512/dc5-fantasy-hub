@@ -2,7 +2,7 @@
   {
     "id": "event-9",
     "fixtureId": "5qwcsl59r8s96ylfl4y9tndp0",
-    "playerId": 10,
+    "playerId": 41,
     "type": "goal",
     "minute": 22,
     "addedTime": null,
@@ -11,7 +11,7 @@
   {
     "id": "event-8",
     "fixtureId": "5qwcsl59r8s96ylfl4y9tndp0",
-    "playerId": 9,
+    "playerId": 40,
     "type": "goal",
     "minute": 55,
     "addedTime": null,
@@ -20,16 +20,70 @@
   {
     "id": "event-10",
     "fixtureId": "5qwcsl59r8s96ylfl4y9tndp0",
-    "playerId": 5,
+    "playerId": 4,
     "type": "goal",
     "minute": 90,
     "addedTime": 11,
     "note": null
   },
   {
+    "id": "event-26",
+    "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
+    "playerId": 1,
+    "type": "goal",
+    "minute": 6,
+    "addedTime": null,
+    "note": null
+  },
+  {
+    "id": "event-27",
+    "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
+    "playerId": 1,
+    "type": "goal",
+    "minute": 15,
+    "addedTime": null,
+    "note": null
+  },
+  {
+    "id": "event-28",
+    "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
+    "playerId": 25,
+    "type": "goal",
+    "minute": 24,
+    "addedTime": null,
+    "note": null
+  },
+  {
+    "id": "event-31",
+    "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
+    "playerId": 42,
+    "type": "goal",
+    "minute": 48,
+    "addedTime": null,
+    "note": null
+  },
+  {
+    "id": "event-29",
+    "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
+    "playerId": 1,
+    "type": "goal",
+    "minute": 56,
+    "addedTime": null,
+    "note": null
+  },
+  {
+    "id": "event-30",
+    "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
+    "playerId": 7,
+    "type": "goal",
+    "minute": 86,
+    "addedTime": null,
+    "note": null
+  },
+  {
     "id": "event-18",
     "fixtureId": "9j6j1y7xg2hlna3zlktze58us",
-    "playerId": 6,
+    "playerId": 8,
     "type": "goal",
     "minute": 10,
     "addedTime": null,
@@ -38,7 +92,7 @@
   {
     "id": "event-19",
     "fixtureId": "9j6j1y7xg2hlna3zlktze58us",
-    "playerId": 4,
+    "playerId": 6,
     "type": "goal",
     "minute": 52,
     "addedTime": null,
@@ -47,7 +101,7 @@
   {
     "id": "event-20",
     "fixtureId": "9j6j1y7xg2hlna3zlktze58us",
-    "playerId": 4,
+    "playerId": 6,
     "type": "goal",
     "minute": 57,
     "addedTime": null,
@@ -56,7 +110,7 @@
   {
     "id": "event-21",
     "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
-    "playerId": 39,
+    "playerId": 43,
     "type": "goal",
     "minute": 11,
     "addedTime": null,
@@ -65,7 +119,7 @@
   {
     "id": "event-22",
     "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
-    "playerId": 3,
+    "playerId": 5,
     "type": "goal",
     "minute": 27,
     "addedTime": null,
@@ -74,7 +128,7 @@
   {
     "id": "event-23",
     "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
-    "playerId": 40,
+    "playerId": 44,
     "type": "goal",
     "minute": 49,
     "addedTime": null,
@@ -83,7 +137,7 @@
   {
     "id": "event-24",
     "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
-    "playerId": 21,
+    "playerId": 26,
     "type": "goal",
     "minute": 52,
     "addedTime": null,
@@ -92,7 +146,7 @@
   {
     "id": "event-25",
     "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
-    "playerId": 3,
+    "playerId": 5,
     "type": "goal",
     "minute": 59,
     "addedTime": null,
@@ -101,7 +155,7 @@
   {
     "id": "event-11",
     "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-    "playerId": 2,
+    "playerId": 3,
     "type": "goal",
     "minute": 7,
     "addedTime": null,
@@ -110,7 +164,7 @@
   {
     "id": "event-12",
     "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-    "playerId": 1,
+    "playerId": 2,
     "type": "goal",
     "minute": 31,
     "addedTime": null,
@@ -119,7 +173,7 @@
   {
     "id": "event-13",
     "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-    "playerId": 2,
+    "playerId": 3,
     "type": "goal",
     "minute": 41,
     "addedTime": null,
@@ -128,7 +182,7 @@
   {
     "id": "event-14",
     "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-    "playerId": 1,
+    "playerId": 2,
     "type": "goal",
     "minute": 42,
     "addedTime": null,
@@ -137,7 +191,7 @@
   {
     "id": "event-15",
     "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-    "playerId": 8,
+    "playerId": 10,
     "type": "goal",
     "minute": 45,
     "addedTime": 1,
@@ -146,7 +200,7 @@
   {
     "id": "event-16",
     "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-    "playerId": 1,
+    "playerId": 2,
     "type": "goal",
     "minute": 65,
     "addedTime": null,
@@ -155,16 +209,34 @@
   {
     "id": "event-17",
     "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-    "playerId": 7,
+    "playerId": 9,
     "type": "goal",
     "minute": 79,
     "addedTime": null,
     "note": null
   },
   {
+    "id": "event-32",
+    "fixtureId": "cmmr7oa4oe5e2r75bp1pcp53o",
+    "playerId": 4,
+    "type": "goal",
+    "minute": 41,
+    "addedTime": null,
+    "note": null
+  },
+  {
+    "id": "event-33",
+    "fixtureId": "cmmr7oa4oe5e2r75bp1pcp53o",
+    "playerId": 45,
+    "type": "goal",
+    "minute": 56,
+    "addedTime": null,
+    "note": null
+  },
+  {
     "id": "event-1",
     "fixtureId": "cp56m1ss73vveu0pwf7ri2rkk",
-    "playerId": 41,
+    "playerId": 46,
     "type": "goal",
     "minute": 27,
     "addedTime": null,
@@ -173,7 +245,7 @@
   {
     "id": "event-2",
     "fixtureId": "cp56m1ss73vveu0pwf7ri2rkk",
-    "playerId": 42,
+    "playerId": 47,
     "type": "goal",
     "minute": 43,
     "addedTime": null,
@@ -182,7 +254,7 @@
   {
     "id": "event-3",
     "fixtureId": "cp56m1ss73vveu0pwf7ri2rkk",
-    "playerId": 43,
+    "playerId": 48,
     "type": "goal",
     "minute": 90,
     "addedTime": 2,
@@ -191,7 +263,7 @@
   {
     "id": "event-7",
     "fixtureId": "cppl8u7ps0piqbne2hqem75lg",
-    "playerId": 44,
+    "playerId": 49,
     "type": "goal",
     "minute": 43,
     "addedTime": null,
@@ -200,7 +272,7 @@
   {
     "id": "event-4",
     "fixtureId": "cppl8u7ps0piqbne2hqem75lg",
-    "playerId": 45,
+    "playerId": 50,
     "type": "goal",
     "minute": 56,
     "addedTime": null,
@@ -209,7 +281,7 @@
   {
     "id": "event-5",
     "fixtureId": "cppl8u7ps0piqbne2hqem75lg",
-    "playerId": 37,
+    "playerId": 27,
     "type": "goal",
     "minute": 62,
     "addedTime": null,
@@ -218,7 +290,7 @@
   {
     "id": "event-6",
     "fixtureId": "cppl8u7ps0piqbne2hqem75lg",
-    "playerId": 43,
+    "playerId": 48,
     "type": "goal",
     "minute": 80,
     "addedTime": null,
