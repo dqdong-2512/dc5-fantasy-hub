@@ -27,6 +27,13 @@ export interface FixtureSeedCollected {
   detailUrl: string;
 }
 
+export interface MatchPageSnapshot {
+  fixtureId: string;
+  fetchedAt: string;
+  sourceUrl: string;
+  html: string;
+}
+
 export interface GoalEventCollected {
   playerName: string;
   minute: number;

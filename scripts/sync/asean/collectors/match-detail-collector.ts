@@ -1,4 +1,9 @@
-import type { GoalEventCollected, MatchDetailCollected } from '../types';
+import type {
+  FixtureSeedCollected,
+  GoalEventCollected,
+  MatchDetailCollected,
+  MatchPageSnapshot,
+} from '../types';
 import {
   determineFixtureStatus,
   fetchHtml,
@@ -132,39 +137,64 @@ function parseVenue(html: string): string {
   return venueMatch ? normalizeName(stripTags(venueMatch[1])) : 'Not Available';
 }
 
-export async function collectMatchDetails(fixtureIds: string[]): Promise<MatchDetailCollected[]> {
-  const details: MatchDetailCollected[] = [];
+export async function collectMatchPageSnapshots(
+  fixtureSeeds: FixtureSeedCollected[]
+): Promise<Map<string, MatchPageSnapshot>> {
+  const snapshots = new Map<string, MatchPageSnapshot>();
+  const htmlBySourceUrl = new Map<string, { fetchedAt: string; html: string }>();
 
-  for (const fixtureId of fixtureIds) {
-    const detailUrl = `https://aseanutdfc.com/asean-championship/match/${fixtureId}/details`;
-    try {
-      const html = await fetchHtml(detailUrl);
-      const teams = parseHomeAway(html);
-      const score = parseScores(html);
-      const stage = parseStage(html);
-      const venue = parseVenue(html);
-      const { dateLabel, localTimeLabel, statusLabel } = parseLocalDateAndStatus(html);
-
-      details.push({
-        fixtureId,
-        detailUrl,
-        homeTeamName: teams.homeTeamName,
-        awayTeamName: teams.awayTeamName,
-        homeTeamSlug: teams.homeTeamSlug,
-        awayTeamSlug: teams.awayTeamSlug,
-        stage,
-        dateLabel,
-        localTimeLabel,
-        statusLabel: determineFixtureStatus(statusLabel, score.homeScore, score.awayScore),
-        venue,
-        homeScore: score.homeScore,
-        awayScore: score.awayScore,
-        goals: parseGoals(html),
-      });
-    } catch (error) {
-      console.warn(`Failed to collect match detail for ${fixtureId}:`, error);
+  for (const fixture of fixtureSeeds) {
+    let cachedPage = htmlBySourceUrl.get(fixture.detailUrl);
+    if (!cachedPage) {
+      cachedPage = {
+        fetchedAt: new Date().toISOString(),
+        html: await fetchHtml(fixture.detailUrl),
+      };
+      htmlBySourceUrl.set(fixture.detailUrl, cachedPage);
     }
+
+    snapshots.set(fixture.id, {
+      fixtureId: fixture.id,
+      fetchedAt: cachedPage.fetchedAt,
+      sourceUrl: fixture.detailUrl,
+      html: cachedPage.html,
+    });
   }
 
-  return details;
+  return snapshots;
+}
+
+export function collectMatchDetails(
+  fixtureSeeds: FixtureSeedCollected[],
+  snapshots: Map<string, MatchPageSnapshot>
+): MatchDetailCollected[] {
+  return fixtureSeeds.map((fixture) => {
+    const snapshot = snapshots.get(fixture.id);
+    if (!snapshot) {
+      throw new Error(`Missing cached match page snapshot for fixture ${fixture.id}`);
+    }
+
+    const teams = parseHomeAway(snapshot.html);
+    const score = parseScores(snapshot.html);
+    const stage = parseStage(snapshot.html);
+    const venue = parseVenue(snapshot.html);
+    const { dateLabel, localTimeLabel, statusLabel } = parseLocalDateAndStatus(snapshot.html);
+
+    return {
+      fixtureId: fixture.id,
+      detailUrl: snapshot.sourceUrl,
+      homeTeamName: teams.homeTeamName,
+      awayTeamName: teams.awayTeamName,
+      homeTeamSlug: teams.homeTeamSlug,
+      awayTeamSlug: teams.awayTeamSlug,
+      stage,
+      dateLabel,
+      localTimeLabel,
+      statusLabel: determineFixtureStatus(statusLabel, score.homeScore, score.awayScore),
+      venue,
+      homeScore: score.homeScore,
+      awayScore: score.awayScore,
+      goals: parseGoals(snapshot.html),
+    };
+  });
 }

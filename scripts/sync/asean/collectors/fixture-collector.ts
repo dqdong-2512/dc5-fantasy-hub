@@ -22,7 +22,7 @@ export async function collectFixtureSeeds(): Promise<{
   const fixtures: FixtureSeedCollected[] = [];
 
   for (const match of html.matchAll(
-    /href="https:\/\/aseanutdfc\.com\/asean-championship\/match\/([a-z0-9]+)\/details"/gi
+    /href=["'][^"']*\/asean-championship\/match\/([a-z0-9]+)\/details(?:[^"']*)["']/gi
   )) {
     const fixtureId = match[1];
     if (seen.has(fixtureId)) {
@@ -34,6 +34,10 @@ export async function collectFixtureSeeds(): Promise<{
       id: fixtureId,
       detailUrl: `${ASEAN_BASE_URL}/match/${fixtureId}/details`,
     });
+  }
+
+  if (fixtures.length === 0) {
+    throw new Error('Matches page did not contain any ASEAN Cup fixture links');
   }
 
   return { fixtures, html };
