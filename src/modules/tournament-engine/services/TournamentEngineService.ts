@@ -22,6 +22,7 @@ import type {
   TournamentStatisticRaw,
   TournamentTeam,
 } from '../models/tournament-engine.models';
+import { normalizeTournamentFixture } from '../normalizer/TournamentDatasetNormalizer';
 
 const DEFAULT_TIMEZONE = 'UTC';
 
@@ -40,9 +41,7 @@ export class TournamentEngineService {
     const normalizedDataset = this.normalizeDataset(payload.data);
     const teamMap = this.createTeamMap(normalizedDataset.teams);
 
-    const evaluatedFixtures = normalizedDataset.fixtures.map((fixture) =>
-      this.evaluateFixtureByTime(fixture)
-    );
+    const evaluatedFixtures = normalizedDataset.fixtures;
     const computedGroupStandings = this.computeGroupStandings(
       normalizedDataset.groups,
       evaluatedFixtures,
@@ -157,51 +156,7 @@ export class TournamentEngineService {
   }
 
   protected sanitizeFixture(fixture: TournamentFixtureRaw): TournamentFixtureRaw {
-    const kickoffTime = new Date(fixture.kickoff).getTime();
-    const hasValidKickoff = Number.isFinite(kickoffTime);
-    const now = Date.now();
-    const hasScore = fixture.homeScore !== null && fixture.awayScore !== null;
-    const isFutureKickoff = hasValidKickoff && kickoffTime > now;
-
-    if (fixture.status === 'LIVE' || fixture.status === 'HALF_TIME') {
-      if (isFutureKickoff) {
-        return {
-          ...fixture,
-          status: 'UPCOMING',
-          homeScore: null,
-          awayScore: null,
-          minute: undefined,
-          addedTime: undefined,
-          note: fixture.note,
-        };
-      }
-      return fixture;
-    }
-
-    if (fixture.status === 'FINISHED' && !hasScore) {
-      return {
-        ...fixture,
-        status: 'UPCOMING',
-        minute: undefined,
-        addedTime: undefined,
-      };
-    }
-
-    if (
-      fixture.status === 'UPCOMING' ||
-      fixture.status === 'POSTPONED' ||
-      fixture.status === 'CANCELLED'
-    ) {
-      return {
-        ...fixture,
-        homeScore: null,
-        awayScore: null,
-        minute: undefined,
-        addedTime: undefined,
-      };
-    }
-
-    return fixture;
+    return normalizeTournamentFixture(fixture);
   }
 
   protected zeroGroupStandings(group: TournamentGroupRaw): TournamentGroupRaw {
@@ -309,83 +264,6 @@ export class TournamentEngineService {
         : 'No finished fixture yet',
       highlight,
       lastUpdated: syncedAt,
-    };
-  }
-
-  protected evaluateFixtureByTime(fixture: TournamentFixtureRaw): TournamentFixtureRaw {
-    if (fixture.status === 'POSTPONED' || fixture.status === 'CANCELLED') {
-      return {
-        ...fixture,
-        homeScore: null,
-        awayScore: null,
-        minute: undefined,
-        addedTime: undefined,
-      };
-    }
-
-    const kickoffTime = this.getKickoffTimeMs(fixture.kickoff);
-    if (!Number.isFinite(kickoffTime)) {
-      return {
-        ...fixture,
-        status: 'UPCOMING',
-        homeScore: null,
-        awayScore: null,
-        minute: undefined,
-        addedTime: undefined,
-      };
-    }
-
-    const now = Date.now();
-    const hasScore = fixture.homeScore !== null && fixture.awayScore !== null;
-    const matchDurationMs = this.configuration.matchDurationMs;
-
-    if (now < kickoffTime) {
-      return {
-        ...fixture,
-        status: 'UPCOMING',
-        homeScore: null,
-        awayScore: null,
-        minute: undefined,
-        addedTime: undefined,
-      };
-    }
-
-    if (hasScore && (fixture.status === 'FINISHED' || now >= kickoffTime + matchDurationMs)) {
-      return {
-        ...fixture,
-        status: 'FINISHED',
-        minute: undefined,
-        addedTime: undefined,
-      };
-    }
-
-    const elapsedMinutes = Math.max(1, Math.floor((now - kickoffTime) / 60000));
-    if (elapsedMinutes >= 46 && elapsedMinutes <= 60) {
-      return {
-        ...fixture,
-        status: 'HALF_TIME',
-        homeScore: hasScore ? fixture.homeScore : null,
-        awayScore: hasScore ? fixture.awayScore : null,
-        minute: 45,
-        addedTime: undefined,
-      };
-    }
-
-    if (elapsedMinutes <= 120) {
-      return {
-        ...fixture,
-        status: 'LIVE',
-        homeScore: hasScore ? fixture.homeScore : null,
-        awayScore: hasScore ? fixture.awayScore : null,
-        minute: Math.min(elapsedMinutes, 120),
-      };
-    }
-
-    return {
-      ...fixture,
-      status: 'FINISHED',
-      minute: undefined,
-      addedTime: undefined,
     };
   }
 

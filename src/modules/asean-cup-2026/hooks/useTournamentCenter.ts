@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { useTournamentEngine } from '../../tournament-engine/hooks';
 import type { TournamentCenterData } from '../models/tournament.models';
 import { TournamentService } from '../services/TournamentService';
@@ -17,9 +16,10 @@ export interface UseTournamentCenterResult {
   refresh: () => Promise<void>;
 }
 
+const tournamentService = new TournamentService();
+
 export function useTournamentCenter(
   options?: UseTournamentCenterOptions
 ): UseTournamentCenterResult {
-  const service = useMemo(() => new TournamentService(), []);
-  return useTournamentEngine(service, options);
+  return useTournamentEngine(tournamentService, options);
 }

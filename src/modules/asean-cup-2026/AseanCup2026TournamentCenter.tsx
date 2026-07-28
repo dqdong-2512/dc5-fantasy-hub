@@ -50,11 +50,15 @@ import type {
   KnockoutMatch,
   TournamentCenterData,
   TournamentFixture,
-  TournamentFixtureStatus,
   TournamentPlayer,
   TournamentPlayerPosition,
 } from './models';
 import { useTournamentCenter } from './hooks';
+import {
+  getFixtureDisplayValue,
+  getFixtureStatusLabel,
+  getFixtureStatusTone as getFixtureStatusColor,
+} from './fixture-display';
 
 type SortOrder = 'asc' | 'desc';
 type PlayerSortField =
@@ -93,56 +97,6 @@ function formatKickoff(value: string): string {
     minute: '2-digit',
     hour12: false,
   }).format(new Date(value));
-}
-
-function formatScore(homeScore: number | null, awayScore: number | null): string {
-  if (homeScore === null || awayScore === null) {
-    return 'vs';
-  }
-  return `${homeScore} - ${awayScore}`;
-}
-
-function getFixtureStatusColor(
-  status: TournamentFixtureStatus
-): 'default' | 'success' | 'warning' | 'error' | 'info' {
-  if (status === 'live') {
-    return 'error';
-  }
-  if (status === 'half-time') {
-    return 'warning';
-  }
-  if (status === 'finished') {
-    return 'success';
-  }
-  if (status === 'upcoming') {
-    return 'info';
-  }
-  return 'default';
-}
-
-function getFixtureStatusLabel(fixture: TournamentFixture): string {
-  if (fixture.status === 'half-time') {
-    return 'Hết hiệp một';
-  }
-  if (fixture.status === 'live') {
-    if (fixture.minute !== null) {
-      if (fixture.addedTime !== null && fixture.addedTime > 0) {
-        return `${fixture.minute}+${fixture.addedTime}'`;
-      }
-      return `${fixture.minute}'`;
-    }
-    return 'Đang diễn ra';
-  }
-  if (fixture.status === 'finished') {
-    return 'Đã kết thúc';
-  }
-  if (fixture.status === 'postponed') {
-    return 'Tạm hoãn';
-  }
-  if (fixture.status === 'cancelled') {
-    return 'Đã hủy';
-  }
-  return 'Sắp diễn ra';
 }
 
 function translateStage(stage: string): string {
@@ -972,8 +926,7 @@ function renderGroupTable(
 function renderFixtureList(
   title: string,
   fixtures: TournamentFixture[],
-  onExpandChange: (fixtureId: string | null) => void,
-  expandedFixtureId: string | null,
+  onSelectFixture: (fixtureId: string) => void,
   emptyMessage = 'Không có trận đấu trong mục này.'
 ): React.ReactElement {
   return (
@@ -990,145 +943,130 @@ function renderFixtureList(
         ) : (
           <Stack spacing={1}>
             {fixtures.map((fixture) => (
-              <Box key={fixture.id}>
-                <Box
-                  onClick={() =>
-                    onExpandChange(expandedFixtureId === fixture.id ? null : fixture.id)
+              <Box
+                key={fixture.id}
+                onClick={() => onSelectFixture(fixture.id)}
+                role="button"
+                tabIndex={0}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    onSelectFixture(fixture.id);
                   }
+                }}
+                sx={{
+                  border: '1px solid',
+                  borderColor: 'divider',
+                  borderRadius: '8px',
+                  p: ThemeTokens.spacing.md,
+                  cursor: 'pointer',
+                  transition: 'all 0.2s ease',
+                  backgroundColor: 'background.paper',
+                  '&:hover': {
+                    backgroundColor: 'action.hover',
+                    borderColor: 'primary.main',
+                  },
+                  '&:focus-visible': {
+                    outline: '2px solid',
+                    outlineColor: 'primary.main',
+                    outlineOffset: 2,
+                  },
+                }}
+              >
+                {/* Stage badge */}
+                <Box
                   sx={{
-                    border: '1px solid',
-                    borderColor: 'divider',
-                    borderRadius: '8px',
-                    p: ThemeTokens.spacing.md,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s ease',
-                    backgroundColor: 'background.paper',
-                    '&:hover': {
-                      backgroundColor: 'action.hover',
-                      borderColor: 'primary.main',
-                    },
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 1,
+                    mb: 0.75,
                   }}
                 >
-                  {/* Stage badge */}
+                  <Typography variant="caption" sx={{ fontWeight: 700, color: 'primary.main' }}>
+                    {translateStage(fixture.stage)}
+                  </Typography>
+                  <StatusChip
+                    status={getFixtureStatusColor(fixture.status)}
+                    label={getFixtureStatusLabel(fixture)}
+                  />
+                </Box>
+
+                {/* Main fixture display */}
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr auto 1fr',
+                    alignItems: 'center',
+                    gap: ThemeTokens.spacing.md,
+                  }}
+                >
+                  {/* Home Team */}
+                  <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+                    <CountryFlag code={fixture.homeTeam.countryCode} size={28} />
+                    <Typography variant="body2" sx={{ fontWeight: 700, minWidth: 0 }}>
+                      {translateTeamName(fixture.homeTeam.name)}
+                    </Typography>
+                  </Box>
+
+                  {/* Score */}
+                  <Box sx={{ textAlign: 'center', minWidth: '70px' }}>
+                    <Typography variant="h5" sx={{ fontWeight: 800 }}>
+                      {getFixtureDisplayValue(fixture)}
+                    </Typography>
+                  </Box>
+
+                  {/* Away Team */}
                   <Box
                     sx={{
                       display: 'flex',
                       alignItems: 'center',
-                      justifyContent: 'space-between',
+                      justifyContent: 'flex-end',
                       gap: 1,
-                      mb: 0.75,
+                      minWidth: 0,
                     }}
                   >
-                    <Typography variant="caption" sx={{ fontWeight: 700, color: 'primary.main' }}>
-                      {translateStage(fixture.stage)}
+                    <Typography variant="body2" sx={{ fontWeight: 700, minWidth: 0 }}>
+                      {translateTeamName(fixture.awayTeam.name)}
                     </Typography>
-                    <StatusChip
-                      status={
-                        title === 'Các trận hôm nay'
-                          ? 'info'
-                          : getFixtureStatusColor(fixture.status)
-                      }
-                      label={
-                        title === 'Các trận hôm nay' ? 'Hôm nay' : getFixtureStatusLabel(fixture)
-                      }
-                    />
-                  </Box>
-
-                  {/* Main fixture display */}
-                  <Box
-                    sx={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr auto 1fr',
-                      alignItems: 'center',
-                      gap: ThemeTokens.spacing.md,
-                    }}
-                  >
-                    {/* Home Team */}
-                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
-                      <CountryFlag code={fixture.homeTeam.countryCode} size={28} />
-                      <Typography variant="body2" sx={{ fontWeight: 700, minWidth: 0 }}>
-                        {translateTeamName(fixture.homeTeam.name)}
-                      </Typography>
-                    </Box>
-
-                    {/* Score */}
-                    <Box sx={{ textAlign: 'center', minWidth: '70px' }}>
-                      <Typography variant="h5" sx={{ fontWeight: 800 }}>
-                        {formatScore(fixture.homeScore, fixture.awayScore)}
-                      </Typography>
-                    </Box>
-
-                    {/* Away Team */}
-                    <Box
-                      sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        justifyContent: 'flex-end',
-                        gap: 1,
-                        minWidth: 0,
-                      }}
-                    >
-                      <Typography variant="body2" sx={{ fontWeight: 700, minWidth: 0 }}>
-                        {translateTeamName(fixture.awayTeam.name)}
-                      </Typography>
-                      <CountryFlag code={fixture.awayTeam.countryCode} size={28} />
-                    </Box>
-                  </Box>
-
-                  {/* Time and Venue info */}
-                  <Box
-                    sx={{
-                      display: 'grid',
-                      gridTemplateColumns: '1fr 1fr',
-                      gap: ThemeTokens.spacing.md,
-                      mt: ThemeTokens.spacing.md,
-                    }}
-                  >
-                    <Box>
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
-                        sx={{ display: 'block', mb: 0.25 }}
-                      >
-                        Ngày và giờ
-                      </Typography>
-                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                        {formatMatchDate(fixture.kickoff)} {formatKickoffTime(fixture.kickoff)}
-                      </Typography>
-                    </Box>
-                    <Box>
-                      <Typography
-                        variant="caption"
-                        color="text.secondary"
-                        sx={{ display: 'block', mb: 0.25 }}
-                      >
-                        Sân vận động
-                      </Typography>
-                      <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                        {fixture.venue ? translateVenue(fixture.venue) : 'Sẽ được công bố'}
-                      </Typography>
-                    </Box>
+                    <CountryFlag code={fixture.awayTeam.countryCode} size={28} />
                   </Box>
                 </Box>
 
-                {expandedFixtureId === fixture.id && (
-                  <Box
-                    sx={{
-                      mt: 1,
-                      p: ThemeTokens.spacing.md,
-                      backgroundColor: 'action.hover',
-                      borderRadius: '8px',
-                      border: '1px solid',
-                      borderColor: 'divider',
-                    }}
-                  >
-                    <Typography variant="body2" color="text.secondary">
-                      {fixture.status === 'finished'
-                        ? 'Diễn biến, bàn thắng, thẻ phạt, thay người và đội hình có trong trang Lịch thi đấu và kết quả.'
-                        : 'Thông tin trước trận và dữ liệu chính thức có trong trang Lịch thi đấu và kết quả.'}
+                {/* Time and Venue info */}
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: '1fr 1fr',
+                    gap: ThemeTokens.spacing.md,
+                    mt: ThemeTokens.spacing.md,
+                  }}
+                >
+                  <Box>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ display: 'block', mb: 0.25 }}
+                    >
+                      Ngày và giờ
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      {formatMatchDate(fixture.kickoff)} {formatKickoffTime(fixture.kickoff)}
                     </Typography>
                   </Box>
-                )}
+                  <Box>
+                    <Typography
+                      variant="caption"
+                      color="text.secondary"
+                      sx={{ display: 'block', mb: 0.25 }}
+                    >
+                      Sân vận động
+                    </Typography>
+                    <Typography variant="body2" sx={{ fontWeight: 600 }}>
+                      {fixture.venue ? translateVenue(fixture.venue) : 'Sẽ được công bố'}
+                    </Typography>
+                  </Box>
+                </Box>
               </Box>
             ))}
           </Stack>
@@ -1430,7 +1368,6 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
   const [sortBy, setSortBy] = useState<PlayerSortField>('goals');
   const [sortOrder, setSortOrder] = useState<SortOrder>('desc');
   const [playerPage, setPlayerPage] = useState(0);
-  const [expandedFixtureId, setExpandedFixtureId] = useState<string | null>(null);
 
   const nations = useMemo(() => {
     if (!data) {
@@ -1499,6 +1436,12 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
 
     setSortBy(field);
     setSortOrder(field === 'name' ? 'asc' : 'desc');
+  };
+
+  const handleFixtureSelect = (fixtureId: string): void => {
+    navigate(`/asean-cup-2026/fixtures?fixtureId=${encodeURIComponent(fixtureId)}`, {
+      state: { from: '/asean-cup-2026' },
+    });
   };
 
   if (isLoading && !data) {
@@ -2163,29 +2106,26 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
             {renderFixtureList(
               'Các trận đã kết thúc',
               completedFixturesPreview,
-              setExpandedFixtureId,
-              expandedFixtureId,
+              handleFixtureSelect,
               'Chưa có trận đấu nào kết thúc.'
             )}
             {renderFixtureList(
               'Các trận hôm nay',
               todaysFixturesPreview,
-              setExpandedFixtureId,
-              expandedFixtureId,
+              handleFixtureSelect,
               'Hôm nay không có trận đấu.'
             )}
-            {renderFixtureList(
-              'Các trận sắp tới',
-              upcomingFixturesPreview,
-              setExpandedFixtureId,
-              expandedFixtureId
-            )}
+            {renderFixtureList('Các trận sắp tới', upcomingFixturesPreview, handleFixtureSelect)}
           </Box>
 
           <Button
             variant="outlined"
             endIcon={<ArrowForwardIcon />}
-            onClick={() => navigate('/asean-cup-2026/fixtures')}
+            onClick={() =>
+              navigate('/asean-cup-2026/fixtures', {
+                state: { from: '/asean-cup-2026' },
+              })
+            }
             sx={{ alignSelf: 'flex-start' }}
           >
             Xem toàn bộ lịch thi đấu

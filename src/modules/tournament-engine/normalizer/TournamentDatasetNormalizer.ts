@@ -1,5 +1,6 @@
 import type {
   TournamentFixtureRaw,
+  TournamentFixtureStatusRaw,
   TournamentGroupRaw,
   TournamentPlayerRaw,
   TournamentRawDataset,
@@ -7,9 +8,76 @@ import type {
   KnockoutTeamRaw,
 } from '../models/tournament-engine.models';
 
+export function normalizeTournamentFixtureStatus(status: unknown): TournamentFixtureStatusRaw {
+  const normalizedStatus =
+    typeof status === 'string'
+      ? status
+          .trim()
+          .replace(/[\s_-]+/g, '')
+          .toUpperCase()
+      : '';
+
+  if (
+    normalizedStatus === 'FT' ||
+    normalizedStatus === 'FINISHED' ||
+    normalizedStatus === 'COMPLETE' ||
+    normalizedStatus === 'COMPLETED' ||
+    normalizedStatus === 'PLAYED'
+  ) {
+    return 'FINISHED';
+  }
+  if (normalizedStatus === 'LIVE' || normalizedStatus === 'INPLAY') {
+    return 'LIVE';
+  }
+  if (normalizedStatus === 'HALFTIME' || normalizedStatus === 'HT') {
+    return 'HALF_TIME';
+  }
+  if (normalizedStatus === 'POSTPONED') {
+    return 'POSTPONED';
+  }
+  if (normalizedStatus === 'CANCELLED' || normalizedStatus === 'CANCELED') {
+    return 'CANCELLED';
+  }
+
+  return 'UPCOMING';
+}
+
+export function normalizeTournamentFixture(fixture: TournamentFixtureRaw): TournamentFixtureRaw {
+  const normalizedFixture: TournamentFixtureRaw = {
+    ...fixture,
+    status: normalizeTournamentFixtureStatus(fixture.status),
+  };
+  const hasScore = normalizedFixture.homeScore !== null && normalizedFixture.awayScore !== null;
+
+  if (normalizedFixture.status === 'FINISHED' && !hasScore) {
+    return {
+      ...normalizedFixture,
+      status: 'UPCOMING',
+      minute: undefined,
+      addedTime: undefined,
+    };
+  }
+
+  if (
+    normalizedFixture.status === 'UPCOMING' ||
+    normalizedFixture.status === 'POSTPONED' ||
+    normalizedFixture.status === 'CANCELLED'
+  ) {
+    return {
+      ...normalizedFixture,
+      homeScore: null,
+      awayScore: null,
+      minute: undefined,
+      addedTime: undefined,
+    };
+  }
+
+  return normalizedFixture;
+}
+
 export class TournamentDatasetNormalizer {
   public normalize(dataset: TournamentRawDataset): TournamentRawDataset {
-    const normalizedFixtures = dataset.fixtures.map((fixture) => this.sanitizeFixture(fixture));
+    const normalizedFixtures = dataset.fixtures.map(normalizeTournamentFixture);
     const hasPlayedMatch = normalizedFixtures.some(
       (fixture) =>
         fixture.status === 'FINISHED' || fixture.status === 'LIVE' || fixture.status === 'HALF_TIME'
@@ -35,54 +103,6 @@ export class TournamentDatasetNormalizer {
         currentMatchday: 1,
       },
     };
-  }
-
-  private sanitizeFixture(fixture: TournamentFixtureRaw): TournamentFixtureRaw {
-    const kickoffTime = new Date(fixture.kickoff).getTime();
-    const hasValidKickoff = Number.isFinite(kickoffTime);
-    const now = Date.now();
-    const hasScore = fixture.homeScore !== null && fixture.awayScore !== null;
-    const isFutureKickoff = hasValidKickoff && kickoffTime > now;
-
-    if (fixture.status === 'LIVE' || fixture.status === 'HALF_TIME') {
-      if (isFutureKickoff) {
-        return {
-          ...fixture,
-          status: 'UPCOMING',
-          homeScore: null,
-          awayScore: null,
-          minute: undefined,
-          addedTime: undefined,
-          note: fixture.note,
-        };
-      }
-      return fixture;
-    }
-
-    if (fixture.status === 'FINISHED' && !hasScore) {
-      return {
-        ...fixture,
-        status: 'UPCOMING',
-        minute: undefined,
-        addedTime: undefined,
-      };
-    }
-
-    if (
-      fixture.status === 'UPCOMING' ||
-      fixture.status === 'POSTPONED' ||
-      fixture.status === 'CANCELLED'
-    ) {
-      return {
-        ...fixture,
-        homeScore: null,
-        awayScore: null,
-        minute: undefined,
-        addedTime: undefined,
-      };
-    }
-
-    return fixture;
   }
 
   private zeroGroupStandings(group: TournamentGroupRaw): TournamentGroupRaw {

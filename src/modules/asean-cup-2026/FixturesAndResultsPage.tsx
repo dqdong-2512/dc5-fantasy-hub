@@ -1,10 +1,17 @@
-import React, { useMemo, useState } from 'react';
-import { Box, Card, CardContent, CircularProgress, Stack, Typography } from '@mui/material';
+import React, { useEffect, useMemo, useRef, useState } from 'react';
+import { useLocation, useNavigate, useSearchParams } from 'react-router-dom';
+import { Box, Button, Card, CardContent, CircularProgress, Stack, Typography } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { CountryFlag, PageContent, PageHeader, PageSection, StatusChip } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { ASEAN_CUP_2026_TOURNAMENT_CONFIG } from './config/tournament.config';
-import type { TournamentFixture, TournamentFixtureStatus } from './models';
+import type { TournamentFixture } from './models';
 import { useTournamentCenter } from './hooks';
+import {
+  getFixtureDisplayValue,
+  getFixtureStatusLabel,
+  getFixtureStatusTone,
+} from './fixture-display';
 
 const VIETNAM_TIMEZONE = 'Asia/Ho_Chi_Minh';
 
@@ -32,56 +39,6 @@ function formatKickoffTime(value: string): string {
     minute: '2-digit',
     hour12: false,
   }).format(date);
-}
-
-function formatScore(homeScore: number | null, awayScore: number | null): string {
-  if (homeScore === null || awayScore === null) {
-    return 'vs';
-  }
-  return `${homeScore} - ${awayScore}`;
-}
-
-function getFixtureStatusColor(
-  status: TournamentFixtureStatus
-): 'default' | 'success' | 'warning' | 'error' | 'info' {
-  if (status === 'live') {
-    return 'error';
-  }
-  if (status === 'half-time') {
-    return 'warning';
-  }
-  if (status === 'finished') {
-    return 'success';
-  }
-  if (status === 'upcoming') {
-    return 'info';
-  }
-  return 'default';
-}
-
-function getFixtureStatusLabel(fixture: TournamentFixture): string {
-  if (fixture.status === 'half-time') {
-    return 'Hết hiệp một';
-  }
-  if (fixture.status === 'live') {
-    if (fixture.minute !== null) {
-      if (fixture.addedTime !== null && fixture.addedTime > 0) {
-        return `${fixture.minute}+${fixture.addedTime}'`;
-      }
-      return `${fixture.minute}'`;
-    }
-    return 'Đang diễn ra';
-  }
-  if (fixture.status === 'finished') {
-    return 'Đã kết thúc';
-  }
-  if (fixture.status === 'postponed') {
-    return 'Tạm hoãn';
-  }
-  if (fixture.status === 'cancelled') {
-    return 'Đã hủy';
-  }
-  return 'Sắp diễn ra';
 }
 
 function translateStage(stage: string): string {
@@ -126,7 +83,8 @@ function translateVenue(venue: string): string {
 
 function translateNote(note: string): string {
   const notes: Record<string, string> = {
-    'Weather delay expected in second half': 'Dự kiến trận đấu bị gián đoạn vì thời tiết trong hiệp hai',
+    'Weather delay expected in second half':
+      'Dự kiến trận đấu bị gián đoạn vì thời tiết trong hiệp hai',
     'Pitch condition review ongoing': 'Đang kiểm tra điều kiện mặt sân',
     'Cancelled by organizing committee': 'Đã bị ban tổ chức hủy',
   };
@@ -137,6 +95,7 @@ interface FixtureCardProps {
   fixture: TournamentFixture;
   isExpanded: boolean;
   isLoadingDetails: boolean;
+  isHighlighted: boolean;
   onToggleExpand: () => void;
 }
 
@@ -144,6 +103,7 @@ function FixtureCard({
   fixture,
   isExpanded,
   isLoadingDetails,
+  isHighlighted,
   onToggleExpand,
 }: FixtureCardProps): React.ReactElement {
   const homeTeam = fixture.homeTeam ?? { name: 'Đội chủ nhà sẽ được công bố', countryCode: 'TBD' };
@@ -152,6 +112,8 @@ function FixtureCard({
   return (
     <Box>
       <Box
+        id={`fixture-${fixture.id}`}
+        data-fixture-id={fixture.id}
         onClick={onToggleExpand}
         role="button"
         tabIndex={0}
@@ -165,15 +127,21 @@ function FixtureCard({
         }}
         sx={{
           border: '1px solid',
-          borderColor: 'divider',
+          borderColor: isHighlighted ? 'primary.main' : 'divider',
           borderRadius: '8px',
           p: ThemeTokens.spacing.md,
           cursor: 'pointer',
           transition: 'all 0.2s ease',
-          backgroundColor: 'background.paper',
+          backgroundColor: isHighlighted ? 'action.selected' : 'background.paper',
+          boxShadow: isHighlighted ? '0 0 0 3px rgba(25, 118, 210, 0.16)' : 'none',
           '&:hover': {
             backgroundColor: 'action.hover',
             borderColor: 'primary.main',
+          },
+          '&:focus-visible': {
+            outline: '2px solid',
+            outlineColor: 'primary.main',
+            outlineOffset: 2,
           },
         }}
       >
@@ -198,7 +166,7 @@ function FixtureCard({
           {/* Score */}
           <Box sx={{ textAlign: 'center', minWidth: '70px' }}>
             <Typography variant="h5" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
-              {formatScore(fixture.homeScore, fixture.awayScore)}
+              {getFixtureDisplayValue(fixture)}
             </Typography>
           </Box>
 
@@ -222,7 +190,7 @@ function FixtureCard({
 
           {/* Status */}
           <StatusChip
-            status={getFixtureStatusColor(fixture.status)}
+            status={getFixtureStatusTone(fixture.status)}
             label={getFixtureStatusLabel(fixture)}
           />
         </Box>
@@ -316,8 +284,7 @@ function FixtureCard({
               </Box>
             )}
             <Typography variant="caption" color="text.secondary">
-              Diễn biến, thống kê, đội hình và sự kiện chỉ hiển thị khi dữ liệu giải đấu cung
-              cấp.
+              Diễn biến, thống kê, đội hình và sự kiện chỉ hiển thị khi dữ liệu giải đấu cung cấp.
             </Typography>
           </Stack>
         </Box>
@@ -327,12 +294,31 @@ function FixtureCard({
 }
 
 export const FixturesAndResultsPage: React.FC = (): React.ReactElement => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams] = useSearchParams();
+  const selectedFixtureId = searchParams.get('fixtureId');
   const { data, isLoading, error } = useTournamentCenter({
     autoRefresh: true,
     refreshIntervalMs: 30000,
   });
   const [expandedFixtureIds, setExpandedFixtureIds] = useState<Set<string>>(new Set());
   const [loadingFixtureIds, setLoadingFixtureIds] = useState<Set<string>>(new Set());
+  const [highlightedFixtureId, setHighlightedFixtureId] = useState<string | null>(null);
+  const focusedFixtureIdRef = useRef<string | null>(null);
+  const didPositionScheduleRef = useRef(false);
+  const highlightTimerRef = useRef<number | null>(null);
+  const focusFrameRef = useRef<number | null>(null);
+
+  const handleBack = (): void => {
+    const navigationState = location.state as { from?: unknown } | null;
+    if (navigationState?.from === '/asean-cup-2026') {
+      navigate(-1);
+      return;
+    }
+
+    navigate('/asean-cup-2026', { replace: true });
+  };
 
   const toggleFixtureExpansion = (fixtureId: string): void => {
     if (loadingFixtureIds.has(fixtureId)) {
@@ -357,6 +343,61 @@ export const FixturesAndResultsPage: React.FC = (): React.ReactElement => {
       });
     }, 100);
   };
+
+  useEffect(() => {
+    return () => {
+      if (highlightTimerRef.current !== null) {
+        window.clearTimeout(highlightTimerRef.current);
+      }
+      if (focusFrameRef.current !== null) {
+        window.cancelAnimationFrame(focusFrameRef.current);
+      }
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!selectedFixtureId) {
+      focusedFixtureIdRef.current = null;
+
+      if (!didPositionScheduleRef.current) {
+        didPositionScheduleRef.current = true;
+        window.scrollTo({ top: 0, behavior: 'auto' });
+      }
+      return;
+    }
+
+    didPositionScheduleRef.current = true;
+    if (!data || focusedFixtureIdRef.current === selectedFixtureId) {
+      return;
+    }
+
+    const selectedFixture = data.fixtures.all.find((fixture) => fixture.id === selectedFixtureId);
+    if (!selectedFixture) {
+      return;
+    }
+
+    focusedFixtureIdRef.current = selectedFixtureId;
+
+    if (highlightTimerRef.current !== null) {
+      window.clearTimeout(highlightTimerRef.current);
+    }
+
+    focusFrameRef.current = window.requestAnimationFrame(() => {
+      setExpandedFixtureIds((current) => new Set(current).add(selectedFixtureId));
+      setHighlightedFixtureId(selectedFixtureId);
+
+      const selectedElement = document.getElementById(`fixture-${selectedFixtureId}`);
+      selectedElement?.focus({ preventScroll: true });
+      selectedElement?.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+      });
+
+      highlightTimerRef.current = window.setTimeout(() => {
+        setHighlightedFixtureId((current) => (current === selectedFixtureId ? null : current));
+      }, 2500);
+    });
+  }, [data, selectedFixtureId]);
 
   // Group fixtures by stage
   const fixturesByStage = useMemo(() => {
@@ -385,9 +426,19 @@ export const FixturesAndResultsPage: React.FC = (): React.ReactElement => {
   if (isLoading && !data) {
     return (
       <PageContent>
-        <Box sx={{ textAlign: 'center', py: 6 }}>
-          <Typography variant="h6">Đang tải lịch thi đấu...</Typography>
-        </Box>
+        <Stack spacing={ThemeTokens.spacing.md}>
+          <Button
+            variant="text"
+            startIcon={<ArrowBackIcon />}
+            onClick={handleBack}
+            sx={{ alignSelf: 'flex-start' }}
+          >
+            Trở về trang trước
+          </Button>
+          <Box sx={{ textAlign: 'center', py: 6 }}>
+            <Typography variant="h6">Đang tải lịch thi đấu...</Typography>
+          </Box>
+        </Stack>
       </PageContent>
     );
   }
@@ -395,11 +446,21 @@ export const FixturesAndResultsPage: React.FC = (): React.ReactElement => {
   if (error && !data) {
     return (
       <PageContent>
-        <Box sx={{ textAlign: 'center', py: 6 }}>
-          <Typography variant="h6" color="error">
-            Không thể tải lịch thi đấu
-          </Typography>
-        </Box>
+        <Stack spacing={ThemeTokens.spacing.md}>
+          <Button
+            variant="text"
+            startIcon={<ArrowBackIcon />}
+            onClick={handleBack}
+            sx={{ alignSelf: 'flex-start' }}
+          >
+            Trở về trang trước
+          </Button>
+          <Box sx={{ textAlign: 'center', py: 6 }}>
+            <Typography variant="h6" color="error">
+              Không thể tải lịch thi đấu
+            </Typography>
+          </Box>
+        </Stack>
       </PageContent>
     );
   }
@@ -407,9 +468,19 @@ export const FixturesAndResultsPage: React.FC = (): React.ReactElement => {
   if (!data) {
     return (
       <PageContent>
-        <Box sx={{ textAlign: 'center', py: 6 }}>
-          <Typography variant="h6">Chưa có dữ liệu giải đấu</Typography>
-        </Box>
+        <Stack spacing={ThemeTokens.spacing.md}>
+          <Button
+            variant="text"
+            startIcon={<ArrowBackIcon />}
+            onClick={handleBack}
+            sx={{ alignSelf: 'flex-start' }}
+          >
+            Trở về trang trước
+          </Button>
+          <Box sx={{ textAlign: 'center', py: 6 }}>
+            <Typography variant="h6">Chưa có dữ liệu giải đấu</Typography>
+          </Box>
+        </Stack>
       </PageContent>
     );
   }
@@ -433,9 +504,21 @@ export const FixturesAndResultsPage: React.FC = (): React.ReactElement => {
     if (indexB === -1) return 1;
     return indexA - indexB;
   });
+  const isSelectedFixtureMissing =
+    selectedFixtureId !== null &&
+    !data.fixtures.all.some((fixture) => fixture.id === selectedFixtureId);
 
   return (
     <PageContent>
+      <Button
+        variant="text"
+        startIcon={<ArrowBackIcon />}
+        onClick={handleBack}
+        sx={{ alignSelf: 'flex-start', mb: ThemeTokens.spacing.md }}
+      >
+        Trở về trang trước
+      </Button>
+
       <PageHeader sx={{ mb: ThemeTokens.spacing.xxxl }}>
         <Card
           sx={{
@@ -455,8 +538,18 @@ export const FixturesAndResultsPage: React.FC = (): React.ReactElement => {
         </Card>
       </PageHeader>
 
+      {isSelectedFixtureMissing && (
+        <Typography variant="body2" color="text.secondary" sx={{ mb: ThemeTokens.spacing.md }}>
+          Không tìm thấy trận đấu được chọn.
+        </Typography>
+      )}
+
       {sortedStages.map(([stage, fixtures]) => (
-        <PageSection key={stage} title={translateStage(stage)} sx={{ mb: ThemeTokens.spacing.xxxl }}>
+        <PageSection
+          key={stage}
+          title={translateStage(stage)}
+          sx={{ mb: ThemeTokens.spacing.xxxl }}
+        >
           <Stack spacing={ThemeTokens.spacing.md}>
             {fixtures.map((fixture) => (
               <FixtureCard
@@ -464,6 +557,7 @@ export const FixturesAndResultsPage: React.FC = (): React.ReactElement => {
                 fixture={fixture}
                 isExpanded={expandedFixtureIds.has(fixture.id)}
                 isLoadingDetails={loadingFixtureIds.has(fixture.id)}
+                isHighlighted={highlightedFixtureId === fixture.id}
                 onToggleExpand={() => toggleFixtureExpansion(fixture.id)}
               />
             ))}

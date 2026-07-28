@@ -58,11 +58,6 @@
       "id": 10,
       "name": "Laos",
       "countryCode": "LA"
-    },
-    {
-      "id": 11,
-      "name": "Brunei Darussalam",
-      "countryCode": "BN"
     }
   ],
   "groups": [
@@ -180,28 +175,6 @@
     }
   ],
   "fixtures": [
-    {
-      "id": "cp56m1ss73vveu0pwf7ri2rkk",
-      "stage": "1st Leg",
-      "kickoff": "2026-06-02T13:15:00.000Z",
-      "venue": "Stadium Sultan Hassanal Bolkiah",
-      "homeTeamId": 11,
-      "awayTeamId": 5,
-      "homeScore": 0,
-      "awayScore": 3,
-      "status": "FINISHED"
-    },
-    {
-      "id": "cppl8u7ps0piqbne2hqem75lg",
-      "stage": "2nd Leg",
-      "kickoff": "2026-06-09T10:00:00.000Z",
-      "venue": "Kuala Lumpur Football Stadium",
-      "homeTeamId": 5,
-      "awayTeamId": 11,
-      "homeScore": 3,
-      "awayScore": 1,
-      "status": "FINISHED"
-    },
     {
       "id": "5qwcsl59r8s96ylfl4y9tndp0",
       "stage": "Group A",
