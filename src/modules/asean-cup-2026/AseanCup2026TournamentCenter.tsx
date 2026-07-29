@@ -45,7 +45,6 @@ import {
 } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { ASEAN_CUP_2026_TOURNAMENT_CONFIG } from './config/tournament.config';
-import { ASEAN_CUP_2026_RAW_DATA } from './data/asean-cup-2026.raw';
 import type {
   KnockoutMatch,
   TournamentCenterData,
@@ -80,10 +79,6 @@ const STAT_CARD_META: StatisticCardMeta[] = [
 ];
 const PLAYER_PAGE_SIZE = 10;
 const TOURNAMENT_STATISTIC_IDS = new Set(STAT_CARD_META.map((item) => item.id));
-const RAW_KNOCKOUT_FIXTURES = ASEAN_CUP_2026_RAW_DATA.fixtures.filter((fixture) =>
-  /Semi-final|Final/i.test(fixture.stage)
-);
-
 const VIETNAM_TIMEZONE = 'Asia/Ho_Chi_Minh';
 const TOURNAMENT_HERO_GRADIENT = `linear-gradient(135deg, #0d47a1 0%, ${ASEAN_CUP_2026_TOURNAMENT_CONFIG.brandColor} 100%)`;
 
@@ -246,28 +241,21 @@ function ensureTwoLegFixtures(
   return [1, 2].map((leg) => {
     const existing = fixtures.find((fixture) => new RegExp(`Leg ${leg}`, 'i').test(fixture.stage));
     const isSecondLeg = leg === 2;
-    const scheduledFixture = RAW_KNOCKOUT_FIXTURES.find(
-      (fixture) =>
-        fixture.stage.toLowerCase().includes(stageName.toLowerCase()) &&
-        new RegExp(`Leg ${leg}`, 'i').test(fixture.stage)
-    );
     if (existing) {
       const useMappedTeams =
         existing.status === 'upcoming' || existing.homeTeam.id === 0 || existing.awayTeam.id === 0;
       return {
         ...existing,
-        kickoff: scheduledFixture?.kickoff || existing.kickoff || '',
-        venue: scheduledFixture?.venue || existing.venue || '',
         homeTeam: useMappedTeams ? (isSecondLeg ? awayTeam : homeTeam) : existing.homeTeam,
         awayTeam: useMappedTeams ? (isSecondLeg ? homeTeam : awayTeam) : existing.awayTeam,
       };
     }
 
     return {
-      id: scheduledFixture?.id ?? `${stageName.toLowerCase().replaceAll(' ', '-')}-leg-${leg}`,
-      stage: scheduledFixture?.stage ?? `${stageName} Leg ${leg}`,
-      kickoff: scheduledFixture?.kickoff ?? '',
-      venue: scheduledFixture?.venue ?? '',
+      id: `${stageName.toLowerCase().replaceAll(' ', '-')}-leg-${leg}`,
+      stage: `${stageName} Leg ${leg}`,
+      kickoff: '',
+      venue: '',
       homeTeam: isSecondLeg ? awayTeam : homeTeam,
       awayTeam: isSecondLeg ? homeTeam : awayTeam,
       homeScore: null,

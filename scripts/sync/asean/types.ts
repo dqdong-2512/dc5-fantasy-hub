@@ -27,6 +27,31 @@ export interface FixtureSeedCollected {
   detailUrl: string;
 }
 
+export type ManualTeamPlaceholder =
+  | { type: 'team'; teamId: number }
+  | { type: 'group-position'; groupId: 'A' | 'B'; position: 1 | 2 }
+  | { type: 'tie-winner'; tieId: 'semi-final-1' | 'semi-final-2' };
+
+export interface ManualScheduleFixture {
+  fixtureId: string;
+  stage: string;
+  matchday: number;
+  leg: 1 | 2 | null;
+  kickoff: string;
+  venue: string;
+  broadcast: string | null;
+  homePlaceholder: ManualTeamPlaceholder;
+  awayPlaceholder: ManualTeamPlaceholder;
+}
+
+export interface ManualSchedule {
+  competition: string;
+  season: string;
+  timezone: string;
+  source: 'manual';
+  fixtures: ManualScheduleFixture[];
+}
+
 export interface MatchPageSnapshot {
   fixtureId: string;
   fetchedAt: string;
@@ -44,15 +69,7 @@ export interface GoalEventCollected {
 export interface MatchDetailCollected {
   fixtureId: string;
   detailUrl: string;
-  homeTeamName: string;
-  awayTeamName: string;
-  homeTeamSlug: string | null;
-  awayTeamSlug: string | null;
-  stage: string;
-  dateLabel: string;
-  localTimeLabel: string | null;
   statusLabel: string;
-  venue: string;
   homeScore: number | null;
   awayScore: number | null;
   goals: GoalEventCollected[];

@@ -2,7 +2,6 @@ import fs from 'fs';
 import path from 'path';
 import { randomUUID } from 'crypto';
 import { fileURLToPath } from 'url';
-import { collectFixtureSeeds } from './collectors/fixture-collector';
 import {
   collectMatchDetails,
   collectMatchPageSnapshots,
@@ -12,8 +11,13 @@ import { collectPlayers } from './collectors/player-collector';
 import { collectStandings } from './collectors/standing-collector';
 import { collectStatistics } from './collectors/statistics-collector';
 import { collectTeams } from './collectors/team-collector';
-import type { FixtureSeedCollected } from './types';
-import { normalizeName, toUtcIsoFromIct } from './utils';
+import type {
+  FixtureSeedCollected,
+  ManualSchedule,
+  ManualTeamPlaceholder,
+  MatchDetailCollected,
+} from './types';
+import { normalizeName } from './utils';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -23,41 +27,28 @@ interface SyncAseanOptions {
   season: string;
 }
 
-function buildKnockoutPayload(): {
-  semiFinal1: {
-    title: string;
-    legDates: string;
-    home: { label: string; teamId: null; score: null; aggregate: string; status: 'pending' };
-    away: { label: string; teamId: null; score: null; aggregate: string; status: 'pending' };
-  };
-  semiFinal2: {
-    title: string;
-    legDates: string;
-    home: { label: string; teamId: null; score: null; aggregate: string; status: 'pending' };
-    away: { label: string; teamId: null; score: null; aggregate: string; status: 'pending' };
-  };
-  final: {
-    title: string;
-    legDates: string;
-    home: { label: string; teamId: null; score: null; aggregate: string; status: 'pending' };
-    away: { label: string; teamId: null; score: null; aggregate: string; status: 'pending' };
-  };
-  champion: { label: string; teamId: null; score: null; aggregate: string; status: 'champion' };
-} {
+function buildKnockoutPayload(
+  groupPositionTeamIds: Map<string, number>,
+  tieWinnerTeamIds: Map<string, number>,
+  championTeamId: number
+) {
+  const qualifiedTeamId = (key: string): number | null => groupPositionTeamIds.get(key) || null;
+  const tieWinnerTeamId = (key: string): number | null => tieWinnerTeamIds.get(key) || null;
+
   return {
     semiFinal1: {
       title: 'Semi-final 1',
       legDates: 'Aug 15-19, 2026 (Two-legged)',
       home: {
         label: '2nd Group A',
-        teamId: null,
+        teamId: qualifiedTeamId('A:2'),
         score: null,
         aggregate: '-',
         status: 'pending',
       },
       away: {
         label: '1st Group B',
-        teamId: null,
+        teamId: qualifiedTeamId('B:1'),
         score: null,
         aggregate: '-',
         status: 'pending',
@@ -68,14 +59,14 @@ function buildKnockoutPayload(): {
       legDates: 'Aug 16-19, 2026 (Two-legged)',
       home: {
         label: '2nd Group B',
-        teamId: null,
+        teamId: qualifiedTeamId('B:2'),
         score: null,
         aggregate: '-',
         status: 'pending',
       },
       away: {
         label: '1st Group A',
-        teamId: null,
+        teamId: qualifiedTeamId('A:1'),
         score: null,
         aggregate: '-',
         status: 'pending',
@@ -86,22 +77,22 @@ function buildKnockoutPayload(): {
       legDates: 'Aug 22-26, 2026 (Two-legged)',
       home: {
         label: 'Winner SF A',
-        teamId: null,
+        teamId: tieWinnerTeamId('semi-final-1'),
         score: null,
         aggregate: '-',
         status: 'pending',
       },
       away: {
         label: 'Winner SF B',
-        teamId: null,
+        teamId: tieWinnerTeamId('semi-final-2'),
         score: null,
         aggregate: '-',
         status: 'pending',
       },
     },
     champion: {
-      label: 'To Be Decided',
-      teamId: null,
+      label: 'Champion',
+      teamId: championTeamId || null,
       score: null,
       aggregate: '-',
       status: 'champion',
@@ -122,31 +113,43 @@ function ensureDirectory(dirPath: string): void {
   }
 }
 
-function loadLastKnownFixtureSeeds(mainOutputPath: string): FixtureSeedCollected[] {
-  if (!fs.existsSync(mainOutputPath)) {
-    return [];
+function loadManualSchedule(manualSchedulePath: string): ManualSchedule {
+  if (!fs.existsSync(manualSchedulePath)) {
+    throw new Error(`Manual ASEAN schedule is missing: ${manualSchedulePath}`);
   }
 
-  try {
-    const payload = JSON.parse(fs.readFileSync(mainOutputPath, 'utf-8')) as {
-      fixtures?: Array<{ id?: unknown }>;
-    };
-    if (!Array.isArray(payload.fixtures)) {
-      return [];
+  const schedule = JSON.parse(fs.readFileSync(manualSchedulePath, 'utf-8')) as ManualSchedule;
+  if (schedule.source !== 'manual' || !Array.isArray(schedule.fixtures)) {
+    throw new Error('Manual ASEAN schedule has an invalid root structure');
+  }
+
+  const fixtureIds = new Set<string>();
+  for (const fixture of schedule.fixtures) {
+    if (
+      !fixture.fixtureId ||
+      !fixture.stage ||
+      !Number.isInteger(fixture.matchday) ||
+      Number.isNaN(Date.parse(fixture.kickoff)) ||
+      typeof fixture.venue !== 'string' ||
+      !fixture.homePlaceholder ||
+      !fixture.awayPlaceholder
+    ) {
+      throw new Error(`Manual ASEAN schedule contains an invalid fixture: ${fixture.fixtureId}`);
     }
-
-    return payload.fixtures
-      .filter(
-        (fixture): fixture is { id: string } =>
-          typeof fixture.id === 'string' && fixture.id.length > 0
-      )
-      .map((fixture) => ({
-        id: fixture.id,
-        detailUrl: `https://aseanutdfc.com/asean-championship/match/${fixture.id}/details`,
-      }));
-  } catch {
-    return [];
+    if (fixtureIds.has(fixture.fixtureId)) {
+      throw new Error(`Manual ASEAN schedule contains duplicate fixture ${fixture.fixtureId}`);
+    }
+    fixtureIds.add(fixture.fixtureId);
   }
+
+  return schedule;
+}
+
+function toFixtureSeeds(schedule: ManualSchedule): FixtureSeedCollected[] {
+  return schedule.fixtures.map((fixture) => ({
+    id: fixture.fixtureId,
+    detailUrl: `https://aseanutdfc.com/asean-championship/match/${fixture.fixtureId}/details`,
+  }));
 }
 
 interface SyncMetadata {
@@ -349,19 +352,23 @@ export async function syncAseanTournament(options: SyncAseanOptions): Promise<vo
   const startedAt = new Date().toISOString();
   const season = options.season;
   const normalizedDir = path.join(projectRoot, 'data', 'seasons', season, 'normalized');
+  const manualSchedulePath = path.join(
+    projectRoot,
+    'data',
+    'seasons',
+    season,
+    'manual',
+    'asean-cup-2026.schedule.json'
+  );
   ensureDirectory(normalizedDir);
   const mainOutputPath = path.join(normalizedDir, 'asean-cup-2026.json');
-  const lastKnownFixtureSeeds = loadLastKnownFixtureSeeds(mainOutputPath);
+  const manualSchedule = loadManualSchedule(manualSchedulePath);
+  const fixtureSeeds = toFixtureSeeds(manualSchedule);
 
   console.log(`Starting ASEAN sync for season ${season} (${syncId})...`);
 
-  const fixtureSeedsPromise =
-    lastKnownFixtureSeeds.length > 0
-      ? Promise.resolve({ fixtures: lastKnownFixtureSeeds })
-      : collectFixtureSeeds();
-  const [{ groups }, { fixtures: fixtureSeeds }, players] = await Promise.all([
+  const [{ groups }, players] = await Promise.all([
     collectStandings(),
-    fixtureSeedsPromise,
     collectPlayers(),
   ]);
   const matchPageSnapshots = await collectMatchPageSnapshots(fixtureSeeds);
@@ -379,8 +386,11 @@ export async function syncAseanTournament(options: SyncAseanOptions): Promise<vo
     );
   }
 
-  const teams = collectTeams(groups, orderedDetails);
+  const teams = collectTeams(groups);
   const teamIdByName = new Map(teams.map((team) => [normalizeKey(team.name), team.id]));
+  const scheduleByFixtureId = new Map(
+    manualSchedule.fixtures.map((fixture) => [fixture.fixtureId, fixture])
+  );
 
   const rawEvents = collectMatchEventsFromDetails(orderedDetails);
 
@@ -407,15 +417,16 @@ export async function syncAseanTournament(options: SyncAseanOptions): Promise<vo
   const events = rawEvents
     .map((event) => {
       const normalizedName = normalizeKey(event.playerName);
-      const detail = detailsByFixtureId.get(event.fixtureId);
-      const eventTeamName = detail
+      const scheduledFixture = scheduleByFixtureId.get(event.fixtureId);
+      const eventPlaceholder = scheduledFixture
         ? event.side === 'home'
-          ? detail.homeTeamName
-          : detail.awayTeamName
+          ? scheduledFixture.homePlaceholder
+          : scheduledFixture.awayPlaceholder
         : null;
-      const eventTeamId = eventTeamName
-        ? (teamIdByName.get(normalizeKey(eventTeamName)) ?? 1)
-        : null;
+      const eventTeamId =
+        eventPlaceholder?.type === 'team' && teams.some((team) => team.id === eventPlaceholder.teamId)
+          ? eventPlaceholder.teamId
+          : null;
 
       let playerId: number | undefined;
       if (eventTeamId !== null) {
@@ -483,17 +494,143 @@ export async function syncAseanTournament(options: SyncAseanOptions): Promise<vo
     })
     .filter((event): event is NonNullable<typeof event> => event !== null);
 
-  const fixtures = orderedDetails.map((detail) => ({
-    id: detail.fixtureId,
-    stage: detail.stage,
-    kickoff: toUtcIsoFromIct(detail.dateLabel, detail.localTimeLabel),
-    venue: detail.venue,
-    homeTeamId: teamIdByName.get(normalizeKey(detail.homeTeamName)) ?? 0,
-    awayTeamId: teamIdByName.get(normalizeKey(detail.awayTeamName)) ?? 0,
-    homeScore: detail.homeScore,
-    awayScore: detail.awayScore,
-    status: detail.statusLabel,
-  }));
+  const groupPositionTeamIds = new Map<string, number>();
+  for (const group of groups) {
+    const groupIsFinal =
+      group.standings.length > 1 &&
+      group.standings.every((standing) => standing.played >= group.standings.length - 1);
+    if (!groupIsFinal) {
+      continue;
+    }
+
+    group.standings.forEach((standing, index) => {
+      const teamId = teamIdByName.get(normalizeKey(standing.teamName));
+      if (teamId) {
+        groupPositionTeamIds.set(`${group.id}:${index + 1}`, teamId);
+      }
+    });
+  }
+
+  const resolveStaticPlaceholder = (placeholder: ManualTeamPlaceholder): number => {
+    if (placeholder.type === 'team') {
+      return teams.some((team) => team.id === placeholder.teamId) ? placeholder.teamId : 0;
+    }
+    if (placeholder.type === 'group-position') {
+      return groupPositionTeamIds.get(`${placeholder.groupId}:${placeholder.position}`) ?? 0;
+    }
+    return 0;
+  };
+
+  const resolvedStaticTeams = new Map(
+    manualSchedule.fixtures.map((fixture) => [
+      fixture.fixtureId,
+      {
+        homeTeamId: resolveStaticPlaceholder(fixture.homePlaceholder),
+        awayTeamId: resolveStaticPlaceholder(fixture.awayPlaceholder),
+      },
+    ])
+  );
+
+  const resolveTieWinner = (tieId: 'semi-final-1' | 'semi-final-2'): number => {
+    const stagePrefix = tieId === 'semi-final-1' ? 'SF A' : 'SF B';
+    const legs = manualSchedule.fixtures.filter((fixture) => fixture.stage.startsWith(stagePrefix));
+    if (legs.length !== 2) {
+      return 0;
+    }
+
+    const aggregateByTeamId = new Map<number, number>();
+    for (const leg of legs) {
+      const dynamic = detailsByFixtureId.get(leg.fixtureId);
+      const resolved = resolvedStaticTeams.get(leg.fixtureId);
+      if (
+        !dynamic ||
+        dynamic.statusLabel !== 'FINISHED' ||
+        dynamic.homeScore === null ||
+        dynamic.awayScore === null ||
+        !resolved?.homeTeamId ||
+        !resolved.awayTeamId
+      ) {
+        return 0;
+      }
+
+      aggregateByTeamId.set(
+        resolved.homeTeamId,
+        (aggregateByTeamId.get(resolved.homeTeamId) ?? 0) + dynamic.homeScore
+      );
+      aggregateByTeamId.set(
+        resolved.awayTeamId,
+        (aggregateByTeamId.get(resolved.awayTeamId) ?? 0) + dynamic.awayScore
+      );
+    }
+
+    const ranked = [...aggregateByTeamId.entries()].sort((left, right) => right[1] - left[1]);
+    return ranked.length === 2 && ranked[0][1] > ranked[1][1] ? ranked[0][0] : 0;
+  };
+
+  const tieWinnerTeamIds = new Map([
+    ['semi-final-1', resolveTieWinner('semi-final-1')],
+    ['semi-final-2', resolveTieWinner('semi-final-2')],
+  ]);
+  const resolvePlaceholder = (placeholder: ManualTeamPlaceholder): number =>
+    placeholder.type === 'tie-winner'
+      ? (tieWinnerTeamIds.get(placeholder.tieId) ?? 0)
+      : resolveStaticPlaceholder(placeholder);
+
+  const fixtures = manualSchedule.fixtures.map((scheduledFixture) => {
+    const dynamic = detailsByFixtureId.get(scheduledFixture.fixtureId);
+    if (!dynamic) {
+      throw new Error(`Missing live data for scheduled fixture ${scheduledFixture.fixtureId}`);
+    }
+
+    return {
+      id: scheduledFixture.fixtureId,
+      stage: scheduledFixture.stage,
+      matchday: scheduledFixture.matchday,
+      leg: scheduledFixture.leg,
+      kickoff: scheduledFixture.kickoff,
+      venue: scheduledFixture.venue,
+      broadcast: scheduledFixture.broadcast,
+      homePlaceholder: scheduledFixture.homePlaceholder,
+      awayPlaceholder: scheduledFixture.awayPlaceholder,
+      homeTeamId: resolvePlaceholder(scheduledFixture.homePlaceholder),
+      awayTeamId: resolvePlaceholder(scheduledFixture.awayPlaceholder),
+      homeScore: dynamic.homeScore,
+      awayScore: dynamic.awayScore,
+      status: dynamic.statusLabel,
+    };
+  });
+
+  const resolveCompletedTieWinner = (stagePrefix: string): number => {
+    const legs = fixtures.filter((fixture) => fixture.stage.startsWith(stagePrefix));
+    if (
+      legs.length !== 2 ||
+      legs.some(
+        (fixture) =>
+          fixture.status !== 'FINISHED' ||
+          fixture.homeScore === null ||
+          fixture.awayScore === null ||
+          !fixture.homeTeamId ||
+          !fixture.awayTeamId
+      )
+    ) {
+      return 0;
+    }
+
+    const aggregateByTeamId = new Map<number, number>();
+    for (const leg of legs) {
+      aggregateByTeamId.set(
+        leg.homeTeamId,
+        (aggregateByTeamId.get(leg.homeTeamId) ?? 0) + (leg.homeScore ?? 0)
+      );
+      aggregateByTeamId.set(
+        leg.awayTeamId,
+        (aggregateByTeamId.get(leg.awayTeamId) ?? 0) + (leg.awayScore ?? 0)
+      );
+    }
+    const ranked = [...aggregateByTeamId.entries()].sort((left, right) => right[1] - left[1]);
+    return ranked.length === 2 && ranked[0][1] > ranked[1][1] ? ranked[0][0] : 0;
+  };
+  const championTeamId = resolveCompletedTieWinner('Final');
 
   const groupsPayload = groups.map((group) => ({
     id: group.id,
@@ -569,31 +706,37 @@ export async function syncAseanTournament(options: SyncAseanOptions): Promise<vo
     fixtures,
     players: allPlayersPayload,
     events,
-    knockout: buildKnockoutPayload(),
+    knockout: buildKnockoutPayload(groupPositionTeamIds, tieWinnerTeamIds, championTeamId),
     statistics: collectStatistics(players, teams),
   };
 
-  const detailFixtures = orderedDetails.map((detail) => ({
-    fixtureId: detail.fixtureId,
-    detailUrl: detail.detailUrl,
-    stage: detail.stage,
-    kickoff: toUtcIsoFromIct(detail.dateLabel, detail.localTimeLabel),
-    dateLabel: detail.dateLabel,
-    localTimeLabel: detail.localTimeLabel,
-    venue: detail.venue,
-    status: detail.statusLabel,
-    homeTeam: detail.homeTeamName,
-    awayTeam: detail.awayTeamName,
-    homeScore: detail.homeScore,
-    awayScore: detail.awayScore,
-    goals: detail.goals,
-  }));
+  const teamNameById = new Map(teams.map((team) => [team.id, team.name]));
+  const detailFixtures = fixtures.map((fixture) => {
+    const dynamic = detailsByFixtureId.get(fixture.id) as MatchDetailCollected;
+    return {
+      fixtureId: fixture.id,
+      detailUrl: dynamic.detailUrl,
+      stage: fixture.stage,
+      matchday: fixture.matchday,
+      leg: fixture.leg,
+      kickoff: fixture.kickoff,
+      venue: fixture.venue,
+      broadcast: fixture.broadcast,
+      homePlaceholder: fixture.homePlaceholder,
+      awayPlaceholder: fixture.awayPlaceholder,
+      status: fixture.status,
+      homeTeam: teamNameById.get(fixture.homeTeamId) ?? 'Unknown Home',
+      awayTeam: teamNameById.get(fixture.awayTeamId) ?? 'Unknown Away',
+      homeScore: fixture.homeScore,
+      awayScore: fixture.awayScore,
+      goals: dynamic.goals,
+    };
+  });
   const detailsPayload = {
     meta: metadata,
     fixtures: detailFixtures,
   };
 
-  const teamNameById = new Map(teams.map((team) => [team.id, team.name]));
   const mainConsistencyRecords: FixtureConsistencyRecord[] = fixtures.map((fixture) => ({
     fixtureId: fixture.id,
     kickoff: fixture.kickoff,

@@ -62,56 +62,9 @@ function parseGoals(overviewHtml: string): GoalEventCollected[] {
   return goals;
 }
 
-function parseLocalDateAndStatus(html: string): {
-  dateLabel: string;
-  localTimeLabel: string | null;
-  statusLabel: string;
-} {
-  const dateMatch = html.match(
-    /<div class="mtch-dtl-mo">[\s\S]*?<p>([A-Za-z]{3}\s+\d{1,2}\s+\d{4})<\/p>/i
-  );
-  const dateLabel = dateMatch ? normalizeName(stripTags(dateMatch[1])) : 'Jan 01 1970';
-
+function parseStatus(html: string): string {
   const statusMatch = html.match(/<div class="time-dtl">[\s\S]*?<p>([\s\S]*?)<\/p>/i);
-  const statusLabel = statusMatch ? normalizeName(stripTags(statusMatch[1])) : 'Unknown';
-
-  const stageDateBlockMatch = html.match(/<h4>Stage<\/h4>[\s\S]*?<h6>([\s\S]*?)<\/h6>/i);
-  let localTimeLabel: string | null = null;
-  if (stageDateBlockMatch) {
-    const cleaned = normalizeName(stripTags(stageDateBlockMatch[1]));
-    const timeMatch = cleaned.match(/(\d{1,2}:\d{2}\s*[AP]M)/i);
-    localTimeLabel = timeMatch ? timeMatch[1].toUpperCase() : null;
-  }
-
-  return { dateLabel, localTimeLabel, statusLabel };
-}
-
-function parseHomeAway(html: string): {
-  homeTeamName: string;
-  awayTeamName: string;
-  homeTeamSlug: string | null;
-  awayTeamSlug: string | null;
-} {
-  const anchorMatches = [
-    ...html.matchAll(
-      /<a href="https:\/\/aseanutdfc\.com\/asean-championship\/team\/([a-z0-9]+)\/details">[\s\S]*?<h4>\s*([^<]+?)\s*<\/h4>/gi
-    ),
-  ];
-  if (anchorMatches.length >= 2) {
-    return {
-      homeTeamSlug: anchorMatches[0][1],
-      homeTeamName: normalizeName(stripTags(anchorMatches[0][2])),
-      awayTeamSlug: anchorMatches[1][1],
-      awayTeamName: normalizeName(stripTags(anchorMatches[1][2])),
-    };
-  }
-
-  return {
-    homeTeamName: 'Unknown Home',
-    awayTeamName: 'Unknown Away',
-    homeTeamSlug: null,
-    awayTeamSlug: null,
-  };
+  return statusMatch ? normalizeName(stripTags(statusMatch[1])) : 'Unknown';
 }
 
 function parseScores(html: string): { homeScore: number | null; awayScore: number | null } {
@@ -125,16 +78,6 @@ function parseScores(html: string): { homeScore: number | null; awayScore: numbe
     homeScore: homeValue,
     awayScore: awayValue,
   };
-}
-
-function parseStage(html: string): string {
-  const stageMatch = html.match(/<div class="grp-dtl">[\s\S]*?<p>([\s\S]*?)<\/p>/i);
-  return stageMatch ? normalizeName(stripTags(stageMatch[1])) : 'Unknown Stage';
-}
-
-function parseVenue(html: string): string {
-  const venueMatch = html.match(/<h4>Stadium<\/h4>[\s\S]*?<h5>([\s\S]*?)<\/h5>/i);
-  return venueMatch ? normalizeName(stripTags(venueMatch[1])) : 'Not Available';
 }
 
 export async function collectMatchPageSnapshots(
@@ -174,24 +117,13 @@ export function collectMatchDetails(
       throw new Error(`Missing cached match page snapshot for fixture ${fixture.id}`);
     }
 
-    const teams = parseHomeAway(snapshot.html);
     const score = parseScores(snapshot.html);
-    const stage = parseStage(snapshot.html);
-    const venue = parseVenue(snapshot.html);
-    const { dateLabel, localTimeLabel, statusLabel } = parseLocalDateAndStatus(snapshot.html);
+    const statusLabel = parseStatus(snapshot.html);
 
     return {
       fixtureId: fixture.id,
       detailUrl: snapshot.sourceUrl,
-      homeTeamName: teams.homeTeamName,
-      awayTeamName: teams.awayTeamName,
-      homeTeamSlug: teams.homeTeamSlug,
-      awayTeamSlug: teams.awayTeamSlug,
-      stage,
-      dateLabel,
-      localTimeLabel,
       statusLabel: determineFixtureStatus(statusLabel, score.homeScore, score.awayScore),
-      venue,
       homeScore: score.homeScore,
       awayScore: score.awayScore,
       goals: parseGoals(snapshot.html),

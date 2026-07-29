@@ -34,8 +34,11 @@ export interface TournamentGroupRaw {
 export interface TournamentFixtureRaw {
   id: string;
   stage: string;
+  matchday?: number;
+  leg?: 1 | 2 | null;
   kickoff: string;
   venue: string;
+  broadcast?: string | null;
   homeTeamId: number;
   awayTeamId: number;
   homeScore: number | null;

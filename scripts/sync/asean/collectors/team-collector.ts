@@ -1,4 +1,4 @@
-import type { GroupCollected, MatchDetailCollected, TeamCollected } from '../types';
+import type { GroupCollected, TeamCollected } from '../types';
 
 const COUNTRY_CODES: Record<string, string> = {
   Vietnam: 'VN',
@@ -14,10 +14,7 @@ const COUNTRY_CODES: Record<string, string> = {
   'Brunei Darussalam': 'BN',
 };
 
-export function collectTeams(
-  groups: GroupCollected[],
-  details: MatchDetailCollected[]
-): TeamCollected[] {
+export function collectTeams(groups: GroupCollected[]): TeamCollected[] {
   const namesInOrder: string[] = [];
   const pushName = (name: string): void => {
     if (!name || namesInOrder.includes(name)) {
@@ -35,11 +32,6 @@ export function collectTeams(
     for (const standing of group.standings) {
       pushName(standing.teamName);
     }
-  }
-
-  for (const detail of details) {
-    pushName(detail.homeTeamName);
-    pushName(detail.awayTeamName);
   }
 
   return namesInOrder.map((name, index) => ({
