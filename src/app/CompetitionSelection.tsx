@@ -10,16 +10,13 @@ import {
   Container,
   Stack,
 } from '@mui/material';
-import SportsSoccerIcon from '@mui/icons-material/SportsSoccer';
-import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import type { CompetitionType } from '../types/competition';
 import { COMPETITIONS } from '../types/competition';
 
 export const CompetitionSelection: React.FC = () => {
   const navigate = useNavigate();
 
-  const handleNavigate = (competition: CompetitionType): void => {
-    navigate(`/${competition}/dashboard`);
+  const handleNavigate = (path: string): void => {
+    navigate(path);
   };
 
   return (
@@ -29,7 +26,8 @@ export const CompetitionSelection: React.FC = () => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: '#fafafa',
+        backgroundColor: '#ffffff',
+        color: '#111827',
         paddingY: 4,
       }}
     >
@@ -41,7 +39,7 @@ export const CompetitionSelection: React.FC = () => {
             sx={{
               fontWeight: 700,
               marginBottom: 2,
-              color: '#1976d2',
+              color: '#111827',
             }}
           >
             DC5 Fantasy Hub
@@ -53,7 +51,7 @@ export const CompetitionSelection: React.FC = () => {
               fontWeight: 400,
             }}
           >
-            Choose your competition
+            Choose your football competition
           </Typography>
         </Box>
 
@@ -65,6 +63,10 @@ export const CompetitionSelection: React.FC = () => {
                   height: '100%',
                   display: 'flex',
                   flexDirection: 'column',
+                  borderRadius: 3,
+                  borderTop: `4px solid ${competition.accentColor}`,
+                  backgroundColor: '#ffffff',
+                  color: '#111827',
                   transition: 'transform 0.3s, box-shadow 0.3s',
                   '&:hover': {
                     transform: 'translateY(-4px)',
@@ -86,15 +88,25 @@ export const CompetitionSelection: React.FC = () => {
                   <Box
                     sx={{
                       marginBottom: 2,
-                      fontSize: 48,
-                      color: '#1976d2',
+                      height: 80,
+                      width: '100%',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
                     }}
                   >
-                    {key === 'premier-league' ? (
-                      <SportsSoccerIcon sx={{ fontSize: 48 }} />
-                    ) : (
-                      <EmojiEventsIcon sx={{ fontSize: 48 }} />
-                    )}
+                    <Box
+                      component="img"
+                      src={competition.logoSrc}
+                      alt={competition.logoAlt}
+                      sx={{
+                        display: 'block',
+                        maxWidth: 112,
+                        width: '100%',
+                        height: 80,
+                        objectFit: 'contain',
+                      }}
+                    />
                   </Box>
                   <Typography
                     variant="h5"
@@ -125,9 +137,14 @@ export const CompetitionSelection: React.FC = () => {
                   <Button
                     variant="contained"
                     size="large"
-                    onClick={() => handleNavigate(competition.type)}
+                    onClick={() => handleNavigate(competition.path)}
                     sx={{
                       paddingX: 4,
+                      backgroundColor: competition.accentColor,
+                      '&:hover': {
+                        backgroundColor: competition.accentColor,
+                        filter: 'brightness(1.12)',
+                      },
                     }}
                   >
                     Enter

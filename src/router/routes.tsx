@@ -107,12 +107,12 @@ const LegacyFantasyRedirect: React.FC = () => {
 const router = createBrowserRouter([
   {
     path: '/',
+    element: <CompetitionSelection />,
+  },
+  {
+    path: '/',
     element: <AppLayout />,
     children: [
-      {
-        index: true,
-        element: <CompetitionSelection />,
-      },
       {
         path: 'asean-cup-2026',
         children: [

@@ -2,7 +2,6 @@ import React from 'react';
 import { Link as RouterLink } from 'react-router-dom';
 import {
   AppBar,
-  Avatar,
   Toolbar,
   Box,
   Typography,
@@ -25,19 +24,21 @@ import { useThemeMode } from '@theme/theme-mode';
 interface NavItem {
   label: string;
   path: string;
-  logoSrc?: string;
 }
 
-const NAV_ITEMS: NavItem[] = [
+const PREMIER_LEAGUE_NAV_ITEMS: NavItem[] = [
   { label: 'Dashboard', path: '/premier-league/dashboard' },
   { label: 'Gameweek', path: '/premier-league/gameweek' },
   { label: 'Players', path: '/premier-league/players' },
   { label: 'Analytics', path: '/premier-league/analytics' },
-  {
-    label: 'ASEAN Cup 2026',
-    path: '/asean-cup-2026',
-    logoSrc: '/2026_ASEAN_Championship-logo.svg',
-  },
+];
+
+const CHAMPIONS_LEAGUE_NAV_ITEMS: NavItem[] = [
+  { label: 'Dashboard', path: '/champions-league/dashboard' },
+  { label: 'Fixtures', path: '/champions-league/fixtures' },
+  { label: 'Players', path: '/champions-league/players' },
+  { label: 'Analytics', path: '/champions-league/analytics' },
+  { label: 'Fantasy', path: '/champions-league/fantasy' },
 ];
 
 export const AppHeader: React.FC = () => {
@@ -47,6 +48,11 @@ export const AppHeader: React.FC = () => {
   const theme = useTheme();
   const { resolvedMode, toggleResolvedMode } = useThemeMode();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  const navItems = location.pathname.startsWith('/champions-league')
+    ? CHAMPIONS_LEAGUE_NAV_ITEMS
+    : location.pathname.startsWith('/premier-league')
+      ? PREMIER_LEAGUE_NAV_ITEMS
+      : [];
 
   const isActive = (path: string): boolean => {
     return location.pathname === path || location.pathname.startsWith(`${path}/`);
@@ -114,24 +120,10 @@ export const AppHeader: React.FC = () => {
               flex: 1,
             }}
           >
-            {NAV_ITEMS.map((item, index) => (
+            {navItems.map((item, index) => (
               <React.Fragment key={item.path}>
                 <Button
                   onClick={() => handleNavigation(item.path)}
-                  startIcon={
-                    item.logoSrc ? (
-                      <Avatar
-                        src={item.logoSrc}
-                        alt={item.label}
-                        variant="rounded"
-                        sx={{
-                          width: 20,
-                          height: 20,
-                          borderRadius: 1,
-                        }}
-                      />
-                    ) : undefined
-                  }
                   sx={{
                     color: isActive(item.path) ? 'primary.main' : 'text.secondary',
                     fontWeight: isActive(item.path) ? 600 : 500,
@@ -159,7 +151,7 @@ export const AppHeader: React.FC = () => {
                   {item.label}
                 </Button>
 
-                {index < NAV_ITEMS.length - 1 && (
+                {index < navItems.length - 1 && (
                   <Typography
                     component="span"
                     sx={{
@@ -201,7 +193,7 @@ export const AppHeader: React.FC = () => {
           </IconButton>
 
           {/* Mobile Menu Button */}
-          {isMobile && (
+          {isMobile && navItems.length > 0 && (
             <IconButton
               size="small"
               aria-label="menu"
@@ -217,7 +209,7 @@ export const AppHeader: React.FC = () => {
       {/* Mobile Navigation Drawer */}
       <Drawer anchor="right" open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)}>
         <List sx={{ width: 250, paddingTop: 1 }}>
-          {NAV_ITEMS.map((item) => (
+          {navItems.map((item) => (
             <ListItem key={item.path} disablePadding>
               <ListItemButton
                 selected={isActive(item.path)}
@@ -228,14 +220,6 @@ export const AppHeader: React.FC = () => {
                   fontWeight: isActive(item.path) ? 600 : 500,
                 }}
               >
-                {item.logoSrc && (
-                  <Avatar
-                    src={item.logoSrc}
-                    alt={item.label}
-                    variant="rounded"
-                    sx={{ width: 20, height: 20, borderRadius: 1, marginRight: 1 }}
-                  />
-                )}
                 {item.label}
               </ListItemButton>
             </ListItem>
