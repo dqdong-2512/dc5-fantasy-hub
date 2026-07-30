@@ -1,12 +1,11 @@
 import { getDataFiles } from '@repositories/data-loader';
-import { ASEAN_CUP_2026_RAW_DATA } from '../data/asean-cup-2026.raw';
 import type { TournamentProvider } from '../../tournament-engine/providers/TournamentProvider';
 import type {
   TournamentRawDataset,
   TournamentSnapshotPayload,
 } from '../../tournament-engine/models/tournament-engine.models';
-import asean2025_2026Dataset from '../../../../data/seasons/2025-2026/normalized/asean-cup-2026.json';
-import asean2026_2027Dataset from '../../../../data/seasons/2026-2027/normalized/asean-cup-2026.json';
+import asean2025_2026Dataset from '../../../../data/competitions/asean-cup-2026/seasons/2025-2026/normalized/asean-cup-2026.json';
+import asean2026_2027Dataset from '../../../../data/competitions/asean-cup-2026/seasons/2026-2027/normalized/asean-cup-2026.json';
 
 const SEASON_ASEAN_DATASETS: Record<string, TournamentRawDataset> = {
   '2025-2026': asean2025_2026Dataset as TournamentRawDataset,
@@ -35,8 +34,7 @@ export class AseanTournamentProvider implements TournamentProvider {
     const dataFiles = getDataFiles();
     const datasetFromSeason =
       SEASON_ASEAN_DATASETS[dataFiles.season] ??
-      SEASON_ASEAN_DATASETS['2026-2027'] ??
-      ASEAN_CUP_2026_RAW_DATA;
+      SEASON_ASEAN_DATASETS['2026-2027'];
     const runtimeDb = (globalThis as { __FPL_DB__?: { aseanCup2026?: unknown } }).__FPL_DB__;
     const runtimeDataset = runtimeDb?.aseanCup2026;
     const selectedDataset = isValidTournamentDataset(runtimeDataset)

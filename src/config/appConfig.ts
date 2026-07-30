@@ -41,8 +41,8 @@ export const appConfig: AppConfig = {
   // Data file paths (relative to src directory)
   // Now points to active season (2026-2027)
   dataPath: {
-    raw: `../../data/seasons/2026-2027/raw`,
-    normalized: `../../data/seasons/2026-2027/normalized`,
+    raw: `../../data/competitions/fpl/seasons/2026-2027/raw`,
+    normalized: `../../data/competitions/fpl/seasons/2026-2027/normalized`,
   },
 
   // Competition profiles and enabled modules

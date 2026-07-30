@@ -119,12 +119,12 @@ export class DataQualityValidator {
       }
     }
 
-    // Check total count is reasonable (should be ~800+)
-    if (players.length < 700) {
+    // Pre-season lists start near 500 and expand as squads are registered.
+    if (players.length < 450) {
       issues.push({
         severity: 'WARNING',
         category: 'PLAYERS',
-        message: `Unusually low player count: ${players.length} (expected ~840)`,
+        message: `Unusually low player count: ${players.length} (expected at least 450)`,
       });
     }
 

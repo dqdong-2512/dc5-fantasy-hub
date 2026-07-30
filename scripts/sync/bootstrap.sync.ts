@@ -6,6 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getFplSeasonPaths } from '../services/competition-data-paths';
 import { FplClient } from '../../src/shared/services/fpl-client';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -13,7 +14,7 @@ const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '../../');
 
 export async function syncBootstrap(season: string = '2026-2027'): Promise<void> {
-  const dataDir = path.join(projectRoot, 'data', 'seasons', season, 'raw');
+  const { rawDir: dataDir } = getFplSeasonPaths(projectRoot, season);
   console.log(`Fetching bootstrap for ${season}...`);
 
   try {

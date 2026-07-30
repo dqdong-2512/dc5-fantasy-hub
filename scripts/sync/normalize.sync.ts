@@ -6,6 +6,7 @@
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
+import { getFplSeasonPaths } from '../services/competition-data-paths';
 import type {
   BootstrapStatic,
   Event,
@@ -20,9 +21,10 @@ const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '../../');
 
 function getNormalizeDataDirs(season: string) {
+  const { rawDir, normalizedDir } = getFplSeasonPaths(projectRoot, season);
   return {
-    rawDataDir: path.join(projectRoot, 'data', 'seasons', season, 'raw'),
-    normalizedDataDir: path.join(projectRoot, 'data', 'seasons', season, 'normalized'),
+    rawDataDir: rawDir,
+    normalizedDataDir: normalizedDir,
   };
 }
 

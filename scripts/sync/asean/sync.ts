@@ -18,6 +18,7 @@ import type {
   MatchDetailCollected,
 } from './types';
 import { normalizeName } from './utils';
+import { getAseanSeasonPaths } from '../../services/competition-data-paths';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -351,15 +352,8 @@ export async function syncAseanTournament(options: SyncAseanOptions): Promise<vo
   const syncId = randomUUID();
   const startedAt = new Date().toISOString();
   const season = options.season;
-  const normalizedDir = path.join(projectRoot, 'data', 'seasons', season, 'normalized');
-  const manualSchedulePath = path.join(
-    projectRoot,
-    'data',
-    'seasons',
-    season,
-    'manual',
-    'asean-cup-2026.schedule.json'
-  );
+  const { normalizedDir, manualDir } = getAseanSeasonPaths(projectRoot, season);
+  const manualSchedulePath = path.join(manualDir, 'asean-cup-2026.schedule.json');
   ensureDirectory(normalizedDir);
   const mainOutputPath = path.join(normalizedDir, 'asean-cup-2026.json');
   const manualSchedule = loadManualSchedule(manualSchedulePath);

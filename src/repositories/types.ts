@@ -1,6 +1,6 @@
 /**
  * Normalized Data Types
- * These types mirror the structure of normalized JSON files in data/normalized/
+ * These types mirror normalized FPL files in data/competitions/fpl/seasons/<season>/normalized/
  */
 
 export interface NormalizedTeam {

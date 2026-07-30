@@ -9,11 +9,11 @@ import { appConfig } from '@config/appConfig';
 
 // Fallback imports for development without db.json
 // When adding new seasons, add fallback imports here
-import teamsDataFallback from '../../data/seasons/2026-2027/normalized/teams.json';
-import playersDataFallback from '../../data/seasons/2026-2027/normalized/players.json';
-import gameweeksDataFallback from '../../data/seasons/2026-2027/normalized/gameweeks.json';
-import elementTypesDataFallback from '../../data/seasons/2026-2027/normalized/element-types.json';
-import fixturesDataFallback from '../../data/seasons/2026-2027/normalized/fixtures.json';
+import teamsDataFallback from '../../data/competitions/fpl/seasons/2026-2027/normalized/teams.json';
+import playersDataFallback from '../../data/competitions/fpl/seasons/2026-2027/normalized/players.json';
+import gameweeksDataFallback from '../../data/competitions/fpl/seasons/2026-2027/normalized/gameweeks.json';
+import elementTypesDataFallback from '../../data/competitions/fpl/seasons/2026-2027/normalized/element-types.json';
+import fixturesDataFallback from '../../data/competitions/fpl/seasons/2026-2027/normalized/fixtures.json';
 
 export interface DataFiles {
   teams: unknown;

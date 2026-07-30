@@ -1,144 +1,195 @@
-/**
- * Public Data Synchronizer - SEASON AWARE
- * Downloads public FPL data (bootstrap, fixtures) and normalizes
- * No manager ID required - works standalone
- * Supports multi-season sync
- */
-
 import fs from 'fs';
 import path from 'path';
 import { fileURLToPath } from 'url';
 import { FplClient } from '../../src/shared/services/fpl-client';
 import type {
-  BootstrapStatic,
-  Event,
-  Team,
-  Player,
   ElementType,
+  Event,
   FPLFixture,
+  Player,
+  Team,
 } from '../../src/shared/services/fpl-client';
+import { getFplSeasonPaths } from '../services/competition-data-paths';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const projectRoot = path.resolve(__dirname, '../../');
 
-interface NormalizedTeam {
+interface CollectionFailure {
   id: number;
-  name: string;
-  shortName: string;
-  code: number;
-  strength: number;
-  position: number;
-  strengthOverallHome: number;
-  strengthOverallAway: number;
-  strengthAttackHome: number;
-  strengthAttackAway: number;
-  strengthDefenceHome: number;
-  strengthDefenceAway: number;
+  message: string;
 }
 
-interface NormalizedPlayer {
-  id: number;
-  firstName: string;
-  secondName: string;
-  webName: string;
-  team: number;
-  elementType: number;
-  squadNumber: number | null;
-  selectedByPercent: string;
-  nowCost: number;
-  form: string;
-  pointsPerGame: string;
-  totalPoints: number;
-  minutes: number;
+export interface SyncPublicResult {
+  players: number;
+  teams: number;
+  gameweeks: number;
+  fixtures: number;
+  elementTypes: number;
+  playerDetails: number;
+  eventLiveSnapshots: number;
+  playerPhotos: number;
 }
 
-interface NormalizedGameweek {
-  id: number;
-  name: string;
-  deadlineTime: string;
-  finished: boolean;
-  averageEntryScore: number | null;
-}
+async function mapWithConcurrency<T, R>(
+  values: T[],
+  concurrency: number,
+  worker: (value: T) => Promise<R>
+): Promise<R[]> {
+  const results = new Array<R>(values.length);
+  let nextIndex = 0;
 
-interface NormalizedElementType {
-  id: number;
-  name: string;
-  pluralName: string;
-  singularName: string;
-}
-
-interface NormalizedFixture {
-  id: number;
-  gameweek: number;
-  homeTeamId: number;
-  awayTeamId: number;
-  homeTeamScore: number | null;
-  awayTeamScore: number | null;
-  started: boolean;
-  finished: boolean;
-  kickoffTime: string;
-  homeDifficulty: number;
-  awayDifficulty: number;
-}
-
-export async function syncPublicData(season: string = '2026-2027'): Promise<void> {
-  const rawDataDir = path.join(projectRoot, 'data', 'seasons', season, 'raw');
-  const normalizedDataDir = path.join(projectRoot, 'data', 'seasons', season, 'normalized');
-
-  console.log(`Syncing public FPL data for ${season}...`);
-
-  try {
-    const client = new FplClient();
-
-    // Fetch bootstrap and fixtures in parallel
-    console.log('Fetching bootstrap-static...');
-    const bootstrapData = await client.getBootstrap();
-
-    console.log('Fetching fixtures...');
-    const fixturesData = await client.getFixtures();
-
-    // Ensure directories exist
-    if (!fs.existsSync(rawDataDir)) {
-      fs.mkdirSync(rawDataDir, { recursive: true });
+  async function runWorker(): Promise<void> {
+    while (nextIndex < values.length) {
+      const index = nextIndex;
+      nextIndex += 1;
+      results[index] = await worker(values[index]);
     }
+  }
 
-    if (!fs.existsSync(normalizedDataDir)) {
-      fs.mkdirSync(normalizedDataDir, { recursive: true });
+  await Promise.all(
+    Array.from({ length: Math.min(concurrency, values.length) }, () => runWorker())
+  );
+  return results;
+}
+
+function ensureDirectories(directories: string[]): void {
+  directories.forEach((directory) => fs.mkdirSync(directory, { recursive: true }));
+}
+
+function writeJson(filePath: string, payload: unknown): void {
+  fs.writeFileSync(filePath, JSON.stringify(payload, null, 2), 'utf-8');
+}
+
+function errorMessage(error: unknown): string {
+  return error instanceof Error ? error.message : String(error);
+}
+
+export async function syncPublicData(season: string = '2026-2027'): Promise<SyncPublicResult> {
+  const paths = getFplSeasonPaths(projectRoot, season);
+  ensureDirectories([
+    paths.rawDir,
+    paths.normalizedDir,
+    paths.assetsDir,
+    paths.playerPhotosDir,
+    paths.elementSummariesDir,
+    paths.eventLiveDir,
+  ]);
+
+  console.log(`Syncing comprehensive public FPL data for ${season}...`);
+  const client = new FplClient();
+
+  console.log('Fetching bootstrap-static and fixtures...');
+  const [bootstrapData, fixturesData] = await Promise.all([
+    client.getBootstrap(),
+    client.getFixtures(),
+  ]);
+  writeJson(path.join(paths.rawDir, 'bootstrap-static.json'), bootstrapData);
+  writeJson(path.join(paths.rawDir, 'fixtures.json'), fixturesData);
+
+  const playerDetailFailures: CollectionFailure[] = [];
+  console.log(`Fetching ${bootstrapData.elements.length} player detail/history records...`);
+  const playerDetailResults = await mapWithConcurrency(bootstrapData.elements, 8, async (player) => {
+    const outputPath = path.join(paths.elementSummariesDir, `${player.id}.json`);
+    try {
+      const summary = fs.existsSync(outputPath)
+        ? (JSON.parse(fs.readFileSync(outputPath, 'utf-8')) as unknown)
+        : await client.getElementSummary(player.id);
+      writeJson(outputPath, summary);
+      return { playerId: player.id, summary };
+    } catch (error) {
+      playerDetailFailures.push({ id: player.id, message: errorMessage(error) });
+      return null;
     }
+  });
+  const playerDetails = playerDetailResults.filter(
+    (entry): entry is NonNullable<typeof entry> => entry !== null
+  );
+  writeJson(path.join(paths.normalizedDir, 'player-details.json'), playerDetails);
 
-    // Save raw data
-    const bootstrapPath = path.join(rawDataDir, 'bootstrap-static.json');
-    fs.writeFileSync(bootstrapPath, JSON.stringify(bootstrapData, null, 2));
-    console.log(`✓ Bootstrap saved: ${bootstrapPath}`);
+  const eventLiveFailures: CollectionFailure[] = [];
+  console.log(`Fetching ${bootstrapData.events.length} gameweek live snapshots...`);
+  const eventLiveResults = await mapWithConcurrency(bootstrapData.events, 4, async (event) => {
+    const outputPath = path.join(paths.eventLiveDir, `${event.id}.json`);
+    try {
+      const live = fs.existsSync(outputPath)
+        ? (JSON.parse(fs.readFileSync(outputPath, 'utf-8')) as unknown)
+        : await client.getEventLive(event.id);
+      writeJson(outputPath, live);
+      return { eventId: event.id, live };
+    } catch (error) {
+      eventLiveFailures.push({ id: event.id, message: errorMessage(error) });
+      return null;
+    }
+  });
+  const eventLiveSnapshots = eventLiveResults.filter(
+    (entry): entry is NonNullable<typeof entry> => entry !== null
+  );
+  writeJson(path.join(paths.normalizedDir, 'event-live.json'), eventLiveSnapshots);
 
-    const fixturesPath = path.join(rawDataDir, 'fixtures.json');
-    fs.writeFileSync(fixturesPath, JSON.stringify(fixturesData, null, 2));
-    console.log(`✓ Fixtures saved: ${fixturesPath} (${fixturesData.length} fixtures)`);
+  const playerPhotoFailures: CollectionFailure[] = [];
+  console.log(`Downloading ${bootstrapData.elements.length} player photos...`);
+  const photoResults = await mapWithConcurrency(bootstrapData.elements, 8, async (player) => {
+    const fileName = `${player.code}.png`;
+    const photoUrl =
+      `https://resources.premierleague.com/premierleague/photos/players/` +
+      `250x250/p${player.code}.png`;
+    try {
+      const outputPath = path.join(paths.playerPhotosDir, fileName);
+      if (!fs.existsSync(outputPath)) {
+        const response = await fetch(photoUrl);
+        if (!response.ok) {
+          throw new Error(`${response.status} ${response.statusText}`);
+        }
+        fs.writeFileSync(outputPath, Buffer.from(await response.arrayBuffer()));
+      }
+      return {
+        playerId: player.id,
+        code: player.code,
+        available: true,
+        file: `assets/player-photos/${fileName}`,
+      };
+    } catch (error) {
+      playerPhotoFailures.push({ id: player.id, message: errorMessage(error) });
+      return {
+        playerId: player.id,
+        code: player.code,
+        available: false,
+        file: '../../shared/player-photo-placeholder.svg',
+      };
+    }
+  });
+  const availablePlayerPhotos = photoResults.filter((entry) => entry.available);
+  writeJson(path.join(paths.assetsDir, 'player-photos.manifest.json'), photoResults);
+  const photoPathByPlayerId = new Map(photoResults.map((entry) => [entry.playerId, entry.file]));
 
-    // Normalize teams
-    const normalizedTeams: NormalizedTeam[] = bootstrapData.teams.map((team: Team) => ({
-      id: team.id,
-      name: team.name,
-      shortName: team.short_name,
-      code: team.code,
-      strength: team.strength,
-      position: team.position,
-      strengthOverallHome: team.strength_overall_home,
-      strengthOverallAway: team.strength_overall_away,
-      strengthAttackHome: team.strength_attack_home,
-      strengthAttackAway: team.strength_attack_away,
-      strengthDefenceHome: team.strength_defence_home,
-      strengthDefenceAway: team.strength_defence_away,
-    }));
-    fs.writeFileSync(
-      path.join(normalizedDataDir, 'teams.json'),
-      JSON.stringify(normalizedTeams, null, 2)
-    );
-    console.log(`✓ Teams normalized: ${normalizedTeams.length} teams`);
+  const normalizedTeams = bootstrapData.teams.map((team: Team) => ({
+    id: team.id,
+    name: team.name,
+    shortName: team.short_name,
+    code: team.code,
+    strength: team.strength,
+    position: team.position,
+    strengthOverallHome: team.strength_overall_home,
+    strengthOverallAway: team.strength_overall_away,
+    strengthAttackHome: team.strength_attack_home,
+    strengthAttackAway: team.strength_attack_away,
+    strengthDefenceHome: team.strength_defence_home,
+    strengthDefenceAway: team.strength_defence_away,
+  }));
+  writeJson(path.join(paths.normalizedDir, 'teams.json'), normalizedTeams);
 
-    // Normalize players
-    const normalizedPlayers: NormalizedPlayer[] = bootstrapData.elements.map((player: Player) => ({
+  type ExtendedPlayer = Player & {
+    cost_change_event?: number;
+    cost_change_start?: number;
+    transfers_in?: number;
+    transfers_out?: number;
+    transfers_in_event?: number;
+    transfers_out_event?: number;
+  };
+  const normalizedPlayers = bootstrapData.elements.map((rawPlayer: Player) => {
+    const player = rawPlayer as ExtendedPlayer;
+    return {
       id: player.id,
       firstName: player.first_name,
       secondName: player.second_name,
@@ -150,8 +201,16 @@ export async function syncPublicData(season: string = '2026-2027'): Promise<void
       elementType: player.element_type,
       squadNumber: player.squad_number,
       photo: player.photo,
+      avatarPath:
+        photoPathByPlayerId.get(player.id) ?? '../../shared/player-photo-placeholder.svg',
       selectedByPercent: player.selected_by_percent,
       nowCost: player.now_cost,
+      costChangeEvent: player.cost_change_event ?? 0,
+      costChangeStart: player.cost_change_start ?? 0,
+      transfersIn: player.transfers_in ?? 0,
+      transfersOut: player.transfers_out ?? 0,
+      transfersInEvent: player.transfers_in_event ?? 0,
+      transfersOutEvent: player.transfers_out_event ?? 0,
       form: player.form,
       pointsPerGame: player.points_per_game,
       totalPoints: player.total_points,
@@ -165,72 +224,67 @@ export async function syncPublicData(season: string = '2026-2027'): Promise<void
       penaltiesMissed: player.penalties_missed,
       yellowCards: player.yellow_cards,
       redCards: player.red_cards,
-    }));
-    fs.writeFileSync(
-      path.join(normalizedDataDir, 'players.json'),
-      JSON.stringify(normalizedPlayers, null, 2)
-    );
-    console.log(`✓ Players normalized: ${normalizedPlayers.length} players`);
+    };
+  });
+  writeJson(path.join(paths.normalizedDir, 'players.json'), normalizedPlayers);
 
-    // Normalize gameweeks
-    const normalizedGameweeks: NormalizedGameweek[] = bootstrapData.events.map((event: Event) => ({
-      id: event.id,
-      name: event.name,
-      deadlineTime: event.deadline_time,
-      finished: event.finished,
-      averageEntryScore: event.average_entry_score,
-    }));
-    fs.writeFileSync(
-      path.join(normalizedDataDir, 'gameweeks.json'),
-      JSON.stringify(normalizedGameweeks, null, 2)
-    );
-    console.log(`✓ Gameweeks normalized: ${normalizedGameweeks.length} gameweeks`);
+  const normalizedGameweeks = bootstrapData.events.map((event: Event) => ({
+    id: event.id,
+    name: event.name,
+    deadlineTime: event.deadline_time,
+    finished: event.finished,
+    averageEntryScore: event.average_entry_score,
+  }));
+  writeJson(path.join(paths.normalizedDir, 'gameweeks.json'), normalizedGameweeks);
 
-    // Normalize element types
-    const normalizedElementTypes: NormalizedElementType[] = bootstrapData.element_types.map(
-      (type: ElementType) => ({
-        id: type.id,
-        name: type.singular_name, // Use singular name as the primary name
-        pluralName: type.plural_name,
-        singularName: type.singular_name,
-      })
-    );
-    fs.writeFileSync(
-      path.join(normalizedDataDir, 'element-types.json'),
-      JSON.stringify(normalizedElementTypes, null, 2)
-    );
-    console.log(`✓ Element types normalized: ${normalizedElementTypes.length} types`);
+  const normalizedElementTypes = bootstrapData.element_types.map((type: ElementType) => ({
+    id: type.id,
+    name: type.singular_name,
+    pluralName: type.plural_name,
+    singularName: type.singular_name,
+  }));
+  writeJson(path.join(paths.normalizedDir, 'element-types.json'), normalizedElementTypes);
 
-    // Normalize fixtures
-    const normalizedFixtures: NormalizedFixture[] = fixturesData.map((fixture: FPLFixture) => ({
-      id: fixture.id,
-      gameweek: fixture.event,
-      homeTeamId: fixture.team_h, // Correct field name from API
-      awayTeamId: fixture.team_a, // Correct field name from API
-      homeTeamScore: fixture.team_h_score, // Correct field name from API
-      awayTeamScore: fixture.team_a_score, // Correct field name from API
-      started: fixture.started,
-      finished: fixture.finished,
-      kickoffTime: fixture.kickoff_time,
-      homeDifficulty: fixture.team_h_difficulty, // Correct field name from API
-      awayDifficulty: fixture.team_a_difficulty, // Correct field name from API
-    }));
-    fs.writeFileSync(
-      path.join(normalizedDataDir, 'fixtures.json'),
-      JSON.stringify(normalizedFixtures, null, 2)
-    );
-    console.log(`✓ Fixtures normalized: ${normalizedFixtures.length} fixtures`);
+  const normalizedFixtures = fixturesData.map((fixture: FPLFixture) => ({
+    id: fixture.id,
+    gameweek: fixture.event,
+    homeTeamId: fixture.team_h,
+    awayTeamId: fixture.team_a,
+    homeTeamScore: fixture.team_h_score,
+    awayTeamScore: fixture.team_a_score,
+    started: fixture.started,
+    finished: fixture.finished,
+    kickoffTime: fixture.kickoff_time,
+    homeDifficulty: fixture.team_h_difficulty,
+    awayDifficulty: fixture.team_a_difficulty,
+  }));
+  writeJson(path.join(paths.normalizedDir, 'fixtures.json'), normalizedFixtures);
 
-    return {
-      players: normalizedPlayers.length,
-      teams: normalizedTeams.length,
-      gameweeks: normalizedGameweeks.length,
-      fixtures: normalizedFixtures.length,
-      elementTypes: normalizedElementTypes.length,
-    } as any;
-  } catch (error) {
-    throw new Error(
-      `Failed to sync public data: ${error instanceof Error ? error.message : String(error)}`
-    );
-  }
+  const result: SyncPublicResult = {
+    players: normalizedPlayers.length,
+    teams: normalizedTeams.length,
+    gameweeks: normalizedGameweeks.length,
+    fixtures: normalizedFixtures.length,
+    elementTypes: normalizedElementTypes.length,
+    playerDetails: playerDetails.length,
+    eventLiveSnapshots: eventLiveSnapshots.length,
+    playerPhotos: availablePlayerPhotos.length,
+  };
+  const manifest = {
+    competition: 'fpl',
+    season,
+    syncedAt: new Date().toISOString(),
+    source: 'https://fantasy.premierleague.com/api',
+    counts: result,
+    failures: {
+      playerDetails: playerDetailFailures,
+      eventLive: eventLiveFailures,
+      playerPhotos: playerPhotoFailures,
+    },
+  };
+  writeJson(path.join(paths.rawDir, 'sync-manifest.json'), manifest);
+  writeJson(path.join(projectRoot, 'data', 'competitions', 'fpl', 'manifest.json'), manifest);
+
+  console.log(`FPL sync complete: ${JSON.stringify(result)}`);
+  return result;
 }

@@ -1,0 +1,22 @@
+{
+  "competition": "asean-cup-2026",
+  "activeSeason": "2026-2027",
+  "syncCommand": "npm run sync:asean -- --season=2026-2027",
+  "seasons": {
+    "2025-2026": {
+      "normalized": [
+        "seasons/2025-2026/normalized/asean-cup-2026.json"
+      ]
+    },
+    "2026-2027": {
+      "manual": [
+        "seasons/2026-2027/manual/asean-cup-2026.schedule.json"
+      ],
+      "normalized": [
+        "seasons/2026-2027/normalized/asean-cup-2026.json",
+        "seasons/2026-2027/normalized/asean-cup-2026.match-details.json",
+        "seasons/2026-2027/normalized/asean-cup-2026.match-events.json"
+      ]
+    }
+  }
+}

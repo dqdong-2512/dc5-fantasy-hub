@@ -17,6 +17,7 @@ import { syncPublicData } from './public-sync';
 import { DataQualityValidator, type DataQualityReport } from '../services/data-quality-validator';
 import { AtomicDbWriter, type DatabaseSchema } from '../services/atomic-db-writer';
 import { getSyncConfig } from '../services/fpl-sync-config';
+import { getFplSeasonPaths } from '../services/competition-data-paths';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -37,43 +38,11 @@ interface SyncResult {
 
 interface TransferEvent {
   playerId: number;
+  playerCode: number;
   playerName: string;
   fromTeamId: number | null;
   toTeamId: number;
   detectedAt: string;
-}
-
-/**
- * Detect player transfers by comparing previous squad to new squad
- */
-function detectTransfers(
-  previousPlayers: any[],
-  currentPlayers: any[],
-  teamMap: Map<number, string>
-): TransferEvent[] {
-  const transfers: TransferEvent[] = [];
-
-  // Map previous players by stable identifier (use web_name + FPL ID if available)
-  const prevMap = new Map<number, any>();
-  previousPlayers.forEach((p) => {
-    prevMap.set(p.id, p);
-  });
-
-  // Check for team changes
-  currentPlayers.forEach((player) => {
-    const prevPlayer = prevMap.get(player.id);
-    if (prevPlayer && prevPlayer.team !== player.team) {
-      transfers.push({
-        playerId: player.id,
-        playerName: player.webName || player.web_name || player.firstName + ' ' + player.secondName,
-        fromTeamId: prevPlayer.team,
-        toTeamId: player.team,
-        detectedAt: new Date().toISOString(),
-      });
-    }
-  });
-
-  return transfers;
 }
 
 async function main(): Promise<void> {
@@ -82,8 +51,10 @@ async function main(): Promise<void> {
   try {
     // Get sync configuration
     const config = getSyncConfig();
-    const seasonDataDir = path.join(projectRoot, 'data', 'seasons', config.season);
-    const normalizedDataDir = path.join(seasonDataDir, 'normalized');
+    const { seasonDir: seasonDataDir, normalizedDir: normalizedDataDir } = getFplSeasonPaths(
+      projectRoot,
+      config.season
+    );
 
     console.log('═══════════════════════════════════════════════════════════');
     console.log('FPL Data Sync Pipeline - SEASON AWARE');
@@ -105,13 +76,13 @@ async function main(): Promise<void> {
     // Step 1: Sync public data (with season-aware paths passed to syncPublicData)
     if (config.syncPublic) {
       console.log('STEP 1: Syncing public FPL data...\n');
-      await syncPublicData(config.season);
+      const synced = await syncPublicData(config.season);
       result.publicData = {
-        players: 0,
-        teams: 0,
-        gameweeks: 0,
-        fixtures: 0,
-        elementTypes: 0,
+        players: synced.players,
+        teams: synced.teams,
+        gameweeks: synced.gameweeks,
+        fixtures: synced.fixtures,
+        elementTypes: synced.elementTypes,
       };
     }
 
@@ -222,7 +193,9 @@ async function main(): Promise<void> {
       try {
         const prevDb = JSON.parse(fs.readFileSync(dbPath, 'utf-8'));
         if (prevDb.transfers && Array.isArray(prevDb.transfers)) {
-          existingTransfers = prevDb.transfers;
+          existingTransfers = prevDb.transfers.filter(
+            (transfer: TransferEvent) => Number.isInteger(transfer.playerCode)
+          );
         }
 
         // Compare players with previous snapshot
@@ -241,7 +214,11 @@ async function main(): Promise<void> {
 
           players.forEach((player: any) => {
             const prevPlayer = prevMap.get(player.id);
-            if (prevPlayer && prevPlayer.team !== player.team) {
+            if (
+              prevPlayer &&
+              prevPlayer.code === player.code &&
+              prevPlayer.team !== player.team
+            ) {
               // Player changed team
               const fromTeamName = teamMap.get(prevPlayer.team) || `Team ${prevPlayer.team}`;
               const toTeamName = teamMap.get(player.team) || `Team ${player.team}`;
@@ -250,6 +227,7 @@ async function main(): Promise<void> {
 
               const transfer: TransferEvent = {
                 playerId: player.id,
+                playerCode: player.code,
                 playerName: playerName,
                 fromTeamId: prevPlayer.team,
                 toTeamId: player.team,

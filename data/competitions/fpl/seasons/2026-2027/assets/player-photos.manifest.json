@@ -1,0 +1,3386 @@
+[
+  {
+    "playerId": 1,
+    "code": 154561,
+    "available": true,
+    "file": "assets/player-photos/154561.png"
+  },
+  {
+    "playerId": 2,
+    "code": 109745,
+    "available": true,
+    "file": "assets/player-photos/109745.png"
+  },
+  {
+    "playerId": 3,
+    "code": 437495,
+    "available": true,
+    "file": "assets/player-photos/437495.png"
+  },
+  {
+    "playerId": 4,
+    "code": 226597,
+    "available": true,
+    "file": "assets/player-photos/226597.png"
+  },
+  {
+    "playerId": 5,
+    "code": 445122,
+    "available": true,
+    "file": "assets/player-photos/445122.png"
+  },
+  {
+    "playerId": 6,
+    "code": 462424,
+    "available": true,
+    "file": "assets/player-photos/462424.png"
+  },
+  {
+    "playerId": 7,
+    "code": 499169,
+    "available": true,
+    "file": "assets/player-photos/499169.png"
+  },
+  {
+    "playerId": 8,
+    "code": 466075,
+    "available": true,
+    "file": "assets/player-photos/466075.png"
+  },
+  {
+    "playerId": 9,
+    "code": 448104,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 10,
+    "code": 198869,
+    "available": true,
+    "file": "assets/player-photos/198869.png"
+  },
+  {
+    "playerId": 11,
+    "code": 500040,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 12,
+    "code": 223340,
+    "available": true,
+    "file": "assets/player-photos/223340.png"
+  },
+  {
+    "playerId": 13,
+    "code": 204480,
+    "available": true,
+    "file": "assets/player-photos/204480.png"
+  },
+  {
+    "playerId": 14,
+    "code": 232413,
+    "available": true,
+    "file": "assets/player-photos/232413.png"
+  },
+  {
+    "playerId": 15,
+    "code": 184029,
+    "available": true,
+    "file": "assets/player-photos/184029.png"
+  },
+  {
+    "playerId": 16,
+    "code": 248857,
+    "available": true,
+    "file": "assets/player-photos/248857.png"
+  },
+  {
+    "playerId": 17,
+    "code": 195384,
+    "available": true,
+    "file": "assets/player-photos/195384.png"
+  },
+  {
+    "playerId": 18,
+    "code": 444145,
+    "available": true,
+    "file": "assets/player-photos/444145.png"
+  },
+  {
+    "playerId": 19,
+    "code": 481655,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 20,
+    "code": 616077,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 21,
+    "code": 128295,
+    "available": true,
+    "file": "assets/player-photos/128295.png"
+  },
+  {
+    "playerId": 22,
+    "code": 499175,
+    "available": true,
+    "file": "assets/player-photos/499175.png"
+  },
+  {
+    "playerId": 23,
+    "code": 438098,
+    "available": true,
+    "file": "assets/player-photos/438098.png"
+  },
+  {
+    "playerId": 24,
+    "code": 200641,
+    "available": true,
+    "file": "assets/player-photos/200641.png"
+  },
+  {
+    "playerId": 25,
+    "code": 224117,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 26,
+    "code": 219847,
+    "available": true,
+    "file": "assets/player-photos/219847.png"
+  },
+  {
+    "playerId": 27,
+    "code": 205651,
+    "available": true,
+    "file": "assets/player-photos/205651.png"
+  },
+  {
+    "playerId": 557,
+    "code": 439509,
+    "available": true,
+    "file": "assets/player-photos/439509.png"
+  },
+  {
+    "playerId": 28,
+    "code": 98980,
+    "available": true,
+    "file": "assets/player-photos/98980.png"
+  },
+  {
+    "playerId": 29,
+    "code": 72147,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 30,
+    "code": 101188,
+    "available": true,
+    "file": "assets/player-photos/101188.png"
+  },
+  {
+    "playerId": 31,
+    "code": 199798,
+    "available": true,
+    "file": "assets/player-photos/199798.png"
+  },
+  {
+    "playerId": 32,
+    "code": 199796,
+    "available": true,
+    "file": "assets/player-photos/199796.png"
+  },
+  {
+    "playerId": 33,
+    "code": 149484,
+    "available": true,
+    "file": "assets/player-photos/149484.png"
+  },
+  {
+    "playerId": 34,
+    "code": 244954,
+    "available": true,
+    "file": "assets/player-photos/244954.png"
+  },
+  {
+    "playerId": 35,
+    "code": 515597,
+    "available": true,
+    "file": "assets/player-photos/515597.png"
+  },
+  {
+    "playerId": 36,
+    "code": 441302,
+    "available": true,
+    "file": "assets/player-photos/441302.png"
+  },
+  {
+    "playerId": 37,
+    "code": 184667,
+    "available": true,
+    "file": "assets/player-photos/184667.png"
+  },
+  {
+    "playerId": 38,
+    "code": 606798,
+    "available": true,
+    "file": "assets/player-photos/606798.png"
+  },
+  {
+    "playerId": 39,
+    "code": 578545,
+    "available": true,
+    "file": "assets/player-photos/578545.png"
+  },
+  {
+    "playerId": 41,
+    "code": 195546,
+    "available": true,
+    "file": "assets/player-photos/195546.png"
+  },
+  {
+    "playerId": 42,
+    "code": 485337,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 44,
+    "code": 215711,
+    "available": true,
+    "file": "assets/player-photos/215711.png"
+  },
+  {
+    "playerId": 45,
+    "code": 122806,
+    "available": true,
+    "file": "assets/player-photos/122806.png"
+  },
+  {
+    "playerId": 46,
+    "code": 88894,
+    "available": true,
+    "file": "assets/player-photos/88894.png"
+  },
+  {
+    "playerId": 47,
+    "code": 226944,
+    "available": true,
+    "file": "assets/player-photos/226944.png"
+  },
+  {
+    "playerId": 48,
+    "code": 449871,
+    "available": true,
+    "file": "assets/player-photos/449871.png"
+  },
+  {
+    "playerId": 49,
+    "code": 469247,
+    "available": true,
+    "file": "assets/player-photos/469247.png"
+  },
+  {
+    "playerId": 50,
+    "code": 645618,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 51,
+    "code": 577285,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 52,
+    "code": 653481,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 53,
+    "code": 614071,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 54,
+    "code": 448089,
+    "available": true,
+    "file": "assets/player-photos/448089.png"
+  },
+  {
+    "playerId": 55,
+    "code": 178301,
+    "available": true,
+    "file": "assets/player-photos/178301.png"
+  },
+  {
+    "playerId": 56,
+    "code": 173879,
+    "available": true,
+    "file": "assets/player-photos/173879.png"
+  },
+  {
+    "playerId": 160,
+    "code": 493105,
+    "available": true,
+    "file": "assets/player-photos/493105.png"
+  },
+  {
+    "playerId": 57,
+    "code": 457569,
+    "available": true,
+    "file": "assets/player-photos/457569.png"
+  },
+  {
+    "playerId": 58,
+    "code": 40383,
+    "available": true,
+    "file": "assets/player-photos/40383.png"
+  },
+  {
+    "playerId": 59,
+    "code": 444172,
+    "available": true,
+    "file": "assets/player-photos/444172.png"
+  },
+  {
+    "playerId": 60,
+    "code": 463981,
+    "available": true,
+    "file": "assets/player-photos/463981.png"
+  },
+  {
+    "playerId": 61,
+    "code": 494521,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 62,
+    "code": 242882,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 63,
+    "code": 620487,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 64,
+    "code": 54469,
+    "available": true,
+    "file": "assets/player-photos/54469.png"
+  },
+  {
+    "playerId": 65,
+    "code": 436893,
+    "available": true,
+    "file": "assets/player-photos/436893.png"
+  },
+  {
+    "playerId": 66,
+    "code": 575901,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 67,
+    "code": 499604,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 68,
+    "code": 201658,
+    "available": true,
+    "file": "assets/player-photos/201658.png"
+  },
+  {
+    "playerId": 69,
+    "code": 503139,
+    "available": true,
+    "file": "assets/player-photos/503139.png"
+  },
+  {
+    "playerId": 70,
+    "code": 222683,
+    "available": true,
+    "file": "assets/player-photos/222683.png"
+  },
+  {
+    "playerId": 71,
+    "code": 155408,
+    "available": true,
+    "file": "assets/player-photos/155408.png"
+  },
+  {
+    "playerId": 72,
+    "code": 496208,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 73,
+    "code": 200785,
+    "available": true,
+    "file": "assets/player-photos/200785.png"
+  },
+  {
+    "playerId": 74,
+    "code": 111317,
+    "available": true,
+    "file": "assets/player-photos/111317.png"
+  },
+  {
+    "playerId": 75,
+    "code": 158499,
+    "available": true,
+    "file": "assets/player-photos/158499.png"
+  },
+  {
+    "playerId": 76,
+    "code": 614574,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 77,
+    "code": 489888,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 78,
+    "code": 560262,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 79,
+    "code": 444102,
+    "available": true,
+    "file": "assets/player-photos/444102.png"
+  },
+  {
+    "playerId": 80,
+    "code": 168636,
+    "available": true,
+    "file": "assets/player-photos/168636.png"
+  },
+  {
+    "playerId": 81,
+    "code": 561245,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 82,
+    "code": 200720,
+    "available": true,
+    "file": "assets/player-photos/200720.png"
+  },
+  {
+    "playerId": 83,
+    "code": 507433,
+    "available": true,
+    "file": "assets/player-photos/507433.png"
+  },
+  {
+    "playerId": 84,
+    "code": 432830,
+    "available": true,
+    "file": "assets/player-photos/432830.png"
+  },
+  {
+    "playerId": 85,
+    "code": 444765,
+    "available": true,
+    "file": "assets/player-photos/444765.png"
+  },
+  {
+    "playerId": 86,
+    "code": 249231,
+    "available": true,
+    "file": "assets/player-photos/249231.png"
+  },
+  {
+    "playerId": 87,
+    "code": 191866,
+    "available": true,
+    "file": "assets/player-photos/191866.png"
+  },
+  {
+    "playerId": 88,
+    "code": 607464,
+    "available": true,
+    "file": "assets/player-photos/607464.png"
+  },
+  {
+    "playerId": 89,
+    "code": 194010,
+    "available": true,
+    "file": "assets/player-photos/194010.png"
+  },
+  {
+    "playerId": 90,
+    "code": 472713,
+    "available": true,
+    "file": "assets/player-photos/472713.png"
+  },
+  {
+    "playerId": 91,
+    "code": 231065,
+    "available": true,
+    "file": "assets/player-photos/231065.png"
+  },
+  {
+    "playerId": 92,
+    "code": 570241,
+    "available": true,
+    "file": "assets/player-photos/570241.png"
+  },
+  {
+    "playerId": 93,
+    "code": 513086,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 94,
+    "code": 513418,
+    "available": true,
+    "file": "assets/player-photos/513418.png"
+  },
+  {
+    "playerId": 95,
+    "code": 533463,
+    "available": true,
+    "file": "assets/player-photos/533463.png"
+  },
+  {
+    "playerId": 96,
+    "code": 440089,
+    "available": true,
+    "file": "assets/player-photos/440089.png"
+  },
+  {
+    "playerId": 97,
+    "code": 207283,
+    "available": true,
+    "file": "assets/player-photos/207283.png"
+  },
+  {
+    "playerId": 98,
+    "code": 204580,
+    "available": true,
+    "file": "assets/player-photos/204580.png"
+  },
+  {
+    "playerId": 99,
+    "code": 543295,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 100,
+    "code": 244858,
+    "available": true,
+    "file": "assets/player-photos/244858.png"
+  },
+  {
+    "playerId": 101,
+    "code": 56979,
+    "available": true,
+    "file": "assets/player-photos/56979.png"
+  },
+  {
+    "playerId": 102,
+    "code": 508395,
+    "available": true,
+    "file": "assets/player-photos/508395.png"
+  },
+  {
+    "playerId": 103,
+    "code": 183656,
+    "available": true,
+    "file": "assets/player-photos/183656.png"
+  },
+  {
+    "playerId": 105,
+    "code": 444180,
+    "available": true,
+    "file": "assets/player-photos/444180.png"
+  },
+  {
+    "playerId": 106,
+    "code": 502500,
+    "available": true,
+    "file": "assets/player-photos/502500.png"
+  },
+  {
+    "playerId": 107,
+    "code": 593174,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 108,
+    "code": 75115,
+    "available": true,
+    "file": "assets/player-photos/75115.png"
+  },
+  {
+    "playerId": 109,
+    "code": 489639,
+    "available": true,
+    "file": "assets/player-photos/489639.png"
+  },
+  {
+    "playerId": 110,
+    "code": 472739,
+    "available": true,
+    "file": "assets/player-photos/472739.png"
+  },
+  {
+    "playerId": 111,
+    "code": 49262,
+    "available": true,
+    "file": "assets/player-photos/49262.png"
+  },
+  {
+    "playerId": 113,
+    "code": 231416,
+    "available": true,
+    "file": "assets/player-photos/231416.png"
+  },
+  {
+    "playerId": 114,
+    "code": 204120,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 115,
+    "code": 465730,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 116,
+    "code": 83299,
+    "available": true,
+    "file": "assets/player-photos/83299.png"
+  },
+  {
+    "playerId": 117,
+    "code": 550090,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 118,
+    "code": 223434,
+    "available": true,
+    "file": "assets/player-photos/223434.png"
+  },
+  {
+    "playerId": 119,
+    "code": 451490,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 120,
+    "code": 454490,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 121,
+    "code": 451340,
+    "available": true,
+    "file": "assets/player-photos/451340.png"
+  },
+  {
+    "playerId": 122,
+    "code": 592031,
+    "available": true,
+    "file": "assets/player-photos/592031.png"
+  },
+  {
+    "playerId": 123,
+    "code": 532529,
+    "available": true,
+    "file": "assets/player-photos/532529.png"
+  },
+  {
+    "playerId": 124,
+    "code": 60307,
+    "available": true,
+    "file": "assets/player-photos/60307.png"
+  },
+  {
+    "playerId": 125,
+    "code": 463067,
+    "available": true,
+    "file": "assets/player-photos/463067.png"
+  },
+  {
+    "playerId": 126,
+    "code": 219249,
+    "available": true,
+    "file": "assets/player-photos/219249.png"
+  },
+  {
+    "playerId": 127,
+    "code": 514254,
+    "available": true,
+    "file": "assets/player-photos/514254.png"
+  },
+  {
+    "playerId": 128,
+    "code": 536916,
+    "available": true,
+    "file": "assets/player-photos/536916.png"
+  },
+  {
+    "playerId": 129,
+    "code": 509416,
+    "available": true,
+    "file": "assets/player-photos/509416.png"
+  },
+  {
+    "playerId": 130,
+    "code": 467779,
+    "available": true,
+    "file": "assets/player-photos/467779.png"
+  },
+  {
+    "playerId": 131,
+    "code": 535301,
+    "available": true,
+    "file": "assets/player-photos/535301.png"
+  },
+  {
+    "playerId": 132,
+    "code": 597320,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 133,
+    "code": 549074,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 134,
+    "code": 556637,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 135,
+    "code": 700308,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 136,
+    "code": 50175,
+    "available": true,
+    "file": "assets/player-photos/50175.png"
+  },
+  {
+    "playerId": 137,
+    "code": 608181,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 138,
+    "code": 647850,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 139,
+    "code": 487117,
+    "available": true,
+    "file": "assets/player-photos/487117.png"
+  },
+  {
+    "playerId": 328,
+    "code": 222694,
+    "available": true,
+    "file": "assets/player-photos/222694.png"
+  },
+  {
+    "playerId": 504,
+    "code": 610799,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 40,
+    "code": 244850,
+    "available": true,
+    "file": "assets/player-photos/244850.png"
+  },
+  {
+    "playerId": 140,
+    "code": 215059,
+    "available": true,
+    "file": "assets/player-photos/215059.png"
+  },
+  {
+    "playerId": 141,
+    "code": 508479,
+    "available": true,
+    "file": "assets/player-photos/508479.png"
+  },
+  {
+    "playerId": 142,
+    "code": 225796,
+    "available": true,
+    "file": "assets/player-photos/225796.png"
+  },
+  {
+    "playerId": 143,
+    "code": 180736,
+    "available": true,
+    "file": "assets/player-photos/180736.png"
+  },
+  {
+    "playerId": 144,
+    "code": 482609,
+    "available": true,
+    "file": "assets/player-photos/482609.png"
+  },
+  {
+    "playerId": 145,
+    "code": 444463,
+    "available": true,
+    "file": "assets/player-photos/444463.png"
+  },
+  {
+    "playerId": 146,
+    "code": 242880,
+    "available": true,
+    "file": "assets/player-photos/242880.png"
+  },
+  {
+    "playerId": 147,
+    "code": 109646,
+    "available": true,
+    "file": "assets/player-photos/109646.png"
+  },
+  {
+    "playerId": 148,
+    "code": 551210,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 149,
+    "code": 460028,
+    "available": true,
+    "file": "assets/player-photos/460028.png"
+  },
+  {
+    "playerId": 150,
+    "code": 574458,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 151,
+    "code": 577016,
+    "available": true,
+    "file": "assets/player-photos/577016.png"
+  },
+  {
+    "playerId": 152,
+    "code": 620109,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 153,
+    "code": 220362,
+    "available": true,
+    "file": "assets/player-photos/220362.png"
+  },
+  {
+    "playerId": 154,
+    "code": 244851,
+    "available": true,
+    "file": "assets/player-photos/244851.png"
+  },
+  {
+    "playerId": 155,
+    "code": 448047,
+    "available": true,
+    "file": "assets/player-photos/448047.png"
+  },
+  {
+    "playerId": 156,
+    "code": 247632,
+    "available": true,
+    "file": "assets/player-photos/247632.png"
+  },
+  {
+    "playerId": 157,
+    "code": 624773,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 158,
+    "code": 463936,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 159,
+    "code": 486672,
+    "available": true,
+    "file": "assets/player-photos/486672.png"
+  },
+  {
+    "playerId": 161,
+    "code": 514356,
+    "available": true,
+    "file": "assets/player-photos/514356.png"
+  },
+  {
+    "playerId": 163,
+    "code": 491007,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 164,
+    "code": 593117,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 165,
+    "code": 475168,
+    "available": true,
+    "file": "assets/player-photos/475168.png"
+  },
+  {
+    "playerId": 166,
+    "code": 517052,
+    "available": true,
+    "file": "assets/player-photos/517052.png"
+  },
+  {
+    "playerId": 167,
+    "code": 463034,
+    "available": true,
+    "file": "assets/player-photos/463034.png"
+  },
+  {
+    "playerId": 168,
+    "code": 499309,
+    "available": true,
+    "file": "assets/player-photos/499309.png"
+  },
+  {
+    "playerId": 169,
+    "code": 567119,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 170,
+    "code": 503037,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 560,
+    "code": 549939,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 561,
+    "code": 622758,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 104,
+    "code": 428580,
+    "available": true,
+    "file": "assets/player-photos/428580.png"
+  },
+  {
+    "playerId": 171,
+    "code": 484389,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 172,
+    "code": 110690,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 173,
+    "code": 461102,
+    "available": true,
+    "file": "assets/player-photos/461102.png"
+  },
+  {
+    "playerId": 174,
+    "code": 436761,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 175,
+    "code": 451284,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 176,
+    "code": 173878,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 177,
+    "code": 465390,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 178,
+    "code": 80178,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 179,
+    "code": 204813,
+    "available": true,
+    "file": "assets/player-photos/204813.png"
+  },
+  {
+    "playerId": 180,
+    "code": 220583,
+    "available": true,
+    "file": "assets/player-photos/220583.png"
+  },
+  {
+    "playerId": 181,
+    "code": 577411,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 182,
+    "code": 539142,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 183,
+    "code": 480457,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 184,
+    "code": 168144,
+    "available": true,
+    "file": "assets/player-photos/168144.png"
+  },
+  {
+    "playerId": 185,
+    "code": 501459,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 186,
+    "code": 241293,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 187,
+    "code": 439668,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 188,
+    "code": 226965,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 189,
+    "code": 684268,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 190,
+    "code": 469272,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 191,
+    "code": 492498,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 192,
+    "code": 629397,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 193,
+    "code": 176412,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 194,
+    "code": 230730,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 195,
+    "code": 218997,
+    "available": true,
+    "file": "assets/player-photos/218997.png"
+  },
+  {
+    "playerId": 196,
+    "code": 551262,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 197,
+    "code": 549653,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 198,
+    "code": 172649,
+    "available": true,
+    "file": "assets/player-photos/172649.png"
+  },
+  {
+    "playerId": 199,
+    "code": 121709,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 200,
+    "code": 437499,
+    "available": true,
+    "file": "assets/player-photos/437499.png"
+  },
+  {
+    "playerId": 201,
+    "code": 247348,
+    "available": true,
+    "file": "assets/player-photos/247348.png"
+  },
+  {
+    "playerId": 202,
+    "code": 427623,
+    "available": true,
+    "file": "assets/player-photos/427623.png"
+  },
+  {
+    "playerId": 203,
+    "code": 651426,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 204,
+    "code": 244723,
+    "available": true,
+    "file": "assets/player-photos/244723.png"
+  },
+  {
+    "playerId": 205,
+    "code": 218364,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 206,
+    "code": 515621,
+    "available": true,
+    "file": "assets/player-photos/515621.png"
+  },
+  {
+    "playerId": 207,
+    "code": 242313,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 208,
+    "code": 232185,
+    "available": true,
+    "file": "assets/player-photos/232185.png"
+  },
+  {
+    "playerId": 209,
+    "code": 242898,
+    "available": true,
+    "file": "assets/player-photos/242898.png"
+  },
+  {
+    "playerId": 210,
+    "code": 496221,
+    "available": true,
+    "file": "assets/player-photos/496221.png"
+  },
+  {
+    "playerId": 211,
+    "code": 488024,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 212,
+    "code": 108413,
+    "available": true,
+    "file": "assets/player-photos/108413.png"
+  },
+  {
+    "playerId": 213,
+    "code": 152551,
+    "available": true,
+    "file": "assets/player-photos/152551.png"
+  },
+  {
+    "playerId": 214,
+    "code": 209400,
+    "available": true,
+    "file": "assets/player-photos/209400.png"
+  },
+  {
+    "playerId": 215,
+    "code": 489706,
+    "available": true,
+    "file": "assets/player-photos/489706.png"
+  },
+  {
+    "playerId": 216,
+    "code": 606921,
+    "available": true,
+    "file": "assets/player-photos/606921.png"
+  },
+  {
+    "playerId": 217,
+    "code": 536694,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 218,
+    "code": 438464,
+    "available": true,
+    "file": "assets/player-photos/438464.png"
+  },
+  {
+    "playerId": 219,
+    "code": 450542,
+    "available": true,
+    "file": "assets/player-photos/450542.png"
+  },
+  {
+    "playerId": 220,
+    "code": 590014,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 221,
+    "code": 672492,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 222,
+    "code": 247412,
+    "available": true,
+    "file": "assets/player-photos/247412.png"
+  },
+  {
+    "playerId": 223,
+    "code": 231747,
+    "available": true,
+    "file": "assets/player-photos/231747.png"
+  },
+  {
+    "playerId": 224,
+    "code": 205533,
+    "available": true,
+    "file": "assets/player-photos/205533.png"
+  },
+  {
+    "playerId": 225,
+    "code": 660392,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 555,
+    "code": 169593,
+    "available": true,
+    "file": "assets/player-photos/169593.png"
+  },
+  {
+    "playerId": 226,
+    "code": 111234,
+    "available": true,
+    "file": "assets/player-photos/111234.png"
+  },
+  {
+    "playerId": 227,
+    "code": 229600,
+    "available": true,
+    "file": "assets/player-photos/229600.png"
+  },
+  {
+    "playerId": 228,
+    "code": 138001,
+    "available": true,
+    "file": "assets/player-photos/138001.png"
+  },
+  {
+    "playerId": 229,
+    "code": 17761,
+    "available": true,
+    "file": "assets/player-photos/17761.png"
+  },
+  {
+    "playerId": 230,
+    "code": 480455,
+    "available": true,
+    "file": "assets/player-photos/480455.png"
+  },
+  {
+    "playerId": 231,
+    "code": 106611,
+    "available": true,
+    "file": "assets/player-photos/106611.png"
+  },
+  {
+    "playerId": 232,
+    "code": 512462,
+    "available": true,
+    "file": "assets/player-photos/512462.png"
+  },
+  {
+    "playerId": 233,
+    "code": 224967,
+    "available": true,
+    "file": "assets/player-photos/224967.png"
+  },
+  {
+    "playerId": 234,
+    "code": 243571,
+    "available": true,
+    "file": "assets/player-photos/243571.png"
+  },
+  {
+    "playerId": 235,
+    "code": 499300,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 236,
+    "code": 215413,
+    "available": true,
+    "file": "assets/player-photos/215413.png"
+  },
+  {
+    "playerId": 237,
+    "code": 440993,
+    "available": true,
+    "file": "assets/player-photos/440993.png"
+  },
+  {
+    "playerId": 239,
+    "code": 232928,
+    "available": true,
+    "file": "assets/player-photos/232928.png"
+  },
+  {
+    "playerId": 240,
+    "code": 490094,
+    "available": true,
+    "file": "assets/player-photos/490094.png"
+  },
+  {
+    "playerId": 241,
+    "code": 433154,
+    "available": true,
+    "file": "assets/player-photos/433154.png"
+  },
+  {
+    "playerId": 242,
+    "code": 550615,
+    "available": true,
+    "file": "assets/player-photos/550615.png"
+  },
+  {
+    "playerId": 243,
+    "code": 502697,
+    "available": true,
+    "file": "assets/player-photos/502697.png"
+  },
+  {
+    "playerId": 244,
+    "code": 609873,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 245,
+    "code": 496661,
+    "available": true,
+    "file": "assets/player-photos/496661.png"
+  },
+  {
+    "playerId": 246,
+    "code": 513466,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 247,
+    "code": 244860,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 248,
+    "code": 486385,
+    "available": true,
+    "file": "assets/player-photos/486385.png"
+  },
+  {
+    "playerId": 249,
+    "code": 586309,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 250,
+    "code": 80201,
+    "available": true,
+    "file": "assets/player-photos/80201.png"
+  },
+  {
+    "playerId": 251,
+    "code": 86873,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 252,
+    "code": 505079,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 253,
+    "code": 174874,
+    "available": true,
+    "file": "assets/player-photos/174874.png"
+  },
+  {
+    "playerId": 254,
+    "code": 169528,
+    "available": true,
+    "file": "assets/player-photos/169528.png"
+  },
+  {
+    "playerId": 255,
+    "code": 246301,
+    "available": true,
+    "file": "assets/player-photos/246301.png"
+  },
+  {
+    "playerId": 256,
+    "code": 167074,
+    "available": true,
+    "file": "assets/player-photos/167074.png"
+  },
+  {
+    "playerId": 257,
+    "code": 232892,
+    "available": true,
+    "file": "assets/player-photos/232892.png"
+  },
+  {
+    "playerId": 258,
+    "code": 166477,
+    "available": true,
+    "file": "assets/player-photos/166477.png"
+  },
+  {
+    "playerId": 261,
+    "code": 153133,
+    "available": true,
+    "file": "assets/player-photos/153133.png"
+  },
+  {
+    "playerId": 262,
+    "code": 209289,
+    "available": true,
+    "file": "assets/player-photos/209289.png"
+  },
+  {
+    "playerId": 263,
+    "code": 560552,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 264,
+    "code": 477555,
+    "available": true,
+    "file": "assets/player-photos/477555.png"
+  },
+  {
+    "playerId": 265,
+    "code": 207189,
+    "available": true,
+    "file": "assets/player-photos/207189.png"
+  },
+  {
+    "playerId": 266,
+    "code": 76357,
+    "available": true,
+    "file": "assets/player-photos/76357.png"
+  },
+  {
+    "playerId": 267,
+    "code": 212314,
+    "available": true,
+    "file": "assets/player-photos/212314.png"
+  },
+  {
+    "playerId": 268,
+    "code": 577725,
+    "available": true,
+    "file": "assets/player-photos/577725.png"
+  },
+  {
+    "playerId": 269,
+    "code": 184349,
+    "available": true,
+    "file": "assets/player-photos/184349.png"
+  },
+  {
+    "playerId": 270,
+    "code": 153366,
+    "available": true,
+    "file": "assets/player-photos/153366.png"
+  },
+  {
+    "playerId": 271,
+    "code": 244042,
+    "available": true,
+    "file": "assets/player-photos/244042.png"
+  },
+  {
+    "playerId": 272,
+    "code": 631786,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 273,
+    "code": 167825,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 274,
+    "code": 105666,
+    "available": true,
+    "file": "assets/player-photos/105666.png"
+  },
+  {
+    "playerId": 275,
+    "code": 494950,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 276,
+    "code": 444307,
+    "available": true,
+    "file": "assets/player-photos/444307.png"
+  },
+  {
+    "playerId": 277,
+    "code": 108416,
+    "available": true,
+    "file": "assets/player-photos/108416.png"
+  },
+  {
+    "playerId": 278,
+    "code": 501902,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 279,
+    "code": 146426,
+    "available": true,
+    "file": "assets/player-photos/146426.png"
+  },
+  {
+    "playerId": 280,
+    "code": 193278,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 281,
+    "code": 433590,
+    "available": true,
+    "file": "assets/player-photos/433590.png"
+  },
+  {
+    "playerId": 282,
+    "code": 232351,
+    "available": true,
+    "file": "assets/player-photos/232351.png"
+  },
+  {
+    "playerId": 283,
+    "code": 449428,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 284,
+    "code": 661800,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 285,
+    "code": 160817,
+    "available": true,
+    "file": "assets/player-photos/160817.png"
+  },
+  {
+    "playerId": 286,
+    "code": 540324,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 287,
+    "code": 232905,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 288,
+    "code": 171270,
+    "available": true,
+    "file": "assets/player-photos/171270.png"
+  },
+  {
+    "playerId": 289,
+    "code": 101282,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 290,
+    "code": 243413,
+    "available": true,
+    "file": "assets/player-photos/243413.png"
+  },
+  {
+    "playerId": 291,
+    "code": 465525,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 292,
+    "code": 208481,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 293,
+    "code": 490161,
+    "available": true,
+    "file": "assets/player-photos/490161.png"
+  },
+  {
+    "playerId": 294,
+    "code": 553783,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 295,
+    "code": 169432,
+    "available": true,
+    "file": "assets/player-photos/169432.png"
+  },
+  {
+    "playerId": 296,
+    "code": 213292,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 297,
+    "code": 470294,
+    "available": true,
+    "file": "assets/player-photos/470294.png"
+  },
+  {
+    "playerId": 298,
+    "code": 500957,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 299,
+    "code": 534392,
+    "available": true,
+    "file": "assets/player-photos/534392.png"
+  },
+  {
+    "playerId": 556,
+    "code": 169359,
+    "available": true,
+    "file": "assets/player-photos/169359.png"
+  },
+  {
+    "playerId": 563,
+    "code": 445028,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 259,
+    "code": 219924,
+    "available": true,
+    "file": "assets/player-photos/219924.png"
+  },
+  {
+    "playerId": 300,
+    "code": 108813,
+    "available": true,
+    "file": "assets/player-photos/108813.png"
+  },
+  {
+    "playerId": 301,
+    "code": 112520,
+    "available": true,
+    "file": "assets/player-photos/112520.png"
+  },
+  {
+    "playerId": 302,
+    "code": 50093,
+    "available": true,
+    "file": "assets/player-photos/50093.png"
+  },
+  {
+    "playerId": 303,
+    "code": 183015,
+    "available": true,
+    "file": "assets/player-photos/183015.png"
+  },
+  {
+    "playerId": 304,
+    "code": 216616,
+    "available": true,
+    "file": "assets/player-photos/216616.png"
+  },
+  {
+    "playerId": 305,
+    "code": 455084,
+    "available": true,
+    "file": "assets/player-photos/455084.png"
+  },
+  {
+    "playerId": 306,
+    "code": 449429,
+    "available": true,
+    "file": "assets/player-photos/449429.png"
+  },
+  {
+    "playerId": 307,
+    "code": 222018,
+    "available": true,
+    "file": "assets/player-photos/222018.png"
+  },
+  {
+    "playerId": 308,
+    "code": 176420,
+    "available": true,
+    "file": "assets/player-photos/176420.png"
+  },
+  {
+    "playerId": 309,
+    "code": 501390,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 310,
+    "code": 241117,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 311,
+    "code": 149929,
+    "available": true,
+    "file": "assets/player-photos/149929.png"
+  },
+  {
+    "playerId": 312,
+    "code": 231899,
+    "available": true,
+    "file": "assets/player-photos/231899.png"
+  },
+  {
+    "playerId": 313,
+    "code": 443261,
+    "available": true,
+    "file": "assets/player-photos/443261.png"
+  },
+  {
+    "playerId": 314,
+    "code": 229164,
+    "available": true,
+    "file": "assets/player-photos/229164.png"
+  },
+  {
+    "playerId": 315,
+    "code": 531442,
+    "available": true,
+    "file": "assets/player-photos/531442.png"
+  },
+  {
+    "playerId": 316,
+    "code": 543968,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 317,
+    "code": 222625,
+    "available": true,
+    "file": "assets/player-photos/222625.png"
+  },
+  {
+    "playerId": 318,
+    "code": 481624,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 319,
+    "code": 172453,
+    "available": true,
+    "file": "assets/player-photos/172453.png"
+  },
+  {
+    "playerId": 320,
+    "code": 147675,
+    "available": true,
+    "file": "assets/player-photos/147675.png"
+  },
+  {
+    "playerId": 321,
+    "code": 557012,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 322,
+    "code": 462387,
+    "available": true,
+    "file": "assets/player-photos/462387.png"
+  },
+  {
+    "playerId": 323,
+    "code": 461587,
+    "available": true,
+    "file": "assets/player-photos/461587.png"
+  },
+  {
+    "playerId": 324,
+    "code": 232457,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 554,
+    "code": 546600,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 562,
+    "code": 442967,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 564,
+    "code": 240514,
+    "available": true,
+    "file": "assets/player-photos/240514.png"
+  },
+  {
+    "playerId": 260,
+    "code": 153682,
+    "available": true,
+    "file": "assets/player-photos/153682.png"
+  },
+  {
+    "playerId": 326,
+    "code": 201595,
+    "available": true,
+    "file": "assets/player-photos/201595.png"
+  },
+  {
+    "playerId": 327,
+    "code": 434752,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 329,
+    "code": 214225,
+    "available": true,
+    "file": "assets/player-photos/214225.png"
+  },
+  {
+    "playerId": 330,
+    "code": 226182,
+    "available": true,
+    "file": "assets/player-photos/226182.png"
+  },
+  {
+    "playerId": 331,
+    "code": 243526,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 332,
+    "code": 220627,
+    "available": true,
+    "file": "assets/player-photos/220627.png"
+  },
+  {
+    "playerId": 333,
+    "code": 437738,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 334,
+    "code": 522047,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 335,
+    "code": 466525,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 336,
+    "code": 435997,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 337,
+    "code": 427637,
+    "available": true,
+    "file": "assets/player-photos/427637.png"
+  },
+  {
+    "playerId": 338,
+    "code": 199598,
+    "available": true,
+    "file": "assets/player-photos/199598.png"
+  },
+  {
+    "playerId": 339,
+    "code": 180135,
+    "available": true,
+    "file": "assets/player-photos/180135.png"
+  },
+  {
+    "playerId": 340,
+    "code": 462635,
+    "available": true,
+    "file": "assets/player-photos/462635.png"
+  },
+  {
+    "playerId": 341,
+    "code": 492859,
+    "available": true,
+    "file": "assets/player-photos/492859.png"
+  },
+  {
+    "playerId": 342,
+    "code": 221399,
+    "available": true,
+    "file": "assets/player-photos/221399.png"
+  },
+  {
+    "playerId": 343,
+    "code": 200617,
+    "available": true,
+    "file": "assets/player-photos/200617.png"
+  },
+  {
+    "playerId": 344,
+    "code": 486520,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 345,
+    "code": 248056,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 346,
+    "code": 177815,
+    "available": true,
+    "file": "assets/player-photos/177815.png"
+  },
+  {
+    "playerId": 347,
+    "code": 174594,
+    "available": true,
+    "file": "assets/player-photos/174594.png"
+  },
+  {
+    "playerId": 348,
+    "code": 235826,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 349,
+    "code": 565297,
+    "available": true,
+    "file": "assets/player-photos/565297.png"
+  },
+  {
+    "playerId": 350,
+    "code": 116535,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 351,
+    "code": 449027,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 352,
+    "code": 155503,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 353,
+    "code": 586268,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 354,
+    "code": 432987,
+    "available": true,
+    "file": "assets/player-photos/432987.png"
+  },
+  {
+    "playerId": 355,
+    "code": 464353,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 356,
+    "code": 97032,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 357,
+    "code": 216094,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 358,
+    "code": 544877,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 359,
+    "code": 171287,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 360,
+    "code": 492777,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 361,
+    "code": 519440,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 362,
+    "code": 606702,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 363,
+    "code": 647681,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 364,
+    "code": 214285,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 365,
+    "code": 489580,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 366,
+    "code": 494595,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 367,
+    "code": 243298,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 368,
+    "code": 424876,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 369,
+    "code": 611922,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 370,
+    "code": 223541,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 371,
+    "code": 441266,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 372,
+    "code": 243016,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 373,
+    "code": 206915,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 374,
+    "code": 158983,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 375,
+    "code": 591386,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 376,
+    "code": 535928,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 377,
+    "code": 551499,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 378,
+    "code": 491501,
+    "available": true,
+    "file": "assets/player-photos/491501.png"
+  },
+  {
+    "playerId": 379,
+    "code": 219168,
+    "available": true,
+    "file": "assets/player-photos/219168.png"
+  },
+  {
+    "playerId": 380,
+    "code": 510663,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 381,
+    "code": 514514,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 382,
+    "code": 500058,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 383,
+    "code": 444884,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 238,
+    "code": 114283,
+    "available": true,
+    "file": "assets/player-photos/114283.png"
+  },
+  {
+    "playerId": 384,
+    "code": 204936,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 385,
+    "code": 432720,
+    "available": true,
+    "file": "assets/player-photos/432720.png"
+  },
+  {
+    "playerId": 386,
+    "code": 122074,
+    "available": true,
+    "file": "assets/player-photos/122074.png"
+  },
+  {
+    "playerId": 387,
+    "code": 472769,
+    "available": true,
+    "file": "assets/player-photos/472769.png"
+  },
+  {
+    "playerId": 388,
+    "code": 209036,
+    "available": true,
+    "file": "assets/player-photos/209036.png"
+  },
+  {
+    "playerId": 389,
+    "code": 465351,
+    "available": true,
+    "file": "assets/player-photos/465351.png"
+  },
+  {
+    "playerId": 390,
+    "code": 171314,
+    "available": true,
+    "file": "assets/player-photos/171314.png"
+  },
+  {
+    "playerId": 391,
+    "code": 477424,
+    "available": true,
+    "file": "assets/player-photos/477424.png"
+  },
+  {
+    "playerId": 392,
+    "code": 448514,
+    "available": true,
+    "file": "assets/player-photos/448514.png"
+  },
+  {
+    "playerId": 393,
+    "code": 578153,
+    "available": true,
+    "file": "assets/player-photos/578153.png"
+  },
+  {
+    "playerId": 394,
+    "code": 494307,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 395,
+    "code": 477064,
+    "available": true,
+    "file": "assets/player-photos/477064.png"
+  },
+  {
+    "playerId": 396,
+    "code": 616222,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 397,
+    "code": 437730,
+    "available": true,
+    "file": "assets/player-photos/437730.png"
+  },
+  {
+    "playerId": 398,
+    "code": 209244,
+    "available": true,
+    "file": "assets/player-photos/209244.png"
+  },
+  {
+    "playerId": 399,
+    "code": 466052,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 400,
+    "code": 248875,
+    "available": true,
+    "file": "assets/player-photos/248875.png"
+  },
+  {
+    "playerId": 401,
+    "code": 438234,
+    "available": true,
+    "file": "assets/player-photos/438234.png"
+  },
+  {
+    "playerId": 402,
+    "code": 220566,
+    "available": true,
+    "file": "assets/player-photos/220566.png"
+  },
+  {
+    "playerId": 403,
+    "code": 510281,
+    "available": true,
+    "file": "assets/player-photos/510281.png"
+  },
+  {
+    "playerId": 404,
+    "code": 433036,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 405,
+    "code": 465694,
+    "available": true,
+    "file": "assets/player-photos/465694.png"
+  },
+  {
+    "playerId": 406,
+    "code": 91651,
+    "available": true,
+    "file": "assets/player-photos/91651.png"
+  },
+  {
+    "playerId": 407,
+    "code": 575204,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 408,
+    "code": 155405,
+    "available": true,
+    "file": "assets/player-photos/155405.png"
+  },
+  {
+    "playerId": 409,
+    "code": 590039,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 410,
+    "code": 649208,
+    "available": true,
+    "file": "assets/player-photos/649208.png"
+  },
+  {
+    "playerId": 411,
+    "code": 223094,
+    "available": true,
+    "file": "assets/player-photos/223094.png"
+  },
+  {
+    "playerId": 481,
+    "code": 215379,
+    "available": true,
+    "file": "assets/player-photos/215379.png"
+  },
+  {
+    "playerId": 43,
+    "code": 166989,
+    "available": true,
+    "file": "assets/player-photos/166989.png"
+  },
+  {
+    "playerId": 162,
+    "code": 532605,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 325,
+    "code": 59735,
+    "available": true,
+    "file": "assets/player-photos/59735.png"
+  },
+  {
+    "playerId": 412,
+    "code": 465247,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 413,
+    "code": 451302,
+    "available": true,
+    "file": "assets/player-photos/451302.png"
+  },
+  {
+    "playerId": 414,
+    "code": 21205,
+    "available": true,
+    "file": "assets/player-photos/21205.png"
+  },
+  {
+    "playerId": 415,
+    "code": 596777,
+    "available": true,
+    "file": "assets/player-photos/596777.png"
+  },
+  {
+    "playerId": 416,
+    "code": 209365,
+    "available": true,
+    "file": "assets/player-photos/209365.png"
+  },
+  {
+    "playerId": 417,
+    "code": 216051,
+    "available": true,
+    "file": "assets/player-photos/216051.png"
+  },
+  {
+    "playerId": 418,
+    "code": 95658,
+    "available": true,
+    "file": "assets/player-photos/95658.png"
+  },
+  {
+    "playerId": 419,
+    "code": 221820,
+    "available": true,
+    "file": "assets/player-photos/221820.png"
+  },
+  {
+    "playerId": 420,
+    "code": 550864,
+    "available": true,
+    "file": "assets/player-photos/550864.png"
+  },
+  {
+    "playerId": 421,
+    "code": 606745,
+    "available": true,
+    "file": "assets/player-photos/606745.png"
+  },
+  {
+    "playerId": 422,
+    "code": 230001,
+    "available": true,
+    "file": "assets/player-photos/230001.png"
+  },
+  {
+    "playerId": 423,
+    "code": 106760,
+    "available": true,
+    "file": "assets/player-photos/106760.png"
+  },
+  {
+    "playerId": 424,
+    "code": 577974,
+    "available": true,
+    "file": "assets/player-photos/577974.png"
+  },
+  {
+    "playerId": 425,
+    "code": 547676,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 426,
+    "code": 141746,
+    "available": true,
+    "file": "assets/player-photos/141746.png"
+  },
+  {
+    "playerId": 427,
+    "code": 446008,
+    "available": true,
+    "file": "assets/player-photos/446008.png"
+  },
+  {
+    "playerId": 428,
+    "code": 430871,
+    "available": true,
+    "file": "assets/player-photos/430871.png"
+  },
+  {
+    "playerId": 429,
+    "code": 176297,
+    "available": true,
+    "file": "assets/player-photos/176297.png"
+  },
+  {
+    "playerId": 430,
+    "code": 184341,
+    "available": true,
+    "file": "assets/player-photos/184341.png"
+  },
+  {
+    "playerId": 431,
+    "code": 493250,
+    "available": true,
+    "file": "assets/player-photos/493250.png"
+  },
+  {
+    "playerId": 432,
+    "code": 516895,
+    "available": true,
+    "file": "assets/player-photos/516895.png"
+  },
+  {
+    "playerId": 433,
+    "code": 232112,
+    "available": true,
+    "file": "assets/player-photos/232112.png"
+  },
+  {
+    "playerId": 434,
+    "code": 547037,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 435,
+    "code": 576628,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 436,
+    "code": 490881,
+    "available": true,
+    "file": "assets/player-photos/490881.png"
+  },
+  {
+    "playerId": 437,
+    "code": 576620,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 438,
+    "code": 519913,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 439,
+    "code": 485711,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 440,
+    "code": 458249,
+    "available": true,
+    "file": "assets/player-photos/458249.png"
+  },
+  {
+    "playerId": 441,
+    "code": 596047,
+    "available": true,
+    "file": "assets/player-photos/596047.png"
+  },
+  {
+    "playerId": 442,
+    "code": 98747,
+    "available": true,
+    "file": "assets/player-photos/98747.png"
+  },
+  {
+    "playerId": 443,
+    "code": 81441,
+    "available": true,
+    "file": "assets/player-photos/81441.png"
+  },
+  {
+    "playerId": 444,
+    "code": 554578,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 445,
+    "code": 465642,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 446,
+    "code": 119471,
+    "available": true,
+    "file": "assets/player-photos/119471.png"
+  },
+  {
+    "playerId": 447,
+    "code": 220237,
+    "available": true,
+    "file": "assets/player-photos/220237.png"
+  },
+  {
+    "playerId": 448,
+    "code": 78916,
+    "available": true,
+    "file": "assets/player-photos/78916.png"
+  },
+  {
+    "playerId": 449,
+    "code": 487838,
+    "available": true,
+    "file": "assets/player-photos/487838.png"
+  },
+  {
+    "playerId": 450,
+    "code": 441191,
+    "available": true,
+    "file": "assets/player-photos/441191.png"
+  },
+  {
+    "playerId": 451,
+    "code": 545477,
+    "available": true,
+    "file": "assets/player-photos/545477.png"
+  },
+  {
+    "playerId": 452,
+    "code": 208706,
+    "available": true,
+    "file": "assets/player-photos/208706.png"
+  },
+  {
+    "playerId": 453,
+    "code": 201666,
+    "available": true,
+    "file": "assets/player-photos/201666.png"
+  },
+  {
+    "playerId": 454,
+    "code": 449434,
+    "available": true,
+    "file": "assets/player-photos/449434.png"
+  },
+  {
+    "playerId": 456,
+    "code": 232653,
+    "available": true,
+    "file": "assets/player-photos/232653.png"
+  },
+  {
+    "playerId": 457,
+    "code": 114243,
+    "available": true,
+    "file": "assets/player-photos/114243.png"
+  },
+  {
+    "playerId": 458,
+    "code": 180974,
+    "available": true,
+    "file": "assets/player-photos/180974.png"
+  },
+  {
+    "playerId": 459,
+    "code": 547719,
+    "available": true,
+    "file": "assets/player-photos/547719.png"
+  },
+  {
+    "playerId": 460,
+    "code": 200089,
+    "available": true,
+    "file": "assets/player-photos/200089.png"
+  },
+  {
+    "playerId": 461,
+    "code": 611665,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 462,
+    "code": 636852,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 463,
+    "code": 470313,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 464,
+    "code": 216646,
+    "available": true,
+    "file": "assets/player-photos/216646.png"
+  },
+  {
+    "playerId": 465,
+    "code": 538207,
+    "available": true,
+    "file": "assets/player-photos/538207.png"
+  },
+  {
+    "playerId": 466,
+    "code": 599303,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 559,
+    "code": 632794,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 467,
+    "code": 85633,
+    "available": true,
+    "file": "assets/player-photos/85633.png"
+  },
+  {
+    "playerId": 468,
+    "code": 221389,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 469,
+    "code": 215136,
+    "available": true,
+    "file": "assets/player-photos/215136.png"
+  },
+  {
+    "playerId": 470,
+    "code": 485047,
+    "available": true,
+    "file": "assets/player-photos/485047.png"
+  },
+  {
+    "playerId": 471,
+    "code": 227444,
+    "available": true,
+    "file": "assets/player-photos/227444.png"
+  },
+  {
+    "playerId": 472,
+    "code": 575476,
+    "available": true,
+    "file": "assets/player-photos/575476.png"
+  },
+  {
+    "playerId": 473,
+    "code": 159506,
+    "available": true,
+    "file": "assets/player-photos/159506.png"
+  },
+  {
+    "playerId": 474,
+    "code": 575458,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 475,
+    "code": 500151,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 476,
+    "code": 204822,
+    "available": true,
+    "file": "assets/player-photos/204822.png"
+  },
+  {
+    "playerId": 477,
+    "code": 549067,
+    "available": true,
+    "file": "assets/player-photos/549067.png"
+  },
+  {
+    "playerId": 478,
+    "code": 470315,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 479,
+    "code": 538638,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 480,
+    "code": 222531,
+    "available": true,
+    "file": "assets/player-photos/222531.png"
+  },
+  {
+    "playerId": 482,
+    "code": 209046,
+    "available": true,
+    "file": "assets/player-photos/209046.png"
+  },
+  {
+    "playerId": 483,
+    "code": 456512,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 484,
+    "code": 503301,
+    "available": true,
+    "file": "assets/player-photos/503301.png"
+  },
+  {
+    "playerId": 485,
+    "code": 476887,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 486,
+    "code": 432714,
+    "available": true,
+    "file": "assets/player-photos/432714.png"
+  },
+  {
+    "playerId": 487,
+    "code": 250199,
+    "available": true,
+    "file": "assets/player-photos/250199.png"
+  },
+  {
+    "playerId": 488,
+    "code": 210462,
+    "available": true,
+    "file": "assets/player-photos/210462.png"
+  },
+  {
+    "playerId": 489,
+    "code": 204968,
+    "available": true,
+    "file": "assets/player-photos/204968.png"
+  },
+  {
+    "playerId": 490,
+    "code": 60689,
+    "available": true,
+    "file": "assets/player-photos/60689.png"
+  },
+  {
+    "playerId": 491,
+    "code": 482973,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 492,
+    "code": 210156,
+    "available": true,
+    "file": "assets/player-photos/210156.png"
+  },
+  {
+    "playerId": 493,
+    "code": 465680,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 558,
+    "code": 204561,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 112,
+    "code": 469142,
+    "available": true,
+    "file": "assets/player-photos/469142.png"
+  },
+  {
+    "playerId": 455,
+    "code": 432422,
+    "available": true,
+    "file": "assets/player-photos/432422.png"
+  },
+  {
+    "playerId": 494,
+    "code": 184254,
+    "available": true,
+    "file": "assets/player-photos/184254.png"
+  },
+  {
+    "playerId": 495,
+    "code": 214572,
+    "available": true,
+    "file": "assets/player-photos/214572.png"
+  },
+  {
+    "playerId": 496,
+    "code": 485055,
+    "available": true,
+    "file": "assets/player-photos/485055.png"
+  },
+  {
+    "playerId": 497,
+    "code": 67089,
+    "available": true,
+    "file": "assets/player-photos/67089.png"
+  },
+  {
+    "playerId": 498,
+    "code": 221466,
+    "available": true,
+    "file": "assets/player-photos/221466.png"
+  },
+  {
+    "playerId": 499,
+    "code": 441164,
+    "available": true,
+    "file": "assets/player-photos/441164.png"
+  },
+  {
+    "playerId": 500,
+    "code": 221632,
+    "available": true,
+    "file": "assets/player-photos/221632.png"
+  },
+  {
+    "playerId": 501,
+    "code": 135720,
+    "available": true,
+    "file": "assets/player-photos/135720.png"
+  },
+  {
+    "playerId": 502,
+    "code": 122798,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 503,
+    "code": 491279,
+    "available": true,
+    "file": "assets/player-photos/491279.png"
+  },
+  {
+    "playerId": 505,
+    "code": 232859,
+    "available": true,
+    "file": "assets/player-photos/232859.png"
+  },
+  {
+    "playerId": 506,
+    "code": 487053,
+    "available": true,
+    "file": "assets/player-photos/487053.png"
+  },
+  {
+    "playerId": 507,
+    "code": 548308,
+    "available": true,
+    "file": "assets/player-photos/548308.png"
+  },
+  {
+    "playerId": 508,
+    "code": 115556,
+    "available": true,
+    "file": "assets/player-photos/115556.png"
+  },
+  {
+    "playerId": 509,
+    "code": 640419,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 510,
+    "code": 499716,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 511,
+    "code": 616221,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 512,
+    "code": 460842,
+    "available": true,
+    "file": "assets/player-photos/460842.png"
+  },
+  {
+    "playerId": 513,
+    "code": 493362,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 514,
+    "code": 511499,
+    "available": true,
+    "file": "assets/player-photos/511499.png"
+  },
+  {
+    "playerId": 515,
+    "code": 172780,
+    "available": true,
+    "file": "assets/player-photos/172780.png"
+  },
+  {
+    "playerId": 516,
+    "code": 202993,
+    "available": true,
+    "file": "assets/player-photos/202993.png"
+  },
+  {
+    "playerId": 517,
+    "code": 550839,
+    "available": true,
+    "file": "assets/player-photos/550839.png"
+  },
+  {
+    "playerId": 518,
+    "code": 482442,
+    "available": true,
+    "file": "assets/player-photos/482442.png"
+  },
+  {
+    "playerId": 519,
+    "code": 232787,
+    "available": true,
+    "file": "assets/player-photos/232787.png"
+  },
+  {
+    "playerId": 520,
+    "code": 570526,
+    "available": true,
+    "file": "assets/player-photos/570526.png"
+  },
+  {
+    "playerId": 521,
+    "code": 445044,
+    "available": true,
+    "file": "assets/player-photos/445044.png"
+  },
+  {
+    "playerId": 522,
+    "code": 547701,
+    "available": true,
+    "file": "assets/player-photos/547701.png"
+  },
+  {
+    "playerId": 523,
+    "code": 499721,
+    "available": true,
+    "file": "assets/player-photos/499721.png"
+  },
+  {
+    "playerId": 524,
+    "code": 499726,
+    "available": true,
+    "file": "assets/player-photos/499726.png"
+  },
+  {
+    "playerId": 525,
+    "code": 551226,
+    "available": true,
+    "file": "assets/player-photos/551226.png"
+  },
+  {
+    "playerId": 526,
+    "code": 154566,
+    "available": true,
+    "file": "assets/player-photos/154566.png"
+  },
+  {
+    "playerId": 527,
+    "code": 212319,
+    "available": true,
+    "file": "assets/player-photos/212319.png"
+  },
+  {
+    "playerId": 528,
+    "code": 490145,
+    "available": true,
+    "file": "assets/player-photos/490145.png"
+  },
+  {
+    "playerId": 529,
+    "code": 498016,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 530,
+    "code": 232571,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 531,
+    "code": 515046,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 532,
+    "code": 223827,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 533,
+    "code": 200834,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 534,
+    "code": 487676,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 535,
+    "code": 201895,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 536,
+    "code": 434399,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 537,
+    "code": 519634,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 538,
+    "code": 477547,
+    "available": true,
+    "file": "assets/player-photos/477547.png"
+  },
+  {
+    "playerId": 539,
+    "code": 167512,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 540,
+    "code": 105717,
+    "available": true,
+    "file": "assets/player-photos/105717.png"
+  },
+  {
+    "playerId": 541,
+    "code": 93605,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 542,
+    "code": 484420,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 543,
+    "code": 547027,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 544,
+    "code": 84450,
+    "available": true,
+    "file": "assets/player-photos/84450.png"
+  },
+  {
+    "playerId": 545,
+    "code": 577669,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 546,
+    "code": 535818,
+    "available": true,
+    "file": "assets/player-photos/535818.png"
+  },
+  {
+    "playerId": 547,
+    "code": 461199,
+    "available": true,
+    "file": "assets/player-photos/461199.png"
+  },
+  {
+    "playerId": 548,
+    "code": 554197,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 549,
+    "code": 549912,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 550,
+    "code": 699989,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 551,
+    "code": 536661,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 552,
+    "code": 441264,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 553,
+    "code": 437505,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  }
+]

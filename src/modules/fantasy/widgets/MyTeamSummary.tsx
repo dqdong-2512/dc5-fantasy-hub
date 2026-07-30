@@ -1,8 +1,3 @@
-/**
- * My Team Summary Widget
- * Displays manager and team information for Fantasy Game
- */
-
 import React from 'react';
 import { Box, Typography, Stack, Button } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
@@ -24,14 +19,17 @@ const StatRow: React.FC<StatRowProps> = ({ label, value }) => (
     sx={{
       display: 'flex',
       justifyContent: 'space-between',
-      paddingY: 1,
+      py: 1,
       borderBottom: '1px solid #e0e0e0',
-      '&:last-child': { borderBottom: 'none' },
+      '&:last-child': {
+        borderBottom: 'none',
+      },
     }}
   >
-    <Typography variant="body2" color="textSecondary">
+    <Typography variant="body2" color="text.secondary">
       {label}
     </Typography>
+
     <Typography variant="body2" sx={{ fontWeight: 600 }}>
       {value}
     </Typography>
@@ -39,25 +37,45 @@ const StatRow: React.FC<StatRowProps> = ({ label, value }) => (
 );
 
 export const MyTeamSummary: React.FC<MyTeamSummaryProps> = ({ manager, onViewTeam }) => {
+  const overallPoints =
+    manager.overallPoints == null ? '—' : manager.overallPoints.toLocaleString('en-US');
+
+  const overallRank =
+    manager.overallRank == null ? 'Not Ranked' : `#${manager.overallRank.toLocaleString('en-US')}`;
+
+  const teamValue = manager.teamValue == null ? '—' : `£${manager.teamValue.toFixed(1)}m`;
+
+  const bank = manager.bank == null ? '—' : `£${manager.bank.toFixed(1)}m`;
+
   return (
     <DashboardWidget title="My Team" subtitle="Team information & stats" icon={<PersonIcon />}>
       <Stack spacing={3}>
         {/* Team Header */}
         <Box>
-          <Typography variant="h6" sx={{ fontWeight: 700, marginBottom: 0.5 }}>
-            {manager.teamName}
+          <Typography
+            variant="h6"
+            sx={{
+              fontWeight: 700,
+              mb: 0.5,
+            }}
+          >
+            {manager.teamName || 'Unnamed Team'}
           </Typography>
-          <Typography variant="body2" color="textSecondary">
-            {manager.name}
+
+          <Typography variant="body2" color="text.secondary">
+            {manager.name || 'Unknown Manager'}
           </Typography>
         </Box>
 
         {/* Stats */}
         <Stack spacing={0}>
-          <StatRow label="Overall Points" value={manager.overallPoints.toLocaleString()} />
-          <StatRow label="Overall Rank" value={`#${manager.overallRank.toLocaleString()}`} />
-          <StatRow label="Team Value" value={`£${manager.teamValue.toFixed(1)}m`} />
-          <StatRow label="Bank" value={`£${manager.bank.toFixed(1)}m`} />
+          <StatRow label="Overall Points" value={overallPoints} />
+
+          <StatRow label="Overall Rank" value={overallRank} />
+
+          <StatRow label="Team Value" value={teamValue} />
+
+          <StatRow label="Bank" value={bank} />
         </Stack>
 
         {/* Action */}
@@ -68,10 +86,12 @@ export const MyTeamSummary: React.FC<MyTeamSummaryProps> = ({ manager, onViewTea
           sx={{
             backgroundColor: '#f59e0b',
             color: '#ffffff',
-            '&:hover': { backgroundColor: '#d97706' },
+            '&:hover': {
+              backgroundColor: '#d97706',
+            },
             textTransform: 'none',
             fontWeight: 600,
-            marginTop: 1,
+            mt: 1,
           }}
         >
           View My Team

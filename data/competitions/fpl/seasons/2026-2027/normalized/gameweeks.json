@@ -1,0 +1,268 @@
+[
+  {
+    "id": 1,
+    "name": "Gameweek 1",
+    "deadlineTime": "2026-08-21T17:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 2,
+    "name": "Gameweek 2",
+    "deadlineTime": "2026-08-28T17:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 3,
+    "name": "Gameweek 3",
+    "deadlineTime": "2026-09-04T17:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 4,
+    "name": "Gameweek 4",
+    "deadlineTime": "2026-09-12T12:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 5,
+    "name": "Gameweek 5",
+    "deadlineTime": "2026-09-18T17:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 6,
+    "name": "Gameweek 6",
+    "deadlineTime": "2026-10-10T12:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 7,
+    "name": "Gameweek 7",
+    "deadlineTime": "2026-10-17T12:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 8,
+    "name": "Gameweek 8",
+    "deadlineTime": "2026-10-24T12:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 9,
+    "name": "Gameweek 9",
+    "deadlineTime": "2026-10-31T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 10,
+    "name": "Gameweek 10",
+    "deadlineTime": "2026-11-07T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 11,
+    "name": "Gameweek 11",
+    "deadlineTime": "2026-11-21T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 12,
+    "name": "Gameweek 12",
+    "deadlineTime": "2026-11-28T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 13,
+    "name": "Gameweek 13",
+    "deadlineTime": "2026-12-02T18:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 14,
+    "name": "Gameweek 14",
+    "deadlineTime": "2026-12-05T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 15,
+    "name": "Gameweek 15",
+    "deadlineTime": "2026-12-12T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 16,
+    "name": "Gameweek 16",
+    "deadlineTime": "2026-12-19T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 17,
+    "name": "Gameweek 17",
+    "deadlineTime": "2026-12-26T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 18,
+    "name": "Gameweek 18",
+    "deadlineTime": "2026-12-30T18:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 19,
+    "name": "Gameweek 19",
+    "deadlineTime": "2027-01-02T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 20,
+    "name": "Gameweek 20",
+    "deadlineTime": "2027-01-06T18:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 21,
+    "name": "Gameweek 21",
+    "deadlineTime": "2027-01-16T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 22,
+    "name": "Gameweek 22",
+    "deadlineTime": "2027-01-23T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 23,
+    "name": "Gameweek 23",
+    "deadlineTime": "2027-01-30T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 24,
+    "name": "Gameweek 24",
+    "deadlineTime": "2027-02-06T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 25,
+    "name": "Gameweek 25",
+    "deadlineTime": "2027-02-10T18:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 26,
+    "name": "Gameweek 26",
+    "deadlineTime": "2027-02-20T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 27,
+    "name": "Gameweek 27",
+    "deadlineTime": "2027-02-27T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 28,
+    "name": "Gameweek 28",
+    "deadlineTime": "2027-03-03T18:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 29,
+    "name": "Gameweek 29",
+    "deadlineTime": "2027-03-13T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 30,
+    "name": "Gameweek 30",
+    "deadlineTime": "2027-03-20T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 31,
+    "name": "Gameweek 31",
+    "deadlineTime": "2027-04-10T12:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 32,
+    "name": "Gameweek 32",
+    "deadlineTime": "2027-04-17T12:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 33,
+    "name": "Gameweek 33",
+    "deadlineTime": "2027-04-24T12:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 34,
+    "name": "Gameweek 34",
+    "deadlineTime": "2027-05-01T12:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 35,
+    "name": "Gameweek 35",
+    "deadlineTime": "2027-05-08T12:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 36,
+    "name": "Gameweek 36",
+    "deadlineTime": "2027-05-15T12:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 37,
+    "name": "Gameweek 37",
+    "deadlineTime": "2027-05-23T12:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  },
+  {
+    "id": 38,
+    "name": "Gameweek 38",
+    "deadlineTime": "2027-05-30T13:30:00Z",
+    "finished": false,
+    "averageEntryScore": 0
+  }
+]
