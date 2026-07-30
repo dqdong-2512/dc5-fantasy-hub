@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
-import { Box, Stack, Typography, Tabs, Tab } from '@mui/material';
+import { Box, Stack, Tabs, Tab } from '@mui/material';
 import { Outlet, useLocation, useNavigate } from 'react-router-dom';
+import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { FantasyGameHeader } from '../components';
 import { useGameweekHubState } from '../context';
@@ -79,35 +80,69 @@ export function GameweekHubShell(): React.ReactElement {
 
   return (
     <Box>
-      <Box
+      {gameState.isConnected && (
+        <Box
+          sx={{
+            borderBottom: '1px solid #e0e0e0',
+            marginTop: { xs: ThemeTokens.spacing.sm, md: ThemeTokens.spacing.md },
+            paddingX: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.xl },
+            paddingY: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg },
+            backgroundColor: '#ffffff',
+          }}
+        >
+          <Stack
+            direction="row"
+            spacing={{ xs: ThemeTokens.spacing.sm, md: ThemeTokens.spacing.md }}
+            sx={{ alignItems: 'stretch' }}
+          >
+            <Box
+              component="img"
+              src="/fantasy-logo.png"
+              alt="Fantasy Premier League"
+              sx={{
+                width: { xs: 56, md: 80 },
+                height: { xs: 56, md: 80 },
+                objectFit: 'contain',
+                flexShrink: 0,
+                alignSelf: 'center',
+              }}
+            />
+            <Box sx={{ flex: 1, minWidth: 0 }}>
+              <FantasyGameHeader
+                entry={gameState.entry}
+                gameweekHistory={gameState.history}
+                onChangeTeam={gameState.disconnectEntry}
+                onDisconnect={gameState.disconnectEntry}
+              />
+            </Box>
+          </Stack>
+        </Box>
+      )}
+
+      <PageContainer
         sx={{
-          borderBottom: '1px solid #e0e0e0',
-          paddingX: ThemeTokens.spacing.md,
-          paddingY: ThemeTokens.spacing.sm,
-          backgroundColor: '#ffffff',
+          paddingTop: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.xl },
+          paddingBottom: 0,
         }}
       >
-        <Stack spacing={ThemeTokens.spacing.sm}>
-          <Typography variant="h5" sx={{ fontWeight: 700 }}>
-            Gameweek Hub
-          </Typography>
-          {gameState.isConnected && (
-            <FantasyGameHeader
-              entry={gameState.entry}
-              gameweekHistory={gameState.history}
-              onChangeTeam={gameState.disconnectEntry}
-              onDisconnect={gameState.disconnectEntry}
-            />
-          )}
+        <Box
+          sx={{
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            backgroundColor: '#ffffff',
+          }}
+        >
           <Tabs
             value={activeTab}
             onChange={handleTabChange}
             variant="scrollable"
             allowScrollButtonsMobile
             sx={{
+              minHeight: 48,
               '& .MuiTab-root': {
+                minHeight: 48,
                 textTransform: 'none',
-                fontWeight: 500,
+                fontWeight: 600,
               },
             }}
           >
@@ -115,8 +150,8 @@ export function GameweekHubShell(): React.ReactElement {
               <Tab key={tab.value} value={tab.value} label={tab.label} />
             ))}
           </Tabs>
-        </Stack>
-      </Box>
+        </Box>
+      </PageContainer>
 
       <Outlet />
     </Box>

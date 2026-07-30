@@ -39,9 +39,14 @@ export function useLiveMatchCenter(options: UseLiveMatchCenterOptions): UseLiveM
   const [isLoading, setIsLoading] = useState(true);
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const snapshotRef = useRef<LiveMatchCenterSnapshot | null>(null);
+
+  useEffect(() => {
+    snapshotRef.current = snapshot;
+  }, [snapshot]);
 
   const refresh = useCallback(async (): Promise<void> => {
-    if (snapshot) {
+    if (snapshotRef.current) {
       setIsRefreshing(true);
     } else {
       setIsLoading(true);
@@ -78,7 +83,6 @@ export function useLiveMatchCenter(options: UseLiveMatchCenterOptions): UseLiveM
     options.gameweekId,
     selectedClubId,
     selectedPlayerId,
-    snapshot,
   ]);
 
   useEffect(() => {

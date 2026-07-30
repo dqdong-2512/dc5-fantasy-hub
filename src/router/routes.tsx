@@ -61,8 +61,8 @@ const LeagueStandingsPage = React.lazy(() =>
 const GameweekCenterPage = React.lazy(() =>
   import('../modules/fantasy/pages').then((module) => ({ default: module.GameweekCenterPage }))
 );
-const LiveMatchCenterPage = React.lazy(() =>
-  import('../modules/fantasy/pages').then((module) => ({ default: module.LiveMatchCenterPage }))
+const FixturesExplorerPage = React.lazy(() =>
+  import('../modules/fantasy/pages').then((module) => ({ default: module.FixturesExplorerPage }))
 );
 const TransferPlannerPage = React.lazy(() =>
   import('../modules/fantasy/pages').then((module) => ({ default: module.TransferPlannerPage }))
@@ -309,7 +309,7 @@ const router = createBrowserRouter([
                 path: 'fixtures',
                 element: (
                   <Suspense fallback={<RouteLoadingFallback />}>
-                    <LiveMatchCenterPage />
+                    <FixturesExplorerPage />
                   </Suspense>
                 ),
               },

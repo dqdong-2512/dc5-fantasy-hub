@@ -1,68 +1,43 @@
-/**
- * Fixtures List Component
- * Displays gameweek fixtures with status
- */
-
 import React, { useMemo } from 'react';
-import { Box, Typography, Chip, Stack } from '@mui/material';
+import { Box, Chip, Stack, Typography } from '@mui/material';
 import { FixtureRepository } from '@repositories/fixtures';
+import { getTeamBadgeUrl } from '@shared/assets';
 import { ThemeTokens } from '@shared/theme/tokens';
 
 export interface FixturesListProps {
   gameweekId: number;
+  limit?: number;
+  compact?: boolean;
+  title?: string;
 }
 
-export const FixturesList: React.FC<FixturesListProps> = ({ gameweekId }) => {
+export const FixturesList: React.FC<FixturesListProps> = ({
+  gameweekId,
+  limit,
+  compact = false,
+  title,
+}) => {
   const fixtures = useMemo(() => {
     try {
-      const repo = new FixtureRepository();
-      return repo.getByGameweek(gameweekId).sort((a, b) => {
-        // Sort: finished -> in progress -> upcoming
-        const statusOrder = (f: any) => {
-          if (f.finished) return 2;
-          if (f.started) return 1;
-          return 0;
-        };
-        return statusOrder(b) - statusOrder(a);
+      return new FixtureRepository().getByGameweek(gameweekId).sort((left, right) => {
+        return new Date(left.kickoffTime).getTime() - new Date(right.kickoffTime).getTime();
       });
     } catch {
       return [];
     }
   }, [gameweekId]);
 
-  const counts = useMemo(() => {
-    return {
-      finished: fixtures.filter((f) => f.finished).length,
-      live: fixtures.filter((f) => f.started && !f.finished).length,
-      upcoming: fixtures.filter((f) => !f.started && !f.finished).length,
+  const counts = useMemo(
+    () => ({
+      finished: fixtures.filter((fixture) => fixture.finished).length,
+      live: fixtures.filter((fixture) => fixture.started && !fixture.finished).length,
+      upcoming: fixtures.filter((fixture) => !fixture.started && !fixture.finished).length,
       total: fixtures.length,
-    };
-  }, [fixtures]);
+    }),
+    [fixtures]
+  );
 
-  const formatTime = (timeString: string): string => {
-    try {
-      const date = new Date(timeString);
-      const hours = date.getHours().toString().padStart(2, '0');
-      const mins = date.getMinutes().toString().padStart(2, '0');
-      return `${hours}:${mins}`;
-    } catch {
-      return timeString;
-    }
-  };
-
-  const getStatusChip = (fixture: any) => {
-    if (fixture.finished) {
-      return (
-        <Chip label="Finished" size="small" sx={{ backgroundColor: '#4caf50', color: '#fff' }} />
-      );
-    }
-    if (fixture.started) {
-      return <Chip label="Live" size="small" sx={{ backgroundColor: '#ff9800', color: '#fff' }} />;
-    }
-    return (
-      <Chip label="Upcoming" size="small" sx={{ backgroundColor: '#1976d2', color: '#fff' }} />
-    );
-  };
+  const displayedFixtures = limit ? fixtures.slice(0, limit) : fixtures;
 
   if (fixtures.length === 0) {
     return null;
@@ -70,79 +45,135 @@ export const FixturesList: React.FC<FixturesListProps> = ({ gameweekId }) => {
 
   return (
     <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
-      <Typography
-        variant="h6"
-        sx={{
-          fontWeight: 700,
-          marginBottom: 1.5,
-          fontSize: '1rem',
-        }}
-      >
-        Gameweek {gameweekId} Fixtures
-      </Typography>
-
-      {/* Fixture Progress Summary */}
-      <Box sx={{ marginBottom: 2, padding: 2, backgroundColor: '#f5f5f5', borderRadius: '4px' }}>
-        <Typography sx={{ fontSize: '0.9rem', color: '#666', marginBottom: 1 }}>
-          {counts.total} Fixtures
+      {title !== '' && (
+        <Typography variant="h6" sx={{ fontWeight: 750, mb: 1.5, fontSize: '1rem' }}>
+          {title ?? `Gameweek ${gameweekId} Fixtures`}
         </Typography>
-        <Stack direction="row" spacing={1}>
-          <Typography sx={{ fontSize: '0.85rem' }}>
-            <span style={{ fontWeight: 600 }}>{counts.finished}</span> Finished •
+      )}
+
+      {!compact && (
+        <Stack
+          direction="row"
+          spacing={{ xs: 1, sm: 2 }}
+          sx={{
+            mb: 2,
+            p: 1.5,
+            borderRadius: '8px',
+            backgroundColor: '#f8fafc',
+            flexWrap: 'wrap',
+          }}
+        >
+          <Typography variant="body2" sx={{ fontWeight: 700 }}>
+            {counts.total} matches
           </Typography>
-          <Typography sx={{ fontSize: '0.85rem' }}>
-            <span style={{ fontWeight: 600 }}>{counts.live}</span> Live •
+          <Typography variant="body2" color="text.secondary">
+            {counts.finished} finished
           </Typography>
-          <Typography sx={{ fontSize: '0.85rem' }}>
-            <span style={{ fontWeight: 600 }}>{counts.upcoming}</span> Upcoming
+          <Typography variant="body2" color="text.secondary">
+            {counts.live} live
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {counts.upcoming} upcoming
           </Typography>
         </Stack>
-      </Box>
+      )}
 
-      {/* Fixtures List */}
-      <Stack spacing={1.5}>
-        {fixtures.map((fixture) => (
-          <Box
-            key={fixture.id}
-            sx={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              padding: 1.5,
-              backgroundColor: '#fff',
-              border: '1px solid #e0e0e0',
-              borderRadius: '4px',
-              '&:hover': { backgroundColor: '#fafafa' },
-            }}
-          >
-            {/* Teams and Score */}
-            <Box sx={{ flex: 1 }}>
-              <Typography sx={{ fontSize: '0.95rem', fontWeight: 600 }}>
-                {fixture.homeTeam.name}{' '}
-                <span style={{ fontWeight: 700 }}>
-                  {fixture.homeTeamScore !== null ? fixture.homeTeamScore : '—'}
-                </span>
-                {' — '}
-                <span style={{ fontWeight: 700 }}>
-                  {fixture.awayTeamScore !== null ? fixture.awayTeamScore : '—'}
-                </span>{' '}
-                {fixture.awayTeam.name}
-              </Typography>
-            </Box>
+      <Stack spacing={compact ? 1 : 1.5}>
+        {displayedFixtures.map((fixture) => {
+          const isLive = fixture.started && !fixture.finished;
+          const kickoff = new Date(fixture.kickoffTime);
 
-            {/* Time / Status */}
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-              {!fixture.started && !fixture.finished && (
-                <Typography
-                  sx={{ fontSize: '0.85rem', color: '#666', minWidth: '45px', textAlign: 'right' }}
-                >
-                  {formatTime(fixture.kickoffTime)}
+          return (
+            <Box
+              key={fixture.id}
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
+                alignItems: 'center',
+                gap: 1.5,
+                p: compact ? 1.25 : 1.5,
+                backgroundColor: '#fff',
+                border: '1px solid',
+                borderColor: isLive ? '#fca5a5' : 'divider',
+                borderRadius: '8px',
+                transition: 'transform 160ms ease, box-shadow 160ms ease',
+                '&:hover': {
+                  transform: 'translateY(-1px)',
+                  boxShadow: '0 6px 16px rgba(15, 23, 42, 0.08)',
+                },
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'grid',
+                  gridTemplateColumns: 'minmax(80px, 1fr) auto minmax(80px, 1fr)',
+                  alignItems: 'center',
+                  gap: 1,
+                }}
+              >
+                <Stack direction="row" spacing={1} sx={{ alignItems: 'center', minWidth: 0 }}>
+                  <Box
+                    component="img"
+                    src={getTeamBadgeUrl(fixture.homeTeam.code)}
+                    alt=""
+                    sx={{ width: 30, height: 30, objectFit: 'contain', flexShrink: 0 }}
+                  />
+                  <Typography sx={{ fontSize: '0.9rem', fontWeight: 700 }} noWrap>
+                    {fixture.homeTeam.shortName}
+                  </Typography>
+                </Stack>
+
+                <Typography sx={{ fontWeight: 800, whiteSpace: 'nowrap' }}>
+                  {fixture.started || fixture.finished
+                    ? `${fixture.homeTeamScore ?? 0} — ${fixture.awayTeamScore ?? 0}`
+                    : 'vs'}
                 </Typography>
-              )}
-              {getStatusChip(fixture)}
+
+                <Stack
+                  direction="row"
+                  spacing={1}
+                  sx={{ alignItems: 'center', justifyContent: 'flex-end', minWidth: 0 }}
+                >
+                  <Typography sx={{ fontSize: '0.9rem', fontWeight: 700 }} noWrap>
+                    {fixture.awayTeam.shortName}
+                  </Typography>
+                  <Box
+                    component="img"
+                    src={getTeamBadgeUrl(fixture.awayTeam.code)}
+                    alt=""
+                    sx={{ width: 30, height: 30, objectFit: 'contain', flexShrink: 0 }}
+                  />
+                </Stack>
+              </Box>
+
+              <Stack
+                direction="row"
+                spacing={1}
+                sx={{ alignItems: 'center', justifyContent: { xs: 'flex-end', sm: 'initial' } }}
+              >
+                {!fixture.started && !fixture.finished && (
+                  <Typography variant="caption" color="text.secondary">
+                    {kickoff.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                  </Typography>
+                )}
+                <Chip
+                  size="small"
+                  label={fixture.finished ? 'FT' : isLive ? 'LIVE' : 'Upcoming'}
+                  sx={{
+                    height: 24,
+                    fontWeight: 750,
+                    color: fixture.finished ? '#166534' : isLive ? '#b91c1c' : '#1d4ed8',
+                    backgroundColor: fixture.finished
+                      ? '#dcfce7'
+                      : isLive
+                        ? '#fee2e2'
+                        : '#dbeafe',
+                  }}
+                />
+              </Stack>
             </Box>
-          </Box>
-        ))}
+          );
+        })}
       </Stack>
     </Box>
   );

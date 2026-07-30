@@ -57,13 +57,13 @@ export const Dashboard: React.FC = () => {
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', sm: '1fr', md: '1fr', lg: '1fr 1fr' },
-            gap: ThemeTokens.spacing.md,
-            marginBottom: ThemeTokens.spacing.md,
+            gap: ThemeTokens.spacing.xxl,
+            marginBottom: ThemeTokens.spacing.xxl,
             alignItems: { xs: 'start', lg: 'stretch' },
           }}
         >
           <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
-            <CurrentGameweekSummary />
+            <CurrentGameweekSummary onViewGameweek={() => handleNavigate('gameweek')} />
           </Box>
           <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
             <TopPerformingPlayers onPlayerClick={() => handleNavigate('players')} />
@@ -75,8 +75,8 @@ export const Dashboard: React.FC = () => {
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', md: '1fr 1fr' },
-            gap: ThemeTokens.spacing.md,
-            marginBottom: ThemeTokens.spacing.md,
+            gap: ThemeTokens.spacing.xxl,
+            marginBottom: ThemeTokens.spacing.xxl,
           }}
         >
           <Box>
@@ -88,7 +88,7 @@ export const Dashboard: React.FC = () => {
         </Box>
 
         {/* Row 2.5: Latest Squad Changes */}
-        <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
+        <Box sx={{ marginBottom: ThemeTokens.spacing.xxl }}>
           <LatestTransfers />
         </Box>
 

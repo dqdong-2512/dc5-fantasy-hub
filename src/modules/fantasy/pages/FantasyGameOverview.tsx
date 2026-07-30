@@ -11,7 +11,7 @@
  */
 
 import React, { useMemo } from 'react';
-import { Box, Typography, Button, Alert } from '@mui/material';
+import { Box, Alert } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
@@ -110,93 +110,21 @@ export const FantasyGameOverview: React.FC = () => {
     navigate(`/premier-league/gameweek/gameweeks/${dashboardData.gameweek.currentGameweekId}`);
   };
 
-  const handleDisconnect = (): void => {
-    gameState.disconnectEntry();
-    navigate('/premier-league/gameweek', { replace: true });
-  };
-
   return (
-    <Box>
-      {/* Connection Header with Disconnect Button */}
-      {gameState.isConnected && (
-        <Box
-          sx={{
-            display: 'flex',
-            justifyContent: 'flex-end',
-            padding: ThemeTokens.spacing.sm,
-            borderBottom: '1px solid #e0e0e0',
-          }}
-        >
-          <Button
-            size="small"
-            onClick={handleDisconnect}
-            sx={{
-              textTransform: 'none',
-              color: '#64748b',
-              '&:hover': { backgroundColor: '#f1f5f9' },
-            }}
-          >
-            Disconnect
-          </Button>
-        </Box>
-      )}
-
-      {/* Page Header - Centered Logo and Subtitle */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          textAlign: 'center',
-          paddingX: ThemeTokens.spacing.md,
-          paddingY: { xs: ThemeTokens.spacing.sm, md: ThemeTokens.spacing.xl },
-        }}
-      >
-        {/* FPL Logo */}
-        <Box
-          component="img"
-          src="/fantasy-logo.png"
-          alt="Fantasy Premier League"
-          sx={{
-            height: { xs: '80px', sm: '100px', md: '160px' },
-            width: 'auto',
-            maxWidth: '100%',
-            objectFit: 'contain',
-            flexShrink: 0,
-            marginBottom: { xs: ThemeTokens.spacing.sm, md: ThemeTokens.spacing.md },
-          }}
-        />
-
-        {/* Subtitle */}
-        <Typography
-          variant="body1"
-          sx={{
-            fontWeight: 500,
-            fontSize: { xs: '15px', sm: '16px', md: '18px' },
-            letterSpacing: '0.3px',
-            lineHeight: 1.5,
-            color: '#64748b',
-            maxWidth: '600px',
-          }}
-        >
-          Manage your FPL team, gameweeks and leagues
-        </Typography>
-      </Box>
-
-      {/* Main Content Container */}
-      <PageContainer
-        sx={{
-          padding: ThemeTokens.spacing.xs,
-        }}
-      >
+    <PageContainer
+      sx={{
+        paddingTop: { xs: ThemeTokens.spacing.lg, md: ThemeTokens.spacing.xl },
+        paddingBottom: ThemeTokens.spacing.xxl,
+      }}
+    >
         {/* SECTION 1: Gameweek Overview & Team Summary (2-col layout on desktop) */}
         <Box
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', sm: '1fr', md: '1fr', lg: '1fr 1fr' },
-            gap: ThemeTokens.spacing.md,
-            marginBottom: ThemeTokens.spacing.md,
-            alignItems: { xs: 'start', lg: 'stretch' },
+            gap: ThemeTokens.spacing.xl,
+            marginBottom: ThemeTokens.spacing.xl,
+            alignItems: 'stretch',
           }}
         >
           <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
@@ -212,9 +140,13 @@ export const FantasyGameOverview: React.FC = () => {
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', sm: '1fr', md: '1fr', lg: '1fr 1fr' },
-            gap: ThemeTokens.spacing.md,
-            marginBottom: ThemeTokens.spacing.md,
-            alignItems: 'start',
+            gap: ThemeTokens.spacing.xl,
+            marginBottom: ThemeTokens.spacing.xl,
+            alignItems: 'stretch',
+            '& > *': {
+              height: '100%',
+              minHeight: { xs: 'auto', lg: 300 },
+            },
           }}
         >
           <PlanningStatusPanel
@@ -240,9 +172,13 @@ export const FantasyGameOverview: React.FC = () => {
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', sm: '1fr', md: '1fr', lg: '1fr 1fr' },
-            gap: ThemeTokens.spacing.md,
-            marginBottom: ThemeTokens.spacing.md,
-            alignItems: 'start',
+            gap: ThemeTokens.spacing.xl,
+            marginBottom: ThemeTokens.spacing.xl,
+            alignItems: 'stretch',
+            '& > *': {
+              height: '100%',
+              minHeight: { xs: 'auto', lg: 300 },
+            },
           }}
         >
           <LeagueSnapshot leagues={dashboardData.leagues} onLeagueClick={handleLeagueClick} />
@@ -254,10 +190,9 @@ export const FantasyGameOverview: React.FC = () => {
         </Box>
 
         {/* SECTION 4: Quick Actions */}
-        <Box sx={{ marginBottom: ThemeTokens.spacing.md }}>
+        <Box sx={{ marginBottom: ThemeTokens.spacing.xl }}>
           <QuickActions onViewTeam={handleViewTeam} onViewLeagues={handleViewLeagues} />
         </Box>
-      </PageContainer>
-    </Box>
+    </PageContainer>
   );
 };

@@ -78,151 +78,171 @@ export function FantasyGameHeader({
       sx={{
         backgroundColor: '#f5f5f5',
         borderRadius: ThemeTokens.borderRadius.md,
-        paddingY: ThemeTokens.spacing.xs,
-        paddingX: ThemeTokens.spacing.sm,
-        marginBottom: ThemeTokens.spacing.xs,
+        paddingY: ThemeTokens.spacing.md,
+        paddingX: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.lg },
       }}
     >
       <Stack
         direction={{ xs: 'column', sm: 'row' }}
-        spacing={ThemeTokens.spacing.sm}
+        spacing={ThemeTokens.spacing.md}
         sx={{
           display: 'flex',
           alignItems: { xs: 'flex-start', sm: 'center' },
-          flexWrap: 'wrap',
+          width: '100%',
         }}
       >
-        {/* Team Info */}
-        <Box sx={{ flex: { xs: '1 1 100%', sm: '0 1 auto' }, minWidth: '150px' }}>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            sx={{ display: 'block', fontSize: '0.8125rem' }}
-          >
-            Team
-          </Typography>
-          <Typography variant="body1" sx={{ fontWeight: 700 }}>
-            {entry.team.name}
-          </Typography>
-        </Box>
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: {
+              xs: 'repeat(2, minmax(0, 1fr))',
+              md: 'repeat(5, minmax(90px, auto))',
+            },
+            columnGap: { xs: ThemeTokens.spacing.md, md: ThemeTokens.spacing.xl },
+            rowGap: ThemeTokens.spacing.sm,
+            flex: 1,
+            width: { xs: '100%', sm: 'auto' },
+            minWidth: 0,
+          }}
+        >
+          {/* Team Info */}
+          <Box sx={{ minWidth: 0 }}>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{ display: 'block', fontSize: '0.8125rem' }}
+            >
+              Team
+            </Typography>
+            <Typography variant="body1" sx={{ fontWeight: 700 }}>
+              {entry.team.name}
+            </Typography>
+          </Box>
 
-        {/* Manager */}
-        <Box sx={{ flex: { xs: '1 1 100%', sm: '0 1 auto' }, minWidth: '150px' }}>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            sx={{ display: 'block', fontSize: '0.8125rem' }}
-          >
-            Manager
-          </Typography>
-          <Typography variant="body1" sx={{ fontWeight: 600 }}>
-            {entry.manager.name}
-          </Typography>
-        </Box>
+          {/* Manager */}
+          <Box sx={{ minWidth: 0 }}>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{ display: 'block', fontSize: '0.8125rem' }}
+            >
+              Manager
+            </Typography>
+            <Typography variant="body1" sx={{ fontWeight: 600 }}>
+              {entry.manager.name}
+            </Typography>
+          </Box>
 
-        {/* Points */}
-        <Box sx={{ flex: { xs: '1 1 100%', sm: '0 1 auto' }, minWidth: '80px' }}>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            sx={{ display: 'block', fontSize: '0.8125rem' }}
-          >
-            Points
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              fontWeight: 700,
-              color: '#4caf50',
-            }}
-          >
-            {entry.manager.totalPoints}
-          </Typography>
-        </Box>
+          {/* Points */}
+          <Box sx={{ minWidth: 0 }}>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{ display: 'block', fontSize: '0.8125rem' }}
+            >
+              Points
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                fontWeight: 700,
+                color: '#4caf50',
+              }}
+            >
+              {entry.manager.totalPoints}
+            </Typography>
+          </Box>
 
-        {/* Rank */}
-        <Box sx={{ flex: { xs: '1 1 100%', sm: '0 1 auto' }, minWidth: '100px' }}>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            sx={{ display: 'block', fontSize: '0.8125rem' }}
-          >
-            Rank
-          </Typography>
-          <Typography
-            variant="body1"
-            sx={{
-              fontWeight: 700,
-              color: '#2196f3',
-            }}
-          >
-            {entry.manager.overallRank ? `#${entry.manager.overallRank.toLocaleString()}` : '—'}
-          </Typography>
-        </Box>
+          {/* Rank */}
+          <Box sx={{ minWidth: 0 }}>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{ display: 'block', fontSize: '0.8125rem' }}
+            >
+              Rank
+            </Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                fontWeight: 700,
+                color: '#2196f3',
+              }}
+            >
+              {entry.manager.overallRank ? `#${entry.manager.overallRank.toLocaleString()}` : '—'}
+            </Typography>
+          </Box>
 
-        {/* Rank Movement */}
-        <Box sx={{ flex: { xs: '1 1 100%', sm: '0 1 auto' }, minWidth: '120px' }}>
-          <Typography
-            variant="body2"
-            color="textSecondary"
-            sx={{ display: 'block', fontSize: '0.8125rem' }}
-          >
-            Movement
-          </Typography>
-          <Stack
-            direction="row"
-            spacing={0.5}
-            sx={{
-              alignItems: 'center',
-            }}
-          >
-            {rankMovement.direction === 'up' && (
-              <>
-                <TrendingUp sx={{ color: '#4caf50', fontSize: '1.25rem' }} />
+          {/* Rank Movement */}
+          <Box sx={{ minWidth: 0 }}>
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{ display: 'block', fontSize: '0.8125rem' }}
+            >
+              Movement
+            </Typography>
+            <Stack
+              direction="row"
+              spacing={0.5}
+              sx={{
+                alignItems: 'center',
+              }}
+            >
+              {rankMovement.direction === 'up' && (
+                <>
+                  <TrendingUp sx={{ color: '#4caf50', fontSize: '1.25rem' }} />
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontWeight: 700,
+                      color: '#4caf50',
+                    }}
+                  >
+                    {rankMovement.movement.toLocaleString()}
+                  </Typography>
+                </>
+              )}
+              {rankMovement.direction === 'down' && (
+                <>
+                  <TrendingDown sx={{ color: '#f44336', fontSize: '1.25rem' }} />
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontWeight: 700,
+                      color: '#f44336',
+                    }}
+                  >
+                    {rankMovement.movement.toLocaleString()}
+                  </Typography>
+                </>
+              )}
+              {rankMovement.direction === 'none' && (
                 <Typography
                   variant="body1"
                   sx={{
                     fontWeight: 700,
-                    color: '#4caf50',
+                    color: '#999',
                   }}
                 >
-                  {rankMovement.movement.toLocaleString()}
+                  —
                 </Typography>
-              </>
-            )}
-            {rankMovement.direction === 'down' && (
-              <>
-                <TrendingDown sx={{ color: '#f44336', fontSize: '1.25rem' }} />
-                <Typography
-                  variant="body1"
-                  sx={{
-                    fontWeight: 700,
-                    color: '#f44336',
-                  }}
-                >
-                  {rankMovement.movement.toLocaleString()}
-                </Typography>
-              </>
-            )}
-            {rankMovement.direction === 'none' && (
-              <Typography
-                variant="body1"
-                sx={{
-                  fontWeight: 700,
-                  color: '#999',
-                }}
-              >
-                —
-              </Typography>
-            )}
-          </Stack>
+              )}
+            </Stack>
+          </Box>
         </Box>
 
         {/* Actions */}
         <Stack
           direction="row"
           spacing={ThemeTokens.spacing.xs}
-          sx={{ marginLeft: 'auto', flex: '0 1 auto' }}
+          sx={{
+            marginLeft: { xs: 0, sm: 'auto' },
+            flex: '0 0 auto',
+            width: { xs: '100%', sm: 'auto' },
+            justifyContent: { xs: 'flex-end', sm: 'flex-end' },
+            alignSelf: { xs: 'stretch', sm: 'center' },
+          }}
         >
           <Button
             variant="outlined"

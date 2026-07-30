@@ -37,6 +37,33 @@ export const GameweekSelector: React.FC<GameweekSelectorProps> = ({ currentGamew
       <Select
         value={currentGameweekId}
         onChange={handleGameweekChange}
+        MenuProps={{
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'left',
+          },
+          transformOrigin: {
+            vertical: 'top',
+            horizontal: 'left',
+          },
+          slotProps: {
+            paper: {
+              sx: {
+                mt: 1,
+                maxHeight: 304,
+                minWidth: 120,
+                borderRadius: '8px',
+                boxShadow: '0 14px 32px rgba(15, 23, 42, 0.18)',
+                '& .MuiMenu-list': {
+                  py: 0.75,
+                },
+                '& .MuiMenuItem-root': {
+                  minHeight: 40,
+                },
+              },
+            },
+          },
+        }}
         sx={{
           minWidth: '120px',
           height: '40px',
@@ -53,4 +80,3 @@ export const GameweekSelector: React.FC<GameweekSelectorProps> = ({ currentGamew
     </Box>
   );
 };
-

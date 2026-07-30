@@ -9,8 +9,8 @@ export const ThemeTokens = {
   spacing: {
     xs: 0.5, // 4px
     sm: 1, // 8px
-    md: 1.25, // 10px
-    lg: 1.5, // 12px
+    md: 2, // 16px
+    lg: 2.5, // 20px
     xl: 2, // 16px
     xxl: 2.5, // 20px
     xxxl: 3, // 24px
@@ -18,10 +18,10 @@ export const ThemeTokens = {
 
   // Border Radius
   borderRadius: {
-    sm: 4,
-    md: 8,
-    lg: 12,
-    xl: 16,
+    sm: '4px',
+    md: '8px',
+    lg: '12px',
+    xl: '16px',
   },
 
   // Elevation (MUI shadow levels)
@@ -37,9 +37,9 @@ export const ThemeTokens = {
   layout: {
     maxWidth: 1600,
     pageHorizontalPadding: 2,
-    sectionGap: 1.5,
-    gridColumnGap: 1.25,
-    gridRowGap: 1.25,
+    sectionGap: 2,
+    gridColumnGap: 2,
+    gridRowGap: 2,
   },
 
   // Typography - using MUI variants

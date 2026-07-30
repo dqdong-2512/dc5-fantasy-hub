@@ -108,6 +108,11 @@ export class BootstrapRepository {
       return 'pre-season';
     }
 
+    const firstDeadline = normalized.gameweeks[0]?.deadlineTime;
+    if (firstDeadline && new Date(firstDeadline).getTime() > Date.now()) {
+      return 'pre-season';
+    }
+
     // Find first unfinished gameweek
     const unfinishedGw = normalized.gameweeks.find((gw: NormalizedGameweek) => !gw.finished);
 

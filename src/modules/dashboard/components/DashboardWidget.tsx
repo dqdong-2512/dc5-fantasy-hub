@@ -69,7 +69,18 @@ export const DashboardWidget: React.FC<DashboardWidgetProps> = ({
               flex: 1,
             }}
           >
-            {icon && <Box sx={{ color: '#ffffff', display: 'flex', flexShrink: 0 }}>{icon}</Box>}
+            {icon && (
+              <Box
+                sx={{
+                  color: '#ffffff',
+                  display: 'flex',
+                  flexShrink: 0,
+                  '& svg': { color: '#ffffff' },
+                }}
+              >
+                {icon}
+              </Box>
+            )}
             <Box sx={{ minWidth: 0 }}>
               <Typography
                 variant="h6"

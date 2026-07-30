@@ -6,6 +6,7 @@ export { MyLeaguesPage } from './MyLeaguesPage';
 export { LeagueStandingsPage } from './LeagueStandingsPage';
 export { GameweekCenterPage } from './GameweekCenterPage';
 export { LiveMatchCenterPage } from './LiveMatchCenterPage';
+export { FixturesExplorerPage } from './FixturesExplorerPage';
 export { TransferPlannerPage } from './TransferPlannerPage';
 export { GameweekPlannerPage } from './GameweekPlannerPage';
 export { SeasonPlannerPage } from './SeasonPlannerPage';
