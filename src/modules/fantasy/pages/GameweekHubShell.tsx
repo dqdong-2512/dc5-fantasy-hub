@@ -153,7 +153,13 @@ export function GameweekHubShell(): React.ReactElement {
         </Box>
       </PageContainer>
 
-      <Outlet />
+      {activeTab === 'my-team' || activeTab === 'league' ? (
+        <PageContainer sx={{ paddingTop: 0, paddingBottom: 0 }}>
+          <Outlet />
+        </PageContainer>
+      ) : (
+        <Outlet />
+      )}
     </Box>
   );
 }

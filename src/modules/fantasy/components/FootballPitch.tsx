@@ -18,6 +18,7 @@ export interface PitchSquadPlayer {
 
 export interface FootballPitchProps {
   squad: PitchSquadPlayer[];
+  gameweekId?: number;
 }
 
 /**
@@ -25,7 +26,8 @@ export interface FootballPitchProps {
  */
 const FormationRow: React.FC<{
   players: PitchSquadPlayer[];
-}> = ({ players }) => {
+  gameweekId?: number;
+}> = ({ players, gameweekId }) => {
   if (players.length === 0) return null;
 
   return (
@@ -33,9 +35,8 @@ const FormationRow: React.FC<{
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        gap: { xs: 1, sm: 2, md: 3 },
-        flexWrap: 'wrap',
-        marginY: { xs: 1.5, sm: 2, md: 3 },
+        gap: { xs: 0.5, sm: 1.5, md: 2.5 },
+        marginY: { xs: 1, sm: 1.5, md: 2 },
       }}
     >
       {players.map((player) => (
@@ -46,13 +47,14 @@ const FormationRow: React.FC<{
           isCaptain={player.isCaptain}
           isViceCaptain={player.isViceCaptain}
           size="medium"
+          gameweekId={gameweekId}
         />
       ))}
     </Box>
   );
 };
 
-export const FootballPitch: React.FC<FootballPitchProps> = ({ squad }) => {
+export const FootballPitch: React.FC<FootballPitchProps> = ({ squad, gameweekId }) => {
   const playerRepo = useMemo(() => new PlayerRepository(), []);
 
   // Get all players
@@ -102,19 +104,19 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({ squad }) => {
   return (
     <Box
       sx={{
-        backgroundColor: '#2d5016',
+        backgroundColor: '#00a65a',
         backgroundImage: `
-          linear-gradient(90deg, transparent 47%, rgba(255,255,255,0.1) 47%, rgba(255,255,255,0.1) 53%, transparent 53%),
-          linear-gradient(180deg, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 50.5%, transparent 50.5%)
+          repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0, rgba(255,255,255,.035) 12.5%, rgba(0,0,0,.025) 12.5%, rgba(0,0,0,.025) 25%),
+          linear-gradient(180deg, #00a65a 0%, #009b53 100%)
         `,
-        borderRadius: '8px',
-        padding: { xs: 2, sm: 3, md: 4 },
-        marginBottom: 3,
+        borderRadius: '12px',
+        padding: { xs: 1, sm: 2.5, md: 3 },
         position: 'relative',
-        aspectRatio: '16 / 10',
+        minHeight: { xs: 590, sm: 680, md: 720 },
         maxWidth: '100%',
         overflow: 'hidden',
-        border: '2px solid rgba(255,255,255,0.1)',
+        border: '1px solid rgba(255,255,255,0.35)',
+        boxShadow: 'inset 0 0 0 5px rgba(255,255,255,0.04)',
       }}
     >
       {/* Field markings */}
@@ -162,16 +164,16 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({ squad }) => {
         }}
       >
         {/* Goalkeeper Row */}
-        {grouped.gk.length > 0 && <FormationRow players={grouped.gk} />}
+        {grouped.gk.length > 0 && <FormationRow players={grouped.gk} gameweekId={gameweekId} />}
 
         {/* Defender Rows */}
-        {grouped.def.length > 0 && <FormationRow players={grouped.def} />}
+        {grouped.def.length > 0 && <FormationRow players={grouped.def} gameweekId={gameweekId} />}
 
         {/* Midfielder Rows */}
-        {grouped.mid.length > 0 && <FormationRow players={grouped.mid} />}
+        {grouped.mid.length > 0 && <FormationRow players={grouped.mid} gameweekId={gameweekId} />}
 
         {/* Forward Rows */}
-        {grouped.fwd.length > 0 && <FormationRow players={grouped.fwd} />}
+        {grouped.fwd.length > 0 && <FormationRow players={grouped.fwd} gameweekId={gameweekId} />}
       </Box>
 
       {/* Empty State */}

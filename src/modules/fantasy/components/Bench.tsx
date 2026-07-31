@@ -16,9 +16,10 @@ export interface BenchSquadPlayer {
 
 export interface BenchProps {
   squad: BenchSquadPlayer[];
+  gameweekId?: number;
 }
 
-export const Bench: React.FC<BenchProps> = ({ squad }) => {
+export const Bench: React.FC<BenchProps> = ({ squad, gameweekId }) => {
   // Get bench players sorted by bench order
   const benchPlayers = useMemo(() => {
     return squad
@@ -31,7 +32,14 @@ export const Bench: React.FC<BenchProps> = ({ squad }) => {
   }
 
   return (
-    <Box>
+    <Box
+      sx={{
+        p: { xs: 1.5, sm: 2 },
+        borderRadius: '12px',
+        color: '#fff',
+        background: 'linear-gradient(135deg, #37003c, #5b075f)',
+      }}
+    >
       <Typography
         variant="h6"
         sx={{
@@ -49,7 +57,7 @@ export const Bench: React.FC<BenchProps> = ({ squad }) => {
           gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(4, 1fr)' },
           gap: { xs: 2, sm: 3 },
           padding: 2,
-          backgroundColor: '#f5f5f5',
+          backgroundColor: 'rgba(255,255,255,0.12)',
           borderRadius: '8px',
         }}
       >
@@ -59,6 +67,7 @@ export const Bench: React.FC<BenchProps> = ({ squad }) => {
             playerId={player.playerId}
             gameweekPoints={player.gameweekPoints}
             size="small"
+            gameweekId={gameweekId}
           />
         ))}
       </Box>

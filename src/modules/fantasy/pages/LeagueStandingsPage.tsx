@@ -8,7 +8,6 @@
 import React, { useMemo, useState, useEffect } from 'react';
 import { Box, Typography, CircularProgress, Alert } from '@mui/material';
 import { useParams, Navigate, useLocation } from 'react-router-dom';
-import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { fantasyGameFixtures, leagueStandingsFixtures, opponentSquadsFixtures } from '../fixtures';
 import {
@@ -22,6 +21,7 @@ import {
 } from '../components';
 import { useGameweekHubState } from '../context';
 import { FantasyGameRepository } from '@repositories/fantasy';
+import { getStoredLeagueId } from '../components/FplConnectionGate';
 
 export const LeagueStandingsPage: React.FC = () => {
   const { leagueId, managerId } = useParams<{ leagueId: string; managerId?: string }>();
@@ -32,7 +32,11 @@ export const LeagueStandingsPage: React.FC = () => {
   // Parse IDs as numbers
   const leagueIdNum = useMemo(() => (leagueId ? parseInt(leagueId, 10) : null), [leagueId]);
   const managerIdNum = useMemo(() => (managerId ? parseInt(managerId, 10) : null), [managerId]);
-  const resolvedLeagueId = leagueIdNum ?? fixtures.manager.primaryLeagueId;
+  const resolvedLeagueId =
+    leagueIdNum ??
+    (gameState.isConnected
+      ? getStoredLeagueId() ?? gameState.entry?.joinedLeaguesIds?.[0] ?? null
+      : fixtures.manager.primaryLeagueId);
 
   // Detect if on Live Race view
   const isLiveRaceView = useMemo(() => location.pathname.includes('/live'), [location.pathname]);
@@ -169,21 +173,28 @@ export const LeagueStandingsPage: React.FC = () => {
   }
   if (standingsError && gameState.isConnected) {
     return (
-      <PageContainer>
+      <Box sx={{ py: ThemeTokens.spacing.lg }}>
         <Alert severity="error" sx={{ mb: 2 }}>
           Failed to load league standings: {standingsError}
         </Alert>
-      </PageContainer>
+      </Box>
     );
   }
 
   // Default route without league id
   if (leagueIdNum === null) {
+    if (!resolvedLeagueId) {
+      return (
+        <Alert severity="info" sx={{ mt: ThemeTokens.spacing.lg }}>
+          Connect a Classic League ID to open your league workspace.
+        </Alert>
+      );
+    }
     return <Navigate to={`/premier-league/gameweek/league/${resolvedLeagueId}`} replace />;
   }
 
   // Error: Invalid league
-  if (!leagueData || !standings || !currentManagerEntry) {
+  if (!leagueData || !standings) {
     return (
       <Box sx={{ padding: 4, textAlign: 'center' }}>
         <Typography variant="body1" color="textSecondary">
@@ -214,13 +225,13 @@ export const LeagueStandingsPage: React.FC = () => {
           standingsEntryCount={standings.entries?.length || 0}
           workspaceNavigation={<WorkspaceNavigation leagueId={leagueIdNum || 0} />}
         />
-        <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
+        <Box sx={{ py: ThemeTokens.spacing.lg }}>
           <Box sx={{ padding: 4, textAlign: 'center' }}>
             <Typography variant="body1" color="textSecondary">
               Team data is not available for this manager
             </Typography>
           </Box>
-        </PageContainer>
+        </Box>
       </Box>
     );
   }
@@ -237,13 +248,13 @@ export const LeagueStandingsPage: React.FC = () => {
           workspaceNavigation={<WorkspaceNavigation leagueId={leagueIdNum || 0} />}
         />
 
-        <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
+        <Box sx={{ py: ThemeTokens.spacing.lg }}>
           <LiveLeagueRace
             leagueId={leagueIdNum || 0}
             standings={standings.entries}
             currentManagerId={fixtures.manager.id}
           />
-        </PageContainer>
+        </Box>
       </Box>
     );
   }
@@ -260,26 +271,32 @@ export const LeagueStandingsPage: React.FC = () => {
           workspaceNavigation={<WorkspaceNavigation leagueId={leagueIdNum || 0} />}
         />
 
-        <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
+        <Box sx={{ py: ThemeTokens.spacing.lg }}>
           {/* Your Position Summary */}
-          <YourPositionSummary
-            currentRank={currentManagerEntry.currentRank}
-            totalManagers={standingsEntries.length}
-            gameweekPoints={currentManagerEntry.gameweekPoints}
-            totalPoints={currentManagerEntry.totalPoints}
-          />
+          {currentManagerEntry ? (
+            <YourPositionSummary
+              currentRank={currentManagerEntry.currentRank}
+              totalManagers={standingsEntries.length}
+              gameweekPoints={currentManagerEntry.gameweekPoints}
+              totalPoints={currentManagerEntry.totalPoints}
+            />
+          ) : (
+            <Alert severity="info" sx={{ mb: 3 }}>
+              Your team is outside the currently loaded standings page. The league table is still
+              available below.
+            </Alert>
+          )}
 
           {/* League Standings Table */}
           <Box sx={{ marginTop: 3 }}>
             <Typography
-              variant="h6"
+              variant="h5"
               sx={{
-                fontWeight: 700,
+                fontWeight: 850,
                 marginBottom: 1.5,
-                fontSize: '1rem',
               }}
             >
-              Standings
+              League standings
             </Typography>
             <LeagueStandingsTable
               standings={standingsEntries}
@@ -288,16 +305,28 @@ export const LeagueStandingsPage: React.FC = () => {
           </Box>
 
           {/* Compare Section - Quick Access */}
-          <Box sx={{ marginTop: 3, paddingBottom: ThemeTokens.spacing.xs }}>
+          <Box
+            sx={{
+              marginTop: 3,
+              padding: { xs: 2, md: 2.5 },
+              marginBottom: ThemeTokens.spacing.xxl,
+              border: '1px solid #e2e8f0',
+              borderRadius: ThemeTokens.borderRadius.lg,
+              backgroundColor: '#fff',
+              boxShadow: '0 10px 28px rgba(15, 23, 42, 0.06)',
+            }}
+          >
             <Typography
-              variant="h6"
+              variant="h5"
               sx={{
-                fontWeight: 700,
+                fontWeight: 850,
                 marginBottom: 1.5,
-                fontSize: '1rem',
               }}
             >
-              Compare Teams
+              Compare with a rival
+            </Typography>
+            <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+              Select another manager to compare squads, captaincy and gameweek performance.
             </Typography>
             <OpponentSelector
               standings={standingsEntries}
@@ -305,7 +334,7 @@ export const LeagueStandingsPage: React.FC = () => {
               leagueId={leagueIdNum || 0}
             />
           </Box>
-        </PageContainer>
+        </Box>
       </Box>
     );
   }
@@ -322,7 +351,7 @@ export const LeagueStandingsPage: React.FC = () => {
           workspaceNavigation={<WorkspaceNavigation leagueId={leagueIdNum || 0} />}
         />
 
-        <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
+        <Box sx={{ py: ThemeTokens.spacing.lg }}>
           <ManagerHeadToHeadPage
             leagueId={leagueIdNum || 0}
             currentManagerId={currentId || fixtures.manager.id}
@@ -333,7 +362,7 @@ export const LeagueStandingsPage: React.FC = () => {
             currentSquad={currentSquad}
             opponentSquad={opponentSquad || []}
           />
-        </PageContainer>
+        </Box>
       </Box>
     );
   }

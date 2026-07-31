@@ -4,8 +4,9 @@
  */
 
 import React, { useMemo } from 'react';
-import { Box, Typography, Avatar } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { PlayerRepository } from '@repositories/players';
+import { FixtureRepository } from '@repositories/fixtures';
 import { getPlayerImageUrl } from '@shared/assets';
 
 export interface PitchPlayerProps {
@@ -14,6 +15,7 @@ export interface PitchPlayerProps {
   isCaptain?: boolean;
   isViceCaptain?: boolean;
   size?: 'small' | 'medium' | 'large';
+  gameweekId?: number;
 }
 
 export const PitchPlayer: React.FC<PitchPlayerProps> = ({
@@ -22,6 +24,7 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
   isCaptain = false,
   isViceCaptain = false,
   size = 'medium',
+  gameweekId,
 }) => {
   // Fetch player from repository
   const player = useMemo(() => {
@@ -32,6 +35,23 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
       return null;
     }
   }, [playerId]);
+
+  const fixtureLabel = useMemo(() => {
+    if (!player || !gameweekId) return 'No fixture';
+    try {
+      const fixture = new FixtureRepository()
+        .getByGameweek(gameweekId)
+        .find(
+          (match) => match.homeTeam.id === player.teamId || match.awayTeam.id === player.teamId
+        );
+      if (!fixture) return 'No fixture';
+      const isHome = fixture.homeTeam.id === player.teamId;
+      const opponent = isHome ? fixture.awayTeam.shortName : fixture.homeTeam.shortName;
+      return `${opponent} (${isHome ? 'H' : 'A'})`;
+    } catch {
+      return 'No fixture';
+    }
+  }, [gameweekId, player]);
 
   if (!player) {
     return (
@@ -44,12 +64,14 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
   }
 
   const sizeConfig = {
-    small: { avatar: 32, nameFont: '11px', pointsFont: '10px', badgeSize: 14 },
-    medium: { avatar: 40, nameFont: '12px', pointsFont: '11px', badgeSize: 16 },
-    large: { avatar: 48, nameFont: '13px', pointsFont: '12px', badgeSize: 18 },
+    small: { avatar: 48, card: 82, nameFont: '10px', pointsFont: '10px', badgeSize: 18 },
+    medium: { avatar: 64, card: 104, nameFont: '11px', pointsFont: '10px', badgeSize: 20 },
+    large: { avatar: 76, card: 116, nameFont: '12px', pointsFont: '11px', badgeSize: 22 },
   };
 
   const config = sizeConfig[size];
+  const mobileCardWidth = size === 'small' ? 72 : 62;
+  const mobileImageSize = size === 'small' ? 44 : 46;
 
   return (
     <Box
@@ -57,34 +79,45 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        gap: 0.5,
         position: 'relative',
-        minWidth: 0,
+        width: { xs: mobileCardWidth, sm: config.card },
+        borderRadius: '8px',
+        transition: 'transform 160ms ease, filter 160ms ease',
+        filter: 'drop-shadow(0 7px 8px rgba(0, 0, 0, 0.20))',
+        '&:hover': { transform: 'translateY(-3px)' },
       }}
     >
-      {/* Player Avatar */}
-      <Box sx={{ position: 'relative' }}>
-        <Avatar
-          src={getPlayerImageUrl(player.id)}
+      <Box
+        sx={{
+          position: 'relative',
+          display: 'flex',
+          justifyContent: 'center',
+          height: { xs: mobileImageSize, sm: config.avatar },
+          overflow: 'hidden',
+          borderRadius: '8px 8px 0 0',
+          background: 'linear-gradient(145deg, rgba(255,255,255,.94), rgba(226,232,240,.88))',
+        }}
+      >
+        <Box
+          component="img"
+          src={getPlayerImageUrl(player.clubCode)}
           alt={player.displayName}
           sx={{
-            width: config.avatar,
-            height: config.avatar,
-            border: '2px solid #fff',
-            boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+            width: { xs: mobileImageSize, sm: config.avatar },
+            height: { xs: mobileImageSize, sm: config.avatar },
+            objectFit: 'contain',
+            objectPosition: 'bottom center',
           }}
-        >
-          {player.displayName.charAt(0)}
-        </Avatar>
+        />
 
         {/* Captain Badge */}
         {isCaptain && (
           <Box
             sx={{
               position: 'absolute',
-              bottom: -2,
-              right: -2,
-              backgroundColor: '#d32f2f',
+              top: 5,
+              left: 5,
+              backgroundColor: '#37003c',
               color: '#fff',
               borderRadius: '50%',
               width: config.badgeSize,
@@ -94,7 +127,7 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
               justifyContent: 'center',
               fontWeight: 700,
               fontSize: `${config.badgeSize - 4}px`,
-              border: '2px solid #fff',
+              border: '1px solid #fff',
               boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
             }}
           >
@@ -107,9 +140,9 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
           <Box
             sx={{
               position: 'absolute',
-              bottom: -2,
-              right: -2,
-              backgroundColor: '#1976d2',
+              top: 5,
+              left: 5,
+              backgroundColor: '#00a8e8',
               color: '#fff',
               borderRadius: '50%',
               width: config.badgeSize,
@@ -119,7 +152,7 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
               justifyContent: 'center',
               fontWeight: 700,
               fontSize: `${config.badgeSize - 4}px`,
-              border: '2px solid #fff',
+              border: '1px solid #fff',
               boxShadow: '0 1px 3px rgba(0,0,0,0.2)',
             }}
           >
@@ -128,33 +161,45 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
         )}
       </Box>
 
-      {/* Player Name */}
-      <Typography
-        variant="caption"
+      <Box
         sx={{
-          fontSize: config.nameFont,
-          fontWeight: 600,
+          px: 0.5,
+          py: 0.45,
           textAlign: 'center',
-          maxWidth: config.avatar + 8,
-          overflow: 'hidden',
-          textOverflow: 'ellipsis',
-          whiteSpace: 'nowrap',
+          color: '#0f172a',
+          borderRadius: '0 0 8px 8px',
+          backgroundColor: '#fff',
         }}
       >
-        {player.displayName.split(' ')[0]}
-      </Typography>
-
-      {/* Gameweek Points */}
-      <Typography
-        variant="caption"
-        sx={{
-          fontSize: config.pointsFont,
-          fontWeight: 700,
-          color: gameweekPoints > 0 ? '#4caf50' : '#666',
-        }}
-      >
-        {gameweekPoints} pts
-      </Typography>
+        <Typography
+          sx={{
+            fontSize: { xs: '9px', sm: config.nameFont },
+            lineHeight: 1.2,
+            fontWeight: 800,
+            overflow: 'hidden',
+            textOverflow: 'ellipsis',
+            whiteSpace: 'nowrap',
+          }}
+        >
+          {player.displayName}
+        </Typography>
+        <Typography
+          sx={{ fontSize: { xs: '8px', sm: config.pointsFont }, lineHeight: 1.2, color: '#64748b' }}
+        >
+          {fixtureLabel}
+        </Typography>
+        <Typography
+          sx={{
+            mt: 0.25,
+            fontSize: { xs: '8px', sm: config.pointsFont },
+            lineHeight: 1.2,
+            fontWeight: 800,
+            color: gameweekPoints > 0 ? '#16a34a' : '#475569',
+          }}
+        >
+          {Number.isFinite(gameweekPoints) ? gameweekPoints : 0} pts · £{player.price.toFixed(1)}m
+        </Typography>
+      </Box>
     </Box>
   );
 };

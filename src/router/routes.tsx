@@ -258,7 +258,7 @@ const router = createBrowserRouter([
               {
                 path: 'my-team',
                 element: (
-                  <FplConnectionGate>
+                  <FplConnectionGate showConnectedSummary={false}>
                     <Suspense fallback={<RouteLoadingFallback />}>
                       <MyTeamPage />
                     </Suspense>
@@ -268,7 +268,7 @@ const router = createBrowserRouter([
               {
                 path: 'league',
                 element: (
-                  <FplConnectionGate>
+                  <FplConnectionGate showConnectedSummary={false}>
                     <Suspense fallback={<RouteLoadingFallback />}>
                       <LeagueStandingsPage />
                     </Suspense>
@@ -278,7 +278,7 @@ const router = createBrowserRouter([
               {
                 path: 'league/:leagueId',
                 element: (
-                  <FplConnectionGate>
+                  <FplConnectionGate showConnectedSummary={false}>
                     <Suspense fallback={<RouteLoadingFallback />}>
                       <LeagueStandingsPage />
                     </Suspense>
@@ -288,7 +288,7 @@ const router = createBrowserRouter([
               {
                 path: 'league/:leagueId/live',
                 element: (
-                  <FplConnectionGate>
+                  <FplConnectionGate showConnectedSummary={false}>
                     <Suspense fallback={<RouteLoadingFallback />}>
                       <LeagueStandingsPage />
                     </Suspense>
@@ -298,7 +298,7 @@ const router = createBrowserRouter([
               {
                 path: 'league/:leagueId/managers/:managerId',
                 element: (
-                  <FplConnectionGate>
+                  <FplConnectionGate showConnectedSummary={false}>
                     <Suspense fallback={<RouteLoadingFallback />}>
                       <LeagueStandingsPage />
                     </Suspense>

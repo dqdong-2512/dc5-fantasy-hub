@@ -28,7 +28,15 @@ export const LeagueStandingsTable: React.FC<LeagueStandingsTableProps> = ({
     }
   };
   return (
-    <Box>
+    <Box
+      sx={{
+        overflow: 'hidden',
+        border: { md: '1px solid #e2e8f0' },
+        borderRadius: { md: '10px' },
+        backgroundColor: '#fff',
+        boxShadow: { md: '0 10px 28px rgba(15, 23, 42, 0.07)' },
+      }}
+    >
       {/* Desktop Table Header */}
       <Box
         sx={{
@@ -36,8 +44,7 @@ export const LeagueStandingsTable: React.FC<LeagueStandingsTableProps> = ({
           gridTemplateColumns: '50px 1fr 80px 100px 80px',
           gap: 2,
           padding: 2,
-          backgroundColor: '#f5f5f5',
-          borderRadius: '8px 8px 0 0',
+          background: 'linear-gradient(90deg, #f8fafc 0%, #f3f0ff 100%)',
           fontWeight: 700,
           fontSize: '0.875rem',
           borderBottom: '2px solid #e0e0e0',
@@ -70,12 +77,13 @@ export const LeagueStandingsTable: React.FC<LeagueStandingsTableProps> = ({
               gap: 2,
               padding: 2,
               alignItems: 'center',
-              backgroundColor: isCurrentManager ? '#f0f7ff' : '#fff',
+              backgroundColor: isCurrentManager ? '#f3efff' : '#fff',
+              borderLeft: isCurrentManager ? '4px solid #7c3aed' : '4px solid transparent',
               borderBottom: '1px solid #e0e0e0',
               cursor: isCurrentManager ? 'default' : 'pointer',
               transition: 'background-color 0.2s',
               '&:hover': {
-                backgroundColor: isCurrentManager ? '#f0f7ff' : '#f5f5f5',
+                backgroundColor: isCurrentManager ? '#eee7ff' : '#f8fafc',
               },
             }}
           >
@@ -223,5 +231,4 @@ export const LeagueStandingsTable: React.FC<LeagueStandingsTableProps> = ({
     </Box>
   );
 };
-
 

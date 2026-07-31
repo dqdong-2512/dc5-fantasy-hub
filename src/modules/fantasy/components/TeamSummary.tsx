@@ -1,10 +1,5 @@
-/**
- * Team Summary Component
- * Displays team information and statistics
- */
-
 import React, { useMemo } from 'react';
-import { Box, Typography, Card, CardContent } from '@mui/material';
+import { Box, Card, CardContent, Typography } from '@mui/material';
 import { PlayerRepository } from '@repositories/players';
 import { calculateFormation } from '../utils/formationUtils';
 
@@ -30,115 +25,74 @@ export const TeamSummary: React.FC<TeamSummaryProps> = ({
   bank,
   squad,
 }) => {
-  const playerRepo = useMemo(() => new PlayerRepository(), []);
-
-  // Get all players
   const allPlayers = useMemo(() => {
     try {
-      return playerRepo.getAll();
+      return new PlayerRepository().getAll();
     } catch {
       return [];
     }
-  }, [playerRepo]);
+  }, []);
 
-  // Calculate formation
   const formation = useMemo(() => {
     const squadWithPositions = squad
-      .map((pick) => {
-        const player = allPlayers.find((p) => p.id === pick.playerId);
-        return { position: player?.position, isStarter: pick.isStarter };
-      })
-      .filter((p) => p.position !== undefined);
-
+      .map((pick) => ({
+        position: allPlayers.find((player) => player.id === pick.playerId)?.position,
+        isStarter: pick.isStarter,
+      }))
+      .filter((player) => player.position !== undefined);
     return calculateFormation(squadWithPositions);
   }, [squad, allPlayers]);
 
-  return (
-    <Box sx={{ marginBottom: 3 }}>
-      {/* Header */}
-      <Box sx={{ marginBottom: 2 }}>
-        <Typography
-          variant="h6"
-          sx={{
-            fontWeight: 700,
-            fontSize: '1.25rem',
-            marginBottom: 0.5,
-          }}
-        >
-          {teamName}
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          Gameweek {gameweekNumber}
-        </Typography>
-      </Box>
+  const metrics = [
+    {
+      label: 'Gameweek points',
+      value: Number.isFinite(gameweekPoints) ? `${gameweekPoints}` : '0',
+      color: '#16a34a',
+    },
+    { label: 'Formation', value: formation.formation, color: '#7c3aed' },
+    {
+      label: 'Team value',
+      value: `£${Number.isFinite(teamValue) ? teamValue.toFixed(1) : '0.0'}m`,
+      color: '#0284c7',
+    },
+    {
+      label: 'In the bank',
+      value: `£${Number.isFinite(bank) ? bank.toFixed(1) : '0.0'}m`,
+      color: '#ea580c',
+    },
+  ];
 
-      {/* Stats Grid */}
+  return (
+    <Box>
+      <Typography variant="h5" sx={{ fontWeight: 850 }}>
+        Gameweek overview
+      </Typography>
+      <Typography variant="body2" color="text.secondary" sx={{ mb: 1.5 }}>
+        {teamName} · Gameweek {gameweekNumber}
+      </Typography>
+
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(4, 1fr)' },
+          gridTemplateColumns: { xs: 'repeat(2, 1fr)', md: 'repeat(4, 1fr)' },
           gap: 2,
         }}
       >
-        <Card>
-          <CardContent sx={{ padding: '12px !important' }}>
-            <Typography
-              variant="caption"
-              color="textSecondary"
-              sx={{ display: 'block', marginBottom: 0.5 }}
-            >
-              Gameweek Points
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1.5rem', color: '#4caf50' }}>
-              {gameweekPoints}
-            </Typography>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent sx={{ padding: '12px !important' }}>
-            <Typography
-              variant="caption"
-              color="textSecondary"
-              sx={{ display: 'block', marginBottom: 0.5 }}
-            >
-              Formation
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1.5rem' }}>
-              {formation.formation}
-            </Typography>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent sx={{ padding: '12px !important' }}>
-            <Typography
-              variant="caption"
-              color="textSecondary"
-              sx={{ display: 'block', marginBottom: 0.5 }}
-            >
-              Team Value
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1.5rem' }}>
-              £{teamValue.toFixed(1)}m
-            </Typography>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardContent sx={{ padding: '12px !important' }}>
-            <Typography
-              variant="caption"
-              color="textSecondary"
-              sx={{ display: 'block', marginBottom: 0.5 }}
-            >
-              Bank
-            </Typography>
-            <Typography variant="h6" sx={{ fontWeight: 700, fontSize: '1.5rem' }}>
-              £{bank.toFixed(1)}m
-            </Typography>
-          </CardContent>
-        </Card>
+        {metrics.map((metric) => (
+          <Card key={metric.label} sx={{ border: '1px solid', borderColor: 'divider' }}>
+            <CardContent sx={{ p: '16px !important' }}>
+              <Typography variant="caption" color="text.secondary">
+                {metric.label}
+              </Typography>
+              <Typography
+                variant="h5"
+                sx={{ mt: 0.5, fontWeight: 850, color: metric.color }}
+              >
+                {metric.value}
+              </Typography>
+            </CardContent>
+          </Card>
+        ))}
       </Box>
     </Box>
   );

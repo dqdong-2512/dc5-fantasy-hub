@@ -149,7 +149,9 @@ export function FantasyGameHeader({
                 color: '#4caf50',
               }}
             >
-              {entry.manager.totalPoints}
+              {Number.isFinite(entry.manager.totalPoints)
+                ? entry.manager.totalPoints
+                : 'Pre-season'}
             </Typography>
           </Box>
 
@@ -169,7 +171,9 @@ export function FantasyGameHeader({
                 color: '#2196f3',
               }}
             >
-              {entry.manager.overallRank ? `#${entry.manager.overallRank.toLocaleString()}` : '—'}
+              {entry.manager.overallRank
+                ? `#${entry.manager.overallRank.toLocaleString()}`
+                : 'Not ranked'}
             </Typography>
           </Box>
 

@@ -5,7 +5,7 @@
  */
 
 import React from 'react';
-import { Box, Button, Typography } from '@mui/material';
+import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { ThemeTokens } from '@shared/theme/tokens';
@@ -33,91 +33,102 @@ export const LeagueWorkspaceHeader: React.FC<LeagueWorkspaceHeaderProps> = ({
   return (
     <Box
       sx={{
-        padding: ThemeTokens.spacing.xs,
-        borderBottom: '1px solid #e0e0e0',
+        position: 'relative',
+        overflow: 'hidden',
+        mt: ThemeTokens.spacing.lg,
+        padding: { xs: 2.5, md: 3.5 },
+        borderRadius: ThemeTokens.borderRadius.lg,
+        color: '#fff',
+        background: 'linear-gradient(125deg, #37003c 0%, #721477 55%, #087fb8 130%)',
+        boxShadow: '0 16px 36px rgba(55, 0, 60, 0.18)',
+        '&::after': {
+          content: '""',
+          position: 'absolute',
+          width: 240,
+          height: 240,
+          right: -56,
+          top: -148,
+          borderRadius: '50%',
+          backgroundColor: 'rgba(255,255,255,0.10)',
+        },
       }}
     >
-      {/* Back Button */}
-      <Button
-        startIcon={<ArrowBackIcon />}
-        onClick={() => navigate('/premier-league/gameweek')}
-        sx={{
-          textTransform: 'none',
-          marginBottom: 1.5,
-          color: '#1976d2',
-          padding: 0,
-          '&:hover': { backgroundColor: 'transparent' },
-        }}
-      >
-        Back to Fantasy Game
-      </Button>
-
-      {/* League Header Row - Title and Switcher */}
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', sm: 'row' },
-          alignItems: { xs: 'flex-start', sm: 'center' },
-          gap: { xs: 1.5, sm: 2 },
-          marginBottom: 1,
-        }}
-      >
-        <Typography
-          variant="h5"
+      <Stack spacing={2} sx={{ position: 'relative', zIndex: 1 }}>
+        <Button
+          startIcon={<ArrowBackIcon />}
+          onClick={() => navigate('/premier-league/gameweek/overview')}
           sx={{
-            fontWeight: 700,
-            flex: 1,
+            alignSelf: 'flex-start',
+            p: 0,
+            textTransform: 'none',
+            color: 'rgba(255,255,255,.82)',
+            '&:hover': { backgroundColor: 'transparent', color: '#fff' },
           }}
         >
-          {selectedLeague?.name || 'League'}
-        </Typography>
+          Back to overview
+        </Button>
 
-        {/* League Switcher */}
-        <LeagueSwitcher leagues={leagues} selectedLeagueId={selectedLeagueId} />
-      </Box>
+        <Stack
+          direction={{ xs: 'column', md: 'row' }}
+          spacing={2}
+          sx={{ alignItems: { md: 'flex-end' }, justifyContent: 'space-between' }}
+        >
+          <Box>
+            <Typography variant="overline" sx={{ opacity: 0.75, letterSpacing: 1.4 }}>
+              Classic league
+            </Typography>
+            <Typography
+              variant="h3"
+              sx={{ fontWeight: 850, lineHeight: 1.05, fontSize: { xs: '2rem', md: '2.6rem' } }}
+            >
+              {selectedLeague?.name || `League ${selectedLeagueId ?? ''}`}
+            </Typography>
+            <Typography variant="body2" sx={{ mt: 0.75, opacity: 0.78 }}>
+              Follow the standings, compare rivals and track the live race
+            </Typography>
+          </Box>
 
-      {/* League Summary Info - Compact Row */}
-      {currentManagerEntry && (
+          {leagues.length > 1 && (
+            <LeagueSwitcher leagues={leagues} selectedLeagueId={selectedLeagueId} />
+          )}
+        </Stack>
+
+        {currentManagerEntry && (
+          <Stack direction="row" spacing={1} sx={{ flexWrap: 'wrap', gap: 1 }}>
+            <Chip
+              label={`Your rank #${currentManagerEntry.currentRank}`}
+              sx={{ color: '#fff', backgroundColor: 'rgba(255,255,255,.14)', fontWeight: 700 }}
+            />
+            <Chip
+              label={`${standingsEntryCount} managers`}
+              sx={{ color: '#fff', backgroundColor: 'rgba(255,255,255,.14)' }}
+            />
+            <Box sx={{ display: 'flex', alignItems: 'center', px: 1 }}>
+              <RankMovement
+                previousRank={currentManagerEntry.previousRank}
+                currentRank={currentManagerEntry.currentRank}
+                size="small"
+              />
+            </Box>
+          </Stack>
+        )}
+      </Stack>
+
+      {workspaceNavigation && (
         <Box
           sx={{
-            display: 'flex',
-            gap: 2,
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            marginBottom: workspaceNavigation ? 2 : 0,
+            position: 'relative',
+            zIndex: 1,
+            mt: 2.5,
+            mx: { xs: -2.5, md: -3.5 },
+            mb: { xs: -2.5, md: -3.5 },
+            px: { xs: 2.5, md: 3.5 },
+            backgroundColor: 'rgba(16, 8, 40, .24)',
           }}
         >
-          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
-            Rank{' '}
-            <Typography component="span" sx={{ fontWeight: 600, color: '#333' }}>
-              #{currentManagerEntry.currentRank}
-            </Typography>
-          </Typography>
-
-          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
-            -
-          </Typography>
-
-          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
-            {standingsEntryCount} Managers
-          </Typography>
-
-          <Typography variant="body2" color="textSecondary" sx={{ fontSize: '0.85rem' }}>
-            -
-          </Typography>
-
-          <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
-            <RankMovement
-              previousRank={currentManagerEntry.previousRank}
-              currentRank={currentManagerEntry.currentRank}
-              size="small"
-            />
-          </Box>
+          {workspaceNavigation}
         </Box>
       )}
-
-      {/* Workspace Navigation */}
-      {workspaceNavigation && <Box>{workspaceNavigation}</Box>}
     </Box>
   );
 };

@@ -54,8 +54,7 @@ export const WorkspaceNavigation: React.FC<WorkspaceNavigationProps> = ({ league
       sx={{
         display: 'flex',
         gap: 0.5,
-        borderTop: '1px solid #e0e0e0',
-        paddingTop: 1,
+        overflowX: 'auto',
       }}
     >
       {tabs.map((tab) => (
@@ -66,15 +65,14 @@ export const WorkspaceNavigation: React.FC<WorkspaceNavigationProps> = ({ league
             textTransform: 'none',
             fontSize: '0.9rem',
             fontWeight: activeTab === tab.id ? 700 : 500,
-            color: activeTab === tab.id ? '#1976d2' : '#666',
-            padding: '8px 16px',
-            borderBottom: activeTab === tab.id ? '3px solid #1976d2' : 'none',
+            color: activeTab === tab.id ? '#fff' : 'rgba(255,255,255,.68)',
+            padding: '12px 16px',
+            borderBottom: activeTab === tab.id ? '3px solid #00c8ff' : '3px solid transparent',
             borderRadius: 0,
-            marginBottom: '-1px',
             transition: 'all 0.2s ease',
             '&:hover': {
-              color: '#1976d2',
-              backgroundColor: 'transparent',
+              color: '#fff',
+              backgroundColor: 'rgba(255,255,255,.06)',
             },
           }}
         >
@@ -84,5 +82,4 @@ export const WorkspaceNavigation: React.FC<WorkspaceNavigationProps> = ({ league
     </Box>
   );
 };
-
 

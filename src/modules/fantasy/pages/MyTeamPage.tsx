@@ -15,16 +15,19 @@ import {
   Select,
   MenuItem,
   FormControl,
+  Card,
+  CardContent,
+  ToggleButton,
+  ToggleButtonGroup,
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SwapCallsIcon from '@mui/icons-material/SwapCalls';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { fantasyGameFixtures } from '../fixtures';
-import { useManagerData, useEnrichedManagerPicks } from '../hooks';
+import { useEnrichedManagerPicks, useManagerLeagues } from '../hooks';
 import { useGameweekHubState } from '../context';
 import {
   FootballPitch,
@@ -36,11 +39,15 @@ import {
 } from '../components';
 import { getBootstrapRepository } from '@repositories/index';
 import type { PointBreakdownData } from '../components/PlayerPointBreakdown';
+import { HeadToHeadGameweekComparison } from '../components/HeadToHeadGameweekComparison';
+import { getStoredLeagueId } from '../components/FplConnectionGate';
 
 export const MyTeamPage: React.FC = () => {
   const navigate = useNavigate();
   const gameState = useGameweekHubState();
   const [manualGameweekOverride, setManualGameweekOverride] = useState<number | null>(null);
+  const [viewMode, setViewMode] = useState<'pitch' | 'compare'>('pitch');
+  const [selectedOpponentId, setSelectedOpponentId] = useState<number | null>(null);
   const [selectedPlayerBreakdown, setSelectedPlayerBreakdown] = useState<PointBreakdownData | null>(
     null
   );
@@ -51,8 +58,32 @@ export const MyTeamPage: React.FC = () => {
   // Get enriched picks for the selected gameweek (includes player gameweek points)
   const picks = useEnrichedManagerPicks(gameState.connectedEntryId, displayGameweek);
 
-  // Format manager data for display
-  const managerData = useManagerData(gameState);
+  const comparisonLeagueIds = useMemo(() => {
+    const joinedLeagueIds = gameState.entry?.joinedLeaguesIds ?? [];
+    const connectedLeagueId = getStoredLeagueId();
+
+    if (!connectedLeagueId) {
+      return joinedLeagueIds;
+    }
+
+    return [
+      connectedLeagueId,
+      ...joinedLeagueIds.filter((leagueId) => leagueId !== connectedLeagueId),
+    ];
+  }, [gameState.entry?.joinedLeaguesIds]);
+
+  const leagueData = useManagerLeagues(
+    gameState.connectedEntryId,
+    comparisonLeagueIds
+  );
+  const myLeagueStanding =
+    leagueData.standings?.find((standing) => standing.entryId === gameState.connectedEntryId) ??
+    null;
+  const opponents =
+    leagueData.standings?.filter((standing) => standing.entryId !== gameState.connectedEntryId) ??
+    [];
+  const selectedOpponent =
+    opponents.find((standing) => standing.entryId === selectedOpponentId) ?? opponents[0] ?? null;
 
   // Get gameweek list for selector
   const bootstrapRepo = useMemo(() => getBootstrapRepository(), []);
@@ -65,20 +96,23 @@ export const MyTeamPage: React.FC = () => {
   }, [bootstrapRepo]);
 
   // Determine if using real data or fixtures
-  const isUsingRealData =
-    gameState.isConnected && gameState.connectedEntryId && picks.enrichedPicks;
+  const isUsingRealData = Boolean(
+    gameState.isConnected && gameState.connectedEntryId && picks.enrichedPicks
+  );
   const fixtures = useMemo(() => fantasyGameFixtures, []);
 
   // Use real data if connected, otherwise fallback to fixtures
-  const teamName = isUsingRealData ? managerData.context?.teamName : fixtures.manager.teamName;
+  const teamName = gameState.isConnected
+    ? gameState.entry?.team.name
+    : fixtures.manager.teamName;
   const gameweekNumber =
     displayGameweek ||
     (isUsingRealData ? gameState.displayGameweek : fixtures.currentGameweek.gameweek);
-  const teamValue = isUsingRealData ? managerData.context?.teamValue : fixtures.manager.teamValue;
-  const bank = isUsingRealData ? managerData.context?.bank : fixtures.manager.bank;
+  const teamValue = isUsingRealData ? picks.teamValue / 10 : fixtures.manager.teamValue;
+  const bank = isUsingRealData ? picks.bankValue / 10 : fixtures.manager.bank;
 
   // Prepare squad data for components
-  const squadForComponents = isUsingRealData
+  const squadForComponents = gameState.isConnected
     ? (picks.enrichedPicks?.picks?.map((pick: any) => ({
         playerId: pick.element,
         isStarter: pick.position <= 11,
@@ -137,36 +171,8 @@ export const MyTeamPage: React.FC = () => {
     );
   }
 
-  // Show error state if picks have error
-  if (isUsingRealData && picks.error) {
-    return (
-      <Box>
-        <Box sx={{ padding: ThemeTokens.spacing.xs, borderBottom: '1px solid #e0e0e0' }}>
-          <Button
-            startIcon={<ArrowBackIcon />}
-            onClick={() => navigate('/premier-league/gameweek')}
-            sx={{
-              textTransform: 'none',
-              color: '#1976d2',
-              padding: 0,
-              '&:hover': { backgroundColor: 'transparent' },
-            }}
-          >
-            Back
-          </Button>
-          <Typography variant="h5" sx={{ fontWeight: 700, marginTop: 2 }}>
-            My Team
-          </Typography>
-        </Box>
-        <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
-          <Alert severity="error">{picks.error}</Alert>
-        </PageContainer>
-      </Box>
-    );
-  }
-
   // Show empty state if no squad data
-  if (!squadForComponents || squadForComponents.length === 0) {
+  if (!gameState.isConnected && (!squadForComponents || squadForComponents.length === 0)) {
     return (
       <Box sx={{ padding: 4, textAlign: 'center' }}>
         <Typography variant="body1" color="textSecondary">
@@ -177,100 +183,190 @@ export const MyTeamPage: React.FC = () => {
   }
 
   return (
-    <Box>
-      {/* Compact Page Header */}
-      <Box sx={{ padding: ThemeTokens.spacing.xs, borderBottom: '1px solid #e0e0e0' }}>
-        {/* Navigation Buttons */}
-        <Stack direction="row" spacing={1} sx={{ marginBottom: 1.5 }}>
-          <Button
-            startIcon={<ArrowBackIcon />}
-            onClick={() => navigate('/premier-league/gameweek')}
-            sx={{
-              textTransform: 'none',
-              color: '#1976d2',
-              padding: 0,
-              '&:hover': { backgroundColor: 'transparent' },
-            }}
-          >
-            Back
-          </Button>
-
-          <Button
-            startIcon={<SwapCallsIcon />}
-            onClick={() => navigate('/premier-league/gameweek/transfers')}
-            variant="outlined"
-            sx={{ textTransform: 'none', borderColor: '#2196f3', color: '#2196f3' }}
-          >
-            Plan Transfers
-          </Button>
-        </Stack>
-
-        {/* Page Title */}
-        <Typography variant="h5" sx={{ fontWeight: 700, marginBottom: 0.5 }}>
-          My Team
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          {teamName}
-        </Typography>
-
-        {/* Gameweek Selector (only for connected users) */}
-        {gameState.isConnected && displayGameweek && (
-          <Box sx={{ marginTop: 1.5, display: 'flex', alignItems: 'center', gap: 1 }}>
-            <Button
-              size="small"
-              onClick={handlePreviousGameweek}
-              startIcon={<KeyboardArrowLeftIcon />}
-              sx={{ padding: 0, minWidth: 'auto' }}
+    <Box
+      sx={{
+        // The shell places this route inside the same PageContainer rail as the tabs.
+        width: '100%',
+        maxWidth: '100%',
+        minWidth: 0,
+        marginX: 0,
+        boxSizing: 'border-box',
+        paddingTop: ThemeTokens.spacing.lg,
+        paddingBottom: ThemeTokens.spacing.xxl,
+      }}
+    >
+      <Stack spacing={ThemeTokens.spacing.lg}>
+        <Box
+          sx={{
+            position: 'relative',
+            overflow: 'hidden',
+            p: { xs: 2.5, md: 3.5 },
+            borderRadius: '12px',
+            color: '#fff',
+            background: 'linear-gradient(125deg, #37003c 0%, #6d0875 55%, #00a8e8 130%)',
+            boxShadow: '0 16px 36px rgba(55, 0, 60, 0.20)',
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              width: 240,
+              height: 240,
+              right: -60,
+              top: -150,
+              borderRadius: '50%',
+              backgroundColor: 'rgba(255,255,255,0.10)',
+            },
+          }}
+        >
+          <Stack spacing={2} sx={{ position: 'relative', zIndex: 1 }}>
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={1}
+              sx={{ justifyContent: 'space-between', alignItems: { sm: 'center' } }}
             >
-              Prev
-            </Button>
-
-            <FormControl sx={{ minWidth: '120px' }}>
-              <Select
-                value={displayGameweek}
-                onChange={(e) => handleGameweekChange(e.target.value as number)}
-                size="small"
-                sx={{ height: '36px' }}
+              <Button
+                startIcon={<ArrowBackIcon />}
+                onClick={() => navigate('/premier-league/gameweek')}
+                sx={{ alignSelf: 'flex-start', p: 0, color: 'rgba(255,255,255,.82)', textTransform: 'none' }}
               >
-                {bootstrap.gameweeks.map((gw) => (
-                  <MenuItem key={gw.id} value={gw.id}>
-                    GW {gw.id}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl>
+                Back to overview
+              </Button>
+              <Button
+                startIcon={<SwapCallsIcon />}
+                onClick={() => navigate('/premier-league/gameweek/transfers')}
+                variant="outlined"
+                sx={{
+                  alignSelf: 'flex-start',
+                  color: '#fff',
+                  borderColor: 'rgba(255,255,255,.45)',
+                  textTransform: 'none',
+                  '&:hover': { borderColor: '#fff', backgroundColor: 'rgba(255,255,255,.10)' },
+                }}
+              >
+                Plan transfers
+              </Button>
+            </Stack>
 
-            <Button
-              size="small"
-              onClick={handleNextGameweek}
-              endIcon={<KeyboardArrowRightIcon />}
-              sx={{ padding: 0, minWidth: 'auto' }}
-            >
-              Next
-            </Button>
-          </Box>
-        )}
-      </Box>
+            <Box>
+              <Typography variant="overline" sx={{ opacity: 0.75, letterSpacing: 1.4 }}>
+                My FPL squad
+              </Typography>
+              <Typography
+                variant="h3"
+                sx={{ fontWeight: 850, lineHeight: 1.05, fontSize: { xs: '2rem', md: '2.75rem' } }}
+              >
+                {teamName}
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 0.75, opacity: 0.78 }}>
+                Select your captain, review fixtures and prepare your starting XI
+              </Typography>
+            </Box>
 
-      {/* Main Content */}
-      <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
+            {gameState.isConnected && displayGameweek && (
+              <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                <Button
+                  size="small"
+                  onClick={handlePreviousGameweek}
+                  sx={{ minWidth: 36, color: '#fff' }}
+                >
+                  <KeyboardArrowLeftIcon />
+                </Button>
+                <FormControl sx={{ minWidth: 130 }}>
+                  <Select
+                    value={displayGameweek}
+                    onChange={(event) => handleGameweekChange(event.target.value as number)}
+                    size="small"
+                    MenuProps={{
+                      anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
+                      transformOrigin: { vertical: 'top', horizontal: 'left' },
+                      slotProps: {
+                        paper: {
+                          sx: {
+                            mt: 1,
+                            maxHeight: 304,
+                            borderRadius: '8px',
+                            boxShadow: '0 14px 32px rgba(15, 23, 42, 0.18)',
+                          },
+                        },
+                      },
+                    }}
+                    sx={{ height: 40, fontWeight: 750, backgroundColor: '#fff' }}
+                  >
+                    {bootstrap.gameweeks.map((gameweek) => (
+                      <MenuItem key={gameweek.id} value={gameweek.id}>
+                        Gameweek {gameweek.id}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+                <Button
+                  size="small"
+                  onClick={handleNextGameweek}
+                  sx={{ minWidth: 36, color: '#fff' }}
+                >
+                  <KeyboardArrowRightIcon />
+                </Button>
+              </Stack>
+            )}
+          </Stack>
+        </Box>
+
         {/* Loading indicator for picks */}
-        {isUsingRealData && picks.isLoading && (
+        {gameState.isConnected && picks.isLoading && (
           <Box sx={{ display: 'flex', justifyContent: 'center', padding: 3 }}>
             <CircularProgress />
           </Box>
         )}
 
+        {gameState.isConnected && (
+          <Card sx={{ border: '1px solid', borderColor: 'divider' }}>
+            <CardContent sx={{ p: '12px !important' }}>
+              <Stack
+                direction={{ xs: 'column', sm: 'row' }}
+                spacing={1.5}
+                sx={{ alignItems: { sm: 'center' }, justifyContent: 'space-between' }}
+              >
+                <Box>
+                  <Typography sx={{ fontWeight: 800 }}>Team workspace</Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Review your squad or compare it with a league rival
+                  </Typography>
+                </Box>
+                <ToggleButtonGroup
+                  exclusive
+                  size="small"
+                  value={viewMode}
+                  onChange={(_event, value: 'pitch' | 'compare' | null) => {
+                    if (value) setViewMode(value);
+                  }}
+                >
+                  <ToggleButton value="pitch" sx={{ textTransform: 'none', fontWeight: 700 }}>
+                    Pitch view
+                  </ToggleButton>
+                  <ToggleButton value="compare" sx={{ textTransform: 'none', fontWeight: 700 }}>
+                    Compare rival
+                  </ToggleButton>
+                </ToggleButtonGroup>
+              </Stack>
+            </CardContent>
+          </Card>
+        )}
+
+        {viewMode === 'pitch' && picks.error && (
+          <Alert severity="info">
+            Your Entry ID is connected, but FPL has not published Gameweek {displayGameweek} picks
+            for public access yet. Manager squads normally become available after the deadline, so
+            the page will not substitute demo players for your real team.
+          </Alert>
+        )}
+
         {/* Team Summary Stats */}
-        {!picks.isLoading && (
+        {!picks.isLoading && viewMode === 'pitch' && squadForComponents.length > 0 && (
           <Stack spacing={ThemeTokens.spacing.lg}>
             <TeamSummary
               teamName={teamName ?? 'Team'}
               gameweekNumber={gameweekNumber ?? 0}
               gameweekPoints={
-                managerData.displayValues?.gameweekPoints
-                  ? parseInt(managerData.displayValues.gameweekPoints)
-                  : fixtures.currentGameweek.points
+                isUsingRealData ? picks.totalPoints : Number(fixtures.currentGameweek.points) || 0
               }
               teamValue={teamValue ?? 0}
               bank={bank ?? 0}
@@ -280,7 +376,18 @@ export const MyTeamPage: React.FC = () => {
               }))}
             />
 
-            {/* Gameweek Summary Card (for connected users with real data) */}
+            <Box>
+              <Typography variant="h5" sx={{ mb: 1.5, fontWeight: 850 }}>
+                Starting XI
+              </Typography>
+              <FootballPitch
+                squad={squadForComponents}
+                gameweekId={displayGameweek ?? undefined}
+              />
+            </Box>
+
+            <Bench squad={squadForComponents} gameweekId={displayGameweek ?? undefined} />
+
             {isUsingRealData && displayGameweek && (
               <GameweekSummaryCard
                 gameweekNumber={displayGameweek}
@@ -295,7 +402,6 @@ export const MyTeamPage: React.FC = () => {
               />
             )}
 
-            {/* Gameweek History (for connected users) */}
             {isUsingRealData && gameState.history && (
               <GameweekHistory
                 history={gameState.history}
@@ -304,22 +410,80 @@ export const MyTeamPage: React.FC = () => {
                 isLoading={picks.isLoading}
               />
             )}
-
-            {/* Football Pitch */}
-            <FootballPitch squad={squadForComponents} />
-
-            {/* Bench */}
-            <Bench squad={squadForComponents} />
           </Stack>
         )}
 
-        {/* Point Breakdown Modal */}
+        {!picks.isLoading && viewMode === 'compare' && (
+          <Stack spacing={ThemeTokens.spacing.md}>
+            <Card sx={{ border: '1px solid', borderColor: 'divider' }}>
+              <CardContent>
+                <Stack
+                  direction={{ xs: 'column', md: 'row' }}
+                  spacing={2}
+                  sx={{ alignItems: { md: 'center' }, justifyContent: 'space-between' }}
+                >
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 850 }}>
+                      Head-to-head comparison
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Compare pitch, captaincy, differentials and live league race
+                    </Typography>
+                  </Box>
+                  <FormControl size="small" sx={{ minWidth: 240 }}>
+                    <Select
+                      value={selectedOpponent?.entryId ?? ''}
+                      displayEmpty
+                      onChange={(event) => setSelectedOpponentId(Number(event.target.value))}
+                    >
+                      {opponents.map((opponent) => (
+                        <MenuItem key={opponent.entryId} value={opponent.entryId}>
+                          {opponent.entryName} · #{opponent.rank}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                </Stack>
+              </CardContent>
+            </Card>
+
+            {leagueData.isLoadingStandings && (
+              <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
+                <CircularProgress />
+              </Box>
+            )}
+            {leagueData.error && <Alert severity="warning">{leagueData.error}</Alert>}
+            {!leagueData.isLoadingStandings &&
+              !leagueData.error &&
+              myLeagueStanding &&
+              selectedOpponent &&
+              gameState.connectedEntryId &&
+              leagueData.currentLeagueId && (
+                <HeadToHeadGameweekComparison
+                  myManager={myLeagueStanding}
+                  opponentManager={selectedOpponent}
+                  connectedEntryId={gameState.connectedEntryId}
+                  selectedLeagueId={leagueData.currentLeagueId}
+                  onClose={() => setViewMode('pitch')}
+                />
+              )}
+            {!leagueData.isLoadingStandings &&
+              !leagueData.error &&
+              (!myLeagueStanding || !selectedOpponent) && (
+                <Alert severity="info">
+                  No league opponent is available yet. Connect a classic league with at least two
+                  managers to enable comparison.
+                </Alert>
+              )}
+          </Stack>
+        )}
+
         <PlayerPointBreakdown
           open={selectedPlayerBreakdown !== null}
           onClose={() => setSelectedPlayerBreakdown(null)}
           breakdown={selectedPlayerBreakdown}
         />
-      </PageContainer>
+      </Stack>
     </Box>
   );
 };

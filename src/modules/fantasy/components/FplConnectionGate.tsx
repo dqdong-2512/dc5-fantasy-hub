@@ -13,9 +13,9 @@ import {
 import { ThemeTokens } from '@shared/theme/tokens';
 import { useGameweekHubState } from '../context';
 
-const CONNECTED_LEAGUE_STORAGE_KEY = 'fpl:connected_league_id';
+export const CONNECTED_LEAGUE_STORAGE_KEY = 'fpl:connected_league_id';
 
-function getStoredLeagueId(): number | null {
+export function getStoredLeagueId(): number | null {
   try {
     const value = localStorage.getItem(CONNECTED_LEAGUE_STORAGE_KEY);
     if (!value) {
@@ -46,12 +46,14 @@ export interface FplConnectionGateProps {
   children?: React.ReactNode;
   title?: string;
   description?: string;
+  showConnectedSummary?: boolean;
 }
 
 export function FplConnectionGate({
   children,
   title = 'Connect your FPL team',
   description = 'Enter your FPL Entry ID to unlock authenticated features.',
+  showConnectedSummary = true,
 }: FplConnectionGateProps): React.ReactElement {
   const gameState = useGameweekHubState();
   const [entryIdInput, setEntryIdInput] = useState('');
@@ -233,7 +235,7 @@ export function FplConnectionGate({
             </Stack>
           </CardContent>
         </Card>
-      ) : (
+      ) : showConnectedSummary ? (
         <Card variant="outlined">
           <CardContent>
             <Stack spacing={0.5}>
@@ -274,7 +276,7 @@ export function FplConnectionGate({
             </Stack>
           </CardContent>
         </Card>
-      )}
+      ) : null}
 
       {gameState.isConnected && children}
     </Stack>
