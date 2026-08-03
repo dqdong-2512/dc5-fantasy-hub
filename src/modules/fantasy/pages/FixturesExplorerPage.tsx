@@ -26,10 +26,8 @@ export const FixturesExplorerPage: React.FC = () => {
   const [selectedGameweek, setSelectedGameweek] = useState(initialGameweek);
 
   const selected = gameweeks.find((gameweek) => gameweek.id === selectedGameweek);
-  const fixtures = useMemo(
-    () => new FixtureRepository().getByGameweek(selectedGameweek),
-    [selectedGameweek]
-  );
+  const fixtureRepository = useMemo(() => new FixtureRepository(), []);
+  const fixtures = fixtureRepository.getByGameweek(selectedGameweek);
 
   return (
     <PageContainer

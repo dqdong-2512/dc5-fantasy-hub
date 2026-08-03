@@ -226,6 +226,22 @@ export interface EntryPicksData {
   }>;
 }
 
+export interface CurrentTeamData {
+  picks: Array<{
+    element: number;
+    position: number;
+    multiplier: number;
+    is_captain: boolean;
+    is_vice_captain: boolean;
+  }>;
+  transfers?: {
+    made?: number;
+    cost?: number;
+    bank?: number;
+    value?: number;
+  };
+}
+
 export interface LeagueStandingsData {
   league: {
     id: number;
@@ -252,6 +268,18 @@ export interface LeagueStandingsData {
       event_total: number;
       division_rank?: number | null;
       division_points?: number | null;
+    }>;
+  };
+  new_entries?: {
+    has_next: boolean;
+    page: number;
+    results: Array<{
+      entry: number;
+      entry_name: string;
+      joined_time?: string;
+      player_first_name?: string;
+      player_last_name?: string;
+      player_name?: string;
     }>;
   };
 }
@@ -411,6 +439,12 @@ export class FplClient {
   async getEntryPicks(entryId: number, eventId: number): Promise<EntryPicksData> {
     return this.withDeduplication(`entry-picks-${entryId}-${eventId}`, () =>
       this.httpClient.get<EntryPicksData>(`/entry/${entryId}/event/${eventId}/picks/`)
+    );
+  }
+
+  async getCurrentTeam(entryId: number): Promise<CurrentTeamData> {
+    return this.withDeduplication(`current-team-${entryId}`, () =>
+      this.httpClient.get<CurrentTeamData>(`/my-team/${entryId}/`)
     );
   }
 

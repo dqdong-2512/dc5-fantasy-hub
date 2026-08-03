@@ -90,8 +90,36 @@ export class FantasyGameRepository {
    */
   async getEntryPicks(entryId: number, eventId: number): Promise<FantasyGameweekPicks> {
     return this.withDeduplication(`entry-picks-${entryId}-${eventId}`, async () => {
-      const data = await this.fplClient.getEntryPicks(entryId, eventId);
-      return this.mapPicksToModel(data, entryId, eventId);
+      try {
+        const data = await this.fplClient.getEntryPicks(entryId, eventId);
+        return this.mapPicksToModel(data, entryId, eventId);
+      } catch (publicPicksError) {
+        try {
+          const currentTeam = await this.fplClient.getCurrentTeam(entryId);
+          return {
+            eventId,
+            entryId,
+            picks: currentTeam.picks.map((pick) => ({
+              element: pick.element,
+              position: pick.position,
+              multiplier: pick.multiplier,
+              isCaptain: pick.is_captain,
+              isViceCaptain: pick.is_vice_captain,
+              isBench: pick.position > 11,
+              benchOrder: pick.position > 11 ? pick.position - 11 : undefined,
+            })),
+            transfersMade: currentTeam.transfers?.made ?? 0,
+            transfersCost: currentTeam.transfers?.cost ?? 0,
+            bankValue: currentTeam.transfers?.bank ?? 0,
+            teamValue: currentTeam.transfers?.value ?? 0,
+            status: 'pre-season',
+            activeChip: null,
+            autoSubs: [],
+          };
+        } catch {
+          throw publicPicksError;
+        }
+      }
     });
   }
 
@@ -234,7 +262,9 @@ export class FantasyGameRepository {
   }
 
   private mapLeagueStandingsToModel(data: LeagueStandingsData): FantasyLeagueStandings {
-    const standings: FantasyLeagueStanding[] = data.standings.results.map((result) => ({
+    const rankedResults = data.standings.results;
+    const pendingResults = data.new_entries?.results ?? [];
+    const standings: FantasyLeagueStanding[] = rankedResults.map((result) => ({
       rank: result.rank,
       prevRank: result.previous_rank,
       entryId: result.entry,
@@ -246,6 +276,24 @@ export class FantasyGameRepository {
       totalPoints: result.total,
       lastRank: result.last_rank || undefined,
     }));
+    if (standings.length === 0 && pendingResults.length > 0) {
+      standings.push(
+        ...pendingResults.map((result, index) => ({
+          rank: index + 1,
+          prevRank: null,
+          entryId: result.entry,
+          entryName: result.entry_name,
+          playerName:
+            result.player_name ||
+            [result.player_first_name, result.player_last_name].filter(Boolean).join(' ') ||
+            'Manager',
+          teamName: result.entry_name,
+          points: 0,
+          eventPoints: 0,
+          totalPoints: 0,
+        }))
+      );
+    }
 
     return {
       leagueId: data.league.id,
@@ -254,8 +302,12 @@ export class FantasyGameRepository {
       pageStandings: standings,
       leagueType: data.league.leagueType || 'classic',
       results: standings,
-      hasNext: data.standings.has_next,
-      pageNumber: data.standings.page,
+      hasNext:
+        rankedResults.length > 0
+          ? data.standings.has_next
+          : Boolean(data.new_entries?.has_next),
+      pageNumber:
+        rankedResults.length > 0 ? data.standings.page : (data.new_entries?.page ?? 1),
       pageSize: standings.length,
     };
   }

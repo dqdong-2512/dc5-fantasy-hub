@@ -7,10 +7,8 @@
 import React, { useCallback } from 'react';
 import { Box, Select, MenuItem, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
-import type { FantasyLeagueFixture } from '../types';
-
 export interface LeagueSwitcherProps {
-  leagues: FantasyLeagueFixture[];
+  leagues: Array<{ id: number; name: string }>;
   selectedLeagueId: number | null;
 }
 
@@ -64,5 +62,4 @@ export const LeagueSwitcher: React.FC<LeagueSwitcherProps> = ({ leagues, selecte
     </Box>
   );
 };
-
 

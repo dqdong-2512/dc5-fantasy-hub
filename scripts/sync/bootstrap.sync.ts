@@ -42,3 +42,11 @@ export async function syncBootstrap(season: string = '2026-2027'): Promise<void>
     );
   }
 }
+
+const seasonArg = process.argv.slice(2).find((arg) => arg.startsWith('--season='));
+const season = seasonArg?.split('=')[1] || process.env.FPL_SEASON || '2026-2027';
+
+syncBootstrap(season).catch((error) => {
+  console.error(error instanceof Error ? error.message : error);
+  process.exitCode = 1;
+});

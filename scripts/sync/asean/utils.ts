@@ -1,5 +1,8 @@
 export const ASEAN_BASE_URL = 'https://aseanutdfc.com/asean-championship';
 
+const FETCH_ATTEMPTS = 4;
+const FETCH_TIMEOUT_MS = 30_000;
+
 const MONTH_MAP: Record<string, number> = {
   Jan: 0,
   Feb: 1,
@@ -32,18 +35,41 @@ export function stripTags(raw: string): string {
 }
 
 export async function fetchHtml(url: string): Promise<string> {
-  const response = await fetch(url, {
-    headers: {
-      'User-Agent': 'dc5-fantasy-hub-collector/1.0',
-      Accept: 'text/html,application/xhtml+xml',
-    },
-  });
+  let lastError: unknown;
 
-  if (!response.ok) {
-    throw new Error(`Failed to fetch ${url}: ${response.status}`);
+  for (let attempt = 1; attempt <= FETCH_ATTEMPTS; attempt += 1) {
+    try {
+      const response = await fetch(url, {
+        headers: {
+          'User-Agent': 'Mozilla/5.0 (compatible; DC5FantasyHub/1.0; +data-sync)',
+          Accept: 'text/html,application/xhtml+xml',
+          'Accept-Language': 'en-US,en;q=0.9',
+        },
+        signal: AbortSignal.timeout(FETCH_TIMEOUT_MS),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status} ${response.statusText}`);
+      }
+
+      return await response.text();
+    } catch (error) {
+      lastError = error;
+      if (attempt < FETCH_ATTEMPTS) {
+        const delayMs = attempt * 1_500;
+        console.warn(
+          `Fetch attempt ${attempt}/${FETCH_ATTEMPTS} failed for ${url}; retrying in ${delayMs}ms...`
+        );
+        await new Promise((resolve) => setTimeout(resolve, delayMs));
+      }
+    }
   }
 
-  return response.text();
+  throw new Error(
+    `Unable to fetch ${url} after ${FETCH_ATTEMPTS} attempts. ` +
+      'Check internet access, DNS/firewall settings, or whether aseanutdfc.com is available.',
+    { cause: lastError }
+  );
 }
 
 export function parseInteger(value: string | null | undefined): number | null {

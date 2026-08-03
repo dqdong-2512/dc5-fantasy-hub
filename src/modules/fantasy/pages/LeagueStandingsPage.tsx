@@ -43,6 +43,7 @@ export const LeagueStandingsPage: React.FC = () => {
 
   // Load real league standings if connected
   const [realStandings, setRealStandings] = useState<any>(null);
+  const [joinedLeagues, setJoinedLeagues] = useState<Array<{ id: number; name: string }>>([]);
   const [standingsLoading, setStandingsLoading] = useState(false);
   const [standingsError, setStandingsError] = useState<string | null>(null);
 
@@ -65,6 +66,56 @@ export const LeagueStandingsPage: React.FC = () => {
 
     loadStandings();
   }, [gameState.isConnected, leagueIdNum]);
+
+  useEffect(() => {
+    if (!gameState.isConnected || !gameState.connectedEntryId) {
+      return;
+    }
+
+    let isActive = true;
+    const loadJoinedLeagues = async () => {
+      try {
+        const repo = new FantasyGameRepository();
+        const leagues = await repo.getEntryLeagues(gameState.connectedEntryId!);
+        if (isActive) {
+          setJoinedLeagues(leagues);
+        }
+      } catch {
+        if (isActive) {
+          setJoinedLeagues(
+            (gameState.entry?.joinedLeaguesIds ?? []).map((id) => ({
+              id,
+              name: `League ${id}`,
+            }))
+          );
+        }
+      }
+    };
+
+    void loadJoinedLeagues();
+    return () => {
+      isActive = false;
+    };
+  }, [gameState.connectedEntryId, gameState.entry?.joinedLeaguesIds, gameState.isConnected]);
+
+  const availableLeagues = useMemo(() => {
+    if (!gameState.isConnected) {
+      return fixtures.leagues;
+    }
+
+    if (
+      leagueIdNum &&
+      realStandings?.leagueName &&
+      !joinedLeagues.some((league) => league.id === leagueIdNum)
+    ) {
+      return [
+        { id: leagueIdNum, name: realStandings.leagueName },
+        ...joinedLeagues,
+      ];
+    }
+
+    return joinedLeagues;
+  }, [fixtures.leagues, gameState.isConnected, joinedLeagues, leagueIdNum, realStandings]);
 
   // Use real data if connected, otherwise use fixtures
   const standings =
@@ -241,7 +292,7 @@ export const LeagueStandingsPage: React.FC = () => {
     return (
       <Box>
         <LeagueWorkspaceHeader
-          leagues={gameState.isConnected ? [] : fixtures.leagues}
+          leagues={availableLeagues}
           selectedLeagueId={leagueIdNum}
           currentManagerEntry={currentManagerEntry}
           standingsEntryCount={standingsEntries.length}
@@ -264,7 +315,7 @@ export const LeagueStandingsPage: React.FC = () => {
     return (
       <Box>
         <LeagueWorkspaceHeader
-          leagues={gameState.isConnected ? [] : fixtures.leagues}
+          leagues={availableLeagues}
           selectedLeagueId={leagueIdNum}
           currentManagerEntry={currentManagerEntry}
           standingsEntryCount={standingsEntries.length}

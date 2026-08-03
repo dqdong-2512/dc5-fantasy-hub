@@ -1,10 +1,10 @@
 {
   "meta": {
-    "syncId": "b58f4c18-61ab-42b3-b285-ad1c019eb20c",
-    "startedAt": "2026-07-29T08:48:24.144Z",
-    "collectedAt": "2026-07-29T08:48:49.028Z",
-    "completedAt": "2026-07-29T08:48:49.042Z",
-    "updatedAt": "2026-07-29T08:48:49.042Z",
+    "syncId": "ab1d1c9a-67c8-4373-8be9-0bb5589484f8",
+    "startedAt": "2026-08-03T04:24:13.901Z",
+    "collectedAt": "2026-08-03T04:24:41.868Z",
+    "completedAt": "2026-08-03T04:24:41.882Z",
+    "updatedAt": "2026-08-03T04:24:41.882Z",
     "source": "aseanutdfc.com"
   },
   "fixtures": [
@@ -70,7 +70,7 @@
       },
       "status": "FINISHED",
       "homeTeam": "Timor-Leste",
-      "awayTeam": "Vietnam",
+      "awayTeam": "Indonesia",
       "homeScore": 0,
       "awayScore": 7,
       "goals": [
@@ -137,7 +137,7 @@
       },
       "status": "FINISHED",
       "homeTeam": "Philippines",
-      "awayTeam": "Thailand",
+      "awayTeam": "Malaysia",
       "homeScore": 1,
       "awayScore": 2,
       "goals": [
@@ -180,7 +180,7 @@
       },
       "status": "FINISHED",
       "homeTeam": "Laos",
-      "awayTeam": "Malaysia",
+      "awayTeam": "Thailand",
       "homeScore": 0,
       "awayScore": 5,
       "goals": [
@@ -234,7 +234,7 @@
         "teamId": 4
       },
       "status": "FINISHED",
-      "homeTeam": "Indonesia",
+      "homeTeam": "Vietnam",
       "awayTeam": "Cambodia",
       "homeScore": 5,
       "awayScore": 1,
@@ -338,7 +338,7 @@
         "teamId": 10
       },
       "status": "FINISHED",
-      "homeTeam": "Thailand",
+      "homeTeam": "Malaysia",
       "awayTeam": "Laos",
       "homeScore": 4,
       "awayScore": 0,
@@ -441,11 +441,11 @@
         "type": "team",
         "teamId": 1
       },
-      "status": "UPCOMING",
-      "homeTeam": "Vietnam",
+      "status": "FINISHED",
+      "homeTeam": "Indonesia",
       "awayTeam": "Singapore",
-      "homeScore": null,
-      "awayScore": null,
+      "homeScore": 0,
+      "awayScore": 0,
       "goals": []
     },
     {
@@ -465,12 +465,31 @@
         "type": "team",
         "teamId": 3
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Timor-Leste",
-      "awayTeam": "Indonesia",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "awayTeam": "Vietnam",
+      "homeScore": 0,
+      "awayScore": 3,
+      "goals": [
+        {
+          "playerName": "S. Pattynama",
+          "minute": 74,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "T. Haye",
+          "minute": 78,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "M. Lee Baker",
+          "minute": 81,
+          "addedTime": null,
+          "side": "away"
+        }
+      ]
     },
     {
       "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
@@ -489,12 +508,43 @@
         "type": "team",
         "teamId": 8
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Laos",
       "awayTeam": "Myanmar",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "homeScore": 1,
+      "awayScore": 4,
+      "goals": [
+        {
+          "playerName": "D. Thongkhamsavath",
+          "minute": 7,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "J. Lucero",
+          "minute": 47,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "V. Sydavong",
+          "minute": 52,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "J. Gayoso",
+          "minute": 60,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "D. Sato",
+          "minute": 88,
+          "addedTime": null,
+          "side": "away"
+        }
+      ]
     },
     {
       "fixtureId": "9lgy1h5avy02d3eiakaez8nx0",
@@ -513,12 +563,25 @@
         "type": "team",
         "teamId": 7
       },
-      "status": "UPCOMING",
-      "homeTeam": "Malaysia",
-      "awayTeam": "Thailand",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "status": "FINISHED",
+      "homeTeam": "Thailand",
+      "awayTeam": "Malaysia",
+      "homeScore": 2,
+      "awayScore": 0,
+      "goals": [
+        {
+          "playerName": "Y. Burapha",
+          "minute": 38,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "T. Poeiphimai",
+          "minute": 56,
+          "addedTime": null,
+          "side": "home"
+        }
+      ]
     },
     {
       "fixtureId": "5sb6fxpeovc5hh0tdqd4lugwk",
@@ -538,8 +601,8 @@
         "teamId": 2
       },
       "status": "UPCOMING",
-      "homeTeam": "Indonesia",
-      "awayTeam": "Vietnam",
+      "homeTeam": "Vietnam",
+      "awayTeam": "Indonesia",
       "homeScore": null,
       "awayScore": null,
       "goals": []
@@ -587,7 +650,7 @@
       },
       "status": "UPCOMING",
       "homeTeam": "Myanmar",
-      "awayTeam": "Malaysia",
+      "awayTeam": "Thailand",
       "homeScore": null,
       "awayScore": null,
       "goals": []
@@ -634,7 +697,7 @@
         "teamId": 4
       },
       "status": "UPCOMING",
-      "homeTeam": "Vietnam",
+      "homeTeam": "Indonesia",
       "awayTeam": "Cambodia",
       "homeScore": null,
       "awayScore": null,
@@ -659,7 +722,7 @@
       },
       "status": "UPCOMING",
       "homeTeam": "Singapore",
-      "awayTeam": "Indonesia",
+      "awayTeam": "Vietnam",
       "homeScore": null,
       "awayScore": null,
       "goals": []
@@ -682,7 +745,7 @@
         "teamId": 9
       },
       "status": "UPCOMING",
-      "homeTeam": "Malaysia",
+      "homeTeam": "Thailand",
       "awayTeam": "Philippines",
       "homeScore": null,
       "awayScore": null,
@@ -706,7 +769,7 @@
         "teamId": 8
       },
       "status": "UPCOMING",
-      "homeTeam": "Thailand",
+      "homeTeam": "Malaysia",
       "awayTeam": "Myanmar",
       "homeScore": null,
       "awayScore": null,

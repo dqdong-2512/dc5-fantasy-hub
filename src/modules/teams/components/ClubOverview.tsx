@@ -124,7 +124,7 @@ export function ClubOverview({
                     Strength
                   </Typography>
                   <Typography variant="body2" sx={{ fontWeight: 600 }}>
-                    {item.strength.toFixed(1)}
+                    {Number(item.strength ?? 0).toFixed(1)}
                   </Typography>
                 </Box>
                 {item.nextFixtureFdr !== null && (
@@ -154,7 +154,7 @@ export function ClubOverview({
                     Avg FDR (Next 5)
                   </Typography>
                   <Chip
-                    label={item.avgFdr.toFixed(1)}
+                    label={Number(item.avgFdr ?? 0).toFixed(1)}
                     size="small"
                     sx={{
                       fontWeight: 600,
@@ -244,7 +244,7 @@ export function ClubOverview({
                 </Box>
               </TableCell>
               <TableCell align="right" sx={{ fontWeight: 600 }}>
-                {item.strength.toFixed(1)}
+                {Number(item.strength ?? 0).toFixed(1)}
               </TableCell>
               <TableCell align="right">
                 {item.nextFixtureFdr !== null ? (
@@ -267,7 +267,7 @@ export function ClubOverview({
               </TableCell>
               <TableCell align="right">
                 <Chip
-                  label={item.avgFdr.toFixed(1)}
+                  label={Number(item.avgFdr ?? 0).toFixed(1)}
                   size="small"
                   sx={{
                     fontWeight: 600,

@@ -4,8 +4,10 @@
  * Non-current managers are clickable to navigate to comparison page
  */
 
-import React from 'react';
-import { Box, Typography, Card } from '@mui/material';
+import React, { useMemo, useState } from 'react';
+import { Box, Typography, Card, Button } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useNavigate, useParams } from 'react-router-dom';
 import { RankMovement } from './RankMovement';
 import type { LeagueStandingEntry } from '../types';
@@ -21,6 +23,11 @@ export const LeagueStandingsTable: React.FC<LeagueStandingsTableProps> = ({
 }) => {
   const navigate = useNavigate();
   const { leagueId } = useParams<{ leagueId: string }>();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const visibleStandings = useMemo(
+    () => (isExpanded ? standings : standings.slice(0, 20)),
+    [isExpanded, standings]
+  );
 
   const handleManagerClick = (managerId: number): void => {
     if (managerId !== currentManagerId && leagueId) {
@@ -64,7 +71,7 @@ export const LeagueStandingsTable: React.FC<LeagueStandingsTableProps> = ({
       </Box>
 
       {/* Desktop Table Rows */}
-      {standings.map((entry) => {
+      {visibleStandings.map((entry) => {
         const isCurrentManager = entry.managerId === currentManagerId;
 
         return (
@@ -131,7 +138,7 @@ export const LeagueStandingsTable: React.FC<LeagueStandingsTableProps> = ({
 
       {/* Mobile Card View */}
       <Box sx={{ display: { xs: 'flex', md: 'none' }, flexDirection: 'column', gap: 1.5 }}>
-        {standings.map((entry) => {
+        {visibleStandings.map((entry) => {
           const isCurrentManager = entry.managerId === currentManagerId;
 
           return (
@@ -228,7 +235,26 @@ export const LeagueStandingsTable: React.FC<LeagueStandingsTableProps> = ({
           );
         })}
       </Box>
+
+      {standings.length > 20 && (
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'center',
+            p: 1.5,
+            borderTop: '1px solid #e2e8f0',
+            backgroundColor: '#f8fafc',
+          }}
+        >
+          <Button
+            startIcon={isExpanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            onClick={() => setIsExpanded((value) => !value)}
+            sx={{ fontWeight: 750 }}
+          >
+            {isExpanded ? 'Show first 20' : `Expand to see more (${standings.length - 20})`}
+          </Button>
+        </Box>
+      )}
     </Box>
   );
 };
-

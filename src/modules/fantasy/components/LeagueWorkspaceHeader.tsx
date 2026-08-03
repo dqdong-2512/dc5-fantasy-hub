@@ -9,11 +9,11 @@ import { Box, Button, Chip, Stack, Typography } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { LeagueSwitcher, RankMovement } from './';
-import type { FantasyLeagueFixture, LeagueStandingEntry } from '../types';
+import { RankMovement } from './';
+import type { LeagueStandingEntry } from '../types';
 
 export interface LeagueWorkspaceHeaderProps {
-  leagues: FantasyLeagueFixture[];
+  leagues: Array<{ id: number; name: string }>;
   selectedLeagueId: number | null;
   currentManagerEntry: LeagueStandingEntry | null;
   standingsEntryCount: number;
@@ -88,8 +88,46 @@ export const LeagueWorkspaceHeader: React.FC<LeagueWorkspaceHeaderProps> = ({
             </Typography>
           </Box>
 
-          {leagues.length > 1 && (
-            <LeagueSwitcher leagues={leagues} selectedLeagueId={selectedLeagueId} />
+          {leagues.length > 0 && (
+            <Box sx={{ maxWidth: { xs: '100%', md: '52%' } }}>
+              <Typography
+                variant="caption"
+                sx={{ display: 'block', mb: 0.75, textAlign: { md: 'right' }, opacity: 0.72 }}
+              >
+                Your leagues
+              </Typography>
+              <Stack
+                direction="row"
+                spacing={0.75}
+                sx={{ justifyContent: { md: 'flex-end' }, flexWrap: 'wrap', gap: 0.75 }}
+              >
+                {leagues.map((league) => {
+                  const isSelected = league.id === selectedLeagueId;
+                  return (
+                    <Button
+                      key={league.id}
+                      size="small"
+                      onClick={() => navigate(`/premier-league/gameweek/league/${league.id}`)}
+                      sx={{
+                        px: 1.25,
+                        color: '#fff',
+                        border: '1px solid',
+                        borderColor: isSelected
+                          ? 'rgba(0,200,255,.9)'
+                          : 'rgba(255,255,255,.32)',
+                        backgroundColor: isSelected
+                          ? 'rgba(0,200,255,.18)'
+                          : 'rgba(255,255,255,.08)',
+                        fontWeight: isSelected ? 800 : 600,
+                        '&:hover': { backgroundColor: 'rgba(255,255,255,.16)' },
+                      }}
+                    >
+                      {league.name}
+                    </Button>
+                  );
+                })}
+              </Stack>
+            </Box>
           )}
         </Stack>
 

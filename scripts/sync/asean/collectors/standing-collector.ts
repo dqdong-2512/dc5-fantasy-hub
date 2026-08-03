@@ -1,5 +1,5 @@
 import type { GroupCollected, StandingRowCollected } from '../types';
-import { ASEAN_BASE_URL, parseInteger, stripTags } from '../utils';
+import { ASEAN_BASE_URL, fetchHtml, parseInteger, stripTags } from '../utils';
 
 function parseStandingRow(rowHtml: string): StandingRowCollected | null {
   const nameMatch = rowHtml.match(
@@ -31,18 +31,7 @@ function parseStandingRow(rowHtml: string): StandingRowCollected | null {
 
 export async function collectStandings(): Promise<{ groups: GroupCollected[]; html: string }> {
   const standingsUrl = `${ASEAN_BASE_URL}/standings`;
-  const response = await fetch(standingsUrl, {
-    headers: {
-      'User-Agent': 'dc5-fantasy-hub-collector/1.0',
-      Accept: 'text/html,application/xhtml+xml',
-    },
-  });
-
-  if (!response.ok) {
-    throw new Error(`Failed to fetch standings page: ${response.status}`);
-  }
-
-  const html = await response.text();
+  const html = await fetchHtml(standingsUrl);
   const tableRegex = /<table class="table trnament-cus-table">([\s\S]*?)<\/table>/gi;
   const groups: GroupCollected[] = [];
 

@@ -77,6 +77,41 @@ export function createAppTheme(mode: PaletteMode) {
           }),
         },
       },
+      MuiMenu: {
+        defaultProps: {
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'left',
+          },
+          transformOrigin: {
+            vertical: 'top',
+            horizontal: 'left',
+          },
+        },
+        styleOverrides: {
+          paper: ({ theme }) => ({
+            marginTop: theme.spacing(1),
+            maxHeight: 304,
+            border: `1px solid ${theme.palette.divider}`,
+            borderRadius: 8,
+            boxShadow: isDark
+              ? '0 16px 36px rgba(0, 0, 0, 0.45)'
+              : '0 16px 36px rgba(15, 23, 42, 0.18)',
+            '& .MuiMenu-list': {
+              paddingTop: theme.spacing(0.75),
+              paddingBottom: theme.spacing(0.75),
+            },
+            '& .MuiMenuItem-root': {
+              minHeight: 40,
+              marginInline: theme.spacing(0.5),
+              borderRadius: 6,
+              '&.Mui-selected': {
+                fontWeight: 700,
+              },
+            },
+          }),
+        },
+      },
       MuiTable: {
         defaultProps: {
           size: 'small',
