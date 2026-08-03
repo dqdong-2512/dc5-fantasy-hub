@@ -336,9 +336,20 @@ export async function syncAseanTournament(options: SyncAseanOptions): Promise<vo
 
   const teams = collectTeams(groups);
   const teamIdByName = new Map(teams.map((team) => [normalizeKey(team.name), team.id]));
+  const teamById = new Map(teams.map((team) => [team.id, team]));
   const scheduleByFixtureId = new Map(
     manualSchedule.fixtures.map((fixture) => [fixture.fixtureId, fixture])
   );
+
+  for (const fixture of manualSchedule.fixtures) {
+    for (const placeholder of [fixture.homePlaceholder, fixture.awayPlaceholder]) {
+      if (placeholder.type === 'team' && !teamById.has(placeholder.teamId)) {
+        throw new Error(
+          `Manual fixture ${fixture.fixtureId} references unknown stable team ID ${placeholder.teamId}`
+        );
+      }
+    }
+  }
 
   const rawEvents = collectMatchEventsFromDetails(orderedDetails);
 

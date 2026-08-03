@@ -1,10 +1,10 @@
 {
   "meta": {
-    "syncId": "ab1d1c9a-67c8-4373-8be9-0bb5589484f8",
-    "startedAt": "2026-08-03T04:24:13.901Z",
-    "collectedAt": "2026-08-03T04:24:41.868Z",
-    "completedAt": "2026-08-03T04:24:41.882Z",
-    "updatedAt": "2026-08-03T04:24:41.882Z",
+    "syncId": "8771d9c5-aaab-4a84-b133-0d1842b36cda",
+    "startedAt": "2026-08-03T04:37:59.662Z",
+    "collectedAt": "2026-08-03T04:38:34.325Z",
+    "completedAt": "2026-08-03T04:38:34.341Z",
+    "updatedAt": "2026-08-03T04:38:34.341Z",
     "source": "aseanutdfc.com",
     "competition": "ASEAN Cup",
     "season": "2026",
@@ -21,13 +21,13 @@
     },
     {
       "id": 2,
-      "name": "Indonesia",
-      "countryCode": "ID"
+      "name": "Vietnam",
+      "countryCode": "VN"
     },
     {
       "id": 3,
-      "name": "Vietnam",
-      "countryCode": "VN"
+      "name": "Indonesia",
+      "countryCode": "ID"
     },
     {
       "id": 4,
@@ -51,13 +51,13 @@
     },
     {
       "id": 8,
-      "name": "Myanmar",
-      "countryCode": "MM"
+      "name": "Philippines",
+      "countryCode": "PH"
     },
     {
       "id": 9,
-      "name": "Philippines",
-      "countryCode": "PH"
+      "name": "Myanmar",
+      "countryCode": "MM"
     },
     {
       "id": 10,
@@ -81,7 +81,7 @@
           "points": 7
         },
         {
-          "teamId": 2,
+          "teamId": 3,
           "played": 2,
           "won": 2,
           "draw": 0,
@@ -91,7 +91,7 @@
           "points": 6
         },
         {
-          "teamId": 3,
+          "teamId": 2,
           "played": 2,
           "won": 1,
           "draw": 1,
@@ -147,7 +147,7 @@
           "points": 6
         },
         {
-          "teamId": 8,
+          "teamId": 9,
           "played": 2,
           "won": 1,
           "draw": 0,
@@ -157,7 +157,7 @@
           "points": 3
         },
         {
-          "teamId": 9,
+          "teamId": 8,
           "played": 2,
           "won": 1,
           "draw": 0,
@@ -765,7 +765,7 @@
     {
       "id": 1,
       "name": "M. Lee Baker",
-      "nationTeamId": 2,
+      "nationTeamId": 3,
       "club": "Not Available",
       "position": "FWD",
       "age": 19,
@@ -779,7 +779,7 @@
     {
       "id": 2,
       "name": "Nguyễn Đình Bắc",
-      "nationTeamId": 3,
+      "nationTeamId": 2,
       "club": "Not Available",
       "position": "FWD",
       "age": 21,
@@ -807,7 +807,7 @@
     {
       "id": 4,
       "name": "Đỗ Hoàng Hên",
-      "nationTeamId": 3,
+      "nationTeamId": 2,
       "club": "Not Available",
       "position": "MID",
       "age": 32,
@@ -835,7 +835,7 @@
     {
       "id": 6,
       "name": "J. Gayoso",
-      "nationTeamId": 9,
+      "nationTeamId": 8,
       "club": "Not Available",
       "position": "MID",
       "age": 29,
@@ -877,7 +877,7 @@
     {
       "id": 9,
       "name": "Than Paing",
-      "nationTeamId": 8,
+      "nationTeamId": 9,
       "club": "Not Available",
       "position": "FWD",
       "age": 29,
@@ -905,7 +905,7 @@
     {
       "id": 11,
       "name": "K. Nishioka",
-      "nationTeamId": 9,
+      "nationTeamId": 8,
       "club": "Not Available",
       "position": "MID",
       "age": 25,
@@ -961,7 +961,7 @@
     {
       "id": 15,
       "name": "S. Rublico",
-      "nationTeamId": 9,
+      "nationTeamId": 8,
       "club": "Not Available",
       "position": "DEF",
       "age": 20,
@@ -989,7 +989,7 @@
     {
       "id": 17,
       "name": "Maung Maung Lwin",
-      "nationTeamId": 8,
+      "nationTeamId": 9,
       "club": "Not Available",
       "position": "FWD",
       "age": 31,
@@ -1017,7 +1017,7 @@
     {
       "id": 19,
       "name": "Myat Phone Khant",
-      "nationTeamId": 8,
+      "nationTeamId": 9,
       "club": "Not Available",
       "position": "DEF",
       "age": 21,
@@ -1031,7 +1031,7 @@
     {
       "id": 20,
       "name": "Nguyễn Hoàng Đức",
-      "nationTeamId": 3,
+      "nationTeamId": 2,
       "club": "Not Available",
       "position": "MID",
       "age": 28,
@@ -1157,7 +1157,7 @@
     {
       "id": 29,
       "name": "T. Haye",
-      "nationTeamId": 2,
+      "nationTeamId": 3,
       "club": "Not Available",
       "position": "MID",
       "age": 31,
@@ -1199,7 +1199,7 @@
     {
       "id": 32,
       "name": "Kyaw Min Oo",
-      "nationTeamId": 8,
+      "nationTeamId": 9,
       "club": "Not Available",
       "position": "MID",
       "age": 30,
