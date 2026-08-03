@@ -20,6 +20,7 @@ import {
 import type { LeagueStandingEntry } from '../types';
 import type { CaptainRaceEntry } from '@domain/models';
 import { GameweekStatus } from '@domain/models';
+import { getBootstrapRepository } from '@repositories/index';
 
 export interface LiveLeagueRaceProps {
   leagueId: number;
@@ -49,14 +50,7 @@ export const LiveLeagueRace: React.FC<LiveLeagueRaceProps> = ({
       }
     }
 
-    // Fall back to latest available gameweek with race data
-    const availableGameweekIds = leagueRaceService.getAvailableGameweeks(
-      [37, 38] // Hardcoded available gameweeks with snapshot data
-    );
-
-    return availableGameweekIds.length > 0
-      ? availableGameweekIds[availableGameweekIds.length - 1]
-      : null;
+    return getBootstrapRepository().getCurrentGameweek()?.id ?? null;
   }, [searchParams, leagueRaceService]);
 
   // Update URL if gameweek parameter missing

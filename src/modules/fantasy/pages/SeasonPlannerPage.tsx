@@ -27,10 +27,12 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SaveIcon from '@mui/icons-material/Save';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { SeasonPlanService, SeasonPlanRepository } from '../services';
+import { SeasonPlanService, SeasonPlanRepository, SquadSourceResolver } from '../services';
 import { getBootstrapRepository } from '@repositories/index';
 import type { SeasonPlan } from '../domain/SeasonPlan';
 import type { BaseSquadSourceType } from '../domain/SeasonPlan';
+import { useGameweekHubState } from '../context';
+import { useEnrichedManagerPicks } from '../hooks';
 import {
   SeasonTimelineView,
   TeamFixtureMatrix,
@@ -44,29 +46,59 @@ import {
 
 export const SeasonPlannerPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const gameState = useGameweekHubState();
+  const bootstrapRepository = useMemo(() => getBootstrapRepository(), []);
+  const currentGameweekId = bootstrapRepository.getCurrentGameweek()?.id ?? 1;
+  const runtimePicks = useEnrichedManagerPicks(
+    gameState.connectedEntryId,
+    gameState.displayGameweek ?? currentGameweekId
+  );
+  const runtimeSquad = useMemo(
+    () =>
+      runtimePicks.enrichedPicks?.picks.map((pick: any) => ({
+        playerId: pick.element,
+        position: pick.position,
+        isStarter: pick.position <= 11,
+        isCaptain: pick.isCaptain,
+        isViceCaptain: pick.isViceCaptain,
+        benchOrder: pick.position > 11 ? pick.position - 12 : undefined,
+        gameweekPoints: pick.playerEffectivePoints,
+      })) ?? [],
+    [runtimePicks.enrichedPicks]
+  );
 
   // Services
-  const planService = useMemo(() => new SeasonPlanService(), []);
+  const planService = useMemo(
+    () =>
+      new SeasonPlanService(
+        undefined,
+        undefined,
+        undefined,
+        new SquadSourceResolver(runtimeSquad)
+      ),
+    [runtimeSquad]
+  );
   const planRepository = useMemo(() => new SeasonPlanRepository(), []);
 
   // Derive maximum gameweek from canonical repository (not hardcoded)
   const maxGameweek = useMemo(() => {
     try {
-      const bootstrapRepo = getBootstrapRepository();
-      const bootstrap = bootstrapRepo.getBootstrap();
+      const bootstrap = bootstrapRepository.getBootstrap();
       return bootstrap.gameweeks.length > 0
         ? bootstrap.gameweeks[bootstrap.gameweeks.length - 1].id
         : 38; // Fallback only if bootstrap unavailable
     } catch {
       return 38; // Fallback only if bootstrap unavailable
     }
-  }, []);
+  }, [bootstrapRepository]);
 
   // State
   const [currentPlan, setCurrentPlan] = useState<SeasonPlan | null>(null);
   const [savedPlans, setSavedPlans] = useState<SeasonPlan[]>(planRepository.loadAllPlans());
-  const [startGameweek, setStartGameweek] = useState(34);
-  const [endGameweek, setEndGameweek] = useState(maxGameweek);
+  const [startGameweek, setStartGameweek] = useState(currentGameweekId);
+  const [endGameweek, setEndGameweek] = useState(
+    Math.min(maxGameweek, currentGameweekId + 5)
+  );
   const [baseSquadSource, setBaseSquadSource] = useState<BaseSquadSourceType>('current');
   const [createDialogOpen, setCreateDialogOpen] = useState(false);
   const [planName, setPlanName] = useState(''); // placeholder
@@ -190,7 +222,7 @@ export const SeasonPlannerPage: React.FC = () => {
                     onChange={(e) => setStartGameweek(e.target.value as number)}
                     label="Start Gameweek"
                   >
-                    {Array.from({ length: 35 }, (_, i) => i + 1).map((gw) => (
+                    {Array.from({ length: maxGameweek }, (_, i) => i + 1).map((gw) => (
                       <MenuItem key={gw} value={gw}>
                         GW{gw}
                       </MenuItem>
@@ -205,7 +237,7 @@ export const SeasonPlannerPage: React.FC = () => {
                     onChange={(e) => setEndGameweek(e.target.value as number)}
                     label="End Gameweek"
                   >
-                    {Array.from({ length: 38 }, (_, i) => i + 1)
+                    {Array.from({ length: maxGameweek }, (_, i) => i + 1)
                       .filter((gw) => gw >= startGameweek)
                       .map((gw) => (
                         <MenuItem key={gw} value={gw}>

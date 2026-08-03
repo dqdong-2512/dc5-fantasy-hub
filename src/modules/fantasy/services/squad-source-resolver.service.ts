@@ -4,10 +4,10 @@
  */
 
 import type { Player } from '@domain/models';
-import { fantasyGameFixtures } from '../fixtures';
 import { PlayerRepository } from '@repositories/players';
 import { GameweekPlanRepository } from './gameweek-plan-repository.service';
 import type { SquadSourceType } from '../domain/GameweekPlan';
+import type { FantasySquadPick } from '../types';
 
 export interface ResolvedSquadSource {
   sourceType: SquadSourceType;
@@ -22,18 +22,20 @@ export interface ResolvedSquadSource {
 export class SquadSourceResolver {
   private playerRepository: PlayerRepository;
   private gameweekPlanRepository: GameweekPlanRepository;
+  private currentSquad: FantasySquadPick[];
 
-  constructor() {
+  constructor(currentSquad: FantasySquadPick[] = []) {
     this.playerRepository = new PlayerRepository();
     this.gameweekPlanRepository = new GameweekPlanRepository();
+    this.currentSquad = currentSquad;
   }
 
   /**
-   * Resolve current squad from fixtures
+   * Resolve the connected entry's current runtime squad.
    */
   resolveCurrentSquad(): ResolvedSquadSource | null {
     try {
-      const squad = fantasyGameFixtures.squad;
+      const squad = this.currentSquad;
       if (!squad || !Array.isArray(squad)) {
         return null;
       }

@@ -81,13 +81,17 @@ export class GameweekStateService {
       }
     } else {
       // We have a current gameweek
-      status = GameweekStatus.Active;
+      const firstDeadline = new Date(gameweeks[0].deadline).getTime();
+      status =
+        Number.isFinite(firstDeadline) && firstDeadline > Date.now()
+          ? GameweekStatus.PreSeason
+          : GameweekStatus.Active;
 
       // Find next gameweek (first after current)
       const currentIndex = gameweeks.indexOf(currentGameweek);
       if (currentIndex >= 0 && currentIndex < gameweeks.length - 1) {
         nextGameweek = gameweeks[currentIndex + 1];
-      } else {
+      } else if (status !== GameweekStatus.PreSeason) {
         // Current is the last gameweek
         status = GameweekStatus.Between;
       }

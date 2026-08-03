@@ -41,26 +41,49 @@ import {
   SavedGameweekPlans,
 } from '../components/gameweek-planner';
 import SaveIcon from '@mui/icons-material/Save';
+import { useGameweekHubState } from '../context';
+import { useEnrichedManagerPicks } from '../hooks';
 
 export const GameweekPlannerPage: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const gameweekParam = searchParams.get('gw');
   const gameweekId = gameweekParam ? parseInt(gameweekParam, 10) : undefined;
+  const gameState = useGameweekHubState();
 
   // Services
   const planService = useMemo(() => new GameweekPlanService(), []);
   const validationService = useMemo(() => new GameweekPlanValidationService(), []);
   const insightService = useMemo(() => new GameweekPlanInsightService(), []);
   const repository = useMemo(() => new GameweekPlanRepository(), []);
-  const sourceResolver = useMemo(() => new SquadSourceResolver(), []);
   const bootstrapRepository = useMemo(() => getBootstrapRepository(), []);
   const playerRepository = useMemo(() => getPlayerRepository(), []);
+  const runtimeGameweekId = bootstrapRepository.getCurrentGameweek()?.id ?? 1;
+  const runtimePicks = useEnrichedManagerPicks(
+    gameState.connectedEntryId,
+    gameState.displayGameweek ?? runtimeGameweekId
+  );
+  const runtimeSquad = useMemo(
+    () =>
+      runtimePicks.enrichedPicks?.picks.map((pick: any) => ({
+        playerId: pick.element,
+        position: pick.position,
+        isStarter: pick.position <= 11,
+        isCaptain: pick.isCaptain,
+        isViceCaptain: pick.isViceCaptain,
+        benchOrder: pick.position > 11 ? pick.position - 12 : undefined,
+        gameweekPoints: pick.playerEffectivePoints,
+      })) ?? [],
+    [runtimePicks.enrichedPicks]
+  );
+  const sourceResolver = useMemo(() => new SquadSourceResolver(runtimeSquad), [runtimeSquad]);
 
   // State
   const [availableGameweeks, setAvailableGameweeks] = useState<Array<{ id: number; name: string }>>(
     []
   );
-  const [selectedGameweekId, setSelectedGameweekId] = useState<number | null>(gameweekId || null);
+  const [selectedGameweekId, setSelectedGameweekId] = useState<number | null>(
+    gameweekId || runtimeGameweekId
+  );
   const [currentPlan, setCurrentPlan] = useState<GameweekPlan | null>(null);
   const [sourceType, setSourceType] = useState<'current' | 'planned'>('current');
   const [sourceTransferPlanId, setSourceTransferPlanId] = useState<string | undefined>();
@@ -120,7 +143,14 @@ export const GameweekPlannerPage: React.FC = () => {
 
   // Initialize plan when gameweek changes
   useEffect(() => {
-    if (!effectiveGameweekId || playerPositions.size === 0) return;
+    if (
+      !effectiveGameweekId ||
+      playerPositions.size === 0 ||
+      runtimePicks.isLoading ||
+      runtimeSquad.length === 0
+    ) {
+      return;
+    }
 
     try {
       const resolved = sourceResolver.resolveCurrentSquad();
@@ -152,6 +182,8 @@ export const GameweekPlannerPage: React.FC = () => {
     planService,
     playerRepository,
     playerPositions,
+    runtimePicks.isLoading,
+    runtimeSquad.length,
   ]);
 
   // Handle gameweek change

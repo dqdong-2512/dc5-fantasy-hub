@@ -11,9 +11,11 @@ import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SaveIcon from '@mui/icons-material/Save';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { fantasyGameFixtures } from '../fixtures';
 import { PlayerRepository } from '@repositories/players';
 import { TeamRepository } from '@repositories/teams';
+import { getBootstrapRepository } from '@repositories/index';
+import { useGameweekHubState } from '../context';
+import { useEnrichedManagerPicks } from '../hooks';
 import type { SquadPlayer, TransferPlan, TransferMove } from '../domain/TransferPlan';
 import { TransferBudgetService, TransferPlanService, TransferPlanRepository } from '../services';
 import {
@@ -31,6 +33,7 @@ type ViewType = 'planner' | 'preview' | 'saved' | 'plans';
 export const TransferPlannerPage: React.FC = () => {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const gameState = useGameweekHubState();
 
   // Services
   const playerRepo = useMemo(() => new PlayerRepository(), []);
@@ -38,18 +41,26 @@ export const TransferPlannerPage: React.FC = () => {
   const budgetService = useMemo(() => new TransferBudgetService(), []);
   const planService = useMemo(() => new TransferPlanService(), []);
   const planRepository = useMemo(() => new TransferPlanRepository(), []);
+  const currentGameweekId = useMemo(
+    () => getBootstrapRepository().getCurrentGameweek()?.id ?? 1,
+    []
+  );
+  const runtimePicks = useEnrichedManagerPicks(
+    gameState.connectedEntryId,
+    gameState.displayGameweek ?? currentGameweekId
+  );
 
-  // Current squad from fixtures
+  // Current squad from the connected FPL entry.
   const currentSquadData = useMemo((): SquadPlayer[] => {
-    const squad = fantasyGameFixtures.squad || [];
-    return squad.map((pick) => {
-      const player = playerRepo.getById(pick.playerId);
+    const squad = runtimePicks.enrichedPicks?.picks ?? [];
+    return squad.map((pick: any) => {
+      const player = playerRepo.getById(pick.element);
       if (!player) {
         return {
-          playerId: pick.playerId,
+          playerId: pick.element,
           position: pick.position,
-          isStarter: pick.isStarter,
-          benchOrder: pick.benchOrder,
+          isStarter: pick.position <= 11,
+          benchOrder: pick.position > 11 ? pick.position - 12 : undefined,
           isCaptain: pick.isCaptain,
           isViceCaptain: pick.isViceCaptain,
           price: 0,
@@ -62,10 +73,10 @@ export const TransferPlannerPage: React.FC = () => {
       const team = teamRepo.getAll().find((t) => t.name === player.club);
 
       return {
-        playerId: pick.playerId,
+        playerId: pick.element,
         position: pick.position,
-        isStarter: pick.isStarter,
-        benchOrder: pick.benchOrder,
+        isStarter: pick.position <= 11,
+        benchOrder: pick.position > 11 ? pick.position - 12 : undefined,
         isCaptain: pick.isCaptain,
         isViceCaptain: pick.isViceCaptain,
         price: player.price,
@@ -77,19 +88,19 @@ export const TransferPlannerPage: React.FC = () => {
         transferTargetScore: (player as any).transferTargetScore,
       };
     });
-  }, [playerRepo, teamRepo]);
+  }, [playerRepo, teamRepo, runtimePicks.enrichedPicks]);
 
   // State
   const [activeView, setActiveView] = useState<ViewType>('planner');
   const [currentPlan, setCurrentPlan] = useState<TransferPlan>(() =>
-    planService.buildTransferPlan(fantasyGameFixtures.currentGameweek.gameweek, '')
+    planService.buildTransferPlan(currentGameweekId, '')
   );
   const [selectedOutPlayerId, setSelectedOutPlayerId] = useState<number | null>(() => {
     const outParam = searchParams.get('out');
     return outParam ? parseInt(outParam, 10) : null;
   });
   const [selectedInPlayerId, setSelectedInPlayerId] = useState<number | null>(null);
-  const [currentBank] = useState(fantasyGameFixtures.manager.bank);
+  const currentBank = runtimePicks.bankValue / 10;
   const [planName, setPlanName] = useState('');
   const [savedPlans, setSavedPlans] = useState<TransferPlan[]>(planRepository.loadAllPlans());
   const [isProcessing, setIsProcessing] = useState(false);

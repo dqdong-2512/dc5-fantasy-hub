@@ -73,7 +73,10 @@ export const CurrentGameweekSummary: React.FC<CurrentGameweekSummaryProps> = ({
             <StatBox label="Highest" value={gameweek.highestPoints} color="#4caf50" />
           </Box>
           <Box>
-            <StatBox label="Your Rank" value={`#${gameweek.rank.toLocaleString()}`} />
+            <StatBox
+              label="Your Rank"
+              value={gameweek.rank > 0 ? `#${gameweek.rank.toLocaleString()}` : 'Not ranked'}
+            />
           </Box>
         </Box>
 

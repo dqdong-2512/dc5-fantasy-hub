@@ -2,14 +2,13 @@
  * League Workspace Page
  * Central workspace for all league-related features
  * Handles Standings, Manager Comparison, and future Live Race features
- * Supports both real FPL data (when connected) and fixture data (for development)
+ * Uses live FPL league, entry and squad data for connected managers.
  */
 
 import React, { useMemo, useState, useEffect } from 'react';
 import { Box, Typography, CircularProgress, Alert } from '@mui/material';
 import { useParams, Navigate, useLocation } from 'react-router-dom';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { fantasyGameFixtures, leagueStandingsFixtures, opponentSquadsFixtures } from '../fixtures';
 import {
   LeagueWorkspaceHeader,
   WorkspaceNavigation,
@@ -22,11 +21,11 @@ import {
 import { useGameweekHubState } from '../context';
 import { FantasyGameRepository } from '@repositories/fantasy';
 import { getStoredLeagueId } from '../components/FplConnectionGate';
+import { useEnrichedManagerPicks } from '../hooks';
 
 export const LeagueStandingsPage: React.FC = () => {
   const { leagueId, managerId } = useParams<{ leagueId: string; managerId?: string }>();
   const location = useLocation();
-  const fixtures = useMemo(() => fantasyGameFixtures, []);
   const gameState = useGameweekHubState();
 
   // Parse IDs as numbers
@@ -34,9 +33,11 @@ export const LeagueStandingsPage: React.FC = () => {
   const managerIdNum = useMemo(() => (managerId ? parseInt(managerId, 10) : null), [managerId]);
   const resolvedLeagueId =
     leagueIdNum ??
-    (gameState.isConnected
-      ? getStoredLeagueId() ?? gameState.entry?.joinedLeaguesIds?.[0] ?? null
-      : fixtures.manager.primaryLeagueId);
+    getStoredLeagueId() ?? gameState.entry?.joinedLeaguesIds?.[0] ?? null;
+
+  const comparisonGameweek = gameState.displayGameweek;
+  const currentPicks = useEnrichedManagerPicks(gameState.connectedEntryId, comparisonGameweek);
+  const opponentPicks = useEnrichedManagerPicks(managerIdNum, comparisonGameweek);
 
   // Detect if on Live Race view
   const isLiveRaceView = useMemo(() => location.pathname.includes('/live'), [location.pathname]);
@@ -99,10 +100,6 @@ export const LeagueStandingsPage: React.FC = () => {
   }, [gameState.connectedEntryId, gameState.entry?.joinedLeaguesIds, gameState.isConnected]);
 
   const availableLeagues = useMemo(() => {
-    if (!gameState.isConnected) {
-      return fixtures.leagues;
-    }
-
     if (
       leagueIdNum &&
       realStandings?.leagueName &&
@@ -115,81 +112,73 @@ export const LeagueStandingsPage: React.FC = () => {
     }
 
     return joinedLeagues;
-  }, [fixtures.leagues, gameState.isConnected, joinedLeagues, leagueIdNum, realStandings]);
+  }, [joinedLeagues, leagueIdNum, realStandings]);
 
-  // Use real data if connected, otherwise use fixtures
-  const standings =
-    gameState.isConnected && realStandings
-      ? realStandings
-      : leagueStandingsFixtures[leagueIdNum || 0];
-  const leagueData =
-    gameState.isConnected && realStandings
-      ? { id: leagueIdNum, name: realStandings.leagueName }
-      : fixtures.leagues.find((l) => l.id === leagueIdNum);
+  const standings = realStandings;
+  const leagueData = realStandings
+    ? { id: leagueIdNum, name: realStandings.leagueName }
+    : null;
 
   // Find current manager entry in standings
   const currentManagerEntry = useMemo(() => {
     if (!standings) return null;
 
-    const entries = realStandings ? standings.standings : standings.entries;
-    const currentId = gameState.isConnected ? gameState.connectedEntryId : fixtures.manager.id;
+    const entries = standings.standings;
+    const currentId = gameState.connectedEntryId;
 
     if (!entries) return null;
 
-    const entry = entries.find((e: any) =>
-      gameState.isConnected ? e.entryId === currentId : e.managerId === currentId
-    );
+    const entry = entries.find((e: any) => e.entryId === currentId);
 
     if (!entry) return null;
 
     // Map to expected format if from real API
-    if (gameState.isConnected && realStandings) {
-      return {
-        managerId: entry.entryId,
-        currentRank: entry.rank,
-        previousRank: entry.prevRank,
-        gameweekPoints: entry.eventPoints || 0,
-        totalPoints: entry.points || entry.totalPoints,
-        managerName: entry.playerName,
-        teamName: entry.entryName,
-      };
-    }
-
-    return entry;
+    return {
+      managerId: entry.entryId,
+      currentRank: entry.rank,
+      previousRank: entry.prevRank,
+      gameweekPoints: entry.eventPoints || 0,
+      totalPoints: entry.points || entry.totalPoints,
+      managerName: entry.playerName,
+      teamName: entry.entryName,
+    };
   }, [
     standings,
-    gameState.isConnected,
     gameState.connectedEntryId,
     realStandings,
-    fixtures.manager.id,
   ]);
 
   // Find opponent manager in standings (if comparing)
   const opponentManager = useMemo(() => {
     if (!managerIdNum || !standings) return null;
 
-    const entries = realStandings ? standings.standings : standings.entries;
+    const entries = standings.standings;
     if (!entries) return null;
 
     return (
-      entries.find((e: any) =>
-        gameState.isConnected ? e.entryId === managerIdNum : e.managerId === managerIdNum
-      ) || null
+      entries.find((e: any) => e.entryId === managerIdNum) || null
     );
-  }, [managerIdNum, standings, gameState.isConnected, realStandings]);
+  }, [managerIdNum, standings]);
 
   // Get opponent squad (if comparing)
-  const opponentSquad = useMemo(
-    () =>
-      managerIdNum && !gameState.isConnected ? opponentSquadsFixtures[managerIdNum] || null : null,
-    [managerIdNum, gameState.isConnected]
-  );
+  const mapRuntimeSquad = (data: typeof currentPicks.enrichedPicks) =>
+    data?.picks.map((pick: any) => ({
+      playerId: pick.element,
+      position: pick.position,
+      isStarter: pick.position <= 11,
+      isCaptain: pick.isCaptain,
+      isViceCaptain: pick.isViceCaptain,
+      benchOrder: pick.position > 11 ? pick.position - 12 : undefined,
+      gameweekPoints: pick.playerEffectivePoints,
+    })) ?? [];
+  const currentSquad = mapRuntimeSquad(currentPicks.enrichedPicks);
+  const opponentSquad = mapRuntimeSquad(opponentPicks.enrichedPicks);
 
   // Prepare standings entries for table (must be before early returns)
   const standingsEntries = useMemo(() => {
     if (!standings) return [];
 
-    if (gameState.isConnected && realStandings) {
+    if (realStandings) {
       // Map real API standings to LeagueStandingEntry format
       return (realStandings.standings || []).map((s: any) => ({
         managerId: s.entryId,
@@ -203,13 +192,10 @@ export const LeagueStandingsPage: React.FC = () => {
     }
 
     return standings.entries || [];
-  }, [standings, gameState.isConnected, realStandings]);
-
-  // Get current squad
-  const currentSquad = fixtures.squad || [];
+  }, [standings, realStandings]);
 
   // Check for self-comparison (use entryId if connected)
-  const currentId = gameState.isConnected ? gameState.connectedEntryId : fixtures.manager.id;
+  const currentId = gameState.connectedEntryId;
   const isSelfComparison = managerIdNum === currentId;
 
   // Show loading state
@@ -265,28 +251,6 @@ export const LeagueStandingsPage: React.FC = () => {
     return <Navigate to={`/premier-league/gameweek/league/${leagueIdNum}`} replace />;
   }
 
-  // Error: Missing opponent squad data (fixture mode only)
-  if (managerIdNum && !gameState.isConnected && !opponentSquad) {
-    return (
-      <Box>
-        <LeagueWorkspaceHeader
-          leagues={fixtures.leagues}
-          selectedLeagueId={leagueIdNum}
-          currentManagerEntry={currentManagerEntry}
-          standingsEntryCount={standings.entries?.length || 0}
-          workspaceNavigation={<WorkspaceNavigation leagueId={leagueIdNum || 0} />}
-        />
-        <Box sx={{ py: ThemeTokens.spacing.lg }}>
-          <Box sx={{ padding: 4, textAlign: 'center' }}>
-            <Typography variant="body1" color="textSecondary">
-              Team data is not available for this manager
-            </Typography>
-          </Box>
-        </Box>
-      </Box>
-    );
-  }
-
   // LIVE RACE VIEW
   if (isLiveRaceView) {
     return (
@@ -302,8 +266,8 @@ export const LeagueStandingsPage: React.FC = () => {
         <Box sx={{ py: ThemeTokens.spacing.lg }}>
           <LiveLeagueRace
             leagueId={leagueIdNum || 0}
-            standings={standings.entries}
-            currentManagerId={fixtures.manager.id}
+            standings={standingsEntries}
+            currentManagerId={currentId ?? 0}
           />
         </Box>
       </Box>
@@ -351,7 +315,7 @@ export const LeagueStandingsPage: React.FC = () => {
             </Typography>
             <LeagueStandingsTable
               standings={standingsEntries}
-              currentManagerId={currentId || fixtures.manager.id}
+              currentManagerId={currentId ?? 0}
             />
           </Box>
 
@@ -381,7 +345,7 @@ export const LeagueStandingsPage: React.FC = () => {
             </Typography>
             <OpponentSelector
               standings={standingsEntries}
-              currentManagerId={currentId || fixtures.manager.id}
+              currentManagerId={currentId ?? 0}
               leagueId={leagueIdNum || 0}
             />
           </Box>
@@ -391,11 +355,17 @@ export const LeagueStandingsPage: React.FC = () => {
   }
 
   // MANAGER COMPARISON VIEW
-  if (managerIdNum && opponentManager && opponentSquad) {
+  if (
+    managerIdNum &&
+    opponentManager &&
+    currentManagerEntry &&
+    currentSquad.length > 0 &&
+    opponentSquad.length > 0
+  ) {
     return (
       <Box>
         <LeagueWorkspaceHeader
-          leagues={fixtures.leagues}
+          leagues={availableLeagues}
           selectedLeagueId={leagueIdNum}
           currentManagerEntry={currentManagerEntry}
           standingsEntryCount={standingsEntries.length}
@@ -405,7 +375,7 @@ export const LeagueStandingsPage: React.FC = () => {
         <Box sx={{ py: ThemeTokens.spacing.lg }}>
           <ManagerHeadToHeadPage
             leagueId={leagueIdNum || 0}
-            currentManagerId={currentId || fixtures.manager.id}
+            currentManagerId={currentId ?? 0}
             opponentManagerId={managerIdNum}
             standings={standingsEntries}
             currentManagerName={currentManagerEntry.managerName}

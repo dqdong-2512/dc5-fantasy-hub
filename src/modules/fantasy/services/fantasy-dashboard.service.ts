@@ -10,7 +10,8 @@ import { TransferPlanRepository, GameweekPlanRepository, SeasonPlanRepository } 
 import type { TransferPlan } from '../domain/TransferPlan';
 import type { GameweekPlan } from '../domain/GameweekPlan';
 import type { SeasonPlan } from '../domain/SeasonPlan';
-import { fantasyGameFixtures } from '../fixtures';
+import type { FantasyEntry } from '@domain/models';
+import { GameweekStateService, GameweekStatus } from '@shared/services/gameweek-state.service';
 
 export interface GameweekOverviewData {
   currentGameweekId: number;
@@ -107,14 +108,12 @@ export class FantasyDashboardService {
   /**
    * Build complete Dashboard view model from application state
    */
-  buildDashboardViewModel(): FantasyDashboardViewModel {
+  buildDashboardViewModel(entry?: FantasyEntry | null): FantasyDashboardViewModel {
     const gameweek = this.buildGameweekOverview();
     const transferStatus = this.buildTransferPlanStatus();
-    const gameweekStatus = this.buildGameweekPlanStatus(
-      gameweek.nextGameweekId ?? gameweek.currentGameweekId
-    );
+    const gameweekStatus = this.buildGameweekPlanStatus(gameweek.currentGameweekId);
     const seasonStatus = this.buildSeasonPlanStatus();
-    const leagues = this.buildLeagueSnapshot();
+    const leagues = this.buildLeagueSnapshot(entry);
     const nextActions = this.deriveNextActions(transferStatus, gameweekStatus, seasonStatus);
 
     return {
@@ -128,42 +127,33 @@ export class FantasyDashboardService {
   }
 
   /**
-   * Build gameweek overview from fixtures and repositories
+   * Build gameweek overview from the normalized season repository
    */
   private buildGameweekOverview(): GameweekOverviewData {
-    const currentGW = fantasyGameFixtures.currentGameweek.gameweek;
-    const nextGW = currentGW + 1;
+    const state = new GameweekStateService().getGameweekState();
+    const current = state.currentGameweek ?? state.lastFinishedGameweek;
 
-    try {
-      // Get gameweek data from bootstrap
-      const currentGameweekData = this.bootstrapRepository.getGameweekById(currentGW);
-      const nextGameweekData = this.bootstrapRepository.getGameweekById(nextGW);
-
-      let currentDeadline: string | undefined;
-      let nextDeadline: string | undefined;
-
-      if (currentGameweekData && currentGameweekData.deadline) {
-        currentDeadline = currentGameweekData.deadline;
-      }
-
-      if (nextGameweekData && nextGameweekData.deadline) {
-        nextDeadline = nextGameweekData.deadline;
-      }
-
-      return {
-        currentGameweekId: currentGW,
-        nextGameweekId: nextGW,
-        currentDeadline,
-        nextDeadline,
-        status: 'UPCOMING' as const,
-      };
-    } catch {
-      return {
-        currentGameweekId: currentGW,
-        nextGameweekId: nextGW,
-        status: 'UPCOMING' as const,
-      };
+    if (!current) {
+      return { currentGameweekId: 1, status: 'UPCOMING' };
     }
+
+    const next = state.nextGameweek;
+    const status =
+      state.status === GameweekStatus.SeasonComplete
+        ? 'FINISHED'
+        : current.finished
+          ? 'FINISHED'
+          : new Date(current.deadline).getTime() <= Date.now()
+            ? 'IN_PROGRESS'
+            : 'UPCOMING';
+
+    return {
+      currentGameweekId: current.id,
+      nextGameweekId: next?.id,
+      currentDeadline: current.deadline,
+      nextDeadline: next?.deadline,
+      status,
+    };
   }
 
   /**
@@ -174,7 +164,7 @@ export class FantasyDashboardService {
       const allPlans = this.transferPlanRepository.loadAllPlans();
 
       // Get most recent plan for current gameweek
-      const currentGW = fantasyGameFixtures.currentGameweek.gameweek;
+      const currentGW = this.bootstrapRepository.getCurrentGameweek()?.id ?? 1;
       const relevantPlan = allPlans
         .filter((p) => p.gameweekId === currentGW)
         .sort((a, b) => new Date(b.updatedAt).getTime() - new Date(a.updatedAt).getTime())[0];
@@ -183,7 +173,7 @@ export class FantasyDashboardService {
         return {
           hasActivePlan: false,
           moveCount: 0,
-          projectedBank: fantasyGameFixtures.manager.bank,
+          projectedBank: 0,
           isValid: true,
           errors: 0,
         };
@@ -201,7 +191,7 @@ export class FantasyDashboardService {
       return {
         hasActivePlan: false,
         moveCount: 0,
-        projectedBank: fantasyGameFixtures.manager.bank,
+        projectedBank: 0,
         isValid: true,
         errors: 0,
       };
@@ -292,19 +282,17 @@ export class FantasyDashboardService {
   }
 
   /**
-   * Build league snapshot from fixtures
+   * Build league snapshot from the connected runtime entry
    */
-  private buildLeagueSnapshot(): LeagueSnapshotData {
-    const leagues = fantasyGameFixtures.leagues || [];
-
+  private buildLeagueSnapshot(entry?: FantasyEntry | null): LeagueSnapshotData {
+    const leagueIds = entry?.joinedLeaguesIds ?? [];
     return {
-      joinedLeagues: leagues.map((l) => ({
-        id: l.id,
-        name: l.name,
-        rank: l.rank,
-        totalMembers: l.members,
+      joinedLeagues: leagueIds.map((id) => ({
+        id,
+        name: `League ${id}`,
+        totalMembers: 0,
       })),
-      primaryLeagueId: fantasyGameFixtures.manager.primaryLeagueId,
+      primaryLeagueId: leagueIds[0],
     };
   }
 

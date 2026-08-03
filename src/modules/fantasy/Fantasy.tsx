@@ -4,7 +4,7 @@
  * Displays team, picks, and leagues
  */
 
-import React, { useMemo } from 'react';
+import React from 'react';
 import { useLocation } from 'react-router-dom';
 import { Navigate } from 'react-router-dom';
 import { useFantasyGame } from './hooks';
@@ -18,12 +18,10 @@ import {
   GameweekPlannerPage,
   SeasonPlannerPage,
 } from './pages';
-import { fantasyGameFixtures } from './fixtures';
 
 export const Fantasy: React.FC = () => {
   const gameState = useFantasyGame();
   const location = useLocation();
-  const fixtures = useMemo(() => fantasyGameFixtures, []);
 
   // Connected - Show Workspace
   if (gameState.isConnected) {
@@ -38,11 +36,11 @@ export const Fantasy: React.FC = () => {
 
   // Redirect /leagues (without ID) to primary league
   if (location.pathname === '/premier-league/gameweek/league') {
-    return (
-      <Navigate
-        to={`/premier-league/gameweek/league/${fixtures.manager.primaryLeagueId}`}
-        replace
-      />
+    const primaryLeagueId = gameState.entry?.joinedLeaguesIds[0];
+    return primaryLeagueId ? (
+      <Navigate to={`/premier-league/gameweek/league/${primaryLeagueId}`} replace />
+    ) : (
+      <FantasyGameOverview />
     );
   }
 
@@ -76,7 +74,6 @@ export const Fantasy: React.FC = () => {
     return <MyTeamPage />;
   }
 
-  // Show the Fantasy Game Overview with fixture data
-  // This allows UI development and testing before real entry connection
+  // The overview owns the runtime bootstrap and connection states.
   return <FantasyGameOverview />;
 };

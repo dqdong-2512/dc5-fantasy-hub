@@ -5,7 +5,6 @@
  */
 
 import { PlayerRepository } from '@repositories/players';
-import { getManagerGameweekSnapshot } from '../fixtures';
 import type {
   LeagueRaceEntry,
   LeagueMovers,
@@ -28,7 +27,7 @@ export class LeagueRaceService {
    */
   buildLeagueRaceEntries(
     standings: LeagueStandingEntry[],
-    gameweekId: number,
+    _gameweekId: number,
     gameweekStatus: 'live' | 'final' | 'snapshot' | 'upcoming'
   ): LeagueRaceEntry[] {
     if (!standings || standings.length === 0) {
@@ -40,21 +39,9 @@ export class LeagueRaceService {
     const leaderTotal = leader?.totalPoints ?? 0;
 
     return standings.map((entry, index): LeagueRaceEntry => {
-      // Get manager snapshot for gameweek
-      const snapshot = getManagerGameweekSnapshot(gameweekId);
-      const hasCompleteGameweekData = snapshot?.managerId === entry.managerId && !!snapshot;
-
-      // Calculate captain contribution (already includes multiplier in snapshot)
-      let captainContribution = 0;
-      let captainPlayerId: number | undefined;
-
-      if (hasCompleteGameweekData && snapshot) {
-        const captainContribution_ = snapshot.playerContributions.find((p) => p.isCaptain);
-        if (captainContribution_) {
-          captainContribution = captainContribution_.managerPoints;
-          captainPlayerId = captainContribution_.playerId;
-        }
-      }
+      const hasCompleteGameweekData = gameweekStatus !== 'upcoming';
+      const captainContribution = 0;
+      const captainPlayerId: number | undefined = undefined;
 
       // Rank movement
       const rankMovement = entry.previousRank - entry.currentRank;
@@ -79,7 +66,7 @@ export class LeagueRaceService {
         rankMovement,
         pointsBeforeGameweek,
         gameweekPoints: entry.gameweekPoints,
-        transferCost: hasCompleteGameweekData ? (snapshot?.transferCost ?? 0) : 0,
+        transferCost: 0,
         netGameweekPoints,
         totalPoints: entry.totalPoints,
         gapToLeader,
@@ -237,11 +224,7 @@ export class LeagueRaceService {
    * Only show gameweeks that have meaningful data
    */
   getAvailableGameweeks(availableGameweekIds: number[]): number[] {
-    // Filter to gameweeks with manager snapshot data
-    return availableGameweekIds.filter((id) => {
-      const snapshot = getManagerGameweekSnapshot(id);
-      return !!snapshot;
-    });
+    return availableGameweekIds;
   }
 
   /**

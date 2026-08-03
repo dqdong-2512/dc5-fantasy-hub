@@ -1,7 +1,7 @@
 ﻿/**
  * My Team Page
  * Displays the user's selected FPL squad on a football pitch with bench
- * Supports both fixture data (for development) and real manager data (when connected)
+ * Uses the connected manager entry plus the current normalized FPL dataset.
  */
 
 import React, { useMemo, useState } from 'react';
@@ -26,7 +26,6 @@ import SwapCallsIcon from '@mui/icons-material/SwapCalls';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { fantasyGameFixtures } from '../fixtures';
 import { useEnrichedManagerPicks, useManagerLeagues } from '../hooks';
 import { useGameweekHubState } from '../context';
 import {
@@ -95,40 +94,26 @@ export const MyTeamPage: React.FC = () => {
     }
   }, [bootstrapRepo]);
 
-  // Determine if using real data or fixtures
+  // The routed page is connection-gated, so only render the connected entry's runtime data.
   const isUsingRealData = Boolean(
     gameState.isConnected && gameState.connectedEntryId && picks.enrichedPicks
   );
-  const fixtures = useMemo(() => fantasyGameFixtures, []);
 
-  // Use real data if connected, otherwise fallback to fixtures
-  const teamName = gameState.isConnected
-    ? gameState.entry?.team.name
-    : fixtures.manager.teamName;
-  const gameweekNumber =
-    displayGameweek ||
-    (isUsingRealData ? gameState.displayGameweek : fixtures.currentGameweek.gameweek);
-  const teamValue = isUsingRealData ? picks.teamValue / 10 : fixtures.manager.teamValue;
-  const bank = isUsingRealData ? picks.bankValue / 10 : fixtures.manager.bank;
+  const teamName = gameState.entry?.team.name ?? 'My Team';
+  const gameweekNumber = displayGameweek ?? bootstrapRepo.getCurrentGameweek()?.id ?? 1;
+  const teamValue = isUsingRealData ? picks.teamValue / 10 : 0;
+  const bank = isUsingRealData ? picks.bankValue / 10 : 0;
 
   // Prepare squad data for components
-  const squadForComponents = gameState.isConnected
-    ? (picks.enrichedPicks?.picks?.map((pick: any) => ({
+  const squadForComponents =
+    picks.enrichedPicks?.picks?.map((pick: any) => ({
         playerId: pick.element,
         isStarter: pick.position <= 11,
         isCaptain: pick.isCaptain,
         isViceCaptain: pick.isViceCaptain,
         gameweekPoints: pick.playerEffectivePoints, // Real points with multiplier applied
         benchOrder: pick.position > 11 ? pick.position - 12 : undefined,
-      })) ?? [])
-    : (fixtures.squad?.map((p) => ({
-        playerId: p.playerId,
-        isStarter: p.isStarter,
-        isCaptain: p.isCaptain,
-        isViceCaptain: p.isViceCaptain,
-        gameweekPoints: p.gameweekPoints,
-        benchOrder: p.benchOrder,
-      })) ?? []);
+      })) ?? [];
 
   // Handle gameweek navigation
   const handleGameweekChange = (newGameweek: number) => {
@@ -167,17 +152,6 @@ export const MyTeamPage: React.FC = () => {
         }}
       >
         <CircularProgress />
-      </Box>
-    );
-  }
-
-  // Show empty state if no squad data
-  if (!gameState.isConnected && (!squadForComponents || squadForComponents.length === 0)) {
-    return (
-      <Box sx={{ padding: 4, textAlign: 'center' }}>
-        <Typography variant="body1" color="textSecondary">
-          No squad data available{isUsingRealData ? ` for Gameweek ${displayGameweek}` : ''}
-        </Typography>
       </Box>
     );
   }
@@ -365,9 +339,7 @@ export const MyTeamPage: React.FC = () => {
             <TeamSummary
               teamName={teamName ?? 'Team'}
               gameweekNumber={gameweekNumber ?? 0}
-              gameweekPoints={
-                isUsingRealData ? picks.totalPoints : Number(fixtures.currentGameweek.points) || 0
-              }
+              gameweekPoints={isUsingRealData ? picks.totalPoints : 0}
               teamValue={teamValue ?? 0}
               bank={bank ?? 0}
               squad={squadForComponents.map((p) => ({

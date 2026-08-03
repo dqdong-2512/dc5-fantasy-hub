@@ -4,7 +4,9 @@
  * Reuses existing gameweek contribution logic via manager snapshots
  */
 
-import { getManagerGameweekSnapshot } from '../fixtures';
+import { BootstrapRepository } from '@repositories/bootstrap';
+import { PlayerRepository } from '@repositories/players';
+import type { ManagerGameweekSnapshot } from '@domain/models';
 import type {
   ManagerHeadToHeadComparison,
   OverallComparison,
@@ -34,11 +36,20 @@ export class ManagerHeadToHeadService {
     opponentSquad: FantasySquadPick[],
     gameweekStatus: 'live' | 'final' | 'snapshot' | 'upcoming'
   ): ManagerHeadToHeadComparison {
-    const currentManagerSnapshot = (getManagerGameweekSnapshot(gameweekId) || undefined) as any;
-    const opponentManagerSnapshot = (getManagerGameweekSnapshot(gameweekId) || undefined) as any;
-
     const currentManagerStanding = standings.find((e) => e.managerId === currentManagerId);
     const opponentManagerStanding = standings.find((e) => e.managerId === opponentManagerId);
+    const currentManagerSnapshot = this.buildRuntimeSnapshot(
+      currentManagerId,
+      gameweekId,
+      currentSquad,
+      currentManagerStanding
+    );
+    const opponentManagerSnapshot = this.buildRuntimeSnapshot(
+      opponentManagerId,
+      gameweekId,
+      opponentSquad,
+      opponentManagerStanding
+    );
 
     const hasMissingSnapshots = !currentManagerSnapshot || !opponentManagerSnapshot;
 
@@ -452,8 +463,53 @@ export class ManagerHeadToHeadService {
    * Get available gameweeks for comparison
    */
   getAvailableGameweeks(): number[] {
-    // Return gameweeks with snapshot data
-    return [37, 38];
+    const repository = new BootstrapRepository();
+    const currentId = repository.getCurrentGameweek()?.id;
+    return currentId ? [currentId] : [];
+  }
+
+  private buildRuntimeSnapshot(
+    managerId: number,
+    gameweekId: number,
+    squad: FantasySquadPick[],
+    standing: LeagueStandingEntry | undefined
+  ): ManagerGameweekSnapshot | undefined {
+    if (squad.length === 0) return undefined;
+
+    const players = new PlayerRepository();
+    const contributions = squad.map((pick) => {
+      const rawPoints = pick.gameweekPoints ?? 0;
+      const multiplier = pick.isCaptain ? 2 : pick.isStarter ? 1 : 0;
+      return {
+        playerId: pick.playerId,
+        playerName: players.getById(pick.playerId)?.displayName,
+        isCaptain: pick.isCaptain ?? false,
+        isViceCaptain: pick.isViceCaptain ?? false,
+        isBench: !pick.isStarter,
+        benchOrder: pick.benchOrder,
+        rawPoints,
+        multiplier,
+        managerPoints: rawPoints,
+        minutesPlayed: 0,
+      };
+    });
+
+    return {
+      managerId,
+      gameweekId,
+      totalPoints: standing?.gameweekPoints ?? contributions.reduce((sum, p) => sum + p.managerPoints, 0),
+      benchPoints: contributions
+        .filter((player) => player.isBench)
+        .reduce((sum, player) => sum + player.rawPoints, 0),
+      transfers: 0,
+      transferCost: 0,
+      rank: standing?.currentRank ?? 0,
+      averagePoints: 0,
+      highestPoints: 0,
+      captainId: squad.find((pick) => pick.isCaptain)?.playerId,
+      viceCaptainId: squad.find((pick) => pick.isViceCaptain)?.playerId,
+      playerContributions: contributions,
+    };
   }
 
   /**

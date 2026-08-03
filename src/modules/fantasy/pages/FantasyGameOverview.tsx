@@ -27,18 +27,18 @@ import {
 import { FplConnectionGate } from '../components';
 import { FantasyDashboardService, FantasyGameDataAdapter } from '../services';
 import { useGameweekHubState } from '../context';
-import { fantasyGameFixtures } from '../fixtures';
+import { getBootstrapRepository } from '@repositories/index';
 
 export const FantasyGameOverview: React.FC = () => {
   const gameState = useGameweekHubState();
   const navigate = useNavigate();
-  const fixtures = useMemo(() => fantasyGameFixtures, []);
+  const bootstrapRepository = useMemo(() => getBootstrapRepository(), []);
 
   // Initialize dashboard service (must be unconditional)
   const dashboardService = useMemo(() => new FantasyDashboardService(), []);
   const dashboardData = useMemo(
-    () => dashboardService.buildDashboardViewModel(),
-    [dashboardService]
+    () => dashboardService.buildDashboardViewModel(gameState.entry),
+    [dashboardService, gameState.entry]
   );
 
   // Prepare manager and gameweek data
@@ -47,15 +47,16 @@ export const FantasyGameOverview: React.FC = () => {
     if (gameState.isConnected && gameState.entry) {
       return FantasyGameDataAdapter.entryToManagerFixture(gameState.entry);
     }
-    return fixtures.manager;
-  }, [gameState.isConnected, gameState.entry, fixtures.manager]);
+    return null;
+  }, [gameState.isConnected, gameState.entry]);
 
   const gameweekData = useMemo(() => {
-    if (gameState.isConnected && gameState.history && gameState.history.length > 0) {
+    if (gameState.history && gameState.history.length > 0) {
       return FantasyGameDataAdapter.getLatestGameweekFromHistory(gameState.history);
     }
-    return fixtures.currentGameweek;
-  }, [gameState.isConnected, gameState.history, fixtures.currentGameweek]);
+    const current = bootstrapRepository.getCurrentGameweek();
+    return current ? FantasyGameDataAdapter.gameweekToFixture(current) : null;
+  }, [gameState.history, bootstrapRepository]);
 
   // Show not-connected state if user hasn't connected (conditional rendering)
   if (!gameState.isConnected) {
@@ -81,7 +82,8 @@ export const FantasyGameOverview: React.FC = () => {
   const handleViewGameweek = (): void => {
     const gameweekNum = gameState.isConnected
       ? gameState.displayGameweek
-      : fantasyGameFixtures.currentGameweek.gameweek;
+      : bootstrapRepository.getCurrentGameweek()?.id;
+    if (!gameweekNum) return;
     navigate(`/premier-league/gameweek/gameweeks/${gameweekNum}`);
   };
 
@@ -127,12 +129,16 @@ export const FantasyGameOverview: React.FC = () => {
             alignItems: 'stretch',
           }}
         >
-          <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
-            <MyTeamSummary manager={managerData} onViewTeam={handleViewTeam} />
-          </Box>
-          <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
-            <CurrentGameweekSummary gameweek={gameweekData} onViewGameweek={handleViewGameweek} />
-          </Box>
+          {managerData && (
+            <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
+              <MyTeamSummary manager={managerData} onViewTeam={handleViewTeam} />
+            </Box>
+          )}
+          {gameweekData && (
+            <Box sx={{ height: { xs: 'auto', lg: '100%' }, minHeight: 0 }}>
+              <CurrentGameweekSummary gameweek={gameweekData} onViewGameweek={handleViewGameweek} />
+            </Box>
+          )}
         </Box>
 
         {/* SECTION 2: Planning Status & Next Actions (2-col layout on desktop) */}

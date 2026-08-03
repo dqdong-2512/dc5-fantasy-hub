@@ -11,7 +11,6 @@ import { FixtureRepository } from '@repositories/fixtures';
 import type { Gameweek } from '@domain/models';
 import { GameweekStatus } from '@domain/models';
 import type { GameweekCenterData, ManagerGameweekSnapshot } from '@domain/models';
-import { getManagerGameweekSnapshot } from '../fixtures';
 
 export class GameweekCenterService {
   private bootstrapRepository: BootstrapRepository;
@@ -65,8 +64,10 @@ export class GameweekCenterService {
     let hasMissingSnapshot = false;
 
     if (managerId) {
-      managerSnapshot = getManagerGameweekSnapshot(gameweekId) || undefined;
-      hasMissingSnapshot = !managerSnapshot;
+      // Manager data is loaded asynchronously by the page hooks. Never inject local demo
+      // snapshots into a runtime route when the public picks endpoint is unavailable.
+      managerSnapshot = undefined;
+      hasMissingSnapshot = true;
     }
 
     return {
@@ -107,7 +108,8 @@ export class GameweekCenterService {
         return current;
       }
 
-      // If no current gameweek (season finished), get latest
+      // If no current gameweek (season finished), get latest.
+      // During pre-season getCurrentGameweek resolves the first unfinished event (GW1).
       const bootstrap = this.bootstrapRepository.getBootstrap();
       return bootstrap.gameweeks[bootstrap.gameweeks.length - 1] || null;
     } catch {

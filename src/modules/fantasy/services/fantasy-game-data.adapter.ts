@@ -4,7 +4,7 @@
  * Bridges real API data with UI components expecting fixture structure
  */
 
-import type { FantasyEntry, FantasyGameweekHistory } from '@domain/models';
+import type { FantasyEntry, FantasyGameweekHistory, Gameweek } from '@domain/models';
 import type {
   FantasyGameManagerFixture,
   FantasyGameweekFixture,
@@ -12,6 +12,23 @@ import type {
 } from '../types';
 
 export class FantasyGameDataAdapter {
+  /**
+   * Build the public gameweek summary from the active season dataset.
+   * This is the canonical fallback before an entry has gameweek history.
+   */
+  static gameweekToFixture(gameweek: Gameweek): FantasyGameweekFixture {
+    return {
+      gameweek: gameweek.id,
+      points: 0,
+      averagePoints: gameweek.averageScore ?? 0,
+      highestPoints: 0,
+      transfers: 0,
+      transferCost: 0,
+      benchPoints: 0,
+      rank: 0,
+    };
+  }
+
   /**
    * Convert FantasyEntry domain model to manager fixture for display
    */
