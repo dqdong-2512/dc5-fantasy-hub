@@ -1,10 +1,10 @@
 {
   "meta": {
-    "syncId": "8771d9c5-aaab-4a84-b133-0d1842b36cda",
-    "startedAt": "2026-08-03T04:37:59.662Z",
-    "collectedAt": "2026-08-03T04:38:34.325Z",
-    "completedAt": "2026-08-03T04:38:34.341Z",
-    "updatedAt": "2026-08-03T04:38:34.341Z",
+    "syncId": "7a85b086-7caa-446f-85a0-ebeb84a6eeb7",
+    "startedAt": "2026-08-05T02:49:14.203Z",
+    "collectedAt": "2026-08-05T02:49:43.749Z",
+    "completedAt": "2026-08-05T02:49:43.808Z",
+    "updatedAt": "2026-08-05T02:49:43.808Z",
     "source": "aseanutdfc.com"
   },
   "fixtures": [
@@ -141,18 +141,6 @@
       "homeScore": 1,
       "awayScore": 2,
       "goals": [
-        {
-          "playerName": "Myat Kaung Khant",
-          "minute": 10,
-          "addedTime": null,
-          "side": "home"
-        },
-        {
-          "playerName": "Paulo Josué",
-          "minute": 52,
-          "addedTime": null,
-          "side": "away"
-        },
         {
           "playerName": "Paulo Josué",
           "minute": 57,
@@ -600,12 +588,31 @@
         "type": "team",
         "teamId": 2
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Indonesia",
       "awayTeam": "Vietnam",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "homeScore": 0,
+      "awayScore": 3,
+      "goals": [
+        {
+          "playerName": "Nguyễn Văn Vĩ",
+          "minute": 6,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "Nguyễn Hai Long",
+          "minute": 14,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "Nguyễn Xuân Son",
+          "minute": 71,
+          "addedTime": null,
+          "side": "away"
+        }
+      ]
     },
     {
       "fixtureId": "ct4uis3jogzmjmni969sgjdg",
@@ -624,12 +631,31 @@
         "type": "team",
         "teamId": 5
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Cambodia",
       "awayTeam": "Timor-Leste",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "homeScore": 3,
+      "awayScore": 0,
+      "goals": [
+        {
+          "playerName": "Hav Soknet",
+          "minute": 16,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Hav Soknet",
+          "minute": 63,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Mon Rado",
+          "minute": 90,
+          "addedTime": null,
+          "side": "home"
+        }
+      ]
     },
     {
       "fixtureId": "9lu0iledwtdn6zu7smkjmtiqc",
@@ -648,12 +674,19 @@
         "type": "team",
         "teamId": 6
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Philippines",
       "awayTeam": "Thailand",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "homeScore": 0,
+      "awayScore": 1,
+      "goals": [
+        {
+          "playerName": "W. Choolthong",
+          "minute": 84,
+          "addedTime": null,
+          "side": "away"
+        }
+      ]
     },
     {
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
@@ -672,12 +705,67 @@
         "type": "team",
         "teamId": 10
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Myanmar",
       "awayTeam": "Laos",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "homeScore": 7,
+      "awayScore": 2,
+      "goals": [
+        {
+          "playerName": "Lwin Moe Aung",
+          "minute": 2,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Win Naing Tun",
+          "minute": 20,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Win Naing Tun",
+          "minute": 41,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Maung Maung Lwin",
+          "minute": 45,
+          "addedTime": 6,
+          "side": "home"
+        },
+        {
+          "playerName": "Than Paing",
+          "minute": 52,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Hein Htet Aung",
+          "minute": 81,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Win Naing Tun",
+          "minute": 83,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "B. Chernvanglien",
+          "minute": 17,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "P. Sangvilay",
+          "minute": 23,
+          "addedTime": null,
+          "side": "away"
+        }
+      ]
     },
     {
       "fixtureId": "5sn8uut8jc8tu8nw9ssmhv8k4",
