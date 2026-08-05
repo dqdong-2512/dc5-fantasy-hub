@@ -6,10 +6,26 @@
 
 import React, { useMemo, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Box, Typography, Button, Stack, Alert, Tab, Tabs } from '@mui/material';
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  Chip,
+  Stack,
+  Tab,
+  Tabs,
+  TextField,
+  Typography,
+} from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import SaveIcon from '@mui/icons-material/Save';
-import { PageContainer } from '@shared/components';
+import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
+import AccountBalanceWalletIcon from '@mui/icons-material/AccountBalanceWallet';
+import GroupsIcon from '@mui/icons-material/Groups';
+import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
+import AutoAwesomeIcon from '@mui/icons-material/AutoAwesome';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { PlayerRepository } from '@repositories/players';
 import { TeamRepository } from '@repositories/teams';
@@ -28,7 +44,7 @@ import {
   SavedPlansPanel,
 } from '../components/transfer-planner';
 
-type ViewType = 'planner' | 'preview' | 'saved' | 'plans';
+type ViewType = 'planner' | 'preview' | 'saved';
 
 export const TransferPlannerPage: React.FC = () => {
   const [searchParams] = useSearchParams();
@@ -216,35 +232,147 @@ export const TransferPlannerPage: React.FC = () => {
   };
 
   return (
-    <Box>
-      {/* Page Header */}
-      <Box sx={{ padding: ThemeTokens.spacing.xs, borderBottom: '1px solid #e0e0e0' }}>
-        <Button
-          startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/premier-league/gameweek')}
-          sx={{
-            textTransform: 'none',
-            marginBottom: 1.5,
-            color: '#1976d2',
-            padding: 0,
-            '&:hover': { backgroundColor: 'transparent' },
-          }}
-        >
-          Back to Fantasy Game
-        </Button>
+    <Box sx={{ py: { xs: 2, md: 2.5 } }}>
+      <Card
+        data-testid="transfer-planner-hero"
+        sx={{
+          mb: 2.5,
+          overflow: 'hidden',
+          color: '#fff',
+          borderRadius: ThemeTokens.borderRadius.lg,
+          background: 'linear-gradient(118deg, #37003c 0%, #6d0877 50%, #0877c9 100%)',
+          boxShadow: '0 18px 44px rgba(55, 0, 60, 0.2)',
+          position: 'relative',
+          '&::after': {
+            content: '""',
+            position: 'absolute',
+            width: 230,
+            height: 230,
+            borderRadius: '50%',
+            right: -70,
+            top: -120,
+            backgroundColor: 'rgba(255,255,255,0.10)',
+          },
+        }}
+      >
+        <CardContent sx={{ p: { xs: 2.5, md: 3.5 }, position: 'relative', zIndex: 1 }}>
+          <Stack spacing={2.5}>
+            <Button
+              startIcon={<ArrowBackIcon />}
+              onClick={() => navigate('/premier-league/gameweek/my-team')}
+              sx={{
+                alignSelf: 'flex-start',
+                color: 'rgba(255,255,255,.88)',
+                textTransform: 'none',
+                px: 0,
+                '&:hover': { backgroundColor: 'transparent', color: '#fff' },
+              }}
+            >
+              Back to My Team
+            </Button>
 
-        <Typography variant="h5" sx={{ fontWeight: 700, marginBottom: 0.5 }}>
-          Transfer Planner
-        </Typography>
-        <Typography variant="body2" color="textSecondary">
-          Plan transfers - Validate squad - Preview changes
-        </Typography>
-      </Box>
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              spacing={2}
+              sx={{ justifyContent: 'space-between', alignItems: { md: 'flex-end' } }}
+            >
+              <Box>
+                <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mb: 1 }}>
+                  <AutoAwesomeIcon sx={{ fontSize: 18, color: '#00ff87' }} />
+                  <Typography
+                    variant="overline"
+                    sx={{ fontWeight: 800, letterSpacing: '0.12em', color: 'rgba(255,255,255,.72)' }}
+                  >
+                    Squad workspace
+                  </Typography>
+                </Stack>
+                <Typography variant="h3" sx={{ fontWeight: 850, fontSize: { xs: 32, md: 42 } }}>
+                  Transfer Planner
+                </Typography>
+                <Typography sx={{ mt: 0.75, color: 'rgba(255,255,255,.78)' }}>
+                  Explore replacements, protect your budget and preview every move before saving.
+                </Typography>
+              </Box>
 
-      {/* Main Content */}
-      <PageContainer sx={{ padding: ThemeTokens.spacing.xs }}>
+              <Chip
+                icon={<CalendarMonthIcon />}
+                label={`Gameweek ${currentGameweekId}`}
+                sx={{
+                  alignSelf: { xs: 'flex-start', md: 'auto' },
+                  height: 38,
+                  px: 0.75,
+                  color: '#fff',
+                  border: '1px solid rgba(255,255,255,.35)',
+                  backgroundColor: 'rgba(255,255,255,.12)',
+                  '& .MuiChip-icon': { color: '#00ff87' },
+                }}
+              />
+            </Stack>
+
+            <Box
+              sx={{
+                display: 'grid',
+                gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, minmax(0, 1fr))' },
+                gap: 1.25,
+              }}
+            >
+              {[
+                {
+                  label: 'Squad loaded',
+                  value: `${currentSquadData.length}/15`,
+                  icon: <GroupsIcon fontSize="small" />,
+                },
+                {
+                  label: 'In the bank',
+                  value: `£${currentBank.toFixed(1)}m`,
+                  icon: <AccountBalanceWalletIcon fontSize="small" />,
+                },
+                {
+                  label: 'Planned moves',
+                  value: currentPlan.transfers.length.toString(),
+                  icon: <SwapHorizIcon fontSize="small" />,
+                },
+              ].map((item) => (
+                <Box
+                  key={item.label}
+                  sx={{
+                    p: 1.5,
+                    borderRadius: 2,
+                    border: '1px solid rgba(255,255,255,.18)',
+                    backgroundColor: 'rgba(255,255,255,.09)',
+                    backdropFilter: 'blur(8px)',
+                  }}
+                >
+                  <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                    <Box sx={{ color: '#00ff87', display: 'flex' }}>{item.icon}</Box>
+                    <Box>
+                      <Typography variant="caption" sx={{ color: 'rgba(255,255,255,.68)' }}>
+                        {item.label}
+                      </Typography>
+                      <Typography variant="h6" sx={{ fontWeight: 800, lineHeight: 1.2 }}>
+                        {item.value}
+                      </Typography>
+                    </Box>
+                  </Stack>
+                </Box>
+              ))}
+            </Box>
+          </Stack>
+        </CardContent>
+      </Card>
+
+      <Card
+        data-testid="transfer-planner-workspace"
+        variant="outlined"
+        sx={{
+          borderRadius: ThemeTokens.borderRadius.lg,
+          overflow: 'hidden',
+          borderColor: '#d9e2ef',
+          boxShadow: '0 10px 30px rgba(15, 23, 42, 0.06)',
+        }}
+      >
         {/* View Tabs */}
-        <Box sx={{ borderBottom: '1px solid #e0e0e0', marginBottom: ThemeTokens.spacing.md }}>
+        <Box sx={{ borderBottom: '1px solid', borderColor: 'divider', px: { xs: 1, md: 2 } }}>
           <Tabs
             value={activeView}
             onChange={(_, value) => setActiveView(value as ViewType)}
@@ -253,8 +381,10 @@ export const TransferPlannerPage: React.FC = () => {
                 fontSize: '0.9rem',
                 fontWeight: 600,
                 textTransform: 'none',
-                minWidth: '120px',
+                minWidth: { xs: 96, sm: 120 },
+                minHeight: 54,
               },
+              '& .MuiTabs-indicator': { height: 3, borderRadius: '3px 3px 0 0' },
             }}
           >
             <Tab label="Planner" value="planner" />
@@ -263,9 +393,17 @@ export const TransferPlannerPage: React.FC = () => {
           </Tabs>
         </Box>
 
+        <CardContent sx={{ p: { xs: 2, md: 3 } }}>
         {/* Planner View */}
         {activeView === 'planner' && (
           <Stack spacing={ThemeTokens.spacing.md}>
+            {currentSquadData.length === 0 && !runtimePicks.isLoading && (
+              <Alert severity="info" sx={{ borderRadius: 2 }}>
+                Your squad has not been published for this gameweek yet. The planner will populate
+                automatically when the connected entry’s picks become available.
+              </Alert>
+            )}
+
             {/* Validation Alert */}
             {!currentPlan.validation.isValid && currentPlan.transfers.length > 0 && (
               <Alert severity="error">
@@ -289,16 +427,19 @@ export const TransferPlannerPage: React.FC = () => {
               }}
             >
               {/* Left: Player Out Selector */}
-              <Box>
+              <Card variant="outlined" sx={{ borderRadius: 2.5, borderColor: '#d9e2ef' }}>
+                <CardContent sx={{ p: { xs: 2, md: 2.5 } }}>
                 <PlayerOutSelector
                   currentSquad={currentSquadData}
                   selectedPlayerId={selectedOutPlayerId}
                   onSelect={setSelectedOutPlayerId}
                 />
-              </Box>
+                </CardContent>
+              </Card>
 
               {/* Right: Replacement Candidates */}
-              <Box>
+              <Card variant="outlined" sx={{ borderRadius: 2.5, borderColor: '#d9e2ef' }}>
+                <CardContent sx={{ p: { xs: 2, md: 2.5 }, minHeight: 240 }}>
                 {selectedOutPlayerId ? (
                   <ReplacementCandidates
                     outgoingPlayerId={selectedOutPlayerId}
@@ -312,18 +453,39 @@ export const TransferPlannerPage: React.FC = () => {
                 ) : (
                   <Box
                     sx={{
-                      padding: ThemeTokens.spacing.md,
-                      backgroundColor: '#f5f5f5',
-                      borderRadius: '8px',
+                      minHeight: 190,
+                      display: 'grid',
+                      placeItems: 'center',
+                      padding: ThemeTokens.spacing.lg,
+                      background: 'linear-gradient(145deg, #f8fafc, #f1f5f9)',
+                      border: '1px dashed #cbd5e1',
+                      borderRadius: 2,
                       textAlign: 'center',
                     }}
                   >
-                    <Typography color="textSecondary">
-                      Select a player to see replacement options
-                    </Typography>
+                    <Stack spacing={1} sx={{ alignItems: 'center', maxWidth: 320 }}>
+                      <Box
+                        sx={{
+                          width: 48,
+                          height: 48,
+                          display: 'grid',
+                          placeItems: 'center',
+                          borderRadius: '50%',
+                          backgroundColor: '#e0f2fe',
+                          color: '#0284c7',
+                        }}
+                      >
+                        <SwapHorizIcon />
+                      </Box>
+                      <Typography sx={{ fontWeight: 750 }}>Choose an outgoing player</Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        Eligible replacements will be ranked here by position, budget and form.
+                      </Typography>
+                    </Stack>
                   </Box>
                 )}
-              </Box>
+                </CardContent>
+              </Card>
             </Box>
 
             {/* Transfer Comparison */}
@@ -356,19 +518,14 @@ export const TransferPlannerPage: React.FC = () => {
                 <Typography variant="subtitle2" sx={{ fontWeight: 700, marginBottom: 1 }}>
                   Save This Plan
                 </Typography>
-                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1}>
-                  <input
-                    type="text"
-                    placeholder="Plan name (e.g., Safe Plan)"
+                <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5}>
+                  <TextField
+                    size="small"
+                    label="Plan name"
+                    placeholder="e.g. Safe GW1 move"
                     value={planName}
                     onChange={(e) => setPlanName(e.target.value)}
-                    style={{
-                      flex: 1,
-                      padding: '8px 12px',
-                      border: '1px solid #ccc',
-                      borderRadius: '4px',
-                      fontSize: '0.9rem',
-                    }}
+                    sx={{ flex: 1 }}
                   />
                   <Button
                     variant="contained"
@@ -415,7 +572,8 @@ export const TransferPlannerPage: React.FC = () => {
             onRefreshPlans={() => setSavedPlans(planRepository.loadAllPlans())}
           />
         )}
-      </PageContainer>
+        </CardContent>
+      </Card>
     </Box>
   );
 };

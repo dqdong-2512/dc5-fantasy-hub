@@ -13,11 +13,11 @@ import { appConfig } from '../../config';
  */
 export function getPlayerImageUrl(playerCode?: number | string): string {
   if (!playerCode) {
-    return `${appConfig.assetsBaseUrl}/players/placeholder.png`;
+    return `${import.meta.env.BASE_URL}player-photo-placeholder.svg`;
   }
 
-  // Official FPL player images: /players/{code}.png
-  return `${appConfig.assetsBaseUrl}/players/photos/250x250/p${playerCode}.png`;
+  // sync:fpl stores successful official downloads in the active season public assets folder.
+  return `${import.meta.env.BASE_URL}player-photos/${playerCode}.png`;
 }
 
 /**
@@ -37,11 +37,7 @@ export function getTeamBadgeUrl(teamCode: number | string): string {
  * @returns Full URL to player headshot
  */
 export function getPlayerHeadshotUrl(playerCode?: number | string): string {
-  if (!playerCode) {
-    return `${appConfig.assetsBaseUrl}/players/placeholder.png`;
-  }
-
-  return `${appConfig.assetsBaseUrl}/players/photos/75x75/p${playerCode}.png`;
+  return getPlayerImageUrl(playerCode);
 }
 
 /**

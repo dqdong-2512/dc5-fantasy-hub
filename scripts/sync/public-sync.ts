@@ -75,6 +75,10 @@ export async function syncPublicData(season: string = '2026-2027'): Promise<Sync
     paths.elementSummariesDir,
     paths.eventLiveDir,
   ]);
+  fs.copyFileSync(
+    path.join(projectRoot, 'data', 'competitions', 'fpl', 'shared', 'player-photo-placeholder.svg'),
+    path.join(paths.assetsDir, 'player-photo-placeholder.svg')
+  );
 
   console.log(`Syncing comprehensive public FPL data for ${season}...`);
   const client = new FplClient();

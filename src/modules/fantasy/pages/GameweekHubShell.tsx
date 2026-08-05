@@ -35,7 +35,12 @@ function resolveHubTabValue(pathname: string): HubTabValue {
 
   if (
     pathname.startsWith('/premier-league/gameweek/my-team') ||
-    pathname === '/premier-league/gameweek/team'
+    pathname === '/premier-league/gameweek/team' ||
+    pathname.startsWith('/premier-league/gameweek/transfers') ||
+    pathname.startsWith('/premier-league/gameweek/transfer-planner') ||
+    pathname.startsWith('/premier-league/gameweek/planner') ||
+    pathname.startsWith('/premier-league/gameweek/gameweek-planner') ||
+    pathname.startsWith('/premier-league/gameweek/season-planner')
   ) {
     return 'my-team';
   }
@@ -82,6 +87,7 @@ export function GameweekHubShell(): React.ReactElement {
     <Box>
       {gameState.isConnected && (
         <Box
+          data-testid="gameweek-hub-tabs"
           sx={{
             borderBottom: '1px solid #e0e0e0',
             marginTop: { xs: ThemeTokens.spacing.sm, md: ThemeTokens.spacing.md },

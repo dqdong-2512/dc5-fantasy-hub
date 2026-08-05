@@ -348,7 +348,7 @@ const router = createBrowserRouter([
               {
                 path: 'transfers',
                 element: (
-                  <FplConnectionGate>
+                  <FplConnectionGate showConnectedSummary={false}>
                     <Suspense fallback={<RouteLoadingFallback />}>
                       <TransferPlannerPage />
                     </Suspense>
@@ -358,7 +358,7 @@ const router = createBrowserRouter([
               {
                 path: 'planner',
                 element: (
-                  <FplConnectionGate>
+                  <FplConnectionGate showConnectedSummary={false}>
                     <Suspense fallback={<RouteLoadingFallback />}>
                       <GameweekPlannerPage />
                     </Suspense>
@@ -368,7 +368,7 @@ const router = createBrowserRouter([
               {
                 path: 'season-planner',
                 element: (
-                  <FplConnectionGate>
+                  <FplConnectionGate showConnectedSummary={false}>
                     <Suspense fallback={<RouteLoadingFallback />}>
                       <SeasonPlannerPage />
                     </Suspense>
