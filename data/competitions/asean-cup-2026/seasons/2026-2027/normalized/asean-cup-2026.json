@@ -1,17 +1,17 @@
 {
   "meta": {
-    "syncId": "7a85b086-7caa-446f-85a0-ebeb84a6eeb7",
-    "startedAt": "2026-08-05T02:49:14.203Z",
-    "collectedAt": "2026-08-05T02:49:43.749Z",
-    "completedAt": "2026-08-05T02:49:43.808Z",
-    "updatedAt": "2026-08-05T02:49:43.808Z",
+    "syncId": "de7240b7-73ee-4802-9b2e-623f370d1922",
+    "startedAt": "2026-08-08T08:40:24.260Z",
+    "collectedAt": "2026-08-08T08:40:44.860Z",
+    "completedAt": "2026-08-08T08:40:44.889Z",
+    "updatedAt": "2026-08-08T08:40:44.889Z",
     "source": "aseanutdfc.com",
     "competition": "ASEAN Cup",
     "season": "2026",
     "name": "ASEAN Cup 2026",
     "subtitle": "Official Tournament Center",
     "currentStage": "Group Stage",
-    "currentMatchday": 16
+    "currentMatchday": 18
   },
   "teams": [
     {
@@ -72,42 +72,42 @@
       "standings": [
         {
           "teamId": 2,
-          "played": 3,
-          "won": 2,
+          "played": 4,
+          "won": 3,
           "draw": 1,
           "lost": 0,
-          "gf": 10,
-          "ga": 0,
-          "points": 7
+          "gf": 13,
+          "ga": 1,
+          "points": 10
         },
         {
           "teamId": 1,
-          "played": 3,
+          "played": 4,
           "won": 2,
-          "draw": 1,
+          "draw": 2,
           "lost": 0,
-          "gf": 4,
-          "ga": 1,
-          "points": 7
+          "gf": 5,
+          "ga": 2,
+          "points": 8
         },
         {
           "teamId": 3,
-          "played": 3,
+          "played": 4,
           "won": 2,
-          "draw": 0,
+          "draw": 1,
           "lost": 1,
-          "gf": 8,
-          "ga": 4,
-          "points": 6
+          "gf": 9,
+          "ga": 5,
+          "points": 7
         },
         {
           "teamId": 4,
-          "played": 3,
+          "played": 4,
           "won": 1,
           "draw": 0,
-          "lost": 2,
-          "gf": 5,
-          "ga": 7,
+          "lost": 3,
+          "gf": 6,
+          "ga": 10,
           "points": 3
         },
         {
@@ -550,9 +550,9 @@
       },
       "homeTeamId": 2,
       "awayTeamId": 4,
-      "homeScore": null,
-      "awayScore": null,
-      "status": "UPCOMING"
+      "homeScore": 3,
+      "awayScore": 1,
+      "status": "FINISHED"
     },
     {
       "id": "5szfys598acemrhp2vkcft0d0",
@@ -572,9 +572,9 @@
       },
       "homeTeamId": 1,
       "awayTeamId": 3,
-      "homeScore": null,
-      "awayScore": null,
-      "status": "UPCOMING"
+      "homeScore": 1,
+      "awayScore": 1,
+      "status": "FINISHED"
     },
     {
       "id": "9mlpt8so52t0ljqv1gwxi38yc",
@@ -638,7 +638,7 @@
         "groupId": "B",
         "position": 1
       },
-      "homeTeamId": 0,
+      "homeTeamId": 1,
       "awayTeamId": 0,
       "homeScore": null,
       "awayScore": null,
@@ -663,7 +663,7 @@
         "position": 1
       },
       "homeTeamId": 0,
-      "awayTeamId": 0,
+      "awayTeamId": 2,
       "homeScore": null,
       "awayScore": null,
       "status": "UPCOMING"
@@ -687,7 +687,7 @@
         "position": 2
       },
       "homeTeamId": 0,
-      "awayTeamId": 0,
+      "awayTeamId": 1,
       "homeScore": null,
       "awayScore": null,
       "status": "UPCOMING"
@@ -710,7 +710,7 @@
         "groupId": "B",
         "position": 2
       },
-      "homeTeamId": 0,
+      "homeTeamId": 2,
       "awayTeamId": 0,
       "homeScore": null,
       "awayScore": null,
@@ -764,20 +764,34 @@
   "players": [
     {
       "id": 1,
-      "name": "M. Lee Baker",
-      "nationTeamId": 3,
+      "name": "Nguyễn Đình Bắc",
+      "nationTeamId": 2,
       "club": "Not Available",
       "position": "FWD",
-      "age": 19,
-      "appearances": 3,
-      "goals": 4,
-      "assists": 0,
-      "minutes": 230,
+      "age": 21,
+      "appearances": 4,
+      "goals": 5,
+      "assists": 1,
+      "minutes": 311,
       "yellowCards": 0,
       "redCards": 0
     },
     {
       "id": 2,
+      "name": "M. Lee Baker",
+      "nationTeamId": 3,
+      "club": "Not Available",
+      "position": "FWD",
+      "age": 19,
+      "appearances": 4,
+      "goals": 4,
+      "assists": 0,
+      "minutes": 320,
+      "yellowCards": 1,
+      "redCards": 0
+    },
+    {
+      "id": 3,
       "name": "Win Naing Tun",
       "nationTeamId": 9,
       "club": "Not Available",
@@ -791,21 +805,21 @@
       "redCards": 0
     },
     {
-      "id": 3,
-      "name": "Nguyễn Đình Bắc",
-      "nationTeamId": 2,
+      "id": 4,
+      "name": "Ilhan Fandi",
+      "nationTeamId": 1,
       "club": "Not Available",
       "position": "FWD",
-      "age": 21,
+      "age": 23,
       "appearances": 4,
       "goals": 3,
-      "assists": 1,
-      "minutes": 221,
+      "assists": 0,
+      "minutes": 204,
       "yellowCards": 0,
       "redCards": 0
     },
     {
-      "id": 4,
+      "id": 5,
       "name": "Paulo Josué",
       "nationTeamId": 7,
       "club": "Not Available",
@@ -819,7 +833,7 @@
       "redCards": 0
     },
     {
-      "id": 5,
+      "id": 6,
       "name": "Than Paing",
       "nationTeamId": 9,
       "club": "Not Available",
@@ -833,7 +847,7 @@
       "redCards": 0
     },
     {
-      "id": 6,
+      "id": 7,
       "name": "Đỗ Hoàng Hên",
       "nationTeamId": 2,
       "club": "Not Available",
@@ -847,7 +861,7 @@
       "redCards": 0
     },
     {
-      "id": 7,
+      "id": 8,
       "name": "Hav Soknet",
       "nationTeamId": 4,
       "club": "Not Available",
@@ -856,21 +870,7 @@
       "appearances": 2,
       "goals": 2,
       "assists": 0,
-      "minutes": 89,
-      "yellowCards": 0,
-      "redCards": 0
-    },
-    {
-      "id": 8,
-      "name": "Ilhan Fandi",
-      "nationTeamId": 1,
-      "club": "Not Available",
-      "position": "FWD",
-      "age": 23,
-      "appearances": 3,
-      "goals": 2,
-      "assists": 0,
-      "minutes": 137,
+      "minutes": 134,
       "yellowCards": 0,
       "redCards": 0
     },
@@ -918,6 +918,20 @@
     },
     {
       "id": 12,
+      "name": "H. Stewart",
+      "nationTeamId": 1,
+      "club": "Not Available",
+      "position": "MID",
+      "age": 25,
+      "appearances": 4,
+      "goals": 0,
+      "assists": 0,
+      "minutes": 359,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 13,
       "name": "Maung Maung Lwin",
       "nationTeamId": 9,
       "club": "Not Available",
@@ -931,7 +945,7 @@
       "redCards": 1
     },
     {
-      "id": 13,
+      "id": 14,
       "name": "Ryan Jom",
       "nationTeamId": 5,
       "club": "Not Available",
@@ -945,7 +959,21 @@
       "redCards": 0
     },
     {
-      "id": 14,
+      "id": 15,
+      "name": "S. Chea",
+      "nationTeamId": 4,
+      "club": "Not Available",
+      "position": "DEF",
+      "age": 23,
+      "appearances": 4,
+      "goals": 1,
+      "assists": 1,
+      "minutes": 195,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 16,
       "name": "Liam Farrugia",
       "nationTeamId": 5,
       "club": "Not Available",
@@ -959,21 +987,21 @@
       "redCards": 0
     },
     {
-      "id": 15,
+      "id": 17,
       "name": "Nguyễn Hoàng Đức",
       "nationTeamId": 2,
       "club": "Not Available",
       "position": "MID",
       "age": 28,
-      "appearances": 3,
+      "appearances": 4,
       "goals": 0,
-      "assists": 3,
-      "minutes": 267,
+      "assists": 4,
+      "minutes": 312,
       "yellowCards": 0,
       "redCards": 0
     },
     {
-      "id": 16,
+      "id": 18,
       "name": "Olagar Xavier",
       "nationTeamId": 5,
       "club": "Not Available",
@@ -987,7 +1015,7 @@
       "redCards": 0
     },
     {
-      "id": 17,
+      "id": 19,
       "name": "V. Koulangsy",
       "nationTeamId": 10,
       "club": "Not Available",
@@ -1001,49 +1029,105 @@
       "redCards": 0
     },
     {
-      "id": 18,
-      "name": "B. Chernvanglien",
-      "nationTeamId": 10,
-      "club": "Not Available",
-      "position": "MID",
-      "age": 19,
-      "appearances": 4,
-      "goals": 1,
-      "assists": 1,
-      "minutes": 251,
-      "yellowCards": 0,
-      "redCards": 0
-    },
-    {
-      "id": 19,
-      "name": "Kyaw Min Oo",
-      "nationTeamId": 9,
-      "club": "Not Available",
-      "position": "MID",
-      "age": 30,
-      "appearances": 3,
-      "goals": 1,
-      "assists": 0,
-      "minutes": 256,
-      "yellowCards": 1,
-      "redCards": 0
-    },
-    {
       "id": 20,
-      "name": "L. Tan",
-      "nationTeamId": 1,
+      "name": "Yudai Ogawa",
+      "nationTeamId": 4,
       "club": "Not Available",
-      "position": "DEF",
+      "position": "MID",
       "age": 29,
       "appearances": 3,
       "goals": 0,
-      "assists": 1,
-      "minutes": 255,
-      "yellowCards": 0,
+      "assists": 2,
+      "minutes": 270,
+      "yellowCards": 3,
       "redCards": 0
     },
     {
       "id": 21,
+      "name": "Nguyễn Thành Chung",
+      "nationTeamId": 2,
+      "club": "Not Available",
+      "position": "DEF",
+      "age": 28,
+      "appearances": 4,
+      "goals": 0,
+      "assists": 0,
+      "minutes": 333,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 22,
+      "name": "Phạm Xuân Mạnh",
+      "nationTeamId": 2,
+      "club": "Not Available",
+      "position": "DEF",
+      "age": 30,
+      "appearances": 4,
+      "goals": 0,
+      "assists": 0,
+      "minutes": 335,
+      "yellowCards": 1,
+      "redCards": 0
+    },
+    {
+      "id": 23,
+      "name": "S. Pattynama",
+      "nationTeamId": 3,
+      "club": "Not Available",
+      "position": "DEF",
+      "age": 27,
+      "appearances": 4,
+      "goals": 1,
+      "assists": 0,
+      "minutes": 285,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 24,
+      "name": "H. Harun",
+      "nationTeamId": 1,
+      "club": "Not Available",
+      "position": "DEF",
+      "age": 35,
+      "appearances": 4,
+      "goals": 0,
+      "assists": 0,
+      "minutes": 360,
+      "yellowCards": 1,
+      "redCards": 0
+    },
+    {
+      "id": 25,
+      "name": "I. Jenner",
+      "nationTeamId": 3,
+      "club": "Not Available",
+      "position": "MID",
+      "age": 22,
+      "appearances": 4,
+      "goals": 0,
+      "assists": 0,
+      "minutes": 313,
+      "yellowCards": 2,
+      "redCards": 0
+    },
+    {
+      "id": 26,
+      "name": "T. Haye",
+      "nationTeamId": 3,
+      "club": "Not Available",
+      "position": "MID",
+      "age": 31,
+      "appearances": 4,
+      "goals": 1,
+      "assists": 3,
+      "minutes": 360,
+      "yellowCards": 1,
+      "redCards": 0
+    },
+    {
+      "id": 27,
       "name": "N. Sayriya",
       "nationTeamId": 6,
       "club": "Not Available",
@@ -1057,7 +1141,21 @@
       "redCards": 0
     },
     {
-      "id": 22,
+      "id": 28,
+      "name": "R. Ridho",
+      "nationTeamId": 3,
+      "club": "Not Available",
+      "position": "DEF",
+      "age": 24,
+      "appearances": 3,
+      "goals": 0,
+      "assists": 0,
+      "minutes": 270,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 29,
       "name": "S. Yooyen",
       "nationTeamId": 6,
       "club": "Not Available",
@@ -1071,91 +1169,21 @@
       "redCards": 0
     },
     {
-      "id": 23,
-      "name": "H. Harun",
-      "nationTeamId": 1,
-      "club": "Not Available",
-      "position": "DEF",
-      "age": 35,
-      "appearances": 3,
-      "goals": 0,
-      "assists": 0,
-      "minutes": 270,
-      "yellowCards": 1,
-      "redCards": 0
-    },
-    {
-      "id": 24,
-      "name": "Ubaidullah Shamsul",
-      "nationTeamId": 7,
-      "club": "Not Available",
-      "position": "DEF",
-      "age": 22,
-      "appearances": 3,
-      "goals": 0,
-      "assists": 0,
-      "minutes": 270,
-      "yellowCards": 0,
-      "redCards": 0
-    },
-    {
-      "id": 25,
-      "name": "J. Amat",
-      "nationTeamId": 3,
-      "club": "Not Available",
-      "position": "DEF",
-      "age": 34,
-      "appearances": 2,
-      "goals": 0,
-      "assists": 0,
-      "minutes": 180,
-      "yellowCards": 0,
-      "redCards": 0
-    },
-    {
-      "id": 26,
-      "name": "T. Haye",
-      "nationTeamId": 3,
+      "id": 30,
+      "name": "Kyaw Min Oo",
+      "nationTeamId": 9,
       "club": "Not Available",
       "position": "MID",
-      "age": 31,
-      "appearances": 3,
-      "goals": 1,
-      "assists": 3,
-      "minutes": 270,
-      "yellowCards": 1,
-      "redCards": 0
-    },
-    {
-      "id": 27,
-      "name": "Claudio Osorio",
-      "nationTeamId": 5,
-      "club": "Not Available",
-      "position": "MID",
-      "age": 23,
-      "appearances": 4,
-      "goals": 0,
-      "assists": 0,
-      "minutes": 347,
-      "yellowCards": 0,
-      "redCards": 0
-    },
-    {
-      "id": 28,
-      "name": "Phạm Xuân Mạnh",
-      "nationTeamId": 2,
-      "club": "Not Available",
-      "position": "DEF",
       "age": 30,
       "appearances": 3,
-      "goals": 0,
+      "goals": 1,
       "assists": 0,
       "minutes": 256,
       "yellowCards": 1,
       "redCards": 0
     },
     {
-      "id": 29,
+      "id": 31,
       "name": "C. Waenpaseuth",
       "nationTeamId": 10,
       "club": "Not Available",
@@ -1169,21 +1197,7 @@
       "redCards": 0
     },
     {
-      "id": 30,
-      "name": "I. Jenner",
-      "nationTeamId": 3,
-      "club": "Not Available",
-      "position": "MID",
-      "age": 22,
-      "appearances": 3,
-      "goals": 0,
-      "assists": 0,
-      "minutes": 224,
-      "yellowCards": 1,
-      "redCards": 0
-    },
-    {
-      "id": 31,
+      "id": 32,
       "name": "K. Phetsivilay",
       "nationTeamId": 10,
       "club": "Not Available",
@@ -1197,7 +1211,7 @@
       "redCards": 0
     },
     {
-      "id": 32,
+      "id": 33,
       "name": "S. Ratree",
       "nationTeamId": 6,
       "club": "Not Available",
@@ -1211,7 +1225,7 @@
       "redCards": 0
     },
     {
-      "id": 33,
+      "id": 34,
       "name": "G. Pavithran",
       "nationTeamId": 7,
       "club": "Not Available",
@@ -1225,49 +1239,49 @@
       "redCards": 0
     },
     {
-      "id": 34,
-      "name": "S. Reyes",
-      "nationTeamId": 8,
-      "club": "Not Available",
-      "position": "MID",
-      "age": 23,
-      "appearances": 3,
-      "goals": 0,
-      "assists": 0,
-      "minutes": 244,
-      "yellowCards": 1,
-      "redCards": 0
-    },
-    {
       "id": 35,
-      "name": "S. Sengvanny",
-      "nationTeamId": 10,
+      "name": "Iago Bento",
+      "nationTeamId": 4,
       "club": "Not Available",
-      "position": "MID",
+      "position": "DEF",
       "age": 27,
-      "appearances": 4,
-      "goals": 0,
+      "appearances": 3,
+      "goals": 1,
       "assists": 0,
-      "minutes": 161,
-      "yellowCards": 1,
+      "minutes": 170,
+      "yellowCards": 0,
       "redCards": 0
     },
     {
       "id": 36,
-      "name": "T. Poeiphimai",
-      "nationTeamId": 6,
+      "name": "M. Klok",
+      "nationTeamId": 3,
       "club": "Not Available",
-      "position": "FWD",
-      "age": 23,
-      "appearances": 3,
-      "goals": 2,
-      "assists": 1,
-      "minutes": 189,
+      "position": "MID",
+      "age": 33,
+      "appearances": 4,
+      "goals": 0,
+      "assists": 0,
+      "minutes": 265,
       "yellowCards": 1,
       "redCards": 0
     },
     {
       "id": 37,
+      "name": "Bong Samuel",
+      "nationTeamId": 4,
+      "club": "Not Available",
+      "position": "MID",
+      "age": 20,
+      "appearances": 4,
+      "goals": 0,
+      "assists": 0,
+      "minutes": 360,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 38,
       "name": "Dylan Niski",
       "nationTeamId": 5,
       "club": "Not Available",
@@ -1281,63 +1295,77 @@
       "redCards": 0
     },
     {
-      "id": 38,
-      "name": "João Rangel",
-      "nationTeamId": 5,
+      "id": 39,
+      "name": "H. Mizuno",
+      "nationTeamId": 4,
       "club": "Not Available",
-      "position": "MID",
-      "age": 25,
+      "position": "DEF",
+      "age": 35,
       "appearances": 4,
       "goals": 0,
       "assists": 0,
-      "minutes": 338,
-      "yellowCards": 0,
-      "redCards": 0
-    },
-    {
-      "id": 39,
-      "name": "Zenivio Mota",
-      "nationTeamId": 5,
-      "club": "Not Available",
-      "position": "MID",
-      "age": 21,
-      "appearances": 2,
-      "goals": 0,
-      "assists": 0,
-      "minutes": 280,
+      "minutes": 360,
       "yellowCards": 0,
       "redCards": 0
     },
     {
       "id": 40,
-      "name": "Azri Ghani",
-      "nationTeamId": 7,
+      "name": "I. Mahbud",
+      "nationTeamId": 1,
       "club": "Not Available",
       "position": "GK",
-      "age": 27,
-      "appearances": 3,
+      "age": 36,
+      "appearances": 4,
       "goals": 0,
       "assists": 0,
-      "minutes": 270,
+      "minutes": 360,
       "yellowCards": 0,
       "redCards": 0
     },
     {
       "id": 41,
-      "name": "Bong Samuel",
-      "nationTeamId": 4,
+      "name": "Lê Giang Patrik",
+      "nationTeamId": 2,
       "club": "Not Available",
-      "position": "MID",
-      "age": 20,
-      "appearances": 3,
+      "position": "GK",
+      "age": 33,
+      "appearances": 4,
       "goals": 0,
       "assists": 0,
-      "minutes": 270,
+      "minutes": 360,
       "yellowCards": 0,
       "redCards": 0
     },
     {
       "id": 42,
+      "name": "Ouk Sovann",
+      "nationTeamId": 4,
+      "club": "Not Available",
+      "position": "DEF",
+      "age": 28,
+      "appearances": 4,
+      "goals": 1,
+      "assists": 0,
+      "minutes": 360,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 43,
+      "name": "S. Shahiran",
+      "nationTeamId": 1,
+      "club": "Not Available",
+      "position": "MID",
+      "age": 26,
+      "appearances": 4,
+      "goals": 0,
+      "assists": 0,
+      "minutes": 360,
+      "yellowCards": 1,
+      "redCards": 0
+    },
+    {
+      "id": 44,
       "name": "S. Anuar",
       "nationTeamId": 1,
       "club": "Not Available",
@@ -1351,21 +1379,7 @@
       "redCards": 0
     },
     {
-      "id": 43,
-      "name": "Ouk Sovann",
-      "nationTeamId": 4,
-      "club": "Not Available",
-      "position": "MID",
-      "age": null,
-      "appearances": 1,
-      "goals": 1,
-      "assists": 0,
-      "minutes": 55,
-      "yellowCards": 0,
-      "redCards": 0
-    },
-    {
-      "id": 44,
+      "id": 45,
       "name": "S. Walsh",
       "nationTeamId": 3,
       "club": "Not Available",
@@ -1379,22 +1393,8 @@
       "redCards": 0
     },
     {
-      "id": 45,
-      "name": "N. Argawinata",
-      "nationTeamId": 4,
-      "club": "Not Available",
-      "position": "MID",
-      "age": null,
-      "appearances": 1,
-      "goals": 1,
-      "assists": 0,
-      "minutes": 48,
-      "yellowCards": 0,
-      "redCards": 0
-    },
-    {
       "id": 46,
-      "name": "S. Chea",
+      "name": "N. Argawinata",
       "nationTeamId": 4,
       "club": "Not Available",
       "position": "MID",
@@ -1464,6 +1464,48 @@
     },
     {
       "id": 51,
+      "name": "Im Vakhim",
+      "nationTeamId": 2,
+      "club": "Not Available",
+      "position": "MID",
+      "age": null,
+      "appearances": 1,
+      "goals": 1,
+      "assists": 0,
+      "minutes": 84,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 52,
+      "name": "R. Oratmangoen",
+      "nationTeamId": 3,
+      "club": "Not Available",
+      "position": "MID",
+      "age": null,
+      "appearances": 1,
+      "goals": 1,
+      "assists": 0,
+      "minutes": 47,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 53,
+      "name": "Myat Kaung Khant",
+      "nationTeamId": 9,
+      "club": "Not Available",
+      "position": "MID",
+      "age": null,
+      "appearances": 1,
+      "goals": 1,
+      "assists": 0,
+      "minutes": 10,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 54,
       "name": "Y. Burapha",
       "nationTeamId": 6,
       "club": "Not Available",
@@ -1477,7 +1519,7 @@
       "redCards": 0
     },
     {
-      "id": 52,
+      "id": 55,
       "name": "Endrick",
       "nationTeamId": 7,
       "club": "Not Available",
@@ -1491,7 +1533,7 @@
       "redCards": 0
     },
     {
-      "id": 53,
+      "id": 56,
       "name": "V. Sydavong",
       "nationTeamId": 7,
       "club": "Not Available",
@@ -1505,7 +1547,7 @@
       "redCards": 0
     },
     {
-      "id": 54,
+      "id": 57,
       "name": "Wan Kuzain",
       "nationTeamId": 7,
       "club": "Not Available",
@@ -1519,7 +1561,7 @@
       "redCards": 0
     },
     {
-      "id": 55,
+      "id": 58,
       "name": "D. Thongkhamsavath",
       "nationTeamId": 10,
       "club": "Not Available",
@@ -1533,7 +1575,7 @@
       "redCards": 0
     },
     {
-      "id": 56,
+      "id": 59,
       "name": "J. Lucero",
       "nationTeamId": 8,
       "club": "Not Available",
@@ -1547,7 +1589,7 @@
       "redCards": 0
     },
     {
-      "id": 57,
+      "id": 60,
       "name": "D. Sato",
       "nationTeamId": 8,
       "club": "Not Available",
@@ -1561,7 +1603,21 @@
       "redCards": 0
     },
     {
-      "id": 58,
+      "id": 61,
+      "name": "T. Poeiphimai",
+      "nationTeamId": 6,
+      "club": "Not Available",
+      "position": "MID",
+      "age": null,
+      "appearances": 1,
+      "goals": 1,
+      "assists": 0,
+      "minutes": 56,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 62,
       "name": "W. Choolthong",
       "nationTeamId": 6,
       "club": "Not Available",
@@ -1575,7 +1631,7 @@
       "redCards": 0
     },
     {
-      "id": 59,
+      "id": 63,
       "name": "Lwin Moe Aung",
       "nationTeamId": 9,
       "club": "Not Available",
@@ -1589,7 +1645,21 @@
       "redCards": 0
     },
     {
-      "id": 60,
+      "id": 64,
+      "name": "B. Chernvanglien",
+      "nationTeamId": 10,
+      "club": "Not Available",
+      "position": "MID",
+      "age": null,
+      "appearances": 1,
+      "goals": 1,
+      "assists": 0,
+      "minutes": 17,
+      "yellowCards": 0,
+      "redCards": 0
+    },
+    {
+      "id": 65,
       "name": "P. Sangvilay",
       "nationTeamId": 10,
       "club": "Not Available",
@@ -1603,7 +1673,7 @@
       "redCards": 0
     },
     {
-      "id": 61,
+      "id": 66,
       "name": "Hein Htet Aung",
       "nationTeamId": 9,
       "club": "Not Available",
@@ -1617,7 +1687,7 @@
       "redCards": 0
     },
     {
-      "id": 62,
+      "id": 67,
       "name": "Nguyễn Quang Hải",
       "nationTeamId": 2,
       "club": "Not Available",
@@ -1631,7 +1701,7 @@
       "redCards": 0
     },
     {
-      "id": 63,
+      "id": 68,
       "name": "Song Ui-Young",
       "nationTeamId": 1,
       "club": "Not Available",
@@ -1645,7 +1715,7 @@
       "redCards": 0
     },
     {
-      "id": 64,
+      "id": 69,
       "name": "Mon Rado",
       "nationTeamId": 4,
       "club": "Not Available",
@@ -1657,27 +1727,13 @@
       "minutes": 90,
       "yellowCards": 0,
       "redCards": 0
-    },
-    {
-      "id": 65,
-      "name": "S. Pattynama",
-      "nationTeamId": 3,
-      "club": "Not Available",
-      "position": "MID",
-      "age": null,
-      "appearances": 1,
-      "goals": 1,
-      "assists": 0,
-      "minutes": 74,
-      "yellowCards": 0,
-      "redCards": 0
     }
   ],
   "events": [
     {
       "id": "event-2",
       "fixtureId": "5qwcsl59r8s96ylfl4y9tndp0",
-      "playerId": 42,
+      "playerId": 44,
       "type": "goal",
       "minute": 22,
       "addedTime": null,
@@ -1686,7 +1742,7 @@
     {
       "id": "event-1",
       "fixtureId": "5qwcsl59r8s96ylfl4y9tndp0",
-      "playerId": 43,
+      "playerId": 42,
       "type": "goal",
       "minute": 55,
       "addedTime": null,
@@ -1695,45 +1751,36 @@
     {
       "id": "event-3",
       "fixtureId": "5qwcsl59r8s96ylfl4y9tndp0",
-      "playerId": 8,
+      "playerId": 4,
       "type": "goal",
       "minute": 90,
       "addedTime": 11,
       "note": null
     },
     {
-      "id": "event-17",
+      "id": "event-18",
       "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
-      "playerId": 1,
+      "playerId": 2,
       "type": "goal",
       "minute": 6,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-18",
+      "id": "event-19",
       "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
-      "playerId": 1,
+      "playerId": 2,
       "type": "goal",
       "minute": 15,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-19",
-      "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
-      "playerId": 44,
-      "type": "goal",
-      "minute": 24,
-      "addedTime": null,
-      "note": null
-    },
-    {
-      "id": "event-22",
+      "id": "event-20",
       "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
       "playerId": 45,
       "type": "goal",
-      "minute": 48,
+      "minute": 24,
       "addedTime": null,
       "note": null
     },
@@ -1747,16 +1794,25 @@
       "note": null
     },
     {
-      "id": "event-20",
+      "id": "event-24",
       "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
-      "playerId": 1,
+      "playerId": 15,
+      "type": "goal",
+      "minute": 48,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-21",
+      "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
+      "playerId": 2,
       "type": "goal",
       "minute": 56,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-21",
+      "id": "event-22",
       "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
       "playerId": 47,
       "type": "goal",
@@ -1765,7 +1821,7 @@
       "note": null
     },
     {
-      "id": "event-45",
+      "id": "event-46",
       "fixtureId": "5sb6fxpeovc5hh0tdqd4lugwk",
       "playerId": 48,
       "type": "goal",
@@ -1774,7 +1830,7 @@
       "note": null
     },
     {
-      "id": "event-46",
+      "id": "event-47",
       "fixtureId": "5sb6fxpeovc5hh0tdqd4lugwk",
       "playerId": 49,
       "type": "goal",
@@ -1783,7 +1839,7 @@
       "note": null
     },
     {
-      "id": "event-47",
+      "id": "event-48",
       "fixtureId": "5sb6fxpeovc5hh0tdqd4lugwk",
       "playerId": 50,
       "type": "goal",
@@ -1792,25 +1848,88 @@
       "note": null
     },
     {
+      "id": "event-62",
+      "fixtureId": "5sn8uut8jc8tu8nw9ssmhv8k4",
+      "playerId": 1,
+      "type": "goal",
+      "minute": 18,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-65",
+      "fixtureId": "5sn8uut8jc8tu8nw9ssmhv8k4",
+      "playerId": 35,
+      "type": "goal",
+      "minute": 71,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-63",
+      "fixtureId": "5sn8uut8jc8tu8nw9ssmhv8k4",
+      "playerId": 51,
+      "type": "goal",
+      "minute": 84,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-64",
+      "fixtureId": "5sn8uut8jc8tu8nw9ssmhv8k4",
+      "playerId": 1,
+      "type": "goal",
+      "minute": 89,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-67",
+      "fixtureId": "5szfys598acemrhp2vkcft0d0",
+      "playerId": 52,
+      "type": "goal",
+      "minute": 47,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-66",
+      "fixtureId": "5szfys598acemrhp2vkcft0d0",
+      "playerId": 4,
+      "type": "goal",
+      "minute": 66,
+      "addedTime": null,
+      "note": null
+    },
+    {
       "id": "event-11",
       "fixtureId": "9j6j1y7xg2hlna3zlktze58us",
-      "playerId": 4,
+      "playerId": 53,
+      "type": "goal",
+      "minute": 10,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-12",
+      "fixtureId": "9j6j1y7xg2hlna3zlktze58us",
+      "playerId": 5,
+      "type": "goal",
+      "minute": 52,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-13",
+      "fixtureId": "9j6j1y7xg2hlna3zlktze58us",
+      "playerId": 5,
       "type": "goal",
       "minute": 57,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-12",
-      "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
-      "playerId": 36,
-      "type": "goal",
-      "minute": 11,
-      "addedTime": null,
-      "note": null
-    },
-    {
-      "id": "event-13",
+      "id": "event-14",
       "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
       "playerId": 10,
       "type": "goal",
@@ -1819,25 +1938,25 @@
       "note": null
     },
     {
-      "id": "event-14",
+      "id": "event-15",
       "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
-      "playerId": 51,
+      "playerId": 54,
       "type": "goal",
       "minute": 49,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-15",
+      "id": "event-16",
       "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
-      "playerId": 22,
+      "playerId": 29,
       "type": "goal",
       "minute": 52,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-16",
+      "id": "event-17",
       "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
       "playerId": 10,
       "type": "goal",
@@ -1846,61 +1965,61 @@
       "note": null
     },
     {
-      "id": "event-26",
+      "id": "event-27",
       "fixtureId": "9kaz0vc8bs0voywdru0pvqcr8",
-      "playerId": 4,
+      "playerId": 5,
       "type": "goal",
       "minute": 45,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-27",
+      "id": "event-28",
       "fixtureId": "9kaz0vc8bs0voywdru0pvqcr8",
-      "playerId": 52,
+      "playerId": 55,
       "type": "goal",
       "minute": 57,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-28",
+      "id": "event-29",
       "fixtureId": "9kaz0vc8bs0voywdru0pvqcr8",
-      "playerId": 53,
+      "playerId": 56,
       "type": "goal",
       "minute": 66,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-29",
+      "id": "event-30",
       "fixtureId": "9kaz0vc8bs0voywdru0pvqcr8",
-      "playerId": 54,
+      "playerId": 57,
       "type": "goal",
       "minute": 84,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-31",
+      "id": "event-32",
       "fixtureId": "9knzp49imdbgo0bd8ajlo3kes",
-      "playerId": 19,
+      "playerId": 30,
       "type": "goal",
       "minute": 7,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-32",
+      "id": "event-33",
       "fixtureId": "9knzp49imdbgo0bd8ajlo3kes",
-      "playerId": 5,
+      "playerId": 6,
       "type": "goal",
       "minute": 28,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-30",
+      "id": "event-31",
       "fixtureId": "9knzp49imdbgo0bd8ajlo3kes",
       "playerId": 9,
       "type": "goal",
@@ -1909,52 +2028,52 @@
       "note": null
     },
     {
-      "id": "event-33",
+      "id": "event-34",
       "fixtureId": "9knzp49imdbgo0bd8ajlo3kes",
-      "playerId": 2,
+      "playerId": 3,
       "type": "goal",
       "minute": 81,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-34",
+      "id": "event-35",
       "fixtureId": "9knzp49imdbgo0bd8ajlo3kes",
-      "playerId": 5,
+      "playerId": 6,
       "type": "goal",
       "minute": 83,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-38",
+      "id": "event-39",
       "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
-      "playerId": 55,
+      "playerId": 58,
       "type": "goal",
       "minute": 7,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-39",
+      "id": "event-40",
       "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
-      "playerId": 56,
+      "playerId": 59,
       "type": "goal",
       "minute": 47,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-40",
+      "id": "event-41",
       "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
-      "playerId": 53,
+      "playerId": 56,
       "type": "goal",
       "minute": 52,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-41",
+      "id": "event-42",
       "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
       "playerId": 9,
       "type": "goal",
@@ -1963,117 +2082,117 @@
       "note": null
     },
     {
-      "id": "event-42",
+      "id": "event-43",
       "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
-      "playerId": 57,
+      "playerId": 60,
       "type": "goal",
       "minute": 88,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-43",
+      "id": "event-44",
       "fixtureId": "9lgy1h5avy02d3eiakaez8nx0",
-      "playerId": 51,
+      "playerId": 54,
       "type": "goal",
       "minute": 38,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-44",
+      "id": "event-45",
       "fixtureId": "9lgy1h5avy02d3eiakaez8nx0",
-      "playerId": 36,
+      "playerId": 61,
       "type": "goal",
       "minute": 56,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-51",
+      "id": "event-52",
       "fixtureId": "9lu0iledwtdn6zu7smkjmtiqc",
-      "playerId": 58,
+      "playerId": 62,
       "type": "goal",
       "minute": 84,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-52",
+      "id": "event-53",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 59,
+      "playerId": 63,
       "type": "goal",
       "minute": 2,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-59",
+      "id": "event-60",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 18,
+      "playerId": 64,
       "type": "goal",
       "minute": 17,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-53",
+      "id": "event-54",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 2,
+      "playerId": 3,
       "type": "goal",
       "minute": 20,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-60",
+      "id": "event-61",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 60,
+      "playerId": 65,
       "type": "goal",
       "minute": 23,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-54",
+      "id": "event-55",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 2,
+      "playerId": 3,
       "type": "goal",
       "minute": 41,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-55",
+      "id": "event-56",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 12,
+      "playerId": 13,
       "type": "goal",
       "minute": 45,
       "addedTime": 6,
       "note": null
     },
     {
-      "id": "event-56",
+      "id": "event-57",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 5,
+      "playerId": 6,
       "type": "goal",
       "minute": 52,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-57",
+      "id": "event-58",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 61,
+      "playerId": 66,
       "type": "goal",
       "minute": 81,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-58",
+      "id": "event-59",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 2,
+      "playerId": 3,
       "type": "goal",
       "minute": 83,
       "addedTime": null,
@@ -2082,7 +2201,7 @@
     {
       "id": "event-4",
       "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-      "playerId": 6,
+      "playerId": 7,
       "type": "goal",
       "minute": 7,
       "addedTime": null,
@@ -2091,7 +2210,7 @@
     {
       "id": "event-5",
       "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-      "playerId": 3,
+      "playerId": 1,
       "type": "goal",
       "minute": 31,
       "addedTime": null,
@@ -2100,7 +2219,7 @@
     {
       "id": "event-6",
       "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-      "playerId": 6,
+      "playerId": 7,
       "type": "goal",
       "minute": 41,
       "addedTime": null,
@@ -2109,7 +2228,7 @@
     {
       "id": "event-7",
       "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-      "playerId": 3,
+      "playerId": 1,
       "type": "goal",
       "minute": 42,
       "addedTime": null,
@@ -2127,7 +2246,7 @@
     {
       "id": "event-9",
       "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-      "playerId": 3,
+      "playerId": 1,
       "type": "goal",
       "minute": 65,
       "addedTime": null,
@@ -2136,68 +2255,68 @@
     {
       "id": "event-10",
       "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-      "playerId": 62,
+      "playerId": 67,
       "type": "goal",
       "minute": 79,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-24",
+      "id": "event-25",
       "fixtureId": "cmmr7oa4oe5e2r75bp1pcp53o",
-      "playerId": 8,
+      "playerId": 4,
       "type": "goal",
       "minute": 41,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-25",
+      "id": "event-26",
       "fixtureId": "cmmr7oa4oe5e2r75bp1pcp53o",
-      "playerId": 63,
+      "playerId": 68,
       "type": "goal",
       "minute": 56,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-48",
+      "id": "event-49",
       "fixtureId": "ct4uis3jogzmjmni969sgjdg",
-      "playerId": 7,
+      "playerId": 8,
       "type": "goal",
       "minute": 16,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-49",
+      "id": "event-50",
       "fixtureId": "ct4uis3jogzmjmni969sgjdg",
-      "playerId": 7,
+      "playerId": 8,
       "type": "goal",
       "minute": 63,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-50",
+      "id": "event-51",
       "fixtureId": "ct4uis3jogzmjmni969sgjdg",
-      "playerId": 64,
+      "playerId": 69,
       "type": "goal",
       "minute": 90,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-35",
+      "id": "event-36",
       "fixtureId": "e1na6zmpd13au6bv2ypxxdses",
-      "playerId": 65,
+      "playerId": 23,
       "type": "goal",
       "minute": 74,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-36",
+      "id": "event-37",
       "fixtureId": "e1na6zmpd13au6bv2ypxxdses",
       "playerId": 26,
       "type": "goal",
@@ -2206,9 +2325,9 @@
       "note": null
     },
     {
-      "id": "event-37",
+      "id": "event-38",
       "fixtureId": "e1na6zmpd13au6bv2ypxxdses",
-      "playerId": 1,
+      "playerId": 2,
       "type": "goal",
       "minute": 81,
       "addedTime": null,
@@ -2221,7 +2340,7 @@
       "legDates": "Aug 15-19, 2026 (Two-legged)",
       "home": {
         "label": "2nd Group A",
-        "teamId": null,
+        "teamId": 1,
         "score": null,
         "aggregate": "-",
         "status": "pending"
@@ -2246,7 +2365,7 @@
       },
       "away": {
         "label": "1st Group A",
-        "teamId": null,
+        "teamId": 2,
         "score": null,
         "aggregate": "-",
         "status": "pending"
@@ -2282,8 +2401,8 @@
     {
       "id": "top-scorer",
       "title": "Top Scorer",
-      "value": "M. Lee Baker (4)",
-      "subtitle": "Indonesia"
+      "value": "Nguyễn Đình Bắc (5)",
+      "subtitle": "Vietnam"
     },
     {
       "id": "most-assists",
@@ -2324,7 +2443,7 @@
     {
       "id": "total-goals",
       "title": "Total Goals",
-      "value": "34",
+      "value": "38",
       "subtitle": "Goals scored across all matches"
     }
   ]

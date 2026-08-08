@@ -1,10 +1,10 @@
 {
   "meta": {
-    "syncId": "7a85b086-7caa-446f-85a0-ebeb84a6eeb7",
-    "startedAt": "2026-08-05T02:49:14.203Z",
-    "collectedAt": "2026-08-05T02:49:43.749Z",
-    "completedAt": "2026-08-05T02:49:43.808Z",
-    "updatedAt": "2026-08-05T02:49:43.808Z",
+    "syncId": "de7240b7-73ee-4802-9b2e-623f370d1922",
+    "startedAt": "2026-08-08T08:40:24.260Z",
+    "collectedAt": "2026-08-08T08:40:44.860Z",
+    "completedAt": "2026-08-08T08:40:44.889Z",
+    "updatedAt": "2026-08-08T08:40:44.889Z",
     "source": "aseanutdfc.com"
   },
   "fixtures": [
@@ -142,6 +142,18 @@
       "awayScore": 2,
       "goals": [
         {
+          "playerName": "Myat Kaung Khant",
+          "minute": 10,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Paulo Josué",
+          "minute": 52,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
           "playerName": "Paulo Josué",
           "minute": 57,
           "addedTime": null,
@@ -172,12 +184,6 @@
       "homeScore": 0,
       "awayScore": 5,
       "goals": [
-        {
-          "playerName": "T. Poeiphimai",
-          "minute": 11,
-          "addedTime": null,
-          "side": "away"
-        },
         {
           "playerName": "K. Khamyok",
           "minute": 27,
@@ -784,12 +790,37 @@
         "type": "team",
         "teamId": 4
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Vietnam",
       "awayTeam": "Cambodia",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "homeScore": 3,
+      "awayScore": 1,
+      "goals": [
+        {
+          "playerName": "Nguyễn Đình Bắc",
+          "minute": 18,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Im Vakhim",
+          "minute": 84,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Nguyễn Đình Bắc",
+          "minute": 89,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Iago Bento",
+          "minute": 71,
+          "addedTime": null,
+          "side": "away"
+        }
+      ]
     },
     {
       "fixtureId": "5szfys598acemrhp2vkcft0d0",
@@ -808,12 +839,25 @@
         "type": "team",
         "teamId": 3
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Singapore",
       "awayTeam": "Indonesia",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "homeScore": 1,
+      "awayScore": 1,
+      "goals": [
+        {
+          "playerName": "Ilhan Fandi",
+          "minute": 66,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "R. Oratmangoen",
+          "minute": 47,
+          "addedTime": null,
+          "side": "away"
+        }
+      ]
     },
     {
       "fixtureId": "9mlpt8so52t0ljqv1gwxi38yc",
@@ -883,7 +927,7 @@
         "position": 1
       },
       "status": "UPCOMING",
-      "homeTeam": "Unknown Home",
+      "homeTeam": "Singapore",
       "awayTeam": "Unknown Away",
       "homeScore": null,
       "awayScore": null,
@@ -910,7 +954,7 @@
       },
       "status": "UPCOMING",
       "homeTeam": "Unknown Home",
-      "awayTeam": "Unknown Away",
+      "awayTeam": "Vietnam",
       "homeScore": null,
       "awayScore": null,
       "goals": []
@@ -936,7 +980,7 @@
       },
       "status": "UPCOMING",
       "homeTeam": "Unknown Home",
-      "awayTeam": "Unknown Away",
+      "awayTeam": "Singapore",
       "homeScore": null,
       "awayScore": null,
       "goals": []
@@ -961,7 +1005,7 @@
         "position": 2
       },
       "status": "UPCOMING",
-      "homeTeam": "Unknown Home",
+      "homeTeam": "Vietnam",
       "awayTeam": "Unknown Away",
       "homeScore": null,
       "awayScore": null,
