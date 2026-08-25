@@ -1,10 +1,10 @@
 {
   "meta": {
-    "syncId": "de7240b7-73ee-4802-9b2e-623f370d1922",
-    "startedAt": "2026-08-08T08:40:24.260Z",
-    "collectedAt": "2026-08-08T08:40:44.860Z",
-    "completedAt": "2026-08-08T08:40:44.889Z",
-    "updatedAt": "2026-08-08T08:40:44.889Z",
+    "syncId": "43eaecbb-04f8-45fb-8fe7-292f63a8c76f",
+    "startedAt": "2026-08-25T09:21:13.511Z",
+    "collectedAt": "2026-08-25T09:21:49.993Z",
+    "completedAt": "2026-08-25T09:21:50.042Z",
+    "updatedAt": "2026-08-25T09:21:50.042Z",
     "source": "aseanutdfc.com"
   },
   "fixtures": [
@@ -175,69 +175,69 @@
       "kickoff": "2026-08-08T13:00:00.000Z",
       "homeTeam": "Thailand",
       "awayTeam": "Myanmar",
-      "status": "UPCOMING",
-      "homeScore": null,
-      "awayScore": null
+      "status": "FINISHED",
+      "homeScore": 2,
+      "awayScore": 0
     },
     {
       "fixtureId": "9mz2zffybtyovpl76q5fkoys4",
       "kickoff": "2026-08-08T14:00:00.000Z",
       "homeTeam": "Malaysia",
       "awayTeam": "Philippines",
-      "status": "UPCOMING",
-      "homeScore": null,
-      "awayScore": null
+      "status": "FINISHED",
+      "homeScore": 1,
+      "awayScore": 0
     },
     {
       "fixtureId": "8q1tvn2o2tqoyqfxjxw2slyj8",
       "kickoff": "2026-08-15T12:00:00.000Z",
       "homeTeam": "Singapore",
-      "awayTeam": "Unknown Away",
-      "status": "UPCOMING",
-      "homeScore": null,
-      "awayScore": null
+      "awayTeam": "Thailand",
+      "status": "FINISHED",
+      "homeScore": 1,
+      "awayScore": 3
     },
     {
       "fixtureId": "8qs2zeoa8k5kwv8tut3qedvdg",
       "kickoff": "2026-08-16T12:00:00.000Z",
-      "homeTeam": "Unknown Home",
+      "homeTeam": "Malaysia",
       "awayTeam": "Vietnam",
-      "status": "UPCOMING",
-      "homeScore": null,
-      "awayScore": null
+      "status": "FINISHED",
+      "homeScore": 0,
+      "awayScore": 2
     },
     {
       "fixtureId": "8rhjmea8xqqopxzwycfzlsduc",
       "kickoff": "2026-08-18T12:00:00.000Z",
-      "homeTeam": "Unknown Home",
+      "homeTeam": "Thailand",
       "awayTeam": "Singapore",
-      "status": "UPCOMING",
-      "homeScore": null,
-      "awayScore": null
+      "status": "FINISHED",
+      "homeScore": 1,
+      "awayScore": 2
     },
     {
       "fixtureId": "8s7nru8oa00ew2ccjd383vcwk",
       "kickoff": "2026-08-19T12:00:00.000Z",
       "homeTeam": "Vietnam",
-      "awayTeam": "Unknown Away",
-      "status": "UPCOMING",
-      "homeScore": null,
-      "awayScore": null
+      "awayTeam": "Malaysia",
+      "status": "FINISHED",
+      "homeScore": 2,
+      "awayScore": 0
     },
     {
       "fixtureId": "3860alcnfbut9fghyv01m4zdg",
       "kickoff": "2026-08-22T12:00:00.000Z",
-      "homeTeam": "Unknown Home",
-      "awayTeam": "Unknown Away",
-      "status": "UPCOMING",
-      "homeScore": null,
-      "awayScore": null
+      "homeTeam": "Thailand",
+      "awayTeam": "Vietnam",
+      "status": "FINISHED",
+      "homeScore": 0,
+      "awayScore": 2
     },
     {
       "fixtureId": "38w3neiqa1x8wrv2ibhgum978",
       "kickoff": "2026-08-26T12:00:00.000Z",
-      "homeTeam": "Unknown Home",
-      "awayTeam": "Unknown Away",
+      "homeTeam": "Vietnam",
+      "awayTeam": "Thailand",
       "status": "UPCOMING",
       "homeScore": null,
       "awayScore": null
@@ -245,9 +245,18 @@
   ],
   "events": [
     {
+      "id": "event-81",
+      "fixtureId": "3860alcnfbut9fghyv01m4zdg",
+      "playerId": 16,
+      "type": "goal",
+      "minute": 69,
+      "addedTime": null,
+      "note": null
+    },
+    {
       "id": "event-2",
       "fixtureId": "5qwcsl59r8s96ylfl4y9tndp0",
-      "playerId": 44,
+      "playerId": 40,
       "type": "goal",
       "minute": 22,
       "addedTime": null,
@@ -256,7 +265,7 @@
     {
       "id": "event-1",
       "fixtureId": "5qwcsl59r8s96ylfl4y9tndp0",
-      "playerId": 42,
+      "playerId": 41,
       "type": "goal",
       "minute": 55,
       "addedTime": null,
@@ -265,104 +274,95 @@
     {
       "id": "event-3",
       "fixtureId": "5qwcsl59r8s96ylfl4y9tndp0",
-      "playerId": 4,
+      "playerId": 3,
       "type": "goal",
       "minute": 90,
       "addedTime": 11,
       "note": null
     },
     {
-      "id": "event-18",
-      "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
-      "playerId": 2,
-      "type": "goal",
-      "minute": 6,
-      "addedTime": null,
-      "note": null
-    },
-    {
       "id": "event-19",
       "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
-      "playerId": 2,
+      "playerId": 4,
       "type": "goal",
-      "minute": 15,
+      "minute": 6,
       "addedTime": null,
       "note": null
     },
     {
       "id": "event-20",
       "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
-      "playerId": 45,
+      "playerId": 4,
       "type": "goal",
-      "minute": 24,
-      "addedTime": null,
-      "note": null
-    },
-    {
-      "id": "event-23",
-      "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
-      "playerId": 46,
-      "type": "goal",
-      "minute": 48,
-      "addedTime": null,
-      "note": null
-    },
-    {
-      "id": "event-24",
-      "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
-      "playerId": 15,
-      "type": "goal",
-      "minute": 48,
+      "minute": 15,
       "addedTime": null,
       "note": null
     },
     {
       "id": "event-21",
       "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
-      "playerId": 2,
+      "playerId": 42,
       "type": "goal",
-      "minute": 56,
+      "minute": 24,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-24",
+      "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
+      "playerId": 43,
+      "type": "goal",
+      "minute": 48,
       "addedTime": null,
       "note": null
     },
     {
       "id": "event-22",
       "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
-      "playerId": 47,
+      "playerId": 4,
+      "type": "goal",
+      "minute": 56,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-23",
+      "fixtureId": "5rhc9xl9z3dvgwlho4l19lams",
+      "playerId": 44,
       "type": "goal",
       "minute": 86,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-46",
+      "id": "event-44",
       "fixtureId": "5sb6fxpeovc5hh0tdqd4lugwk",
-      "playerId": 48,
+      "playerId": 45,
       "type": "goal",
       "minute": 6,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-47",
+      "id": "event-45",
       "fixtureId": "5sb6fxpeovc5hh0tdqd4lugwk",
-      "playerId": 49,
+      "playerId": 46,
       "type": "goal",
       "minute": 14,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-48",
+      "id": "event-46",
       "fixtureId": "5sb6fxpeovc5hh0tdqd4lugwk",
-      "playerId": 50,
+      "playerId": 2,
       "type": "goal",
       "minute": 71,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-62",
+      "id": "event-60",
       "fixtureId": "5sn8uut8jc8tu8nw9ssmhv8k4",
       "playerId": 1,
       "type": "goal",
@@ -371,25 +371,25 @@
       "note": null
     },
     {
-      "id": "event-65",
+      "id": "event-63",
       "fixtureId": "5sn8uut8jc8tu8nw9ssmhv8k4",
-      "playerId": 35,
+      "playerId": 47,
       "type": "goal",
       "minute": 71,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-63",
+      "id": "event-61",
       "fixtureId": "5sn8uut8jc8tu8nw9ssmhv8k4",
-      "playerId": 51,
+      "playerId": 48,
       "type": "goal",
       "minute": 84,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-64",
+      "id": "event-62",
       "fixtureId": "5sn8uut8jc8tu8nw9ssmhv8k4",
       "playerId": 1,
       "type": "goal",
@@ -398,27 +398,108 @@
       "note": null
     },
     {
-      "id": "event-67",
+      "id": "event-65",
       "fixtureId": "5szfys598acemrhp2vkcft0d0",
-      "playerId": 52,
+      "playerId": 49,
       "type": "goal",
       "minute": 47,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-66",
+      "id": "event-64",
       "fixtureId": "5szfys598acemrhp2vkcft0d0",
-      "playerId": 4,
+      "playerId": 3,
       "type": "goal",
       "minute": 66,
       "addedTime": null,
       "note": null
     },
     {
+      "id": "event-70",
+      "fixtureId": "8q1tvn2o2tqoyqfxjxw2slyj8",
+      "playerId": 5,
+      "type": "goal",
+      "minute": 14,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-71",
+      "fixtureId": "8q1tvn2o2tqoyqfxjxw2slyj8",
+      "playerId": 5,
+      "type": "goal",
+      "minute": 26,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-72",
+      "fixtureId": "8q1tvn2o2tqoyqfxjxw2slyj8",
+      "playerId": 18,
+      "type": "goal",
+      "minute": 51,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-69",
+      "fixtureId": "8q1tvn2o2tqoyqfxjxw2slyj8",
+      "playerId": 3,
+      "type": "goal",
+      "minute": 84,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-73",
+      "fixtureId": "8qs2zeoa8k5kwv8tut3qedvdg",
+      "playerId": 2,
+      "type": "goal",
+      "minute": 45,
+      "addedTime": 5,
+      "note": null
+    },
+    {
+      "id": "event-76",
+      "fixtureId": "8rhjmea8xqqopxzwycfzlsduc",
+      "playerId": 20,
+      "type": "goal",
+      "minute": 45,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-75",
+      "fixtureId": "8rhjmea8xqqopxzwycfzlsduc",
+      "playerId": 7,
+      "type": "goal",
+      "minute": 61,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-78",
+      "fixtureId": "8s7nru8oa00ew2ccjd383vcwk",
+      "playerId": 2,
+      "type": "goal",
+      "minute": 62,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-79",
+      "fixtureId": "8s7nru8oa00ew2ccjd383vcwk",
+      "playerId": 2,
+      "type": "goal",
+      "minute": 89,
+      "addedTime": null,
+      "note": null
+    },
+    {
       "id": "event-11",
       "fixtureId": "9j6j1y7xg2hlna3zlktze58us",
-      "playerId": 53,
+      "playerId": 50,
       "type": "goal",
       "minute": 10,
       "addedTime": null,
@@ -427,7 +508,7 @@
     {
       "id": "event-12",
       "fixtureId": "9j6j1y7xg2hlna3zlktze58us",
-      "playerId": 5,
+      "playerId": 8,
       "type": "goal",
       "minute": 52,
       "addedTime": null,
@@ -436,7 +517,7 @@
     {
       "id": "event-13",
       "fixtureId": "9j6j1y7xg2hlna3zlktze58us",
-      "playerId": 5,
+      "playerId": 8,
       "type": "goal",
       "minute": 57,
       "addedTime": null,
@@ -445,34 +526,43 @@
     {
       "id": "event-14",
       "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
-      "playerId": 10,
+      "playerId": 5,
       "type": "goal",
-      "minute": 27,
+      "minute": 11,
       "addedTime": null,
       "note": null
     },
     {
       "id": "event-15",
       "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
-      "playerId": 54,
+      "playerId": 7,
       "type": "goal",
-      "minute": 49,
+      "minute": 27,
       "addedTime": null,
       "note": null
     },
     {
       "id": "event-16",
       "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
-      "playerId": 29,
+      "playerId": 33,
       "type": "goal",
-      "minute": 52,
+      "minute": 49,
       "addedTime": null,
       "note": null
     },
     {
       "id": "event-17",
       "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
-      "playerId": 10,
+      "playerId": 22,
+      "type": "goal",
+      "minute": 52,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-18",
+      "fixtureId": "9jsdh9v3ygeotcwiar1klnspg",
+      "playerId": 7,
       "type": "goal",
       "minute": 59,
       "addedTime": null,
@@ -481,41 +571,23 @@
     {
       "id": "event-27",
       "fixtureId": "9kaz0vc8bs0voywdru0pvqcr8",
-      "playerId": 5,
-      "type": "goal",
-      "minute": 45,
-      "addedTime": null,
-      "note": null
-    },
-    {
-      "id": "event-28",
-      "fixtureId": "9kaz0vc8bs0voywdru0pvqcr8",
-      "playerId": 55,
-      "type": "goal",
-      "minute": 57,
-      "addedTime": null,
-      "note": null
-    },
-    {
-      "id": "event-29",
-      "fixtureId": "9kaz0vc8bs0voywdru0pvqcr8",
-      "playerId": 56,
+      "playerId": 51,
       "type": "goal",
       "minute": 66,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-30",
+      "id": "event-28",
       "fixtureId": "9kaz0vc8bs0voywdru0pvqcr8",
-      "playerId": 57,
+      "playerId": 52,
       "type": "goal",
       "minute": 84,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-32",
+      "id": "event-30",
       "fixtureId": "9knzp49imdbgo0bd8ajlo3kes",
       "playerId": 30,
       "type": "goal",
@@ -524,56 +596,74 @@
       "note": null
     },
     {
-      "id": "event-33",
+      "id": "event-31",
       "fixtureId": "9knzp49imdbgo0bd8ajlo3kes",
-      "playerId": 6,
+      "playerId": 9,
       "type": "goal",
       "minute": 28,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-31",
+      "id": "event-29",
       "fixtureId": "9knzp49imdbgo0bd8ajlo3kes",
-      "playerId": 9,
+      "playerId": 53,
       "type": "goal",
       "minute": 68,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-34",
+      "id": "event-32",
       "fixtureId": "9knzp49imdbgo0bd8ajlo3kes",
-      "playerId": 3,
+      "playerId": 6,
       "type": "goal",
       "minute": 81,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-35",
+      "id": "event-33",
       "fixtureId": "9knzp49imdbgo0bd8ajlo3kes",
-      "playerId": 6,
+      "playerId": 9,
       "type": "goal",
       "minute": 83,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-39",
+      "id": "event-37",
       "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
-      "playerId": 58,
+      "playerId": 54,
       "type": "goal",
       "minute": 7,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-40",
+      "id": "event-38",
       "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
-      "playerId": 59,
+      "playerId": 55,
       "type": "goal",
       "minute": 47,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-39",
+      "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
+      "playerId": 51,
+      "type": "goal",
+      "minute": 52,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-40",
+      "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
+      "playerId": 53,
+      "type": "goal",
+      "minute": 60,
       "addedTime": null,
       "note": null
     },
@@ -582,107 +672,107 @@
       "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
       "playerId": 56,
       "type": "goal",
-      "minute": 52,
-      "addedTime": null,
-      "note": null
-    },
-    {
-      "id": "event-42",
-      "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
-      "playerId": 9,
-      "type": "goal",
-      "minute": 60,
-      "addedTime": null,
-      "note": null
-    },
-    {
-      "id": "event-43",
-      "fixtureId": "9l3rzgyq8xakbmq01juwt3dw4",
-      "playerId": 60,
-      "type": "goal",
       "minute": 88,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-44",
+      "id": "event-42",
       "fixtureId": "9lgy1h5avy02d3eiakaez8nx0",
-      "playerId": 54,
+      "playerId": 33,
       "type": "goal",
       "minute": 38,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-45",
+      "id": "event-43",
       "fixtureId": "9lgy1h5avy02d3eiakaez8nx0",
-      "playerId": 61,
+      "playerId": 5,
       "type": "goal",
       "minute": 56,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-52",
+      "id": "event-50",
       "fixtureId": "9lu0iledwtdn6zu7smkjmtiqc",
-      "playerId": 62,
+      "playerId": 57,
       "type": "goal",
       "minute": 84,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-53",
+      "id": "event-51",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 63,
+      "playerId": 58,
       "type": "goal",
       "minute": 2,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-60",
+      "id": "event-58",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 64,
+      "playerId": 59,
       "type": "goal",
       "minute": 17,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-54",
+      "id": "event-52",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 3,
+      "playerId": 6,
       "type": "goal",
       "minute": 20,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-61",
+      "id": "event-59",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 65,
+      "playerId": 60,
       "type": "goal",
       "minute": 23,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-55",
+      "id": "event-53",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 3,
+      "playerId": 6,
       "type": "goal",
       "minute": 41,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-56",
+      "id": "event-54",
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 13,
+      "playerId": 34,
       "type": "goal",
       "minute": 45,
       "addedTime": 6,
+      "note": null
+    },
+    {
+      "id": "event-55",
+      "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
+      "playerId": 9,
+      "type": "goal",
+      "minute": 52,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-56",
+      "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
+      "playerId": 61,
+      "type": "goal",
+      "minute": 81,
+      "addedTime": null,
       "note": null
     },
     {
@@ -690,32 +780,41 @@
       "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
       "playerId": 6,
       "type": "goal",
+      "minute": 83,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-66",
+      "fixtureId": "9mlpt8so52t0ljqv1gwxi38yc",
+      "playerId": 62,
+      "type": "goal",
+      "minute": 11,
+      "addedTime": null,
+      "note": null
+    },
+    {
+      "id": "event-67",
+      "fixtureId": "9mlpt8so52t0ljqv1gwxi38yc",
+      "playerId": 63,
+      "type": "goal",
       "minute": 52,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-58",
-      "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 66,
+      "id": "event-68",
+      "fixtureId": "9mz2zffybtyovpl76q5fkoys4",
+      "playerId": 19,
       "type": "goal",
-      "minute": 81,
-      "addedTime": null,
-      "note": null
-    },
-    {
-      "id": "event-59",
-      "fixtureId": "9m7aeiwfdt10gun5z6bl8qtxw",
-      "playerId": 3,
-      "type": "goal",
-      "minute": 83,
+      "minute": 16,
       "addedTime": null,
       "note": null
     },
     {
       "id": "event-4",
       "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-      "playerId": 7,
+      "playerId": 10,
       "type": "goal",
       "minute": 7,
       "addedTime": null,
@@ -733,7 +832,7 @@
     {
       "id": "event-6",
       "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-      "playerId": 7,
+      "playerId": 10,
       "type": "goal",
       "minute": 41,
       "addedTime": null,
@@ -751,7 +850,7 @@
     {
       "id": "event-8",
       "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-      "playerId": 50,
+      "playerId": 2,
       "type": "goal",
       "minute": 45,
       "addedTime": 1,
@@ -769,7 +868,7 @@
     {
       "id": "event-10",
       "fixtureId": "aa1xjyzuguuao51etdbet2adw",
-      "playerId": 67,
+      "playerId": 16,
       "type": "goal",
       "minute": 79,
       "addedTime": null,
@@ -778,7 +877,7 @@
     {
       "id": "event-25",
       "fixtureId": "cmmr7oa4oe5e2r75bp1pcp53o",
-      "playerId": 4,
+      "playerId": 3,
       "type": "goal",
       "minute": 41,
       "addedTime": null,
@@ -787,61 +886,61 @@
     {
       "id": "event-26",
       "fixtureId": "cmmr7oa4oe5e2r75bp1pcp53o",
-      "playerId": 68,
+      "playerId": 32,
       "type": "goal",
       "minute": 56,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-49",
+      "id": "event-47",
       "fixtureId": "ct4uis3jogzmjmni969sgjdg",
-      "playerId": 8,
+      "playerId": 64,
       "type": "goal",
       "minute": 16,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-50",
+      "id": "event-48",
       "fixtureId": "ct4uis3jogzmjmni969sgjdg",
-      "playerId": 8,
+      "playerId": 64,
       "type": "goal",
       "minute": 63,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-51",
+      "id": "event-49",
       "fixtureId": "ct4uis3jogzmjmni969sgjdg",
-      "playerId": 69,
+      "playerId": 65,
       "type": "goal",
       "minute": 90,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-36",
+      "id": "event-34",
       "fixtureId": "e1na6zmpd13au6bv2ypxxdses",
-      "playerId": 23,
+      "playerId": 66,
       "type": "goal",
       "minute": 74,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-37",
+      "id": "event-35",
       "fixtureId": "e1na6zmpd13au6bv2ypxxdses",
-      "playerId": 26,
+      "playerId": 67,
       "type": "goal",
       "minute": 78,
       "addedTime": null,
       "note": null
     },
     {
-      "id": "event-38",
+      "id": "event-36",
       "fixtureId": "e1na6zmpd13au6bv2ypxxdses",
-      "playerId": 2,
+      "playerId": 4,
       "type": "goal",
       "minute": 81,
       "addedTime": null,

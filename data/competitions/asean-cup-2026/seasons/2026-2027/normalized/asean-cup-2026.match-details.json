@@ -1,10 +1,10 @@
 {
   "meta": {
-    "syncId": "de7240b7-73ee-4802-9b2e-623f370d1922",
-    "startedAt": "2026-08-08T08:40:24.260Z",
-    "collectedAt": "2026-08-08T08:40:44.860Z",
-    "completedAt": "2026-08-08T08:40:44.889Z",
-    "updatedAt": "2026-08-08T08:40:44.889Z",
+    "syncId": "43eaecbb-04f8-45fb-8fe7-292f63a8c76f",
+    "startedAt": "2026-08-25T09:21:13.511Z",
+    "collectedAt": "2026-08-25T09:21:49.993Z",
+    "completedAt": "2026-08-25T09:21:50.042Z",
+    "updatedAt": "2026-08-25T09:21:50.042Z",
     "source": "aseanutdfc.com"
   },
   "fixtures": [
@@ -185,6 +185,12 @@
       "awayScore": 5,
       "goals": [
         {
+          "playerName": "T. Poeiphimai",
+          "minute": 11,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
           "playerName": "K. Khamyok",
           "minute": 27,
           "addedTime": null,
@@ -264,12 +270,6 @@
           "side": "home"
         },
         {
-          "playerName": "N. Argawinata",
-          "minute": 48,
-          "addedTime": null,
-          "side": "away"
-        },
-        {
           "playerName": "S. Chea",
           "minute": 48,
           "addedTime": null,
@@ -337,18 +337,6 @@
       "homeScore": 4,
       "awayScore": 0,
       "goals": [
-        {
-          "playerName": "Paulo Josué",
-          "minute": 45,
-          "addedTime": null,
-          "side": "home"
-        },
-        {
-          "playerName": "Endrick",
-          "minute": 57,
-          "addedTime": null,
-          "side": "home"
-        },
         {
           "playerName": "V. Sydavong",
           "minute": 66,
@@ -876,12 +864,25 @@
         "type": "team",
         "teamId": 9
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Thailand",
       "awayTeam": "Myanmar",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "homeScore": 2,
+      "awayScore": 0,
+      "goals": [
+        {
+          "playerName": "W. Kanitsribumphen",
+          "minute": 11,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "J. Mamah",
+          "minute": 52,
+          "addedTime": null,
+          "side": "home"
+        }
+      ]
     },
     {
       "fixtureId": "9mz2zffybtyovpl76q5fkoys4",
@@ -900,12 +901,19 @@
         "type": "team",
         "teamId": 8
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Malaysia",
       "awayTeam": "Philippines",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "homeScore": 1,
+      "awayScore": 0,
+      "goals": [
+        {
+          "playerName": "G. Pavithran",
+          "minute": 16,
+          "addedTime": null,
+          "side": "home"
+        }
+      ]
     },
     {
       "fixtureId": "8q1tvn2o2tqoyqfxjxw2slyj8",
@@ -926,12 +934,37 @@
         "groupId": "B",
         "position": 1
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Singapore",
-      "awayTeam": "Unknown Away",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "awayTeam": "Thailand",
+      "homeScore": 1,
+      "awayScore": 3,
+      "goals": [
+        {
+          "playerName": "Ilhan Fandi",
+          "minute": 84,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "T. Poeiphimai",
+          "minute": 14,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "T. Poeiphimai",
+          "minute": 26,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "S. Ratree",
+          "minute": 51,
+          "addedTime": null,
+          "side": "away"
+        }
+      ]
     },
     {
       "fixtureId": "8qs2zeoa8k5kwv8tut3qedvdg",
@@ -952,12 +985,25 @@
         "groupId": "A",
         "position": 1
       },
-      "status": "UPCOMING",
-      "homeTeam": "Unknown Home",
+      "status": "FINISHED",
+      "homeTeam": "Malaysia",
       "awayTeam": "Vietnam",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "homeScore": 0,
+      "awayScore": 2,
+      "goals": [
+        {
+          "playerName": "Nguyễn Xuân Son",
+          "minute": 45,
+          "addedTime": 5,
+          "side": "away"
+        },
+        {
+          "playerName": "Faris Danish",
+          "minute": 86,
+          "addedTime": null,
+          "side": "away"
+        }
+      ]
     },
     {
       "fixtureId": "8rhjmea8xqqopxzwycfzlsduc",
@@ -978,12 +1024,31 @@
         "groupId": "A",
         "position": 2
       },
-      "status": "UPCOMING",
-      "homeTeam": "Unknown Home",
+      "status": "FINISHED",
+      "homeTeam": "Thailand",
       "awayTeam": "Singapore",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "homeScore": 1,
+      "awayScore": 2,
+      "goals": [
+        {
+          "playerName": "K. Khamyok",
+          "minute": 61,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "H. Stewart",
+          "minute": 45,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "P. Hemviboon",
+          "minute": 65,
+          "addedTime": null,
+          "side": "away"
+        }
+      ]
     },
     {
       "fixtureId": "8s7nru8oa00ew2ccjd383vcwk",
@@ -1004,12 +1069,25 @@
         "groupId": "B",
         "position": 2
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Vietnam",
-      "awayTeam": "Unknown Away",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "awayTeam": "Malaysia",
+      "homeScore": 2,
+      "awayScore": 0,
+      "goals": [
+        {
+          "playerName": "Nguyễn Xuân Son",
+          "minute": 62,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Nguyễn Xuân Son",
+          "minute": 89,
+          "addedTime": null,
+          "side": "home"
+        }
+      ]
     },
     {
       "fixtureId": "3860alcnfbut9fghyv01m4zdg",
@@ -1028,12 +1106,25 @@
         "type": "tie-winner",
         "tieId": "semi-final-2"
       },
-      "status": "UPCOMING",
-      "homeTeam": "Unknown Home",
-      "awayTeam": "Unknown Away",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "status": "FINISHED",
+      "homeTeam": "Thailand",
+      "awayTeam": "Vietnam",
+      "homeScore": 0,
+      "awayScore": 2,
+      "goals": [
+        {
+          "playerName": "Nguyễn Hai Long",
+          "minute": 62,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "Nguyễn Quang Hải",
+          "minute": 69,
+          "addedTime": null,
+          "side": "away"
+        }
+      ]
     },
     {
       "fixtureId": "38w3neiqa1x8wrv2ibhgum978",
@@ -1053,8 +1144,8 @@
         "tieId": "semi-final-1"
       },
       "status": "UPCOMING",
-      "homeTeam": "Unknown Home",
-      "awayTeam": "Unknown Away",
+      "homeTeam": "Vietnam",
+      "awayTeam": "Thailand",
       "homeScore": null,
       "awayScore": null,
       "goals": []
