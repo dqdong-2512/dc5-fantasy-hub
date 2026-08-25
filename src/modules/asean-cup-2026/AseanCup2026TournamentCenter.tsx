@@ -149,6 +149,8 @@ function translateVenue(venue: string): string {
     .replace(/Winner Group B Home Venue/gi, 'Sân nhà đội nhất bảng B')
     .replace(/Runner-up Group A Home Venue/gi, 'Sân nhà đội nhì bảng A')
     .replace(/Runner-up Group B Home Venue/gi, 'Sân nhà đội nhì bảng B')
+    .replace(/Semi-final 1 winner home venue/gi, 'Sân nhà đội thắng bán kết 1')
+    .replace(/Semi-final 2 winner home venue/gi, 'Sân nhà đội thắng bán kết 2')
     .replace(/Finalist 1 Home Venue/gi, 'Sân nhà đội vào chung kết 1')
     .replace(/Finalist 2 Home Venue/gi, 'Sân nhà đội vào chung kết 2');
 }
@@ -268,24 +270,51 @@ function ensureTwoLegFixtures(
   });
 }
 
-function renderScheduledTeamRow(label: string, score: number | null): React.ReactElement {
+function isFinalStage(stage: string): boolean {
+  return /^Final\s*(?:[-–—:]\s*)?\(?Leg\s*[12]\)?$/i.test(stage.trim());
+}
+
+function renderScheduledTeamRow(
+  team: TournamentFixture['homeTeam'],
+  score: number | null,
+  opponentScore: number | null
+): React.ReactElement {
+  const isWinner = score !== null && opponentScore !== null && score > opponentScore;
+
   return (
     <Box
       sx={{
-        minHeight: 32,
+        minHeight: 42,
         display: 'grid',
-        gridTemplateColumns: 'minmax(0, 1fr) 32px',
+        gridTemplateColumns: 'minmax(0, 1fr) 38px',
         alignItems: 'center',
         gap: 1,
+        px: 1.25,
+        py: 0.5,
+        borderRadius: '10px',
+        border: '1px solid',
+        borderColor: isWinner ? 'rgba(22, 163, 74, 0.22)' : 'rgba(148, 163, 184, 0.16)',
+        backgroundColor: isWinner ? 'rgba(22, 163, 74, 0.07)' : 'rgba(248, 250, 252, 0.82)',
       }}
     >
-      <Typography variant="body2" sx={{ fontWeight: 700 }}>
-        {translateTeamName(label)}
-      </Typography>
+      <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, minWidth: 0 }}>
+        <CountryFlag code={team.countryCode} size={22} showTooltip />
+        <Typography
+          variant="body2"
+          noWrap
+          sx={{ fontWeight: isWinner ? 800 : 700, color: isWinner ? '#166534' : 'text.primary' }}
+        >
+          {translateTeamName(team.name)}
+        </Typography>
+      </Box>
       <Typography
         variant="body2"
-        color="text.secondary"
-        sx={{ fontWeight: 800, textAlign: 'right', fontVariantNumeric: 'tabular-nums' }}
+        sx={{
+          fontWeight: 900,
+          textAlign: 'center',
+          fontVariantNumeric: 'tabular-nums',
+          color: isWinner ? '#15803d' : 'text.primary',
+        }}
       >
         {score ?? '-'}
       </Typography>
@@ -304,26 +333,40 @@ function renderKnockoutLegCard(fixture: TournamentFixture): React.ReactElement {
     <Card
       variant="outlined"
       sx={{
-        borderRadius: '8px',
+        borderRadius: '14px',
         borderColor: 'rgba(148, 163, 184, 0.36)',
-        boxShadow: '0 5px 16px rgba(15, 23, 42, 0.045)',
+        boxShadow: '0 10px 26px rgba(15, 23, 42, 0.07)',
         backgroundColor: '#ffffff',
+        overflow: 'hidden',
+        position: 'relative',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          inset: '0 auto 0 0',
+          width: 4,
+          background: 'linear-gradient(180deg, #2563EB, #06B6D4)',
+        },
       }}
     >
-      <CardContent sx={{ p: { xs: 1.5, md: ThemeTokens.spacing.md } }}>
-        <Stack spacing={1.1}>
-          <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-            {translateStage(fixture.stage)}
-          </Typography>
+      <CardContent sx={{ p: { xs: 1.75, md: 2 } }}>
+        <Stack spacing={1.35}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
+              {translateStage(fixture.stage)}
+            </Typography>
+            <StatusChip
+              status={getFixtureStatusColor(fixture.status)}
+              label={getFixtureStatusLabel(fixture)}
+            />
+          </Box>
 
           <Box
             sx={{
               display: 'flex',
               alignItems: 'center',
-              justifyContent: 'center',
-              gap: 1,
+              gap: 1.25,
               color: 'text.secondary',
-              flexWrap: { xs: 'wrap', sm: 'nowrap' },
+              flexWrap: 'wrap',
             }}
           >
             <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.5 }}>
@@ -334,15 +377,19 @@ function renderKnockoutLegCard(fixture: TournamentFixture): React.ReactElement {
               <AccessTimeOutlinedIcon sx={{ fontSize: 14 }} />
               <Typography variant="caption">{kickoffTime} (giờ Việt Nam)</Typography>
             </Box>
-            <StatusChip
-              status={getFixtureStatusColor(fixture.status)}
-              label={getFixtureStatusLabel(fixture)}
-            />
           </Box>
 
           <Stack spacing={0.7}>
-            {renderScheduledTeamRow(homeLabel, fixture.homeScore)}
-            {renderScheduledTeamRow(awayLabel, fixture.awayScore)}
+            {renderScheduledTeamRow(
+              { ...fixture.homeTeam, name: homeLabel },
+              fixture.homeScore,
+              fixture.awayScore
+            )}
+            {renderScheduledTeamRow(
+              { ...fixture.awayTeam, name: awayLabel },
+              fixture.awayScore,
+              fixture.homeScore
+            )}
           </Stack>
 
           <Box
@@ -424,16 +471,6 @@ function calculateTieSummary(
   };
 }
 
-function formatAggregateScore(summary: KnockoutTieSummary): string {
-  const teamAName = translateTeamName(summary.teamA.name);
-  const teamBName = translateTeamName(summary.teamB.name);
-
-  const teamAScore = summary.hasScore ? summary.teamAScore : 0;
-  const teamBScore = summary.hasScore ? summary.teamBScore : 0;
-
-  return `${teamAName} ${teamAScore} - ${teamBScore} ${teamBName}`;
-}
-
 function renderAggregateRow(summary: KnockoutTieSummary): React.ReactElement {
   return (
     <Box
@@ -442,9 +479,9 @@ function renderAggregateRow(summary: KnockoutTieSummary): React.ReactElement {
         px: 1.5,
         py: 1.25,
         textAlign: 'center',
-        border: '1px solid rgba(37, 99, 235, 0.2)',
-        borderRadius: '8px',
-        bgcolor: 'rgba(37, 99, 235, 0.06)',
+        border: '1px solid rgba(37, 99, 235, 0.22)',
+        borderRadius: '12px',
+        background: 'linear-gradient(135deg, rgba(37, 99, 235, 0.08), rgba(6, 182, 212, 0.06))',
       }}
     >
       <Typography
@@ -458,15 +495,22 @@ function renderAggregateRow(summary: KnockoutTieSummary): React.ReactElement {
         Tổng tỷ số sau 2 lượt
       </Typography>
 
-      <Typography
-        variant="h6"
+      <Box
         sx={{
-          fontWeight: 800,
-          lineHeight: 1.3,
+          display: 'grid',
+          gridTemplateColumns: 'minmax(0, 1fr) auto minmax(0, 1fr)',
+          alignItems: 'center',
+          gap: 1,
         }}
       >
-        {formatAggregateScore(summary)}
-      </Typography>
+        {renderTeamWithFlag(summary.teamA, 22, 'body2')}
+        <Chip
+          size="small"
+          label={`${summary.hasScore ? summary.teamAScore : 0} – ${summary.hasScore ? summary.teamBScore : 0}`}
+          sx={{ fontWeight: 900, bgcolor: '#ffffff', border: '1px solid rgba(37,99,235,.18)' }}
+        />
+        <Box sx={{ justifySelf: 'end' }}>{renderTeamWithFlag(summary.teamB, 22, 'body2')}</Box>
+      </Box>
     </Box>
   );
 }
@@ -551,9 +595,9 @@ function renderFinalTieCard(
         mx: 'auto',
         borderWidth: 2,
         borderColor: '#F59E0B',
-        borderRadius: '16px',
-        boxShadow: '0 12px 28px rgba(245, 158, 11, 0.18)',
-        background: 'linear-gradient(180deg, rgba(245, 158, 11, 0.08) 0%, rgba(255,255,255,1) 38%)',
+        borderRadius: '18px',
+        boxShadow: '0 18px 42px rgba(180, 83, 9, 0.2)',
+        background: 'linear-gradient(160deg, rgba(255, 247, 237, 1) 0%, #ffffff 46%, rgba(255,255,255,1) 100%)',
       }}
     >
       <CardContent sx={{ p: { xs: 1.5, md: ThemeTokens.spacing.md } }}>
@@ -562,7 +606,7 @@ function renderFinalTieCard(
             <React.Fragment key={fixture.id}>
               {index > 0 && <Divider />}
               <Stack spacing={1}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
                   <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
                     {index === 0 ? 'Lượt đi' : 'Lượt về'}
                   </Typography>
@@ -587,12 +631,18 @@ function renderFinalTieCard(
                 </Box>
                 <Stack spacing={0.7}>
                   {renderScheduledTeamRow(
-                    translateTeamName(fixture.homeTeam?.name || 'Đội vào chung kết 1'),
-                    fixture.homeScore
+                    fixture.homeTeam?.name
+                      ? fixture.homeTeam
+                      : createPlaceholderTeam(-301, 'Đội vào chung kết 1'),
+                    fixture.homeScore,
+                    fixture.awayScore
                   )}
                   {renderScheduledTeamRow(
-                    translateTeamName(fixture.awayTeam?.name || 'Đội vào chung kết 2'),
-                    fixture.awayScore
+                    fixture.awayTeam?.name
+                      ? fixture.awayTeam
+                      : createPlaceholderTeam(-302, 'Đội vào chung kết 2'),
+                    fixture.awayScore,
+                    fixture.homeScore
                   )}
                 </Stack>
                 <Typography variant="caption" color="text.secondary" sx={{ textAlign: 'center' }}>
@@ -602,11 +652,7 @@ function renderFinalTieCard(
             </React.Fragment>
           ))}
           <Divider />
-          <Box sx={{ textAlign: 'center' }}>
-            <Typography variant="body1" sx={{ fontWeight: 850 }}>
-              {formatAggregateScore(summary)}
-            </Typography>
-          </Box>
+          <Box sx={{ px: 0.5 }}>{renderAggregateRow(summary)}</Box>
         </Stack>
       </CardContent>
     </Card>
@@ -1483,7 +1529,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
     .filter((fixture) => /Semi-final 2|SF B/i.test(fixture.stage))
     .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime());
   const finalFixtures = allKnockoutFixtures
-    .filter((fixture) => /^Final(?: \()?Leg [12]\)?$/i.test(fixture.stage))
+    .filter((fixture) => isFinalStage(fixture.stage))
     .sort((left, right) => new Date(left.kickoff).getTime() - new Date(right.kickoff).getTime());
   const groupAQualifiers = resolveGroupQualifiers(
     data.groups.find((group) => group.id === 'A' || /Group A/i.test(group.name)),
@@ -1726,14 +1772,14 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                 display: 'grid',
                 gridTemplateColumns: {
                   xs: '1fr',
-                  md: 'minmax(220px, 1fr) minmax(320px, 460px) minmax(220px, 1fr)',
+                  md: 'minmax(280px, 1fr) minmax(360px, 440px) minmax(280px, 1fr)',
                 },
                 gridTemplateAreas: {
                   xs: '"semi1" "semi2" "final" "champion"',
                   md: '"semi1 final semi2" ". champion ."',
                 },
                 alignItems: 'center',
-                columnGap: { xs: 0, md: ThemeTokens.spacing.xxl },
+                columnGap: { xs: 0, md: ThemeTokens.spacing.xl },
                 rowGap: { xs: ThemeTokens.spacing.xxl, md: ThemeTokens.spacing.md },
                 pt: { xs: 0, md: 12 },
                 pb: { xs: 0, md: 8 },
@@ -1748,7 +1794,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                   position: 'relative',
                   alignSelf: 'center',
                   justifySelf: 'center',
-                  width: { xs: '100%', md: '75%' },
+                  width: '100%',
                   zIndex: 1,
                 }}
               >
@@ -1890,7 +1936,7 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
                   position: 'relative',
                   alignSelf: 'center',
                   justifySelf: 'center',
-                  width: { xs: '100%', md: '75%' },
+                  width: '100%',
                   zIndex: 1,
                 }}
               >
