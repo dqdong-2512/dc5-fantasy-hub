@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently --kill-others-on-fail --names worker,web \"npm:dev:worker\" \"npm:dev:web\"",
+    "dev:web": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
     "lint": "eslint src worker/src scripts/tests/fpl-live-pipeline.test.ts --ext ts,tsx --report-unused-disable-directives",
@@ -29,6 +30,7 @@
     "@typescript-eslint/eslint-plugin": "^8.63.0",
     "@typescript-eslint/parser": "^8.63.0",
     "@vitejs/plugin-react": "^4.7.0",
+    "concurrently": "^10.0.5",
     "eslint": "^9.39.5",
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",

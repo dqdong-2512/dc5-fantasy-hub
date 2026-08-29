@@ -79,6 +79,24 @@ export class HttpClient {
         });
       }
 
+      const contentType = response.headers.get('content-type')?.toLowerCase() ?? '';
+      if (!contentType.includes('application/json')) {
+        const responseText = await response.text();
+        const returnedHtml = /^\s*<!doctype html|^\s*<html/i.test(responseText);
+
+        if (returnedHtml) {
+          throw new Error(
+            'FPL data service is not available. In local development, run `npm run dev` so ' +
+              'both the Worker and frontend start together. In production, verify ' +
+              '`VITE_FPL_API_BASE_URL` points to the deployed Worker.'
+          );
+        }
+
+        throw new Error(
+          `API returned an unsupported response type${contentType ? ` (${contentType})` : ''}.`
+        );
+      }
+
       return (await response.json()) as T;
     } catch (error) {
       if (error instanceof TypeError && error.message === 'Failed to fetch') {

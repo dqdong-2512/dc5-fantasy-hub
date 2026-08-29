@@ -20,12 +20,13 @@ Copy `worker/.dev.vars.example` to `worker/.dev.vars`. The checked development v
 entry `2055583` (Dương Đồng / Thêm 1 lần đau) and league `65957` (DC5 FPL 2026-2027).
 `worker/.dev.vars` is ignored by Git so local overrides are never committed accidentally.
 
-Run the Worker and Vite in separate terminals:
+Start the Worker and Vite together:
 
 ```powershell
-npm run dev:worker
 npm run dev
 ```
+
+For isolated debugging, use `npm run dev:worker` and `npm run dev:web` in separate terminals.
 
 Vite proxies `/api/fpl` to `http://127.0.0.1:8787`. For a deployed environment set:
 
