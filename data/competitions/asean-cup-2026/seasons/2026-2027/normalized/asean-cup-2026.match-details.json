@@ -1,10 +1,10 @@
 {
   "meta": {
-    "syncId": "43eaecbb-04f8-45fb-8fe7-292f63a8c76f",
-    "startedAt": "2026-08-25T09:21:13.511Z",
-    "collectedAt": "2026-08-25T09:21:49.993Z",
-    "completedAt": "2026-08-25T09:21:50.042Z",
-    "updatedAt": "2026-08-25T09:21:50.042Z",
+    "syncId": "b68c4235-6654-4c68-9e67-e5551dee130c",
+    "startedAt": "2026-08-29T04:17:23.405Z",
+    "collectedAt": "2026-08-29T04:17:44.962Z",
+    "completedAt": "2026-08-29T04:17:44.981Z",
+    "updatedAt": "2026-08-29T04:17:44.981Z",
     "source": "aseanutdfc.com"
   },
   "fixtures": [
@@ -338,6 +338,18 @@
       "awayScore": 0,
       "goals": [
         {
+          "playerName": "Paulo Josué",
+          "minute": 45,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "Endrick",
+          "minute": 57,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
           "playerName": "V. Sydavong",
           "minute": 66,
           "addedTime": null,
@@ -453,12 +465,6 @@
       "homeScore": 0,
       "awayScore": 3,
       "goals": [
-        {
-          "playerName": "S. Pattynama",
-          "minute": 74,
-          "addedTime": null,
-          "side": "away"
-        },
         {
           "playerName": "T. Haye",
           "minute": 78,
@@ -1143,12 +1149,37 @@
         "type": "tie-winner",
         "tieId": "semi-final-1"
       },
-      "status": "UPCOMING",
+      "status": "FINISHED",
       "homeTeam": "Vietnam",
       "awayTeam": "Thailand",
-      "homeScore": null,
-      "awayScore": null,
-      "goals": []
+      "homeScore": 2,
+      "awayScore": 2,
+      "goals": [
+        {
+          "playerName": "C. Bootprom",
+          "minute": 52,
+          "addedTime": null,
+          "side": "home"
+        },
+        {
+          "playerName": "W. Jarunongkran",
+          "minute": 90,
+          "addedTime": 3,
+          "side": "home"
+        },
+        {
+          "playerName": "Y. Burapha",
+          "minute": 12,
+          "addedTime": null,
+          "side": "away"
+        },
+        {
+          "playerName": "W. Jarunongkran",
+          "minute": 85,
+          "addedTime": null,
+          "side": "away"
+        }
+      ]
     }
   ]
 }
