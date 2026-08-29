@@ -29,6 +29,11 @@ export interface SyncPublicResult {
   playerDetails: number;
   eventLiveSnapshots: number;
   playerPhotos: number;
+  complete: boolean;
+}
+
+export interface SyncPublicOptions {
+  trigger?: 'manual' | 'automatic';
 }
 
 async function mapWithConcurrency<T, R>(
@@ -58,14 +63,66 @@ function ensureDirectories(directories: string[]): void {
 }
 
 function writeJson(filePath: string, payload: unknown): void {
-  fs.writeFileSync(filePath, JSON.stringify(payload, null, 2), 'utf-8');
+  const temporaryPath = `${filePath}.${process.pid}.tmp`;
+  fs.writeFileSync(temporaryPath, JSON.stringify(payload, null, 2), 'utf-8');
+  fs.renameSync(temporaryPath, filePath);
 }
 
 function errorMessage(error: unknown): string {
   return error instanceof Error ? error.message : String(error);
 }
 
-export async function syncPublicData(season: string = '2026-2027'): Promise<SyncPublicResult> {
+function wait(delayMs: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, delayMs));
+}
+
+async function fetchWithRetry<T>(label: string, operation: () => Promise<T>): Promise<T> {
+  const maxAttempts = 4;
+  let lastError: unknown;
+
+  for (let attempt = 1; attempt <= maxAttempts; attempt += 1) {
+    try {
+      return await operation();
+    } catch (error) {
+      lastError = error;
+      if (attempt === maxAttempts) break;
+
+      const delayMs = 750 * 2 ** (attempt - 1);
+      console.warn(
+        `  ${label} failed (${attempt}/${maxAttempts}): ${errorMessage(error)}. ` +
+          `Retrying in ${delayMs}ms...`
+      );
+      await wait(delayMs);
+    }
+  }
+
+  throw new Error(`${label} failed after ${maxAttempts} attempts: ${errorMessage(lastError)}`, {
+    cause: lastError,
+  });
+}
+
+function pruneNumberedJsonFiles(directory: string, activeIds: Set<number>): void {
+  for (const fileName of fs.readdirSync(directory)) {
+    const match = /^(\d+)\.json$/.exec(fileName);
+    if (match && !activeIds.has(Number(match[1]))) {
+      fs.unlinkSync(path.join(directory, fileName));
+    }
+  }
+}
+
+function prunePlayerPhotos(directory: string, activeCodes: Set<number>): void {
+  for (const fileName of fs.readdirSync(directory)) {
+    const match = /^(\d+)\.png$/.exec(fileName);
+    if (match && !activeCodes.has(Number(match[1]))) {
+      fs.unlinkSync(path.join(directory, fileName));
+    }
+  }
+}
+
+export async function syncPublicData(
+  season: string = '2026-2027',
+  options: SyncPublicOptions = {}
+): Promise<SyncPublicResult> {
   const paths = getFplSeasonPaths(projectRoot, season);
   ensureDirectories([
     paths.rawDir,
@@ -85,21 +142,19 @@ export async function syncPublicData(season: string = '2026-2027'): Promise<Sync
 
   console.log('Fetching bootstrap-static and fixtures...');
   const [bootstrapData, fixturesData] = await Promise.all([
-    client.getBootstrap(),
-    client.getFixtures(),
+    fetchWithRetry('bootstrap-static', () => client.getBootstrap()),
+    fetchWithRetry('fixtures', () => client.getFixtures()),
   ]);
-  writeJson(path.join(paths.rawDir, 'bootstrap-static.json'), bootstrapData);
-  writeJson(path.join(paths.rawDir, 'fixtures.json'), fixturesData);
 
   const playerDetailFailures: CollectionFailure[] = [];
-  console.log(`Fetching ${bootstrapData.elements.length} player detail/history records...`);
+  console.log(
+    `Refreshing all ${bootstrapData.elements.length} player detail/history records from FPL...`
+  );
   const playerDetailResults = await mapWithConcurrency(bootstrapData.elements, 8, async (player) => {
-    const outputPath = path.join(paths.elementSummariesDir, `${player.id}.json`);
     try {
-      const summary = fs.existsSync(outputPath)
-        ? (JSON.parse(fs.readFileSync(outputPath, 'utf-8')) as unknown)
-        : await client.getElementSummary(player.id);
-      writeJson(outputPath, summary);
+      const summary = await fetchWithRetry(`element-summary/${player.id}`, () =>
+        client.getElementSummary(player.id)
+      );
       return { playerId: player.id, summary };
     } catch (error) {
       playerDetailFailures.push({ id: player.id, message: errorMessage(error) });
@@ -109,17 +164,21 @@ export async function syncPublicData(season: string = '2026-2027'): Promise<Sync
   const playerDetails = playerDetailResults.filter(
     (entry): entry is NonNullable<typeof entry> => entry !== null
   );
-  writeJson(path.join(paths.normalizedDir, 'player-details.json'), playerDetails);
+  if (playerDetailFailures.length > 0) {
+    throw new Error(
+      `FPL player detail refresh is incomplete: ${playerDetailFailures.length}/` +
+        `${bootstrapData.elements.length} requests failed. No new snapshot was published. ` +
+        `First failure: player ${playerDetailFailures[0].id}: ${playerDetailFailures[0].message}`
+    );
+  }
 
   const eventLiveFailures: CollectionFailure[] = [];
-  console.log(`Fetching ${bootstrapData.events.length} gameweek live snapshots...`);
+  console.log(`Refreshing all ${bootstrapData.events.length} gameweek live snapshots from FPL...`);
   const eventLiveResults = await mapWithConcurrency(bootstrapData.events, 4, async (event) => {
-    const outputPath = path.join(paths.eventLiveDir, `${event.id}.json`);
     try {
-      const live = fs.existsSync(outputPath)
-        ? (JSON.parse(fs.readFileSync(outputPath, 'utf-8')) as unknown)
-        : await client.getEventLive(event.id);
-      writeJson(outputPath, live);
+      const live = await fetchWithRetry(`event/${event.id}/live`, () =>
+        client.getEventLive(event.id)
+      );
       return { eventId: event.id, live };
     } catch (error) {
       eventLiveFailures.push({ id: event.id, message: errorMessage(error) });
@@ -129,6 +188,33 @@ export async function syncPublicData(season: string = '2026-2027'): Promise<Sync
   const eventLiveSnapshots = eventLiveResults.filter(
     (entry): entry is NonNullable<typeof entry> => entry !== null
   );
+  if (eventLiveFailures.length > 0) {
+    throw new Error(
+      `FPL event-live refresh is incomplete: ${eventLiveFailures.length}/` +
+        `${bootstrapData.events.length} requests failed. No new snapshot was published. ` +
+        `First failure: GW ${eventLiveFailures[0].id}: ${eventLiveFailures[0].message}`
+    );
+  }
+
+  // Publish mandatory JSON only after every endpoint has been refreshed successfully. This
+  // prevents a failed run from leaving a mixture of old and new season data on disk.
+  writeJson(path.join(paths.rawDir, 'bootstrap-static.json'), bootstrapData);
+  writeJson(path.join(paths.rawDir, 'fixtures.json'), fixturesData);
+  for (const entry of playerDetails) {
+    writeJson(path.join(paths.elementSummariesDir, `${entry.playerId}.json`), entry.summary);
+  }
+  for (const entry of eventLiveSnapshots) {
+    writeJson(path.join(paths.eventLiveDir, `${entry.eventId}.json`), entry.live);
+  }
+  pruneNumberedJsonFiles(
+    paths.elementSummariesDir,
+    new Set(bootstrapData.elements.map((player) => player.id))
+  );
+  pruneNumberedJsonFiles(
+    paths.eventLiveDir,
+    new Set(bootstrapData.events.map((event) => event.id))
+  );
+  writeJson(path.join(paths.normalizedDir, 'player-details.json'), playerDetails);
   writeJson(path.join(paths.normalizedDir, 'event-live.json'), eventLiveSnapshots);
 
   const playerPhotoFailures: CollectionFailure[] = [];
@@ -140,12 +226,14 @@ export async function syncPublicData(season: string = '2026-2027'): Promise<Sync
       `250x250/p${player.code}.png`;
     try {
       const outputPath = path.join(paths.playerPhotosDir, fileName);
-      if (!fs.existsSync(outputPath)) {
-        const response = await fetch(photoUrl);
+      if (!fs.existsSync(outputPath) || fs.statSync(outputPath).size === 0) {
+        const response = await fetchWithRetry(`player photo ${player.code}`, () => fetch(photoUrl));
         if (!response.ok) {
           throw new Error(`${response.status} ${response.statusText}`);
         }
-        fs.writeFileSync(outputPath, Buffer.from(await response.arrayBuffer()));
+        const temporaryPath = `${outputPath}.${process.pid}.tmp`;
+        fs.writeFileSync(temporaryPath, Buffer.from(await response.arrayBuffer()));
+        fs.renameSync(temporaryPath, outputPath);
       }
       return {
         playerId: player.id,
@@ -164,6 +252,10 @@ export async function syncPublicData(season: string = '2026-2027'): Promise<Sync
     }
   });
   const availablePlayerPhotos = photoResults.filter((entry) => entry.available);
+  prunePlayerPhotos(
+    paths.playerPhotosDir,
+    new Set(bootstrapData.elements.map((player) => player.code))
+  );
   writeJson(path.join(paths.assetsDir, 'player-photos.manifest.json'), photoResults);
   const photoPathByPlayerId = new Map(photoResults.map((entry) => [entry.playerId, entry.file]));
 
@@ -273,13 +365,43 @@ export async function syncPublicData(season: string = '2026-2027'): Promise<Sync
     playerDetails: playerDetails.length,
     eventLiveSnapshots: eventLiveSnapshots.length,
     playerPhotos: availablePlayerPhotos.length,
+    complete:
+      playerDetails.length === bootstrapData.elements.length &&
+      eventLiveSnapshots.length === bootstrapData.events.length,
   };
   const manifest = {
     competition: 'fpl',
     season,
     syncedAt: new Date().toISOString(),
+    trigger: options.trigger ?? 'manual',
+    mode: 'full-refresh',
+    complete: result.complete,
     source: 'https://fantasy.premierleague.com/api',
-    counts: result,
+    counts: {
+      players: result.players,
+      teams: result.teams,
+      gameweeks: result.gameweeks,
+      fixtures: result.fixtures,
+      elementTypes: result.elementTypes,
+      playerDetails: result.playerDetails,
+      eventLiveSnapshots: result.eventLiveSnapshots,
+      playerPhotos: result.playerPhotos,
+    },
+    coverage: {
+      playerDetails: {
+        expected: bootstrapData.elements.length,
+        actual: playerDetails.length,
+      },
+      eventLive: {
+        expected: bootstrapData.events.length,
+        actual: eventLiveSnapshots.length,
+      },
+      playerPhotos: {
+        expected: bootstrapData.elements.length,
+        actual: availablePlayerPhotos.length,
+        placeholders: playerPhotoFailures.length,
+      },
+    },
     failures: {
       playerDetails: playerDetailFailures,
       eventLive: eventLiveFailures,

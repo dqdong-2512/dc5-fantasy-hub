@@ -15,6 +15,7 @@
     "typecheck": "tsc --noEmit",
     "test:analytics": "tsx scripts/tests/analytics-decision-engine.test.ts",
     "sync:fpl": "tsx scripts/sync/index.ts",
+    "sync:data:fpl": "tsx scripts/sync/index.ts",
     "sync:bootstrap": "tsx scripts/sync/bootstrap.sync.ts",
     "sync:asean": "node --dns-result-order=ipv4first --import tsx scripts/sync/asean.sync.ts"
   },

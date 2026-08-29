@@ -18,6 +18,7 @@ import { DataQualityValidator, type DataQualityReport } from '../services/data-q
 import { AtomicDbWriter, type DatabaseSchema } from '../services/atomic-db-writer';
 import { getSyncConfig } from '../services/fpl-sync-config';
 import { getFplSeasonPaths } from '../services/competition-data-paths';
+import { syncManagerData, type ManagerSyncResult } from './manager-sync';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -34,6 +35,7 @@ interface SyncResult {
   } | null;
   dataQuality: DataQualityReport | null;
   dbWritten: boolean;
+  managerData: ManagerSyncResult | null;
 }
 
 interface TransferEvent {
@@ -71,12 +73,13 @@ async function main(): Promise<void> {
       publicData: null,
       dataQuality: null,
       dbWritten: false,
+      managerData: null,
     };
 
     // Step 1: Sync public data (with season-aware paths passed to syncPublicData)
     if (config.syncPublic) {
       console.log('STEP 1: Syncing public FPL data...\n');
-      const synced = await syncPublicData(config.season);
+      const synced = await syncPublicData(config.season, { trigger: config.trigger });
       result.publicData = {
         players: synced.players,
         teams: synced.teams,
@@ -119,6 +122,13 @@ async function main(): Promise<void> {
       result.publicData.gameweeks = gameweeks.length;
       result.publicData.fixtures = fixtures.length;
       result.publicData.elementTypes = elementTypes.length;
+    }
+
+    if (config.syncManager && config.managerId !== null) {
+      console.log('STEP 2.5: Syncing latest public manager data...\n');
+      result.managerData = await syncManagerData(config.managerId);
+      console.log(`  Published picks: ${Object.keys(result.managerData.picks).length} gameweeks`);
+      console.log(`  Joined classic leagues: ${result.managerData.leagues.length}\n`);
     }
 
     // Step 3: Data quality validation
@@ -309,7 +319,7 @@ async function main(): Promise<void> {
           source: 'fpl',
           syncedAt: new Date().toISOString(),
           publicDataSynced: config.syncPublic,
-          managerDataSynced: config.syncManager,
+          managerDataSynced: result.managerData !== null,
           managerId: config.managerId,
           dataQualityStatus: result.dataQuality?.status || 'UNKNOWN',
           // Gameweek state snapshot
@@ -323,6 +333,10 @@ async function main(): Promise<void> {
         gameweeks,
         elementTypes,
         fixtures,
+        manager: result.managerData?.manager,
+        managerHistory: result.managerData?.history.current,
+        picks: result.managerData?.picks,
+        leagues: result.managerData?.leagues,
         transfers: allTransfers.length > 0 ? allTransfers : undefined,
       };
 
@@ -361,7 +375,7 @@ async function main(): Promise<void> {
     console.log(`Duration: ${(duration / 1000).toFixed(2)}s`);
     console.log(`Public Data Synced: ${config.syncPublic}`);
     console.log(
-      `Manager Data Synced: ${config.syncManager} ${config.managerId ? `(Manager: ${config.managerId})` : ''}`
+      `Manager Data Synced: ${result.managerData !== null} ${config.managerId ? `(Manager: ${config.managerId})` : ''}`
     );
     console.log(`Data Quality: ${result.dataQuality?.status || 'N/A'}`);
     console.log(`db.json Written: ${result.dbWritten}`);

@@ -9,12 +9,19 @@ npm install
 
 ## Fantasy Premier League
 
-Use the full pipeline for normal manual updates. It downloads public FPL data, normalizes it,
-validates the result, and atomically updates `db.json`.
+Use the full pipeline for normal manual updates. Both command names below run the same full-refresh
+pipeline: they download fresh bootstrap data, fixtures, every player detail/history record and all
+gameweek live snapshots, refresh missing player photos, normalize the result, validate it, and
+atomically update `db.json`.
 
 ```powershell
+npm run sync:data:fpl
 npm run sync:fpl
 ```
+
+Existing player-detail and event-live JSON files are never treated as a permanent cache. A run only
+publishes mandatory JSON after all of those requests succeed. If an endpoint is still unavailable
+after four attempts, the command exits with an error and keeps the previous complete snapshot.
 
 Useful options:
 
@@ -24,6 +31,22 @@ npm run sync:fpl -- --season=2026-2027 --manager-id=12345
 npm run sync:fpl -- --season=2026-2027 --no-write-db
 npm run sync:fpl -- --season=2026-2027 --no-validate
 ```
+
+When `--manager-id` (or `FPL_MANAGER_ID`) is supplied, the pipeline also refreshes the public entry,
+season history, joined classic leagues and every gameweek pick set currently published by FPL.
+Private pre-deadline picks are not available through the public API and are not replaced with demo
+data.
+
+The active season defaults to `appConfig.activeSeason`; `--season` is only needed when deliberately
+syncing another season.
+
+## Automatic FPL synchronization
+
+`.github/workflows/sync-fpl-data.yml` runs the same full-refresh pipeline every six hours and can
+also be started with **Run workflow** in GitHub Actions. Automatic runs set
+`FPL_SYNC_TRIGGER=automatic` and `FPL_WRITE_DB=false` because the application consumes the versioned
+competition files under `data/competitions/fpl`; all other fetch, normalization and validation
+stages are identical to a manual run.
 
 Use the bootstrap-only command only when raw `bootstrap-static.json` and `fixtures.json` need to
 be refreshed without running normalization or updating `db.json`:

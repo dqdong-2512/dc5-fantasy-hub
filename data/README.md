@@ -34,7 +34,8 @@ data/competitions/
 
 ## Sync commands
 
-- `npm run sync:fpl -- --season=2026-2027`
+- `npm run sync:data:fpl` (full refresh of the configured active season)
+- `npm run sync:fpl -- --season=2026-2027` (same pipeline with an explicit season)
 - `npm run sync:asean -- --season=2026-2027`
 
 FPL raw files preserve the API payloads. Normalized files are stable application/test
@@ -43,6 +44,10 @@ official photos point to the shared placeholder and are also listed in the sync 
 The active season `assets/` directory is served as the application's static asset directory,
 so player pages use the downloaded photos instead of depending on the Premier League CDN at
 runtime.
+
+Every full FPL run re-fetches player summaries and gameweek live data even when corresponding raw
+files already exist. Mandatory JSON is published only when its coverage matches the current
+bootstrap response; obsolete player/gameweek files and photos are pruned after a successful run.
 
 The `fpl/legacy` directory preserves the former unversioned snapshot for reference. It is
 not read by the application.

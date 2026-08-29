@@ -5,6 +5,8 @@
  * CLI arguments override environment variables
  */
 
+import { appConfig } from '../../src/config/appConfig';
+
 export interface SyncConfig {
   season: string;
   managerId: number | null;
@@ -13,6 +15,7 @@ export interface SyncConfig {
   validateData: boolean;
   writeDb: boolean;
   outputDir: string;
+  trigger: 'manual' | 'automatic';
 }
 
 /**
@@ -31,11 +34,13 @@ export function getSyncConfig(): SyncConfig {
 
   // Parse CLI arguments
   const args = process.argv.slice(2);
-  let season = process.env.FPL_SEASON || '2026-2027'; // Default to 2026-2027
+  let season = process.env.FPL_SEASON || appConfig.activeSeason;
   let syncPublic = true;
   let syncManager = false;
   let validateData = true;
-  let writeDb = true;
+  let writeDb = process.env.FPL_WRITE_DB !== 'false';
+  let trigger: 'manual' | 'automatic' =
+    process.env.FPL_SYNC_TRIGGER === 'automatic' ? 'automatic' : 'manual';
 
   for (const arg of args) {
     if (arg.startsWith('--season=')) {
@@ -46,7 +51,13 @@ export function getSyncConfig(): SyncConfig {
       validateData = false;
     } else if (arg === '--no-write-db') {
       writeDb = false;
+    } else if (arg === '--automatic') {
+      trigger = 'automatic';
     }
+  }
+
+  if (!/^\d{4}-\d{4}$/.test(season)) {
+    throw new Error(`Invalid FPL season "${season}". Expected YYYY-YYYY.`);
   }
 
   // Fall back to environment variable if not in CLI args
@@ -65,5 +76,6 @@ export function getSyncConfig(): SyncConfig {
     validateData,
     writeDb,
     outputDir: process.env.FPL_OUTPUT_DIR || '.',
+    trigger,
   };
 }
