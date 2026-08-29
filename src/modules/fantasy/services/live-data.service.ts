@@ -287,7 +287,7 @@ export class LiveDataService {
     const fixtures = await this.getResource(
       `fixtures-event-${event.id}`,
       async () => {
-        const allFixtures = await this.fplClient.getFixtures();
+        const allFixtures = await this.fplClient.getFixtures(event.id);
         return allFixtures.filter((fixture) => fixture.event === event.id);
       },
       {

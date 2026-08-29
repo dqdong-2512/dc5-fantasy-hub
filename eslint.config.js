@@ -45,4 +45,34 @@ export default [
       },
     },
   },
+  {
+    files: ['worker/src/**/*.ts'],
+    languageOptions: {
+      ecmaVersion: 2023,
+      sourceType: 'module',
+      globals: {
+        ...globals.worker,
+      },
+      parser: typescriptParser,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      'no-unused-vars': 'off',
+    },
+  },
+  {
+    files: ['scripts/tests/fpl-live-pipeline.test.ts'],
+    languageOptions: {
+      ecmaVersion: 2023,
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+      },
+      parser: typescriptParser,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      'no-unused-vars': 'off',
+    },
+  },
 ];

@@ -94,12 +94,8 @@ export default defineConfig({
     open: true,
     proxy: {
       '/api/fpl': {
-        target: 'https://fantasy.premierleague.com',
+        target: 'http://127.0.0.1:8787',
         changeOrigin: true,
-        rewrite: (path) => path.replace(/^\/api\/fpl/, '/api'),
-        headers: {
-          'User-Agent': 'DC5-Fantasy-Hub/1.0 (Development)',
-        },
       },
     },
   },

@@ -9,6 +9,7 @@ import { EntryStorage } from '@shared/services/entry-storage';
 import { FantasyGameRepository } from '@repositories/fantasy';
 import { getBootstrapRepository } from '@repositories/index';
 import type { FantasyEntry, FantasyGameweekHistory } from '@domain/models';
+import { FplClient, type Event as FplEvent } from '@shared/services/fpl-client';
 
 export interface UseFantasyGameState {
   // Connection state
@@ -50,6 +51,8 @@ export function useFantasyGame(): UseFantasyGameState {
 
   const repositoryRef = useRef(new FantasyGameRepository());
   const bootstrapRepositoryRef = useRef(getBootstrapRepository());
+  const fplClientRef = useRef(new FplClient());
+  const [runtimeGameweeks, setRuntimeGameweeks] = useState<FplEvent[] | null>(null);
 
   // Memoize bootstrap data access to prevent creation on every render
   const bootstrap = useMemo(
@@ -67,9 +70,11 @@ export function useFantasyGame(): UseFantasyGameState {
   const isCurrentGameweekActive = useMemo(
     () =>
       displayGameweek
-        ? !bootstrap.gameweeks.some((gw) => gw.id === displayGameweek && gw.finished)
+        ? !(runtimeGameweeks ?? bootstrap.gameweeks).some(
+            (gw) => gw.id === displayGameweek && gw.finished
+          )
         : false,
-    [displayGameweek, bootstrap]
+    [displayGameweek, bootstrap, runtimeGameweeks]
   );
 
   // Load entry and history on startup or when ID changes
@@ -78,6 +83,10 @@ export function useFantasyGame(): UseFantasyGameState {
       try {
         setIsLoading(true);
         setError(null);
+
+        const runtimeBootstrap = await fplClientRef.current.getBootstrap().catch(() => null);
+        const gameweeks = runtimeBootstrap?.events ?? bootstrap.gameweeks;
+        if (runtimeBootstrap) setRuntimeGameweeks(runtimeBootstrap.events);
 
         const storedId = EntryStorage.getConnectedEntryId();
         setConnectedEntryId(storedId);
@@ -92,10 +101,10 @@ export function useFantasyGame(): UseFantasyGameState {
             setHistory(historyData);
 
             // Set default display gameweek to current/latest
-            const currentGw = bootstrap.gameweeks.find((gw) => !gw.finished);
+            const currentGw = gameweeks.find((gw) => !gw.finished);
             const displayGw = currentGw
               ? currentGw.id
-              : bootstrap.gameweeks[bootstrap.gameweeks.length - 1]?.id;
+              : gameweeks[gameweeks.length - 1]?.id;
             setDisplayGameweekState(displayGw ?? null);
           } catch (err) {
             // Entry ID invalid or API error
@@ -136,10 +145,13 @@ export function useFantasyGame(): UseFantasyGameState {
         setHistory(historyData);
 
         // Set default display gameweek
-        const currentGw = bootstrap.gameweeks.find((gw) => !gw.finished);
+        const runtimeBootstrap = await fplClientRef.current.getBootstrap().catch(() => null);
+        const gameweeks = runtimeBootstrap?.events ?? bootstrap.gameweeks;
+        if (runtimeBootstrap) setRuntimeGameweeks(runtimeBootstrap.events);
+        const currentGw = gameweeks.find((gw) => !gw.finished);
         const displayGw = currentGw
           ? currentGw.id
-          : bootstrap.gameweeks[bootstrap.gameweeks.length - 1]?.id;
+          : gameweeks[gameweeks.length - 1]?.id;
         setDisplayGameweekState(displayGw ?? null);
       } catch (err) {
         const message = err instanceof Error ? err.message : 'Failed to connect entry';

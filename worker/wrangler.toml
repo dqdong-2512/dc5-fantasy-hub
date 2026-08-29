@@ -1,0 +1,12 @@
+name = "dc5-fantasy-hub-fpl-api"
+main = "src/index.ts"
+compatibility_date = "2026-08-01"
+
+[vars]
+ALLOWED_ORIGIN = "https://dc5-fantasy-hub.pages.dev"
+
+[triggers]
+crons = ["* * * * *"]
+
+[observability.logs]
+enabled = true
