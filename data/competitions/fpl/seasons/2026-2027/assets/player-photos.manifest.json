@@ -1320,6 +1320,12 @@
     "file": "../../shared/player-photo-placeholder.svg"
   },
   {
+    "playerId": 623,
+    "code": 79602,
+    "available": true,
+    "file": "assets/player-photos/79602.png"
+  },
+  {
     "playerId": 42,
     "code": 485337,
     "available": false,
