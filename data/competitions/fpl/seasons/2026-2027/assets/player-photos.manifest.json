@@ -900,6 +900,12 @@
     "file": "../../shared/player-photo-placeholder.svg"
   },
   {
+    "playerId": 624,
+    "code": 519324,
+    "available": true,
+    "file": "assets/player-photos/519324.png"
+  },
+  {
     "playerId": 28,
     "code": 98980,
     "available": true,
@@ -1812,6 +1818,12 @@
     "file": "../../shared/player-photo-placeholder.svg"
   },
   {
+    "playerId": 626,
+    "code": 616069,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
     "playerId": 273,
     "code": 167825,
     "available": false,
@@ -2402,6 +2414,12 @@
   {
     "playerId": 604,
     "code": 592740,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 625,
+    "code": 97846,
     "available": false,
     "file": "../../shared/player-photo-placeholder.svg"
   },
