@@ -174,12 +174,6 @@
     "file": "assets/player-photos/439509.png"
   },
   {
-    "playerId": 28,
-    "code": 98980,
-    "available": true,
-    "file": "assets/player-photos/98980.png"
-  },
-  {
     "playerId": 29,
     "code": 72147,
     "available": false,
@@ -904,6 +898,12 @@
     "code": 512123,
     "available": false,
     "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 28,
+    "code": 98980,
+    "available": true,
+    "file": "assets/player-photos/98980.png"
   },
   {
     "playerId": 40,
