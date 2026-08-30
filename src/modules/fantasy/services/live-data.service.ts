@@ -8,8 +8,7 @@ import {
   type EventLiveData,
   type FPLFixture,
 } from '@shared/services/fpl-client';
-import { FantasyGameLiveLeagueService } from '@shared/services/fantasy-game-live-league.service';
-import type { FantasyGameweekPicks, FantasyLeagueStandings } from '@domain/models';
+import type { FantasyEntry, FantasyGameweekPicks } from '@domain/models';
 
 export type LiveStatusBadge = 'upcoming' | 'live' | 'ht' | 'ft' | 'postponed' | 'suspended';
 
@@ -101,6 +100,7 @@ export interface LiveTeamPlayerCard {
   isCaptain: boolean;
   isViceCaptain: boolean;
   isBench: boolean;
+  multiplier: number;
   minutes: number;
   livePoints: number;
   expectedPoints: number;
@@ -137,6 +137,22 @@ export interface GameweekLiveHeader {
   deadlineIso: string | null;
   deadlineCountdownLabel: string;
   lastSyncIso: string;
+  phase: 'PRESEASON' | 'PRE_DEADLINE' | 'LOCKED' | 'LIVE' | 'PROVISIONAL' | 'FINAL';
+}
+
+export interface LiveManagerSummary {
+  teamName: string;
+  managerName: string;
+  gameweekPoints: number;
+  overallPoints: number;
+  overallRank: number | null;
+  liveRank: number | null;
+  transferCost: number;
+  activeChip: string | null;
+  captainName: string | null;
+  viceCaptainName: string | null;
+  teamValue: number | null;
+  bank: number | null;
 }
 
 export interface ClubLivePanel {
@@ -182,8 +198,10 @@ export interface LiveMatchCenterSnapshot {
     leagueId: number | null;
     leagueName: string | null;
     rows: LiveLeagueRow[];
+    dataStatus: 'LIVE' | 'STALE' | 'ERROR';
   };
   liveTeam: LiveTeamView | null;
+  manager: LiveManagerSummary | null;
   changedResources: string[];
 }
 
@@ -205,7 +223,6 @@ interface RuntimeResourceBundle {
   fixtures: FPLFixture[];
   eventLive: EventLiveData;
   picks: FantasyGameweekPicks | null;
-  leagueStandings: FantasyLeagueStandings | null;
   connectedEntryId: number | null;
   connectedLeagueId: number | null;
 }
@@ -216,7 +233,6 @@ export class LiveDataService {
   private readonly fixtureRepository: FixtureRepository;
   private readonly playerRepository: PlayerRepository;
   private readonly fantasyRepository: FantasyGameRepository;
-  private readonly liveLeagueService: FantasyGameLiveLeagueService;
 
   private readonly cache = new Map<string, CachedResource<unknown>>();
   private readonly inFlight = new Map<string, Promise<unknown>>();
@@ -229,7 +245,6 @@ export class LiveDataService {
     this.fixtureRepository = new FixtureRepository();
     this.playerRepository = new PlayerRepository();
     this.fantasyRepository = new FantasyGameRepository();
-    this.liveLeagueService = new FantasyGameLiveLeagueService();
   }
 
   scheduleRefresh(key: string, intervalMs: number, callback: () => Promise<void>): void {
@@ -277,7 +292,7 @@ export class LiveDataService {
       () => this.fplClient.getBootstrap(),
       {
         ttlMs: 120000,
-        forceRefresh,
+        forceRefresh: false,
         changedResources,
       }
     );
@@ -312,33 +327,28 @@ export class LiveDataService {
           `entry-picks-${options.connectedEntryId}-${event.id}`,
           () => this.fantasyRepository.getEntryPicks(options.connectedEntryId!, event.id),
           {
-            ttlMs: 15000,
-            forceRefresh,
+            ttlMs: 900000,
+            forceRefresh: false,
             changedResources,
           }
         )
       : Promise.resolve(null);
 
-    const leaguePromise = options.connectedLeagueId
+    const entryPromise = options.connectedEntryId
       ? this.getResource(
-          `league-standings-${options.connectedLeagueId}-1`,
-          () => this.fantasyRepository.getLeagueStandings(options.connectedLeagueId!, 1),
-          {
-            ttlMs: 30000,
-            forceRefresh,
-            changedResources,
-          }
-        )
+          `entry-${options.connectedEntryId}`,
+          () => this.fantasyRepository.getEntry(options.connectedEntryId!),
+          { ttlMs: 120000, forceRefresh, changedResources }
+        ).catch(() => null)
       : Promise.resolve(null);
 
-    const [picks, leagueStandings] = await Promise.all([picksPromise, leaguePromise]);
+    const [picks, entry] = await Promise.all([picksPromise, entryPromise]);
 
     this.latestBundle = {
       event,
       fixtures,
       eventLive,
       picks,
-      leagueStandings,
       connectedEntryId: options.connectedEntryId ?? null,
       connectedLeagueId: options.connectedLeagueId ?? null,
     };
@@ -347,19 +357,19 @@ export class LiveDataService {
     const liveTeam = this.buildLiveTeamView(fixtureCards, eventLive, bootstrap, picks);
     const liveLeague = await this.buildLiveLeagueView(
       event.id,
-      leagueStandings,
-      picks,
       options.connectedEntryId ?? null,
       options.connectedLeagueId ?? null
     );
 
     const header = this.buildHeader(event, fixtureCards, liveLeague.rows);
+    const manager = this.buildManagerSummary(entry, picks, liveTeam, liveLeague.rows, bootstrap);
 
     return {
       header,
       fixtures: fixtureCards,
       liveLeague,
       liveTeam,
+      manager,
       changedResources,
     };
   }
@@ -390,7 +400,7 @@ export class LiveDataService {
       .map((player) => ({
         playerId: player.id,
         playerName: player.displayName,
-        playerCode: player.teamCode,
+        playerCode: player.clubCode ?? 0,
         minutes: liveByPlayerId.get(player.id)?.minutes ?? 0,
       }));
 
@@ -400,7 +410,7 @@ export class LiveDataService {
       .map((player) => ({
         playerId: player.id,
         playerName: player.displayName,
-        playerCode: player.teamCode,
+        playerCode: player.clubCode ?? 0,
         minutes: 0,
       }));
 
@@ -553,64 +563,155 @@ export class LiveDataService {
       deadlineIso: event.deadline_time ?? null,
       deadlineCountdownLabel: this.formatCountdown(event.deadline_time),
       lastSyncIso: new Date().toISOString(),
+      phase: this.resolveGameweekPhase(event, fixtures),
+    };
+  }
+
+  private resolveGameweekPhase(
+    event: Event,
+    fixtures: MatchCenterFixture[]
+  ): GameweekLiveHeader['phase'] {
+    const now = Date.now();
+    const deadline = event.deadline_time ? new Date(event.deadline_time).getTime() : Number.NaN;
+    const beforeDeadline = !Number.isNaN(deadline) && now < deadline;
+    const hasLive = fixtures.some(
+      (fixture) => fixture.status === 'live' || fixture.status === 'ht'
+    );
+    const allFinished = fixtures.length > 0 && fixtures.every((fixture) => fixture.status === 'ft');
+
+    if (hasLive) return 'LIVE';
+    if (event.finished && event.data_checked) return 'FINAL';
+    if (allFinished || event.finished) return 'PROVISIONAL';
+    if (!beforeDeadline) return 'LOCKED';
+    return event.id === 1 ? 'PRESEASON' : 'PRE_DEADLINE';
+  }
+
+  private buildManagerSummary(
+    entry: FantasyEntry | null,
+    picks: FantasyGameweekPicks | null,
+    liveTeam: LiveTeamView | null,
+    leagueRows: LiveLeagueRow[],
+    bootstrap: Awaited<ReturnType<FplClient['getBootstrap']>>
+  ): LiveManagerSummary | null {
+    if (!entry) return null;
+    const playerById = new Map(bootstrap.elements.map((player) => [player.id, player.web_name]));
+    const captain = picks?.picks.find((pick) => pick.isCaptain);
+    const viceCaptain = picks?.picks.find((pick) => pick.isViceCaptain);
+    const leagueRow = leagueRows.find((row) => row.entryId === entry.id);
+
+    return {
+      teamName: entry.team.name,
+      managerName: entry.manager.name,
+      gameweekPoints: liveTeam?.currentPoints ?? entry.manager.currentGameweekPoints ?? 0,
+      overallPoints: entry.manager.totalPoints ?? 0,
+      overallRank: entry.manager.overallRank ?? null,
+      liveRank: leagueRow?.liveRank ?? null,
+      transferCost: picks?.transfersCost ?? 0,
+      activeChip: picks?.activeChip ?? null,
+      captainName: captain ? (playerById.get(captain.element) ?? null) : null,
+      viceCaptainName: viceCaptain ? (playerById.get(viceCaptain.element) ?? null) : null,
+      teamValue: picks ? (Number.isFinite(picks.teamValue) ? picks.teamValue : null) : null,
+      bank: picks ? (Number.isFinite(picks.bankValue) ? picks.bankValue : null) : null,
     };
   }
 
   private async buildLiveLeagueView(
     gameweekId: number,
-    leagueStandings: FantasyLeagueStandings | null,
-    picks: FantasyGameweekPicks | null,
     connectedEntryId: number | null,
     connectedLeagueId: number | null
-  ): Promise<{ leagueId: number | null; leagueName: string | null; rows: LiveLeagueRow[] }> {
-    if (!leagueStandings || !connectedLeagueId) {
+  ): Promise<{
+    leagueId: number | null;
+    leagueName: string | null;
+    rows: LiveLeagueRow[];
+    dataStatus: 'LIVE' | 'STALE' | 'ERROR';
+  }> {
+    if (!connectedLeagueId) {
       return {
         leagueId: connectedLeagueId,
         leagueName: null,
         rows: [],
+        dataStatus: 'ERROR',
       };
     }
 
-    const liveResult = await this.getResource(
-      `live-league-${connectedLeagueId}-${gameweekId}`,
-      () =>
-        this.liveLeagueService.calculateLiveLeagueStandings(
-          leagueStandings.standings,
-          gameweekId,
-          connectedEntryId ?? undefined
-        ),
-      {
-        ttlMs: 15000,
-        forceRefresh: true,
+    const cacheKey = `worker-live-league:${connectedLeagueId}:${gameweekId}`;
+
+    try {
+      const envelope = await this.getResource(
+        cacheKey,
+        () => this.fplClient.getLiveLeague(connectedLeagueId, gameweekId),
+        { ttlMs: 15_000, forceRefresh: true }
+      );
+      if (!envelope.data) throw new Error(envelope.error ?? 'Live league unavailable');
+      const liveResult = envelope.data;
+
+      const highestGameweekPoints =
+        liveResult.members.length > 0
+          ? Math.max(...liveResult.members.map((row) => row.liveGameweekPoints))
+          : 0;
+
+      const rows = liveResult.members.map((row) => ({
+        entryId: row.entryId,
+        rank: row.rank ?? row.liveRank,
+        liveRank: row.liveRank,
+        managerName: row.managerName,
+        teamName: row.teamName,
+        gameweekPoints: row.liveGameweekPoints,
+        totalPoints: row.liveTotalPoints,
+        rankMovement: row.rankMovement ?? 0,
+        isHighestScorer: row.liveGameweekPoints === highestGameweekPoints,
+        captainName: null,
+        chipUsed: null,
+        benchPoints: 0,
+        isConnectedManager: connectedEntryId === row.entryId,
+      }));
+
+      return {
+        leagueId: connectedLeagueId,
+        leagueName: liveResult.leagueName,
+        rows,
+        dataStatus: envelope.dataStatus,
+      };
+    } catch {
+      const previous = this.cache.get(cacheKey) as
+        CachedResource<Awaited<ReturnType<FplClient['getLiveLeague']>>> | undefined;
+
+      if (previous?.data.data) {
+        const liveResult = previous.data.data;
+        const highestGameweekPoints =
+          liveResult.members.length > 0
+            ? Math.max(...liveResult.members.map((row) => row.liveGameweekPoints))
+            : 0;
+
+        return {
+          leagueId: connectedLeagueId,
+          leagueName: liveResult.leagueName,
+          rows: liveResult.members.map((row) => ({
+            entryId: row.entryId,
+            rank: row.rank ?? row.liveRank,
+            liveRank: row.liveRank,
+            managerName: row.managerName,
+            teamName: row.teamName,
+            gameweekPoints: row.liveGameweekPoints,
+            totalPoints: row.liveTotalPoints,
+            rankMovement: row.rankMovement ?? 0,
+            isHighestScorer: row.liveGameweekPoints === highestGameweekPoints,
+            captainName: null,
+            chipUsed: null,
+            benchPoints: 0,
+            isConnectedManager: connectedEntryId === row.entryId,
+          })),
+          dataStatus: 'STALE',
+        };
       }
-    );
 
-    const highestGameweekPoints =
-      liveResult.standings.length > 0
-        ? Math.max(...liveResult.standings.map((row) => row.liveGameweekPoints))
-        : 0;
-
-    const rows = liveResult.standings.map((row) => ({
-      entryId: row.entryId,
-      rank: row.officialRank,
-      liveRank: row.calculatedLiveRank ?? row.officialRank,
-      managerName: row.playerName,
-      teamName: row.teamName,
-      gameweekPoints: row.liveGameweekPoints,
-      totalPoints: row.calculatedLiveTotal,
-      rankMovement: row.rankMovement ?? 0,
-      isHighestScorer: row.liveGameweekPoints === highestGameweekPoints,
-      captainName: row.captainName ?? null,
-      chipUsed: connectedEntryId === row.entryId ? (picks?.activeChip ?? null) : null,
-      benchPoints: row.benchPoints,
-      isConnectedManager: row.isConnectedUser,
-    }));
-
-    return {
-      leagueId: connectedLeagueId,
-      leagueName: leagueStandings.leagueName,
-      rows,
-    };
+      return {
+        leagueId: connectedLeagueId,
+        leagueName: null,
+        rows: [],
+        dataStatus: 'ERROR',
+      };
+    }
   }
 
   private buildLiveTeamView(
@@ -677,6 +778,7 @@ export class LiveDataService {
         isCaptain: pick.isCaptain,
         isViceCaptain: pick.isViceCaptain,
         isBench: pick.position > 11,
+        multiplier,
         minutes: live?.minutes ?? 0,
         livePoints: currentPoints,
         expectedPoints,
@@ -758,8 +860,8 @@ export class LiveDataService {
       }
 
       const status = this.getFixtureStatusBadge(fixture);
-      const elapsedMinute = this.getElapsedMinute(fixture, status);
-      const stoppageTime = this.getStoppageTime(elapsedMinute, status);
+      const elapsedMinute = fixture.minutes ?? null;
+      const stoppageTime = null;
 
       const fixturePlayers = bootstrap.elements.filter(
         (player) => player.team === fixture.team_h || player.team === fixture.team_a
@@ -829,7 +931,9 @@ export class LiveDataService {
         return;
       }
 
-      const minute = Math.min(90, Math.max(1, live.minutes || 0));
+      // FPL exposes aggregate player minutes, not event timestamps. Keep the
+      // activity timestamp empty rather than presenting an invented minute.
+      const minute = null;
       const teamShortName = teamById.get(player.team)?.short_name ?? 'UNK';
 
       const pushEvent = (type: MatchEventType, label: string, quantity: number): void => {
@@ -839,7 +943,7 @@ export class LiveDataService {
 
         events.push({
           id: `${fixture.id}-${player.id}-${type}`,
-          minute: minute > 0 ? minute : null,
+          minute,
           type,
           label,
           playerId: player.id,
@@ -858,9 +962,8 @@ export class LiveDataService {
       pushEvent('penalty_missed', 'Penalty missed', live.penalties_missed ?? 0);
       pushEvent('bonus_change', 'Bonus change', live.bonus ?? 0);
 
-      if ((live.minutes ?? 0) > 0 && (live.minutes ?? 0) < 90) {
-        pushEvent('substitution', 'Substitution', 1);
-      }
+      // The public FPL feed does not expose substitutions as discrete events.
+      // Player minutes alone are insufficient to infer them reliably.
     });
 
     return events
@@ -921,8 +1024,8 @@ export class LiveDataService {
       return 'upcoming';
     }
 
-    const elapsed = this.getElapsedMinute(fixture, 'live');
-    if (elapsed !== null && elapsed >= 45 && elapsed < 60) {
+    const elapsed = fixture.minutes ?? null;
+    if (elapsed === 45) {
       return 'ht';
     }
 
@@ -940,41 +1043,6 @@ export class LiveDataService {
     if (status === 'ht') return 'HT';
     if (elapsedMinute !== null && elapsedMinute >= 46) return '2H';
     return '1H';
-  }
-
-  private getElapsedMinute(fixture: FPLFixture, status: LiveStatusBadge): number | null {
-    if (status === 'upcoming' || status === 'postponed' || status === 'suspended') {
-      return null;
-    }
-
-    if (status === 'ft') {
-      return 90;
-    }
-
-    const kickoff = new Date(fixture.kickoff_time).getTime();
-    const now = Date.now();
-    if (Number.isNaN(kickoff)) {
-      return null;
-    }
-
-    const elapsed = Math.floor((now - kickoff) / 60000);
-    return Math.max(1, Math.min(120, elapsed));
-  }
-
-  private getStoppageTime(elapsedMinute: number | null, status: LiveStatusBadge): number | null {
-    if (status !== 'live' && status !== 'ht') {
-      return null;
-    }
-    if (elapsedMinute === null) {
-      return null;
-    }
-    if (elapsedMinute > 45 && elapsedMinute <= 60) {
-      return Math.max(0, elapsedMinute - 45);
-    }
-    if (elapsedMinute > 90) {
-      return elapsedMinute - 90;
-    }
-    return null;
   }
 
   private buildTeamForm(teamId: number): string {

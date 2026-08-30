@@ -4,12 +4,12 @@
  */
 
 import React, { useMemo } from 'react';
-import { Box, Typography, Stack, Avatar, Chip, LinearProgress } from '@mui/material';
+import { Box, Typography, Stack, Chip, LinearProgress } from '@mui/material';
 import LocalFireDepartmentIcon from '@mui/icons-material/LocalFireDepartment';
 import { DashboardWidget } from '../components/DashboardWidget';
 import { PlayerRepository } from '@repositories/players';
 import { PlayerPresenter } from '@shared/presentation';
-import { getPlayerImageUrl } from '@shared/assets';
+import { PlayerAvatar } from '@shared/components/data-display';
 import { ThemeTokens } from '@shared/theme/tokens';
 
 /**
@@ -67,13 +67,7 @@ export const PlayerFormRankings: React.FC = () => {
                 <Typography sx={{ fontWeight: 600, minWidth: 20, color: '#666' }}>
                   {idx + 1}
                 </Typography>
-                <Avatar
-                  src={getPlayerImageUrl(player.id)}
-                  sx={{ width: 32, height: 32 }}
-                  alt={player.name}
-                >
-                  {player.name.charAt(0)}
-                </Avatar>
+                <PlayerAvatar src={player.image} name={player.name} size="small" />
                 <Box sx={{ flex: 1, minWidth: 0 }}>
                   <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
                     {player.name}

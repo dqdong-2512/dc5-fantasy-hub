@@ -110,6 +110,7 @@ export class FplNormalizer {
         started: asBoolean(fixture.started),
         finished: asBoolean(fixture.finished),
         finishedProvisional: asBoolean(fixture.finished_provisional),
+        minutes: asNullableNumber(fixture.minutes),
       };
     });
   }
@@ -202,6 +203,8 @@ export class FplNormalizer {
       gameweek,
       activeChip: asNullableString(root.active_chip),
       transferCost: asNumber(history.event_transfers_cost),
+      bank: asNullableNumber(history.bank),
+      teamValue: asNullableNumber(history.value),
       picks: asArray(root.picks).map((value) => {
         const pick = isRecord(value) ? value : {};
         return {

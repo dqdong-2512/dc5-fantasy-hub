@@ -82,6 +82,8 @@ export function generatePlayersToWatch(
     .filter((p) => p.form > 0 && p.totalPoints > 0)
     .map((p) => ({
       playerId: p.id,
+      playerCode: p.clubCode,
+      photo: p.photo,
       playerName: p.displayName,
       club: p.club,
       position: p.position,
@@ -115,6 +117,8 @@ export function generateDifferentialWatch(
     )
     .map((p) => ({
       playerId: p.id,
+      playerCode: p.clubCode,
+      photo: p.photo,
       playerName: p.displayName,
       club: p.club,
       position: p.position,
@@ -141,6 +145,8 @@ export function generateOwnershipWatch(
     .filter((p) => p.ownership >= INSIGHT_THRESHOLDS.HIGH_OWNERSHIP_MIN)
     .map((p) => ({
       playerId: p.id,
+      playerCode: p.clubCode,
+      photo: p.photo,
       playerName: p.displayName,
       club: p.club,
       position: p.position,
@@ -172,6 +178,8 @@ export function generateAvailabilityWatch(players: Player[]): PlayerRecommendati
     )
     .map((p) => ({
       playerId: p.id,
+      playerCode: p.clubCode,
+      photo: p.photo,
       playerName: p.displayName,
       club: p.club,
       position: p.position,

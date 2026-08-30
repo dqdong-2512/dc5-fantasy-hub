@@ -38,6 +38,8 @@ export interface DeadlineInsight extends Insight {
  */
 export interface PlayerRecommendation {
   playerId: number;
+  playerCode?: number;
+  photo?: string;
   playerName: string;
   club: string;
   position: string;

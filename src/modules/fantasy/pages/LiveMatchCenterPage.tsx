@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import {
   Alert,
-  Avatar,
   Box,
   Button,
   Card,
@@ -26,7 +25,16 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import DragHandleIcon from '@mui/icons-material/DragHandle';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { getPlayerHeadshotUrl, getTeamBadgeUrl } from '@shared/assets';
+import {
+  CaptainBadge,
+  ClubLogo,
+  DataFreshnessIndicator,
+  LiveStatusBadge as GameweekStatusBadge,
+  PageContainer,
+  PlayerAvatar,
+  PointsChangeIndicator,
+} from '@shared/components';
+import { useNavigate } from 'react-router-dom';
 import { useGameweekHubState } from '../context';
 import { useLiveMatchCenter } from '../hooks';
 import type {
@@ -66,8 +74,9 @@ const TIMELINE_ICONS: Record<MatchTimelineEvent['type'], string> = {
   bonus_change: '⭐',
 };
 
-export const LiveMatchCenterPage: React.FC = () => {
+export const LiveMatchCenterPage: React.FC<{ gameweekId?: number }> = ({ gameweekId }) => {
   const gameState = useGameweekHubState();
+  const navigate = useNavigate();
   const [autoRefresh, setAutoRefresh] = React.useState(true);
 
   const connectedLeagueId = useMemo(() => {
@@ -90,18 +99,34 @@ export const LiveMatchCenterPage: React.FC = () => {
     selectClub,
     selectPlayer,
   } = useLiveMatchCenter({
-    gameweekId: gameState.displayGameweek ?? undefined,
+    gameweekId: gameweekId ?? gameState.displayGameweek ?? undefined,
     connectedEntryId: gameState.connectedEntryId,
     connectedLeagueId,
     autoRefresh,
-    refreshIntervalMs: 30000,
   });
 
-  if (isLoading || !snapshot) {
+  const fixtureGroups = useMemo(() => {
+    if (!snapshot) return [];
+    const groups = new Map<string, MatchCenterFixture[]>();
+    snapshot.fixtures.forEach((fixture) => {
+      const timestamp = new Date(fixture.kickoffTime);
+      const key = Number.isNaN(timestamp.getTime())
+        ? 'Schedule pending'
+        : timestamp.toLocaleDateString('en-GB', {
+            weekday: 'long',
+            day: 'numeric',
+            month: 'long',
+          });
+      groups.set(key, [...(groups.get(key) ?? []), fixture]);
+    });
+    return [...groups.entries()];
+  }, [snapshot]);
+
+  if (isLoading && !snapshot) {
     return <LiveMatchCenterSkeleton />;
   }
 
-  if (error) {
+  if (!snapshot) {
     return (
       <Box sx={{ p: ThemeTokens.spacing.md }}>
         <Alert
@@ -112,219 +137,386 @@ export const LiveMatchCenterPage: React.FC = () => {
             </Button>
           }
         >
-          {error}
+          {error ?? 'Live gameweek data is temporarily unavailable.'}
         </Alert>
       </Box>
     );
   }
 
   return (
-    <Stack spacing={ThemeTokens.spacing.md} sx={{ p: ThemeTokens.spacing.sm }}>
-      <Card>
-        <CardContent sx={{ p: ThemeTokens.spacing.sm }}>
+    <PageContainer sx={{ py: ThemeTokens.spacing.md }}>
+      <Stack spacing={ThemeTokens.spacing.lg}>
+        <Box
+          sx={{
+            position: 'relative',
+            overflow: 'hidden',
+            borderRadius: '14px',
+            p: { xs: 2.5, md: 3.5 },
+            color: '#fff',
+            background: 'linear-gradient(125deg, #37003c 0%, #6d0875 50%, #087cc1 125%)',
+            boxShadow: '0 18px 42px rgba(55, 0, 60, 0.18)',
+            '&::after': {
+              content: '""',
+              position: 'absolute',
+              width: 240,
+              height: 240,
+              borderRadius: '50%',
+              right: -70,
+              top: -140,
+              bgcolor: 'rgba(255,255,255,.10)',
+            },
+          }}
+        >
           <Stack
             direction={{ xs: 'column', md: 'row' }}
-            spacing={ThemeTokens.spacing.sm}
-            sx={{ alignItems: { xs: 'stretch', md: 'center' }, justifyContent: 'space-between' }}
+            spacing={2}
+            sx={{ position: 'relative', zIndex: 1, justifyContent: 'space-between' }}
           >
+            <Box>
+              <GameweekStatusBadge status={snapshot.header.phase} />
+              <Typography variant="overline" sx={{ display: 'block', mt: 1.5, opacity: 0.78 }}>
+                Fantasy Premier League · Matchday
+              </Typography>
+              <Typography
+                variant="h3"
+                sx={{ fontWeight: 900, fontSize: { xs: '2.2rem', md: '3.2rem' } }}
+              >
+                Gameweek {snapshot.header.currentGameweek}
+              </Typography>
+              <Typography variant="body2" sx={{ mt: 1, opacity: 0.86 }}>
+                Deadline {formatDateTime(snapshot.header.deadlineIso)}
+              </Typography>
+            </Box>
             <Stack
-              direction="row"
-              spacing={ThemeTokens.spacing.sm}
-              sx={{ alignItems: 'center', flexWrap: 'wrap' }}
+              sx={{
+                alignItems: { xs: 'flex-start', md: 'flex-end' },
+                justifyContent: 'space-between',
+              }}
             >
-              <HeaderStat label="GW" value={`${snapshot.header.currentGameweek}`} />
-              <HeaderStat label="Finished" value={`${snapshot.header.matchesFinished}`} />
-              <HeaderStat label="Live" value={`${snapshot.header.matchesLive}`} accent="#dc2626" />
-              <HeaderStat label="Remaining" value={`${snapshot.header.matchesRemaining}`} />
-              <HeaderStat
-                label="Avg"
-                value={
-                  snapshot.header.averageScore !== null
-                    ? snapshot.header.averageScore.toFixed(1)
-                    : '—'
-                }
+              <DataFreshnessIndicator
+                updatedAt={snapshot.header.lastSyncIso}
+                delayed={Boolean(error) || snapshot.liveLeague.dataStatus === 'STALE'}
               />
-              <HeaderStat
-                label="High"
-                value={
-                  snapshot.header.highestScore !== null ? `${snapshot.header.highestScore}` : '—'
-                }
-              />
-              <HeaderStat label="Deadline" value={snapshot.header.deadlineCountdownLabel} />
-            </Stack>
-
-            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-              <Tooltip title="Auto-refresh every 30s">
-                <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
-                  <Typography variant="caption" color="text.secondary">
-                    Auto
-                  </Typography>
-                  <Switch
-                    size="small"
-                    checked={autoRefresh}
-                    onChange={(_event, value) => setAutoRefresh(value)}
-                  />
-                </Stack>
-              </Tooltip>
               <Button
-                size="small"
                 variant="outlined"
-                startIcon={<RefreshIcon fontSize="small" />}
+                color="inherit"
+                startIcon={<RefreshIcon />}
                 onClick={() => void refresh()}
                 disabled={isRefreshing}
+                sx={{ mt: 2 }}
               >
-                {isRefreshing ? 'Refreshing…' : 'Refresh'}
+                {isRefreshing ? 'Refreshing…' : 'Refresh live data'}
               </Button>
             </Stack>
           </Stack>
+        </Box>
 
-          <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
-            Last sync{' '}
-            {new Date(snapshot.header.lastSyncIso).toLocaleTimeString('en-GB', {
-              hour: '2-digit',
-              minute: '2-digit',
-              second: '2-digit',
-            })}
-            {snapshot.changedResources.length > 0
-              ? ` • Updated: ${snapshot.changedResources.length}`
-              : ''}
-          </Typography>
-        </CardContent>
-      </Card>
+        {error && <Alert severity="warning">{error}</Alert>}
+        <GameweekPhaseMessage
+          phase={snapshot.header.phase}
+          matchesLive={snapshot.header.matchesLive}
+        />
 
-      <Box
-        sx={{
-          display: 'grid',
-          gridTemplateColumns: { xs: '1fr', xl: '1.7fr 1fr' },
-          gap: ThemeTokens.spacing.md,
-        }}
-      >
-        <Stack spacing={ThemeTokens.spacing.sm}>
-          {snapshot.fixtures.map((fixture) => (
-            <FixtureCard
-              key={fixture.id}
-              fixture={fixture}
-              onSelectClub={selectClub}
-              onSelectPlayer={selectPlayer}
-              selectedClubId={selectedClubId}
-              selectedPlayerId={selectedPlayerId}
-            />
-          ))}
-        </Stack>
-
-        <Stack spacing={ThemeTokens.spacing.sm}>
-          <Card>
-            <CardContent sx={{ p: ThemeTokens.spacing.sm }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-                Live Team View
-              </Typography>
-              {!snapshot.liveTeam ? (
-                <Alert severity="info">
-                  Connect your team to see live points impact, bench, and autosubs.
-                </Alert>
-              ) : (
-                <LiveTeamPanel
-                  liveTeam={snapshot.liveTeam}
-                  onSelectPlayer={selectPlayer}
-                  selectedPlayerId={selectedPlayerId}
+        {snapshot.manager && (
+          <Card sx={{ border: '1px solid', borderColor: 'divider' }}>
+            <CardContent>
+              <Stack
+                direction={{ xs: 'column', md: 'row' }}
+                spacing={2}
+                sx={{ justifyContent: 'space-between' }}
+              >
+                <Box>
+                  <Typography variant="overline" color="text.secondary">
+                    My Team live
+                  </Typography>
+                  <Typography variant="h5" sx={{ fontWeight: 900 }}>
+                    {snapshot.manager.teamName}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {snapshot.manager.managerName}
+                  </Typography>
+                </Box>
+                <Box
+                  sx={{
+                    display: 'grid',
+                    gridTemplateColumns: {
+                      xs: 'repeat(2, 1fr)',
+                      sm: 'repeat(4, minmax(100px, 1fr))',
+                    },
+                    gap: 2,
+                  }}
+                >
+                  <ManagerMetric
+                    label="Live points"
+                    value={<PointsChangeIndicator value={snapshot.manager.gameweekPoints} />}
+                  />
+                  <ManagerMetric label="Total points" value={snapshot.manager.overallPoints} />
+                  <ManagerMetric
+                    label="Overall rank"
+                    value={formatRank(snapshot.manager.overallRank)}
+                  />
+                  <ManagerMetric label="Live rank" value={formatRank(snapshot.manager.liveRank)} />
+                  <ManagerMetric
+                    label="Transfer cost"
+                    value={
+                      snapshot.manager.transferCost ? `-${snapshot.manager.transferCost}` : '0'
+                    }
+                  />
+                  <ManagerMetric
+                    label="Active chip"
+                    value={formatChip(snapshot.manager.activeChip)}
+                  />
+                  <ManagerMetric
+                    label="Team value"
+                    value={formatMoney(snapshot.manager.teamValue)}
+                  />
+                  <ManagerMetric label="Bank" value={formatMoney(snapshot.manager.bank)} />
+                  <ManagerMetric
+                    label="Captain"
+                    value={snapshot.manager.captainName ?? 'Unavailable'}
+                  />
+                  <ManagerMetric
+                    label="Vice captain"
+                    value={snapshot.manager.viceCaptainName ?? 'Unavailable'}
+                  />
+                </Box>
+              </Stack>
+            </CardContent>
+          </Card>
+        )}
+        <Card>
+          <CardContent sx={{ p: ThemeTokens.spacing.sm }}>
+            <Stack
+              direction={{ xs: 'column', md: 'row' }}
+              spacing={ThemeTokens.spacing.sm}
+              sx={{ alignItems: { xs: 'stretch', md: 'center' }, justifyContent: 'space-between' }}
+            >
+              <Stack
+                direction="row"
+                spacing={ThemeTokens.spacing.sm}
+                sx={{ alignItems: 'center', flexWrap: 'wrap' }}
+              >
+                <HeaderStat label="GW" value={`${snapshot.header.currentGameweek}`} />
+                <HeaderStat label="Finished" value={`${snapshot.header.matchesFinished}`} />
+                <HeaderStat
+                  label="Live"
+                  value={`${snapshot.header.matchesLive}`}
+                  accent="#dc2626"
                 />
-              )}
-            </CardContent>
-          </Card>
+                <HeaderStat label="Remaining" value={`${snapshot.header.matchesRemaining}`} />
+                <HeaderStat
+                  label="Avg"
+                  value={
+                    snapshot.header.averageScore !== null
+                      ? snapshot.header.averageScore.toFixed(1)
+                      : '—'
+                  }
+                />
+                <HeaderStat
+                  label="High"
+                  value={
+                    snapshot.header.highestScore !== null ? `${snapshot.header.highestScore}` : '—'
+                  }
+                />
+                <HeaderStat label="Deadline" value={snapshot.header.deadlineCountdownLabel} />
+              </Stack>
 
-          <Card>
-            <CardContent sx={{ p: ThemeTokens.spacing.sm }}>
-              <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-                Live League Race
-              </Typography>
-              {snapshot.liveLeague.rows.length === 0 ? (
-                <Alert severity="info">Connect a mini-league to view live ranking movement.</Alert>
-              ) : (
-                <LiveLeagueTable rows={snapshot.liveLeague.rows} />
-              )}
-            </CardContent>
-          </Card>
+              <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+                <Tooltip title="Adaptive background refresh while matches are live">
+                  <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
+                    <Typography variant="caption" color="text.secondary">
+                      Auto
+                    </Typography>
+                    <Switch
+                      size="small"
+                      checked={autoRefresh}
+                      onChange={(_event, value) => setAutoRefresh(value)}
+                    />
+                  </Stack>
+                </Tooltip>
+              </Stack>
+            </Stack>
 
-          {selectedClubPanel && (
+            <Typography variant="caption" color="text.secondary" sx={{ mt: 1, display: 'block' }}>
+              Last sync{' '}
+              {new Date(snapshot.header.lastSyncIso).toLocaleTimeString('en-GB', {
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit',
+              })}
+              {snapshot.changedResources.length > 0
+                ? ` • Updated: ${snapshot.changedResources.length}`
+                : ''}
+            </Typography>
+          </CardContent>
+        </Card>
+
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: '1fr', lg: '1.55fr 1fr' },
+            gap: ThemeTokens.spacing.md,
+          }}
+        >
+          <Stack spacing={ThemeTokens.spacing.sm}>
+            {fixtureGroups.length === 0 ? (
+              <Alert severity="info">No fixtures are currently available for this gameweek.</Alert>
+            ) : (
+              fixtureGroups.map(([date, fixtures]) => (
+                <Box key={date}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 900, mb: 1 }}>
+                    {date}
+                  </Typography>
+                  <Stack spacing={1.25}>
+                    {fixtures.map((fixture) => (
+                      <FixtureCard
+                        key={fixture.id}
+                        fixture={fixture}
+                        onSelectClub={selectClub}
+                        onSelectPlayer={selectPlayer}
+                        selectedClubId={selectedClubId}
+                        selectedPlayerId={selectedPlayerId}
+                      />
+                    ))}
+                  </Stack>
+                </Box>
+              ))
+            )}
+          </Stack>
+
+          <Stack spacing={ThemeTokens.spacing.sm}>
             <Card>
               <CardContent sx={{ p: ThemeTokens.spacing.sm }}>
                 <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
-                  {selectedClubPanel.clubName} Live
+                  Live Team View
                 </Typography>
-                <Typography variant="caption" color="text.secondary">
-                  Formation {selectedClubPanel.formation} • Form {selectedClubPanel.form} • Pos{' '}
-                  {selectedClubPanel.leaguePosition ?? '—'}
-                </Typography>
-                <Divider sx={{ my: 1 }} />
-                <Typography variant="caption" color="text.secondary">
-                  Upcoming
-                </Typography>
-                <Typography variant="body2">
-                  {selectedClubPanel.upcomingFixtures.join(' • ') || 'No data'}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ mt: 1, display: 'block' }}
-                >
-                  Possession {selectedClubPanel.matchStats.possession ?? '—'}% • Shots{' '}
-                  {selectedClubPanel.matchStats.shots ?? '—'} • xG{' '}
-                  {selectedClubPanel.matchStats.xg ?? '—'} • Corners{' '}
-                  {selectedClubPanel.matchStats.corners ?? '—'} • Cards{' '}
-                  {selectedClubPanel.matchStats.cards}
-                </Typography>
-              </CardContent>
-            </Card>
-          )}
-
-          {selectedPlayerPanel && (
-            <Card>
-              <CardContent sx={{ p: ThemeTokens.spacing.sm }}>
-                <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mb: 1 }}>
-                  <Avatar
-                    src={getPlayerHeadshotUrl(selectedPlayerPanel.playerCode)}
-                    sx={{ width: 32, height: 32 }}
+                {!snapshot.liveTeam ? (
+                  <Alert severity="info">
+                    {gameState.isConnected
+                      ? 'Manager picks are not available for this gameweek yet. They normally appear after the deadline.'
+                      : 'Connect your team to see live points, captaincy and bench impact.'}
+                  </Alert>
+                ) : (
+                  <LiveTeamPanel
+                    liveTeam={snapshot.liveTeam}
+                    onSelectPlayer={selectPlayer}
+                    selectedPlayerId={selectedPlayerId}
                   />
-                  <Box>
-                    <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
-                      {selectedPlayerPanel.playerName}
-                    </Typography>
-                    <Typography variant="caption" color="text.secondary">
-                      {selectedPlayerPanel.teamShortName}
-                    </Typography>
-                  </Box>
-                </Stack>
-
-                <Typography variant="caption" color="text.secondary">
-                  Live {selectedPlayerPanel.livePoints} • Season {selectedPlayerPanel.seasonPoints}{' '}
-                  • Ownership {selectedPlayerPanel.ownership.toFixed(1)}% • Price{' '}
-                  {selectedPlayerPanel.price.toFixed(1)}m
-                </Typography>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ display: 'block', mt: 0.5 }}
-                >
-                  Form {selectedPlayerPanel.recentForm.toFixed(1)} • Transfer trend{' '}
-                  {selectedPlayerPanel.transferTrend ?? '—'}
-                </Typography>
-                <Typography
-                  variant="caption"
-                  color="text.secondary"
-                  sx={{ display: 'block', mt: 0.5 }}
-                >
-                  Fixtures{' '}
-                  {selectedPlayerPanel.upcomingFixtures.join(' • ') || 'No upcoming fixtures'}
-                </Typography>
-                {selectedPlayerPanel.captainOwnership && (
-                  <Chip label={selectedPlayerPanel.captainOwnership} size="small" sx={{ mt: 1 }} />
                 )}
               </CardContent>
             </Card>
-          )}
-        </Stack>
-      </Box>
-    </Stack>
+
+            <Card>
+              <CardContent sx={{ p: ThemeTokens.spacing.sm }}>
+                <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
+                  Live League Race
+                </Typography>
+                {snapshot.liveLeague.rows.length === 0 ? (
+                  <Alert severity="info">
+                    Connect a mini-league to view live ranking movement.
+                  </Alert>
+                ) : (
+                  <LiveLeagueTable rows={snapshot.liveLeague.rows.slice(0, 5)} />
+                )}
+                {snapshot.liveLeague.rows.length > 0 && (
+                  <Button
+                    size="small"
+                    sx={{ mt: 1, textTransform: 'none' }}
+                    onClick={() => navigate('/premier-league/gameweek/league')}
+                  >
+                    View Full League
+                  </Button>
+                )}
+              </CardContent>
+            </Card>
+
+            {selectedClubPanel && (
+              <Card>
+                <CardContent sx={{ p: ThemeTokens.spacing.sm }}>
+                  <Typography variant="subtitle2" sx={{ fontWeight: 700, mb: 1 }}>
+                    {selectedClubPanel.clubName} Live
+                  </Typography>
+                  <Typography variant="caption" color="text.secondary">
+                    Formation {selectedClubPanel.formation} • Form {selectedClubPanel.form} • Pos{' '}
+                    {selectedClubPanel.leaguePosition ?? '—'}
+                  </Typography>
+                  <Divider sx={{ my: 1 }} />
+                  <Typography variant="caption" color="text.secondary">
+                    Upcoming
+                  </Typography>
+                  <Typography variant="body2">
+                    {selectedClubPanel.upcomingFixtures.join(' • ') || 'No data'}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ mt: 1, display: 'block' }}
+                  >
+                    Possession {selectedClubPanel.matchStats.possession ?? '—'}% • Shots{' '}
+                    {selectedClubPanel.matchStats.shots ?? '—'} • xG{' '}
+                    {selectedClubPanel.matchStats.xg ?? '—'} • Corners{' '}
+                    {selectedClubPanel.matchStats.corners ?? '—'} • Cards{' '}
+                    {selectedClubPanel.matchStats.cards}
+                  </Typography>
+                </CardContent>
+              </Card>
+            )}
+
+            {selectedPlayerPanel && (
+              <Card>
+                <CardContent sx={{ p: ThemeTokens.spacing.sm }}>
+                  <Stack direction="row" spacing={1} sx={{ alignItems: 'center', mb: 1 }}>
+                    <PlayerAvatar
+                      playerCode={selectedPlayerPanel.playerCode}
+                      name={selectedPlayerPanel.playerName}
+                      size="small"
+                    />
+                    <Box>
+                      <Typography variant="subtitle2" sx={{ fontWeight: 700 }}>
+                        {selectedPlayerPanel.playerName}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        {selectedPlayerPanel.teamShortName}
+                      </Typography>
+                    </Box>
+                  </Stack>
+
+                  <Typography variant="caption" color="text.secondary">
+                    Live {selectedPlayerPanel.livePoints} • Season{' '}
+                    {selectedPlayerPanel.seasonPoints} • Ownership{' '}
+                    {selectedPlayerPanel.ownership.toFixed(1)}% • Price{' '}
+                    {selectedPlayerPanel.price.toFixed(1)}m
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ display: 'block', mt: 0.5 }}
+                  >
+                    Form {selectedPlayerPanel.recentForm.toFixed(1)} • Transfer trend{' '}
+                    {selectedPlayerPanel.transferTrend ?? '—'}
+                  </Typography>
+                  <Typography
+                    variant="caption"
+                    color="text.secondary"
+                    sx={{ display: 'block', mt: 0.5 }}
+                  >
+                    Fixtures{' '}
+                    {selectedPlayerPanel.upcomingFixtures.join(' • ') || 'No upcoming fixtures'}
+                  </Typography>
+                  {selectedPlayerPanel.captainOwnership && (
+                    <Chip
+                      label={selectedPlayerPanel.captainOwnership}
+                      size="small"
+                      sx={{ mt: 1 }}
+                    />
+                  )}
+                </CardContent>
+              </Card>
+            )}
+          </Stack>
+        </Box>
+      </Stack>
+    </PageContainer>
   );
 };
 
@@ -357,6 +549,78 @@ function HeaderStat({
   );
 }
 
+function ManagerMetric({
+  label,
+  value,
+}: {
+  label: string;
+  value: React.ReactNode;
+}): React.ReactElement {
+  return (
+    <Box sx={{ minWidth: 0 }}>
+      <Typography variant="caption" color="text.secondary">
+        {label}
+      </Typography>
+      <Box sx={{ fontWeight: 850, overflowWrap: 'anywhere' }}>{value}</Box>
+    </Box>
+  );
+}
+
+function GameweekPhaseMessage({
+  phase,
+  matchesLive,
+}: {
+  phase: 'PRESEASON' | 'PRE_DEADLINE' | 'LOCKED' | 'LIVE' | 'PROVISIONAL' | 'FINAL';
+  matchesLive: number;
+}): React.ReactElement | null {
+  if (phase === 'LIVE' && matchesLive > 0) return null;
+  const messages = {
+    PRESEASON:
+      'The season has not started yet. Fixtures and squad information are ready for planning.',
+    PRE_DEADLINE: 'Gameweek has not started yet. Live scores will appear after the deadline.',
+    LOCKED:
+      'The deadline has passed. Team selections are locked while the first matches prepare to start.',
+    LIVE: 'No matches are currently live.',
+    PROVISIONAL:
+      'All matches are finished. Points and ranks remain provisional while FPL completes checks.',
+    FINAL: 'This gameweek is complete and the displayed scores are final.',
+  } as const;
+  return <Alert severity={phase === 'FINAL' ? 'success' : 'info'}>{messages[phase]}</Alert>;
+}
+
+function formatDateTime(value: string | null): string {
+  if (!value) return 'to be confirmed';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'to be confirmed';
+  return date.toLocaleString('en-GB', {
+    weekday: 'short',
+    day: 'numeric',
+    month: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
+  });
+}
+
+function formatKickoff(value: string | null): string {
+  if (!value) return 'Kickoff TBC';
+  const date = new Date(value);
+  if (Number.isNaN(date.getTime())) return 'Kickoff TBC';
+  return date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' });
+}
+
+function formatRank(value: number | null): string {
+  return value === null || !Number.isFinite(value) ? 'Not ranked' : `#${value.toLocaleString()}`;
+}
+
+function formatChip(value: string | null): string {
+  if (!value) return 'None';
+  return value.replace(/_/g, ' ').replace(/\b\w/g, (letter) => letter.toUpperCase());
+}
+
+function formatMoney(value: number | null): string {
+  return value === null || !Number.isFinite(value) ? 'Unavailable' : `£${(value / 10).toFixed(1)}m`;
+}
+
 function FixtureCard({
   fixture,
   onSelectClub,
@@ -378,21 +642,21 @@ function FixtureCard({
     <Card sx={{ border: isClubSelected ? '1px solid #2563eb' : '1px solid transparent' }}>
       <CardContent sx={{ p: ThemeTokens.spacing.sm }}>
         <Stack spacing={1}>
-          <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+          <Stack
+            direction="row"
+            spacing={1}
+            sx={{ justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap' }}
+          >
+            <Stack direction="row" spacing={1} sx={{ alignItems: 'center', flexWrap: 'wrap' }}>
               <Chip
                 label={badge.label}
                 size="small"
                 sx={{ backgroundColor: badge.color, color: badge.textColor, fontWeight: 700 }}
               />
               <Typography variant="caption" color="text.secondary">
-                {new Date(fixture.kickoffTime).toLocaleString('en-GB', {
-                  weekday: 'short',
-                  hour: '2-digit',
-                  minute: '2-digit',
-                })}
+                {formatKickoff(fixture.kickoffTime)}
               </Typography>
-              {fixture.elapsedMinute !== null && (
+              {fixture.elapsedMinute !== null && fixture.elapsedMinute > 0 && (
                 <Chip
                   icon={<AccessTimeIcon sx={{ fontSize: '14px !important' }} />}
                   label={`${fixture.elapsedMinute}${fixture.stoppageTime ? `+${fixture.stoppageTime}` : ''}'`}
@@ -401,12 +665,7 @@ function FixtureCard({
                 />
               )}
             </Stack>
-            <Stack direction="row" spacing={1}>
-              <Chip
-                label={`FDR ${fixture.difficulty.toFixed(1)}`}
-                size="small"
-                variant="outlined"
-              />
+            <Stack direction="row" spacing={1} sx={{ display: { xs: 'none', md: 'flex' } }}>
               <Button size="small" onClick={() => onSelectClub(fixture.homeTeamId)}>
                 {selectedClubId === fixture.homeTeamId ? 'Home Selected' : 'Home Club'}
               </Button>
@@ -434,15 +693,14 @@ function FixtureCard({
           </Stack>
 
           <Typography variant="caption" color="text.secondary">
-            {fixture.venue ?? 'Venue unavailable'} • {fixture.referee ?? 'Referee unavailable'} •{' '}
-            {fixture.period}
+            Match status · {fixture.period}
           </Typography>
 
           <Divider />
 
           <Box>
             <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5, display: 'block' }}>
-              Match Event Timeline
+              Match activity
             </Typography>
             {fixture.timeline.length === 0 ? (
               <Typography variant="body2" color="text.secondary">
@@ -450,7 +708,7 @@ function FixtureCard({
               </Typography>
             ) : (
               <Stack spacing={0.5}>
-                {fixture.timeline.slice(0, 12).map((event) => (
+                {fixture.timeline.slice(0, 6).map((event) => (
                   <Stack key={event.id} direction="row" spacing={1} sx={{ alignItems: 'center' }}>
                     <Typography variant="caption" sx={{ width: 34, fontWeight: 700 }}>
                       {event.minute !== null ? `${event.minute}'` : '—'}
@@ -515,14 +773,18 @@ function ClubBlock({
     <Stack
       direction={align === 'right' ? 'row-reverse' : 'row'}
       spacing={1}
-      sx={{ alignItems: 'center', minWidth: 180 }}
+      sx={{ alignItems: 'center', minWidth: { xs: 0, sm: 150 }, maxWidth: '42%' }}
     >
-      <Avatar src={getTeamBadgeUrl(code)} sx={{ width: 30, height: 30 }} />
+      <ClubLogo teamCode={code} clubName={name} size="medium" />
       <Box sx={{ textAlign: align }}>
         <Typography variant="body2" sx={{ fontWeight: 700 }}>
           {shortName}
         </Typography>
-        <Typography variant="caption" color="text.secondary">
+        <Typography
+          variant="caption"
+          color="text.secondary"
+          sx={{ display: { xs: 'none', sm: 'block' } }}
+        >
           {name}
         </Typography>
       </Box>
@@ -646,6 +908,8 @@ function CompactPlayerGrid({
     positionLabel: string;
     isCaptain: boolean;
     isViceCaptain: boolean;
+    isBench: boolean;
+    multiplier: number;
     minutes: number;
     livePoints: number;
     expectedPoints: number;
@@ -654,6 +918,7 @@ function CompactPlayerGrid({
     assists: number;
     yellowCards: number;
     redCards: number;
+    status: LiveStatusBadge;
     currentFixture: string;
     remainingFixture: string;
   }>;
@@ -682,7 +947,7 @@ function CompactPlayerGrid({
             py: 0.75,
           }}
         >
-          <Avatar src={getPlayerHeadshotUrl(player.playerCode)} sx={{ width: 24, height: 24 }} />
+          <PlayerAvatar playerCode={player.playerCode} name={player.playerName} size="small" />
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <Button
               size="small"
@@ -695,18 +960,32 @@ function CompactPlayerGrid({
               {player.positionLabel} • {player.teamShortName} • {player.currentFixture}
             </Typography>
             <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
-              Min {player.minutes} • Live {player.livePoints} • Exp {player.expectedPoints} • B+{' '}
-              {player.bonusPending}
+              {player.status === 'ft'
+                ? 'FT'
+                : player.status === 'ht'
+                  ? 'HT'
+                  : player.status === 'live'
+                    ? 'LIVE'
+                    : 'Upcoming'}{' '}
+              • x{player.multiplier} • Min {player.minutes}
             </Typography>
             <Typography variant="caption" color="text.secondary" sx={{ display: 'block' }}>
               G/A {player.goals}/{player.assists} • Cards {player.yellowCards + player.redCards} •{' '}
               {player.remainingFixture}
             </Typography>
           </Box>
-          {player.isCaptain && <Chip label="C" size="small" sx={{ height: 20 }} />}
-          {!player.isCaptain && player.isViceCaptain && (
-            <Chip label="VC" size="small" sx={{ height: 20 }} />
-          )}
+          <Stack spacing={0.5} sx={{ alignItems: 'flex-end' }}>
+            <CaptainBadge captain={player.isCaptain} viceCaptain={player.isViceCaptain} />
+            {player.isBench && (
+              <Chip
+                label={player.multiplier > 0 ? 'Bench Boost' : 'Bench'}
+                size="small"
+                variant="outlined"
+                sx={{ height: 22 }}
+              />
+            )}
+            <PointsChangeIndicator value={player.livePoints} />
+          </Stack>
         </Stack>
       ))}
     </Box>
@@ -724,9 +1003,6 @@ function LiveLeagueTable({ rows }: { rows: LiveLeagueRow[] }): React.ReactElemen
             <TableCell align="right">GW</TableCell>
             <TableCell align="right">Total</TableCell>
             <TableCell align="center">Move</TableCell>
-            <TableCell>Captain</TableCell>
-            <TableCell>Chip</TableCell>
-            <TableCell align="right">Bench</TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -774,9 +1050,6 @@ function LiveLeagueTable({ rows }: { rows: LiveLeagueRow[] }): React.ReactElemen
                   <Chip icon={<DragHandleIcon />} label="0" size="small" variant="outlined" />
                 )}
               </TableCell>
-              <TableCell>{row.captainName ?? '—'}</TableCell>
-              <TableCell>{row.chipUsed ?? '—'}</TableCell>
-              <TableCell align="right">{row.benchPoints}</TableCell>
             </TableRow>
           ))}
         </TableBody>
@@ -801,7 +1074,7 @@ function LiveMatchCenterSkeleton(): React.ReactElement {
       <Box
         sx={{
           display: 'grid',
-          gridTemplateColumns: { xs: '1fr', xl: '1.7fr 1fr' },
+          gridTemplateColumns: { xs: '1fr', lg: '1.55fr 1fr' },
           gap: ThemeTokens.spacing.md,
         }}
       >

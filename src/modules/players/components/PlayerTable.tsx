@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  Avatar,
   Box,
   Button,
   Card,
@@ -22,7 +21,7 @@ import type { Theme } from '@mui/material/styles';
 import type { Player } from '@domain/models';
 import { Position } from '@domain/enums';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { getPlayerImageUrl, getTeamBadgeUrl } from '@shared/assets';
+import { ClubLogo, PlayerAvatar } from '@shared/components';
 import { getPlayerStatusLabel } from '../utils';
 import type { PlayerFilters } from '../types';
 
@@ -105,9 +104,12 @@ export function PlayerTable({
                   }}
                   onClick={() => onRowClick(player)}
                 >
-                  <Avatar src={getPlayerImageUrl(player.clubCode)} alt={player.displayName}>
-                    {player.displayName.charAt(0)}
-                  </Avatar>
+                  <PlayerAvatar
+                    playerCode={player.clubCode}
+                    photo={player.photo}
+                    name={player.displayName}
+                    size="medium"
+                  />
                   <Box sx={{ minWidth: 0 }}>
                     <Typography variant="subtitle2" noWrap sx={{ fontWeight: 700 }}>
                       {player.displayName}
@@ -236,13 +238,12 @@ export function PlayerTable({
                     sx={{ display: 'flex', alignItems: 'center', gap: 1.2, cursor: 'pointer' }}
                     onClick={() => onRowClick(player)}
                   >
-                    <Avatar
-                      src={getPlayerImageUrl(player.clubCode)}
-                      alt={player.displayName}
-                      sx={{ width: 32, height: 32 }}
-                    >
-                      {player.displayName.charAt(0)}
-                    </Avatar>
+                    <PlayerAvatar
+                      playerCode={player.clubCode}
+                      photo={player.photo}
+                      name={player.displayName}
+                      size="small"
+                    />
                     <Typography variant="body2" sx={{ fontWeight: 600 }}>
                       {player.displayName}
                     </Typography>
@@ -250,11 +251,7 @@ export function PlayerTable({
                 </TableCell>
                 <TableCell>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.9 }}>
-                    <Avatar
-                      src={getTeamBadgeUrl(player.teamCode)}
-                      sx={{ width: 18, height: 18 }}
-                      alt={player.club}
-                    />
+                    <ClubLogo teamCode={player.teamCode} clubName={player.club} size="small" />
                     <Typography variant="body2">{player.club}</Typography>
                   </Box>
                 </TableCell>

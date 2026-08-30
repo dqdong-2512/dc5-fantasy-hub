@@ -5,6 +5,11 @@ import { FplLivePointsCalculator } from '../../worker/src/FplLivePointsCalculato
 import { FplNormalizer } from '../../worker/src/FplNormalizer';
 import type { FplEntryPicks, FplLivePlayer } from '../../worker/src/models';
 import { stableHash } from '../../worker/src/utils';
+import {
+  getPlayerImageUrl,
+  getTeamBadgeUrl,
+  resolvePlayerPhotoIdentifier,
+} from '../../src/shared/assets/officialAssets';
 
 function assert(condition: boolean, message: string): void {
   if (!condition) throw new Error(message);
@@ -36,6 +41,8 @@ function picks(overrides: Partial<FplEntryPicks> = {}): FplEntryPicks {
     gameweek: 2,
     activeChip: null,
     transferCost: 4,
+    bank: null,
+    teamValue: null,
     automaticSubstitutions: [],
     picks: [
       { playerId: 1, position: 1, multiplier: 2, isCaptain: true, isViceCaptain: false },
@@ -101,6 +108,15 @@ function runNullableAndPreseasonTests(): void {
   assert(bootstrap.gameweeks[0].deadlineTime === null, 'Nullable deadline must remain null');
   assert(bootstrap.players[0].id === 0, 'Malformed nullable player must normalize safely');
 
+  const entry = normalizer.normalizeEntry({ id: 10, summary_overall_rank: null });
+  assert(entry.overallRank === null, 'Null manager rank must remain null');
+  const normalizedPicks = normalizer.normalizeEntryPicks(
+    { entry_history: { bank: null, value: null }, picks: [] },
+    10,
+    1
+  );
+  assert(normalizedPicks.teamValue === null, 'Null team value must remain null');
+
   const future = new Date(Date.now() + 86_400_000).toISOString();
   const preseason = new FplGameweekResolver().resolve(
     [
@@ -120,6 +136,57 @@ function runNullableAndPreseasonTests(): void {
     []
   );
   assert(preseason.phase === 'PRESEASON', 'Future GW1 with no completed GW must be preseason');
+
+  const locked = new FplGameweekResolver().resolve(
+    [{ ...preseason.gameweek!, deadlineTime: new Date(Date.now() - 60_000).toISOString() }],
+    []
+  );
+  assert(
+    locked.phase === 'LOCKED',
+    'Post-deadline gameweek with no started fixture must be locked'
+  );
+
+  const live = new FplGameweekResolver().resolve(
+    [{ ...preseason.gameweek!, deadlineTime: new Date(Date.now() - 60_000).toISOString() }],
+    [
+      {
+        id: 1,
+        gameweek: 1,
+        homeTeamId: 1,
+        awayTeamId: 2,
+        homeScore: 0,
+        awayScore: 0,
+        kickoffTime: null,
+        started: true,
+        finished: false,
+        finishedProvisional: false,
+        minutes: null,
+      },
+    ]
+  );
+  assert(live.phase === 'LIVE', 'Started unfinished fixture must resolve to live gameweek');
+
+  const final = new FplGameweekResolver().resolve(
+    [{ ...preseason.gameweek!, finished: true, dataChecked: true }],
+    []
+  );
+  assert(final.phase === 'FINAL', 'Checked completed gameweek must resolve to final');
+}
+
+function runAssetFallbackTests(): void {
+  assert(
+    resolvePlayerPhotoIdentifier('223094.jpg') === '223094',
+    'FPL photo filename must resolve to its player code'
+  );
+  assert(
+    resolvePlayerPhotoIdentifier('not-a-photo') === null,
+    'Malformed player photo must be rejected'
+  );
+  assert(
+    getPlayerImageUrl(undefined).includes('player-photo-placeholder.svg'),
+    'Missing player image must resolve to the fallback asset'
+  );
+  assert(getTeamBadgeUrl(null) === '', 'Missing club logo must allow the component fallback');
 }
 
 async function runUpstreamFallbackTests(): Promise<void> {
@@ -167,6 +234,7 @@ async function runUpstreamFallbackTests(): Promise<void> {
 async function main(): Promise<void> {
   runLivePointsTests();
   runNullableAndPreseasonTests();
+  runAssetFallbackTests();
   await runUpstreamFallbackTests();
   console.log('fpl-live-pipeline.test.ts: all tests passed');
 }

@@ -62,6 +62,7 @@ export function useLiveMatchCenter(options: UseLiveMatchCenterOptions): UseLiveM
       });
 
       setSnapshot(data);
+      setError(null);
 
       if (selectedClubId !== null) {
         setSelectedClubPanel(serviceRef.current.getClubLivePanel(selectedClubId));
@@ -104,7 +105,10 @@ export function useLiveMatchCenter(options: UseLiveMatchCenterOptions): UseLiveM
       return;
     }
 
-    const intervalMs = options.refreshIntervalMs ?? 30000;
+    const phase = snapshotRef.current?.header.phase;
+    const intervalMs =
+      options.refreshIntervalMs ??
+      (phase === 'LIVE' ? 20000 : phase === 'LOCKED' || phase === 'PROVISIONAL' ? 60000 : 180000);
     service.startBackgroundPolling(pollKey, intervalMs, async () => {
       try {
         const data = await service.getLiveMatchCenterSnapshot({
@@ -115,6 +119,7 @@ export function useLiveMatchCenter(options: UseLiveMatchCenterOptions): UseLiveM
         });
 
         setSnapshot(data);
+        setError(null);
 
         if (selectedClubId !== null) {
           setSelectedClubPanel(service.getClubLivePanel(selectedClubId));
@@ -124,6 +129,7 @@ export function useLiveMatchCenter(options: UseLiveMatchCenterOptions): UseLiveM
         }
       } catch {
         // Keep last successful snapshot if polling fails.
+        setError('Live data temporarily unavailable. Showing the latest successful update.');
       }
     });
 

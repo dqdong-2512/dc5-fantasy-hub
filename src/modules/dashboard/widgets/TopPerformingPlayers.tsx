@@ -13,14 +13,13 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Avatar,
 } from '@mui/material';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import { DashboardWidget } from '../components/DashboardWidget';
 import { PlayerRepository } from '@repositories/players';
 import { BootstrapRepository } from '@repositories/bootstrap';
 import { PlayerPresenter } from '@shared/presentation';
-import { getPlayerImageUrl } from '@shared/assets';
+import { PlayerAvatar } from '@shared/components';
 
 export interface TopPerformingPlayersProps {
   onPlayerClick?: (playerId: number) => void;
@@ -89,13 +88,7 @@ export const TopPerformingPlayers: React.FC<TopPerformingPlayersProps> = ({ onPl
                   <TableCell>
                     <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                       <Typography sx={{ fontWeight: 600, minWidth: 20 }}>{idx + 1}</Typography>
-                      <Avatar
-                        src={getPlayerImageUrl(player.id)}
-                        sx={{ width: 32, height: 32 }}
-                        alt={player.name}
-                      >
-                        {player.name.charAt(0)}
-                      </Avatar>
+                      <PlayerAvatar src={player.image} name={player.name} size="small" />
                       <Box sx={{ minWidth: 0 }}>
                         <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
                           {player.name}

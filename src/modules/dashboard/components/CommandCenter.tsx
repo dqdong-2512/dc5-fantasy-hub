@@ -15,7 +15,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Avatar,
   Chip,
   Alert,
 } from '@mui/material';
@@ -26,7 +25,7 @@ import { DashboardWidget } from './DashboardWidget';
 import { BootstrapRepository } from '@repositories/bootstrap';
 import { PlayerRepository } from '@repositories/players';
 import { compileCommandCenterData } from '../insights';
-import { getPlayerImageUrl } from '@shared/assets';
+import { PlayerAvatar } from '@shared/components/data-display';
 import { getSeasonDisplay } from '@config/appConfig';
 import { ThemeTokens } from '@shared/theme/tokens';
 import type { PlayerRecommendation } from '../insights';
@@ -59,13 +58,12 @@ const PlayerRow: React.FC<PlayerRowProps> = ({ player, hideReason }) => (
   <TableRow sx={{ '&:hover': { backgroundColor: '#f9f9f9' } }}>
     <TableCell sx={{ maxWidth: 200 }}>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-        <Avatar
-          src={getPlayerImageUrl(player.playerId)}
-          sx={{ width: 32, height: 32 }}
-          alt={player.playerName}
-        >
-          {player.playerName.charAt(0)}
-        </Avatar>
+        <PlayerAvatar
+          playerCode={player.playerCode}
+          photo={player.photo}
+          name={player.playerName}
+          size="small"
+        />
         <Box sx={{ minWidth: 0 }}>
           <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
             {player.playerName}
@@ -319,12 +317,12 @@ export const CommandCenter: React.FC = () => {
                     >
                       <TableCell sx={{ maxWidth: 200 }}>
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-                          <Avatar
-                            src={getPlayerImageUrl(player.playerId)}
-                            sx={{ width: 32, height: 32 }}
-                          >
-                            {player.playerName.charAt(0)}
-                          </Avatar>
+                          <PlayerAvatar
+                            playerCode={player.playerCode}
+                            photo={player.photo}
+                            name={player.playerName}
+                            size="small"
+                          />
                           <Box sx={{ minWidth: 0 }}>
                             <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
                               {player.playerName}

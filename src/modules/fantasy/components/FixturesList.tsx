@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { Box, Chip, Stack, Typography } from '@mui/material';
 import { FixtureRepository } from '@repositories/fixtures';
-import { getTeamBadgeUrl } from '@shared/assets';
+import { ClubLogo } from '@shared/components/data-display';
 import { ThemeTokens } from '@shared/theme/tokens';
 
 export interface FixturesListProps {
@@ -112,11 +112,10 @@ export const FixturesList: React.FC<FixturesListProps> = ({
                 }}
               >
                 <Stack direction="row" spacing={1} sx={{ alignItems: 'center', minWidth: 0 }}>
-                  <Box
-                    component="img"
-                    src={getTeamBadgeUrl(fixture.homeTeam.code)}
-                    alt=""
-                    sx={{ width: 30, height: 30, objectFit: 'contain', flexShrink: 0 }}
+                  <ClubLogo
+                    teamCode={fixture.homeTeam.code}
+                    clubName={fixture.homeTeam.shortName}
+                    size="small"
                   />
                   <Typography sx={{ fontSize: '0.9rem', fontWeight: 700 }} noWrap>
                     {fixture.homeTeam.shortName}
@@ -137,11 +136,10 @@ export const FixturesList: React.FC<FixturesListProps> = ({
                   <Typography sx={{ fontSize: '0.9rem', fontWeight: 700 }} noWrap>
                     {fixture.awayTeam.shortName}
                   </Typography>
-                  <Box
-                    component="img"
-                    src={getTeamBadgeUrl(fixture.awayTeam.code)}
-                    alt=""
-                    sx={{ width: 30, height: 30, objectFit: 'contain', flexShrink: 0 }}
+                  <ClubLogo
+                    teamCode={fixture.awayTeam.code}
+                    clubName={fixture.awayTeam.shortName}
+                    size="small"
                   />
                 </Stack>
               </Box>
@@ -163,11 +161,7 @@ export const FixturesList: React.FC<FixturesListProps> = ({
                     height: 24,
                     fontWeight: 750,
                     color: fixture.finished ? '#166534' : isLive ? '#b91c1c' : '#1d4ed8',
-                    backgroundColor: fixture.finished
-                      ? '#dcfce7'
-                      : isLive
-                        ? '#fee2e2'
-                        : '#dbeafe',
+                    backgroundColor: fixture.finished ? '#dcfce7' : isLive ? '#fee2e2' : '#dbeafe',
                   }}
                 />
               </Stack>

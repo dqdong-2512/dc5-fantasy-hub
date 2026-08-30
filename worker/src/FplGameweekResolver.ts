@@ -38,6 +38,6 @@ export class FplGameweekResolver {
         pollIntervalSeconds: 300,
       };
     }
-    return { gameweek, phase: 'PRE_DEADLINE', pollIntervalSeconds: 180 };
+    return { gameweek, phase: 'LOCKED', pollIntervalSeconds: 60 };
   }
 }

@@ -7,7 +7,7 @@ import React, { useMemo } from 'react';
 import { Box, Typography } from '@mui/material';
 import { PlayerRepository } from '@repositories/players';
 import { FixtureRepository } from '@repositories/fixtures';
-import { getPlayerImageUrl } from '@shared/assets';
+import { PlayerAvatar } from '@shared/components';
 
 export interface PitchPlayerProps {
   playerId: number;
@@ -98,16 +98,12 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
           background: 'linear-gradient(145deg, rgba(255,255,255,.94), rgba(226,232,240,.88))',
         }}
       >
-        <Box
-          component="img"
-          src={getPlayerImageUrl(player.clubCode)}
-          alt={player.displayName}
-          sx={{
-            width: { xs: mobileImageSize, sm: config.avatar },
-            height: { xs: mobileImageSize, sm: config.avatar },
-            objectFit: 'contain',
-            objectPosition: 'bottom center',
-          }}
+        <PlayerAvatar
+          playerCode={player.clubCode}
+          photo={player.photo}
+          name={player.displayName}
+          size={size}
+          lazy={false}
         />
 
         {/* Captain Badge */}

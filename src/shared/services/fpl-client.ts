@@ -130,6 +130,7 @@ export interface FPLFixture {
   team_a_score: number | null;
   team_h_difficulty: number;
   team_a_difficulty: number;
+  minutes: number | null;
 }
 
 // Personal Entry API Interfaces
@@ -326,11 +327,34 @@ export interface EventLiveData {
   elements: LivePlayerStats[];
 }
 
-interface InternalApiResponse<T> {
+export interface InternalApiResponse<T> {
   data: T | null;
   dataStatus: 'LIVE' | 'STALE' | 'ERROR';
   lastUpdated: string;
   error?: string;
+}
+
+export interface InternalLiveLeagueMember {
+  entryId: number;
+  managerName: string;
+  teamName: string;
+  rank: number | null;
+  previousRank: number | null;
+  gameweekPoints: number;
+  totalPoints: number;
+  liveGameweekPoints: number;
+  liveTotalPoints: number;
+  liveRank: number;
+  rankMovement: number | null;
+  provisional: boolean;
+}
+
+export interface InternalLiveLeague {
+  leagueId: number;
+  leagueName: string;
+  gameweek: number;
+  members: InternalLiveLeagueMember[];
+  provisional: boolean;
 }
 
 interface InternalBootstrap {
@@ -548,8 +572,8 @@ export class FplClient {
           rank_sort: null,
           overall_rank: null,
           percentile_rank: null,
-          bank: 0,
-          value: 0,
+          bank: this.nullableNumber(data.bank) ?? Number.NaN,
+          value: this.nullableNumber(data.teamValue) ?? Number.NaN,
           event_transfers: 0,
           event_transfers_cost: this.number(data.transferCost),
           transfers_made: 0,
@@ -614,6 +638,18 @@ export class FplClient {
       this.httpClient.get<LeagueStandingsData>(
         `/leagues-classic/${leagueId}/standings/${pageParam}`
       )
+    );
+  }
+
+  async getLiveLeague(
+    leagueId: number,
+    gameweek: number
+  ): Promise<InternalApiResponse<InternalLiveLeague>> {
+    if (!this.useInternalApi) {
+      throw new Error('Live league calculation is only available through the internal FPL API.');
+    }
+    return this.httpClient.get<InternalApiResponse<InternalLiveLeague>>(
+      `/league/${leagueId}/live?gw=${gameweek}`
     );
   }
 
@@ -738,6 +774,7 @@ export class FplClient {
       team_a_score: this.nullableNumber(fixture.awayScore),
       team_h_difficulty: 0,
       team_a_difficulty: 0,
+      minutes: this.nullableNumber(fixture.minutes),
     };
   }
 

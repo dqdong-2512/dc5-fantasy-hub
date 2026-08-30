@@ -4,12 +4,12 @@
  */
 
 import React, { useMemo } from 'react';
-import { Box, Typography, Stack, Avatar, LinearProgress } from '@mui/material';
+import { Box, Typography, Stack, LinearProgress } from '@mui/material';
 import PeopleIcon from '@mui/icons-material/People';
 import { DashboardWidget } from '../components/DashboardWidget';
 import { PlayerRepository } from '@repositories/players';
 import { PlayerPresenter } from '@shared/presentation';
-import { getPlayerImageUrl } from '@shared/assets';
+import { PlayerAvatar } from '@shared/components/data-display';
 import { ThemeTokens } from '@shared/theme/tokens';
 
 /**
@@ -53,13 +53,7 @@ export const MostSelectedPlayers: React.FC = () => {
                 <Typography sx={{ fontWeight: 600, minWidth: 20, color: '#9c27b0' }}>
                   #{idx + 1}
                 </Typography>
-                <Avatar
-                  src={getPlayerImageUrl(player.id)}
-                  sx={{ width: 36, height: 36 }}
-                  alt={player.name}
-                >
-                  {player.name.charAt(0)}
-                </Avatar>
+                <PlayerAvatar src={player.image} name={player.name} size="small" />
                 <Box sx={{ flex: 1, minWidth: 0 }}>
                   <Typography variant="body2" sx={{ fontWeight: 600 }} noWrap>
                     {player.name}

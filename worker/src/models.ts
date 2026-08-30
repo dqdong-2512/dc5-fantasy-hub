@@ -1,6 +1,7 @@
 export type FplDataStatus = 'LIVE' | 'STALE' | 'ERROR';
 
-export type FplGameweekPhase = 'PRESEASON' | 'PRE_DEADLINE' | 'LIVE' | 'PROVISIONAL' | 'FINAL';
+export type FplGameweekPhase =
+  'PRESEASON' | 'PRE_DEADLINE' | 'LOCKED' | 'LIVE' | 'PROVISIONAL' | 'FINAL';
 
 export interface InternalApiResponse<T> {
   data: T | null;
@@ -90,6 +91,7 @@ export interface FplFixture {
   started: boolean;
   finished: boolean;
   finishedProvisional: boolean;
+  minutes: number | null;
 }
 
 export interface FplLivePlayer {
@@ -170,6 +172,8 @@ export interface FplEntryPicks {
   gameweek: number;
   activeChip: string | null;
   transferCost: number;
+  bank: number | null;
+  teamValue: number | null;
   picks: FplPick[];
   automaticSubstitutions: FplAutomaticSubstitution[];
 }

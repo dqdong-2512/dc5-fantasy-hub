@@ -153,7 +153,4 @@ export function formatPositionBadge(position: string): string {
  * @param playerCode - FPL player code
  * @returns Player photo URL
  */
-export function getPlayerImageUrl(playerCode?: number): string {
-  if (!playerCode) return '/images/placeholder-player.png';
-  return `https://resources.premierleague.com/premierleague/photos/players/110x110/p${playerCode}.png`;
-}
+export { getPlayerImageUrl } from '@shared/assets';
