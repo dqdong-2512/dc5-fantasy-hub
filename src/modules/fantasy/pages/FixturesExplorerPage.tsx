@@ -17,8 +17,12 @@ import { FixtureRepository } from '@repositories/fixtures';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { FixturesList } from '../components';
+import { useLiveMatchCenter } from '../hooks';
+import { useGameweekHubState } from '../context';
+import { getStoredLeagueId } from '../components/FplConnectionGate';
 
 export const FixturesExplorerPage: React.FC = () => {
+  const gameState = useGameweekHubState();
   const gameweeks = useMemo(() => new BootstrapRepository().getBootstrap().gameweeks, []);
   const initialGameweek = useMemo(() => {
     return gameweeks.find((gameweek) => !gameweek.finished)?.id ?? gameweeks.at(-1)?.id ?? 1;
@@ -28,6 +32,12 @@ export const FixturesExplorerPage: React.FC = () => {
   const selected = gameweeks.find((gameweek) => gameweek.id === selectedGameweek);
   const fixtureRepository = useMemo(() => new FixtureRepository(), []);
   const fixtures = fixtureRepository.getByGameweek(selectedGameweek);
+  const live = useLiveMatchCenter({
+    gameweekId: selectedGameweek,
+    connectedEntryId: gameState.connectedEntryId,
+    connectedLeagueId: getStoredLeagueId(),
+    autoRefresh: true,
+  });
 
   return (
     <PageContainer
@@ -134,7 +144,11 @@ export const FixturesExplorerPage: React.FC = () => {
 
         <Card sx={{ border: '1px solid', borderColor: 'divider' }}>
           <CardContent sx={{ p: { xs: 2, md: 3 } }}>
-            <FixturesList gameweekId={selectedGameweek} title="Full match schedule" />
+            <FixturesList
+              gameweekId={selectedGameweek}
+              title="Full match schedule"
+              liveFixtures={live.snapshot?.fixtures}
+            />
           </CardContent>
         </Card>
       </Stack>

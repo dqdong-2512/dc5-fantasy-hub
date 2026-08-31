@@ -89,6 +89,14 @@ export function useManagerLeagues(
         const data = await repository.getLeagueStandings(currentLeagueId, pageNumber);
         setStandings(data.standings);
         setLeagueName(data.leagueName);
+        setLeagues(
+          (previous) =>
+            previous?.map((league) =>
+              league.id === currentLeagueId
+                ? { ...league, name: data.leagueName || league.name }
+                : league
+            ) ?? null
+        );
         setHasNextPage(data.hasNext);
         setPageSize(data.pageSize);
 

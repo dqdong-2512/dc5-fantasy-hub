@@ -1,14 +1,17 @@
-import React, { useMemo } from 'react';
-import { Box, Chip, Stack, Typography } from '@mui/material';
+import React, { useMemo, useState } from 'react';
+import { Box, Chip, Collapse, Divider, Stack, Typography } from '@mui/material';
+import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { FixtureRepository } from '@repositories/fixtures';
 import { ClubLogo } from '@shared/components/data-display';
 import { ThemeTokens } from '@shared/theme/tokens';
+import type { MatchCenterFixture } from '../services';
 
 export interface FixturesListProps {
   gameweekId: number;
   limit?: number;
   compact?: boolean;
   title?: string;
+  liveFixtures?: MatchCenterFixture[] | null;
 }
 
 export const FixturesList: React.FC<FixturesListProps> = ({
@@ -16,7 +19,9 @@ export const FixturesList: React.FC<FixturesListProps> = ({
   limit,
   compact = false,
   title,
+  liveFixtures,
 }) => {
+  const [expandedFixtureId, setExpandedFixtureId] = useState<number | null>(null);
   const fixtures = useMemo(() => {
     try {
       return new FixtureRepository().getByGameweek(gameweekId).sort((left, right) => {
@@ -82,16 +87,14 @@ export const FixturesList: React.FC<FixturesListProps> = ({
         {displayedFixtures.map((fixture) => {
           const isLive = fixture.started && !fixture.finished;
           const kickoff = new Date(fixture.kickoffTime);
+          const liveFixture = liveFixtures?.find((item) => item.id === fixture.id);
+          const isExpanded = expandedFixtureId === fixture.id;
 
           return (
             <Box
               key={fixture.id}
               sx={{
-                display: 'grid',
-                gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
-                alignItems: 'center',
-                gap: 1.5,
-                p: compact ? 1.25 : 1.5,
+                overflow: 'hidden',
                 backgroundColor: '#fff',
                 border: '1px solid',
                 borderColor: isLive ? '#fca5a5' : 'divider',
@@ -104,14 +107,27 @@ export const FixturesList: React.FC<FixturesListProps> = ({
               }}
             >
               <Box
+                role="button"
+                tabIndex={0}
+                aria-expanded={isExpanded}
+                onClick={() => setExpandedFixtureId(isExpanded ? null : fixture.id)}
+                onKeyDown={(event) => {
+                  if (event.key === 'Enter' || event.key === ' ') {
+                    event.preventDefault();
+                    setExpandedFixtureId(isExpanded ? null : fixture.id);
+                  }
+                }}
                 sx={{
                   display: 'grid',
-                  gridTemplateColumns: 'minmax(80px, 1fr) auto minmax(80px, 1fr)',
+                  gridTemplateColumns: { xs: '1fr', sm: '1fr auto' },
                   alignItems: 'center',
-                  gap: 1,
+                  gap: 1.5,
+                  p: compact ? 1.25 : 1.5,
+                  cursor: 'pointer',
                 }}
               >
-                <Stack direction="row" spacing={1} sx={{ alignItems: 'center', minWidth: 0 }}>
+                <Box sx={{ display: 'grid', gridTemplateColumns: 'minmax(80px, 1fr) auto minmax(80px, 1fr)', alignItems: 'center', gap: 1 }}>
+                  <Stack direction="row" spacing={1} sx={{ alignItems: 'center', minWidth: 0 }}>
                   <ClubLogo
                     teamCode={fixture.homeTeam.code}
                     clubName={fixture.homeTeam.shortName}
@@ -120,15 +136,15 @@ export const FixturesList: React.FC<FixturesListProps> = ({
                   <Typography sx={{ fontSize: '0.9rem', fontWeight: 700 }} noWrap>
                     {fixture.homeTeam.shortName}
                   </Typography>
-                </Stack>
+                  </Stack>
 
-                <Typography sx={{ fontWeight: 800, whiteSpace: 'nowrap' }}>
+                  <Typography sx={{ fontWeight: 800, whiteSpace: 'nowrap' }}>
                   {fixture.started || fixture.finished
                     ? `${fixture.homeTeamScore ?? 0} — ${fixture.awayTeamScore ?? 0}`
                     : 'vs'}
-                </Typography>
+                  </Typography>
 
-                <Stack
+                  <Stack
                   direction="row"
                   spacing={1}
                   sx={{ alignItems: 'center', justifyContent: 'flex-end', minWidth: 0 }}
@@ -141,14 +157,14 @@ export const FixturesList: React.FC<FixturesListProps> = ({
                     clubName={fixture.awayTeam.shortName}
                     size="small"
                   />
-                </Stack>
-              </Box>
+                  </Stack>
+                </Box>
 
-              <Stack
+                <Stack
                 direction="row"
                 spacing={1}
                 sx={{ alignItems: 'center', justifyContent: { xs: 'flex-end', sm: 'initial' } }}
-              >
+                >
                 {!fixture.started && !fixture.finished && (
                   <Typography variant="caption" color="text.secondary">
                     {kickoff.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
@@ -164,7 +180,33 @@ export const FixturesList: React.FC<FixturesListProps> = ({
                     backgroundColor: fixture.finished ? '#dcfce7' : isLive ? '#fee2e2' : '#dbeafe',
                   }}
                 />
-              </Stack>
+                  <KeyboardArrowDownRoundedIcon sx={{ transform: isExpanded ? 'rotate(180deg)' : 'none', transition: 'transform 180ms ease', color: '#64748b' }} />
+                </Stack>
+              </Box>
+
+              <Collapse in={isExpanded} unmountOnExit>
+                <Divider />
+                <Box sx={{ p: { xs: 1.5, md: 2 }, backgroundColor: '#f8fafc' }}>
+                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 1.5, mb: liveFixture?.timeline.length ? 2 : 0 }}>
+                    <Box><Typography variant="caption" color="text.secondary">Venue</Typography><Typography sx={{ fontWeight: 700 }}>{liveFixture?.venue || 'Not published by FPL'}</Typography></Box>
+                    <Box><Typography variant="caption" color="text.secondary">Referee</Typography><Typography sx={{ fontWeight: 700 }}>{liveFixture?.referee || 'Not published by FPL'}</Typography></Box>
+                    <Box><Typography variant="caption" color="text.secondary">Status</Typography><Typography sx={{ fontWeight: 700 }}>{liveFixture?.period || (fixture.finished ? 'FT' : 'NS')}</Typography></Box>
+                  </Box>
+                  {liveFixture?.timeline.length ? (
+                    <Stack spacing={1}>
+                      <Typography sx={{ fontWeight: 850 }}>Match events</Typography>
+                      {liveFixture.timeline.map((event) => (
+                        <Stack key={event.id} direction="row" sx={{ justifyContent: 'space-between', p: 1, borderRadius: '8px', backgroundColor: '#fff' }}>
+                          <Typography variant="body2"><strong>{event.playerName}</strong> · {event.label}</Typography>
+                          <Typography variant="body2" color="text.secondary">{event.minute ? `${event.minute}'` : event.teamShortName}</Typography>
+                        </Stack>
+                      ))}
+                    </Stack>
+                  ) : (
+                    <Typography variant="body2" color="text.secondary">Scorers, assists and bonus events will appear here as soon as FPL publishes live match data.</Typography>
+                  )}
+                </Box>
+              </Collapse>
             </Box>
           );
         })}

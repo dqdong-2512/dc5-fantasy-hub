@@ -1,5 +1,5 @@
 import React, { useMemo, useState } from 'react';
-import { Box, FormControl, MenuItem, Select, Typography } from '@mui/material';
+import { Box, Chip, FormControl, MenuItem, Select, Stack, Typography } from '@mui/material';
 import { BootstrapRepository } from '@repositories/bootstrap';
 import { PageContainer, StandingsTable } from '@shared/components';
 import { useStandings, useStandingsByGameweek } from '@shared/hooks';
@@ -45,7 +45,9 @@ export const PremierLeagueTablePage: React.FC = () => {
               setSelectedGameweek(typeof value === 'string' && value === '' ? null : Number(value));
             }}
           >
-            <MenuItem value="">Latest Completed</MenuItem>
+            <MenuItem value="">
+              {latestStandings.gameweekId ? `Gameweek ${latestStandings.gameweekId}` : 'Current table'}
+            </MenuItem>
             {allGameweeks.map((gameweek) => (
               <MenuItem key={gameweek.id} value={gameweek.id}>
                 {gameweek.name}
@@ -53,6 +55,12 @@ export const PremierLeagueTablePage: React.FC = () => {
             ))}
           </Select>
         </FormControl>
+
+        <Stack direction="row" spacing={1} sx={{ mt: 2, flexWrap: 'wrap', rowGap: 1 }}>
+          <Chip size="small" label="Champions League" sx={{ color: '#166534', backgroundColor: '#dcfce7' }} />
+          <Chip size="small" label="European places" sx={{ color: '#1d4ed8', backgroundColor: '#dbeafe' }} />
+          <Chip size="small" label="Relegation" sx={{ color: '#b91c1c', backgroundColor: '#fee2e2' }} />
+        </Stack>
       </Box>
 
       <StandingsTable

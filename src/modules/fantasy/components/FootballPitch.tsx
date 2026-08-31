@@ -35,8 +35,9 @@ const FormationRow: React.FC<{
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        gap: { xs: 0.5, sm: 1.5, md: 2.5 },
-        marginY: { xs: 1, sm: 1.5, md: 2 },
+        gap: { xs: 0.5, sm: 2, md: 3.5 },
+        marginY: { xs: 0.75, sm: 1, md: 1.25 },
+        width: '100%',
       }}
     >
       {players.map((player) => (
@@ -46,7 +47,7 @@ const FormationRow: React.FC<{
           gameweekPoints={player.gameweekPoints}
           isCaptain={player.isCaptain}
           isViceCaptain={player.isViceCaptain}
-          size="medium"
+          size="large"
           gameweekId={gameweekId}
         />
       ))}
@@ -110,9 +111,9 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({ squad, gameweekId 
           linear-gradient(180deg, #00a65a 0%, #009b53 100%)
         `,
         borderRadius: '12px',
-        padding: { xs: 1, sm: 2.5, md: 3 },
+        padding: { xs: 1, sm: 2, md: 2.5 },
         position: 'relative',
-        minHeight: { xs: 590, sm: 680, md: 720 },
+        minHeight: { xs: 540, sm: 590, md: 620 },
         maxWidth: '100%',
         overflow: 'hidden',
         border: '1px solid rgba(255,255,255,0.35)',

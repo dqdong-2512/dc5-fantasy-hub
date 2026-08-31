@@ -12,7 +12,6 @@ import {
   TableHead,
   TableRow,
   Paper,
-  Avatar,
   Box,
   Typography,
   useMediaQuery,
@@ -23,7 +22,7 @@ import {
 import type { StandingsRow } from '@shared/services/standings-calculator.service';
 import { StandingsCalculatorService } from '@shared/services/standings-calculator.service';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { getTeamBadgeUrl } from '@shared/assets';
+import { ClubLogo } from './data-display';
 
 export interface StandingsTableProps {
   standings: StandingsRow[] | null;
@@ -63,6 +62,8 @@ export function StandingsTable({
               alignItems: 'center',
               p: ThemeTokens.spacing.md,
               gap: ThemeTokens.spacing.md,
+              borderLeft: `4px solid ${getPositionColor(row.position)}`,
+              backgroundColor: getPositionBackground(row.position),
             }}
           >
             <Box sx={{ minWidth: 40, textAlign: 'center' }}>
@@ -98,11 +99,7 @@ export function StandingsTable({
 
             <Box sx={{ flex: 1, minWidth: 0 }}>
               <Box sx={{ display: 'flex', alignItems: 'center', gap: ThemeTokens.spacing.sm }}>
-                <Avatar
-                  src={getTeamBadgeUrl(row.team.code)}
-                  sx={{ width: 32, height: 32 }}
-                  alt={row.team.name}
-                />
+                <ClubLogo teamCode={row.team.code} clubName={row.team.name} size="medium" />
                 <Box sx={{ minWidth: 0 }}>
                   <Typography
                     variant="body2"
@@ -195,11 +192,7 @@ export function StandingsTable({
                 </TableCell>
                 <TableCell sx={{ fontSize: '0.85rem' }}>
                   <Box sx={{ display: 'flex', alignItems: 'center', gap: ThemeTokens.spacing.xs }}>
-                    <Avatar
-                      src={getTeamBadgeUrl(row.team.code)}
-                      sx={{ width: 24, height: 24 }}
-                      alt={row.team.name}
-                    />
+                    <ClubLogo teamCode={row.team.code} clubName={row.team.name} size="small" />
                     <span>{row.team.shortName}</span>
                   </Box>
                 </TableCell>
@@ -311,11 +304,7 @@ export function StandingsTable({
               </TableCell>
               <TableCell>
                 <Box sx={{ display: 'flex', alignItems: 'center', gap: ThemeTokens.spacing.md }}>
-                  <Avatar
-                    src={getTeamBadgeUrl(row.team.code)}
-                    sx={{ width: 32, height: 32 }}
-                    alt={row.team.name}
-                  />
+                  <ClubLogo teamCode={row.team.code} clubName={row.team.name} size="medium" />
                   <Box>
                     <Typography variant="body2" sx={{ fontWeight: 600 }}>
                       {row.team.name}
@@ -360,4 +349,11 @@ function getPositionColor(position: number): string {
   if (position === 5 || position === 6) return '#0d47a1';
   if (position >= 18) return '#b71c1c';
   return '#424242';
+}
+
+function getPositionBackground(position: number): string {
+  if (position <= 4) return '#f0fdf4';
+  if (position === 5 || position === 6) return '#eff6ff';
+  if (position >= 18) return '#fff1f2';
+  return '#ffffff';
 }

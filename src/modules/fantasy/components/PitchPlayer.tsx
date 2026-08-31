@@ -66,12 +66,12 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
   const sizeConfig = {
     small: { avatar: 48, card: 82, nameFont: '10px', pointsFont: '10px', badgeSize: 18 },
     medium: { avatar: 64, card: 104, nameFont: '11px', pointsFont: '10px', badgeSize: 20 },
-    large: { avatar: 76, card: 116, nameFont: '12px', pointsFont: '11px', badgeSize: 22 },
+    large: { avatar: 88, card: 128, nameFont: '12px', pointsFont: '11px', badgeSize: 22 },
   };
 
   const config = sizeConfig[size];
-  const mobileCardWidth = size === 'small' ? 72 : 62;
-  const mobileImageSize = size === 'small' ? 44 : 46;
+  const mobileCardWidth = size === 'small' ? 72 : 66;
+  const mobileImageSize = size === 'small' ? 44 : 50;
 
   return (
     <Box
