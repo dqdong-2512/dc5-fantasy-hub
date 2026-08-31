@@ -87,7 +87,8 @@ export class HttpClient {
         if (returnedHtml) {
           throw new Error(
             'FPL data service is not available. In local development, run `npm run dev` so ' +
-              'both the Worker and frontend start together. In production, verify ' +
+              'the Worker (port 8787) and frontend (port 5173) start together. If either port ' +
+              'is already occupied, stop that stale process and restart. In production, verify ' +
               '`VITE_FPL_API_BASE_URL` points to the deployed Worker.'
           );
         }

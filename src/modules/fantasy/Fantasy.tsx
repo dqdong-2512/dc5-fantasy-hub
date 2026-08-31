@@ -10,7 +10,6 @@ import { Navigate } from 'react-router-dom';
 import { useFantasyGame } from './hooks';
 import {
   FantasyWorkspace,
-  FantasyGameOverview,
   MyTeamPage,
   LeagueStandingsPage,
   GameweekCenterPage,
@@ -28,10 +27,10 @@ export const Fantasy: React.FC = () => {
     return <FantasyWorkspace gameState={gameState} />;
   }
 
-  // Not connected - route rendering falls back to overview, which now contains inline connection.
+  // Home owns the connection experience; the Gameweek root starts at My Team.
   const isRootPath = location.pathname === '/premier-league/gameweek';
   if (isRootPath) {
-    return <FantasyGameOverview />;
+    return <Navigate to="/premier-league/gameweek/my-team" replace />;
   }
 
   // Redirect /leagues (without ID) to primary league
@@ -40,7 +39,7 @@ export const Fantasy: React.FC = () => {
     return primaryLeagueId ? (
       <Navigate to={`/premier-league/gameweek/league/${primaryLeagueId}`} replace />
     ) : (
-      <FantasyGameOverview />
+      <Navigate to="/premier-league/home" replace />
     );
   }
 
@@ -74,6 +73,5 @@ export const Fantasy: React.FC = () => {
     return <MyTeamPage />;
   }
 
-  // The overview owns the runtime bootstrap and connection states.
-  return <FantasyGameOverview />;
+  return <Navigate to="/premier-league/home" replace />;
 };

@@ -11,6 +11,7 @@ import {
   Typography,
 } from '@mui/material';
 import { ThemeTokens } from '@shared/theme/tokens';
+import { FantasyGameRepository } from '@repositories/fantasy';
 import { useGameweekHubState } from '../context';
 
 export const CONNECTED_LEAGUE_STORAGE_KEY = 'fpl:connected_league_id';
@@ -56,6 +57,7 @@ export function FplConnectionGate({
   showConnectedSummary = true,
 }: FplConnectionGateProps): React.ReactElement {
   const gameState = useGameweekHubState();
+  const repository = useMemo(() => new FantasyGameRepository(), []);
   const [entryIdInput, setEntryIdInput] = useState('');
   const [leagueIdInput, setLeagueIdInput] = useState(() => {
     const stored = getStoredLeagueId();
@@ -63,6 +65,7 @@ export function FplConnectionGate({
   });
   const [entryValidationError, setEntryValidationError] = useState('');
   const [leagueValidationError, setLeagueValidationError] = useState('');
+  const [connectionError, setConnectionError] = useState('');
   const [isEditingConnection, setIsEditingConnection] = useState(false);
 
   const effectiveConnectedLeagueId = useMemo(() => {
@@ -76,7 +79,7 @@ export function FplConnectionGate({
     }
 
     return null;
-  }, [gameState.entry?.joinedLeaguesIds]);
+  }, [gameState.entry]);
 
   const validateEntryId = (value: string): number | null => {
     const trimmed = value.trim();
@@ -114,6 +117,7 @@ export function FplConnectionGate({
   const handleConnect = async (): Promise<void> => {
     setEntryValidationError('');
     setLeagueValidationError('');
+    setConnectionError('');
 
     const entryId = validateEntryId(entryIdInput);
     if (entryId === null) {
@@ -126,11 +130,16 @@ export function FplConnectionGate({
     }
 
     try {
+      if (parsedLeagueId !== null) {
+        await repository.getLeagueStandings(parsedLeagueId, 1);
+      }
       await gameState.connectEntry(entryId);
       setStoredLeagueId(parsedLeagueId);
       setIsEditingConnection(false);
-    } catch {
-      // Connection errors are surfaced via gameState.error
+    } catch (error) {
+      setConnectionError(
+        error instanceof Error ? error.message : 'Unable to connect to the FPL data service.'
+      );
     }
   };
 
@@ -141,6 +150,7 @@ export function FplConnectionGate({
     setLeagueIdInput('');
     setEntryValidationError('');
     setLeagueValidationError('');
+    setConnectionError('');
     setIsEditingConnection(false);
   };
 
@@ -148,6 +158,7 @@ export function FplConnectionGate({
     setIsEditingConnection(true);
     setEntryValidationError('');
     setLeagueValidationError('');
+    setConnectionError('');
     setEntryIdInput(gameState.connectedEntryId ? gameState.connectedEntryId.toString() : '');
     setLeagueIdInput(effectiveConnectedLeagueId ? effectiveConnectedLeagueId.toString() : '');
   };
@@ -201,7 +212,9 @@ export function FplConnectionGate({
                 fullWidth
               />
 
-              {gameState.error && <Alert severity="error">{gameState.error}</Alert>}
+              {(connectionError || gameState.error) && (
+                <Alert severity="error">{connectionError || gameState.error}</Alert>
+              )}
 
               <Stack direction="row" spacing={ThemeTokens.spacing.sm}>
                 <Button

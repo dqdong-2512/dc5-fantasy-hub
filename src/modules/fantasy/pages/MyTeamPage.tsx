@@ -199,10 +199,10 @@ export const MyTeamPage: React.FC = () => {
             >
               <Button
                 startIcon={<ArrowBackIcon />}
-                onClick={() => navigate('/premier-league/gameweek')}
+                onClick={() => navigate('/premier-league/home')}
                 sx={{ alignSelf: 'flex-start', p: 0, color: 'rgba(255,255,255,.82)', textTransform: 'none' }}
               >
-                Back to overview
+                Back to Home
               </Button>
               <Button
                 startIcon={<SwapCallsIcon />}

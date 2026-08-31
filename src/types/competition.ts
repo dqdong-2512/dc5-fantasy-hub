@@ -15,7 +15,7 @@ export const COMPETITIONS: Record<CompetitionType, CompetitionInfo> = {
     type: 'premier-league',
     name: 'Fantasy Premier League',
     subtitle: 'Official Fantasy Premier League Hub',
-    path: '/premier-league/dashboard',
+    path: '/premier-league/home',
     logoSrc: '/fpl-logo.png',
     logoAlt: 'Premier League lion',
     accentColor: '#37003c',

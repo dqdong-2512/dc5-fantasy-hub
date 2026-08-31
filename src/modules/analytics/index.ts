@@ -1,7 +1,3 @@
-// Analytics module
-export { Analytics } from './Analytics';
-export * from './components';
-export * from './context';
-export * from './pages';
+// Reusable analytics calculations. The standalone Analytics page was retired in favor of Home.
 export * from './services';
 export * from './types';

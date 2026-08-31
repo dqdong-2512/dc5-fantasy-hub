@@ -56,7 +56,7 @@ export const LeagueWorkspaceHeader: React.FC<LeagueWorkspaceHeaderProps> = ({
       <Stack spacing={2} sx={{ position: 'relative', zIndex: 1 }}>
         <Button
           startIcon={<ArrowBackIcon />}
-          onClick={() => navigate('/premier-league/gameweek/overview')}
+          onClick={() => navigate('/premier-league/home')}
           sx={{
             alignSelf: 'flex-start',
             p: 0,
@@ -65,7 +65,7 @@ export const LeagueWorkspaceHeader: React.FC<LeagueWorkspaceHeaderProps> = ({
             '&:hover': { backgroundColor: 'transparent', color: '#fff' },
           }}
         >
-          Back to overview
+          Back to Home
         </Button>
 
         <Stack

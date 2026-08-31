@@ -19,10 +19,9 @@ interface SidebarProps {
 }
 
 const MENU_ITEMS = [
-  { id: 'dashboard', label: 'Dashboard', path: 'dashboard' },
+  { id: 'home', label: 'Home', path: 'home' },
   { id: 'gameweek', label: 'Gameweek', path: 'gameweek' },
   { id: 'players', label: 'Players', path: 'players' },
-  { id: 'analytics', label: 'Analytics', path: 'analytics' },
   { id: 'champions', label: 'Champions League', path: 'champions-league/dashboard' },
 ];
 

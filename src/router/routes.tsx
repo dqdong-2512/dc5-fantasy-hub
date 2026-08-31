@@ -2,24 +2,11 @@ import React, { Suspense } from 'react';
 import { createBrowserRouter, RouterProvider, Navigate, useLocation } from 'react-router-dom';
 import { Box, Skeleton, Stack } from '@mui/material';
 import { CompetitionSelection } from '../app/CompetitionSelection';
-import {
-  CaptainPage,
-  DifferentialsPage,
-  FixturesPage,
-  FormPage,
-  OverviewPage,
-  TeamPage,
-  TransfersPage,
-  ValuePage,
-} from '../modules/analytics/pages';
 import { FplConnectionGate } from '../modules/fantasy/components';
 import { GameweekHubProvider } from '../modules/fantasy/context';
 import { AppLayout } from '../layouts/AppLayout';
 import { NotFound, ChampionsLeagueComingSoon } from '../shared/pages';
 
-const Dashboard = React.lazy(() =>
-  import('../modules/dashboard/Dashboard').then((module) => ({ default: module.Dashboard }))
-);
 const PlayerResearchHub = React.lazy(() =>
   import('../modules/players').then((module) => ({ default: module.PlayerResearchHub }))
 );
@@ -75,11 +62,6 @@ const SeasonPlannerPage = React.lazy(() =>
 );
 const PremierLeagueTablePage = React.lazy(() =>
   import('../modules/fantasy/pages').then((module) => ({ default: module.PremierLeagueTablePage }))
-);
-
-// Lazy load Analytics module to reduce initial bundle size
-const Analytics = React.lazy(() =>
-  import('../modules/analytics/Analytics').then((module) => ({ default: module.Analytics }))
 );
 
 const RouteLoadingFallback = () => (
@@ -139,15 +121,21 @@ const router = createBrowserRouter([
         children: [
           {
             index: true,
-            element: <Navigate to="dashboard" replace />,
+            element: <Navigate to="home" replace />,
+          },
+          {
+            path: 'home',
+            element: (
+              <GameweekHubProvider>
+                <Suspense fallback={<RouteLoadingFallback />}>
+                  <FantasyGameOverview />
+                </Suspense>
+              </GameweekHubProvider>
+            ),
           },
           {
             path: 'dashboard',
-            element: (
-              <Suspense fallback={<RouteLoadingFallback />}>
-                <Dashboard />
-              </Suspense>
-            ),
+            element: <Navigate to="/premier-league/home" replace />,
           },
           {
             path: 'players',
@@ -184,50 +172,8 @@ const router = createBrowserRouter([
             ],
           },
           {
-            path: 'analytics',
-            element: (
-              <Suspense fallback={<RouteLoadingFallback />}>
-                <Analytics />
-              </Suspense>
-            ),
-            children: [
-              {
-                index: true,
-                element: <Navigate to="overview" replace />,
-              },
-              {
-                path: 'overview',
-                element: <OverviewPage />,
-              },
-              {
-                path: 'captain',
-                element: <CaptainPage />,
-              },
-              {
-                path: 'form',
-                element: <FormPage />,
-              },
-              {
-                path: 'differentials',
-                element: <DifferentialsPage />,
-              },
-              {
-                path: 'value',
-                element: <ValuePage />,
-              },
-              {
-                path: 'transfers',
-                element: <TransfersPage />,
-              },
-              {
-                path: 'fixtures',
-                element: <FixturesPage />,
-              },
-              {
-                path: 'team',
-                element: <TeamPage />,
-              },
-            ],
+            path: 'analytics/*',
+            element: <Navigate to="/premier-league/home" replace />,
           },
           {
             path: 'gameweek',
@@ -241,19 +187,15 @@ const router = createBrowserRouter([
             children: [
               {
                 index: true,
-                element: <Navigate to="overview" replace />,
+                element: <Navigate to="my-team" replace />,
               },
               {
                 path: 'overview',
-                element: (
-                  <Suspense fallback={<RouteLoadingFallback />}>
-                    <FantasyGameOverview />
-                  </Suspense>
-                ),
+                element: <Navigate to="/premier-league/home" replace />,
               },
               {
                 path: 'connect',
-                element: <Navigate to="../overview" replace />,
+                element: <Navigate to="/premier-league/home" replace />,
               },
               {
                 path: 'my-team',

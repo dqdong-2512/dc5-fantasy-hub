@@ -60,8 +60,8 @@ export function PlayerExplorer(): React.ReactElement {
         <EmptyState
           title="Data unavailable"
           description={errorMessage}
-          actionLabel="Back to Dashboard"
-          onAction={() => navigate('/premier-league/dashboard')}
+          actionLabel="Back to Home"
+          onAction={() => navigate('/premier-league/home')}
         />
       </PageContent>
     );

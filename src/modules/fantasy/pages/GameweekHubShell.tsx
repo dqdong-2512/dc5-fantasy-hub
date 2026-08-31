@@ -6,7 +6,7 @@ import { ThemeTokens } from '@shared/theme/tokens';
 import { FantasyGameHeader } from '../components';
 import { useGameweekHubState } from '../context';
 
-type HubTabValue = 'overview' | 'my-team' | 'league' | 'fixtures' | 'clubs' | 'table';
+type HubTabValue = 'my-team' | 'league' | 'fixtures' | 'clubs' | 'table';
 
 interface HubTab {
   value: HubTabValue;
@@ -15,7 +15,6 @@ interface HubTab {
 }
 
 const HUB_TABS: HubTab[] = [
-  { value: 'overview', label: 'Overview', path: '/premier-league/gameweek/overview' },
   { value: 'my-team', label: 'My Team', path: '/premier-league/gameweek/my-team' },
   { value: 'league', label: 'League', path: '/premier-league/gameweek/league' },
   { value: 'fixtures', label: 'Fixtures', path: '/premier-league/gameweek/fixtures' },
@@ -24,15 +23,6 @@ const HUB_TABS: HubTab[] = [
 ];
 
 function resolveHubTabValue(pathname: string): HubTabValue {
-  if (
-    pathname === '/premier-league/gameweek' ||
-    pathname === '/premier-league/gameweek/' ||
-    pathname === '/premier-league/gameweek/overview' ||
-    pathname === '/premier-league/gameweek/connect'
-  ) {
-    return 'overview';
-  }
-
   if (
     pathname.startsWith('/premier-league/gameweek/my-team') ||
     pathname === '/premier-league/gameweek/team' ||
@@ -64,7 +54,7 @@ function resolveHubTabValue(pathname: string): HubTabValue {
     return 'table';
   }
 
-  return 'overview';
+  return 'my-team';
 }
 
 export function GameweekHubShell(): React.ReactElement {

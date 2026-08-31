@@ -27,10 +27,9 @@ interface NavItem {
 }
 
 const PREMIER_LEAGUE_NAV_ITEMS: NavItem[] = [
-  { label: 'Dashboard', path: '/premier-league/dashboard' },
+  { label: 'Home', path: '/premier-league/home' },
   { label: 'Gameweek', path: '/premier-league/gameweek' },
   { label: 'Players', path: '/premier-league/players' },
-  { label: 'Analytics', path: '/premier-league/analytics' },
 ];
 
 const CHAMPIONS_LEAGUE_NAV_ITEMS: NavItem[] = [
