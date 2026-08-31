@@ -5,6 +5,7 @@ import { FixtureRepository } from '@repositories/fixtures';
 import { ClubLogo } from '@shared/components/data-display';
 import { ThemeTokens } from '@shared/theme/tokens';
 import type { MatchCenterFixture } from '../services';
+import { FixtureMatchDetails } from './FixtureMatchDetails';
 
 export interface FixturesListProps {
   gameweekId: number;
@@ -186,26 +187,7 @@ export const FixturesList: React.FC<FixturesListProps> = ({
 
               <Collapse in={isExpanded} unmountOnExit>
                 <Divider />
-                <Box sx={{ p: { xs: 1.5, md: 2 }, backgroundColor: '#f8fafc' }}>
-                  <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' }, gap: 1.5, mb: liveFixture?.timeline.length ? 2 : 0 }}>
-                    <Box><Typography variant="caption" color="text.secondary">Venue</Typography><Typography sx={{ fontWeight: 700 }}>{liveFixture?.venue || 'Not published by FPL'}</Typography></Box>
-                    <Box><Typography variant="caption" color="text.secondary">Referee</Typography><Typography sx={{ fontWeight: 700 }}>{liveFixture?.referee || 'Not published by FPL'}</Typography></Box>
-                    <Box><Typography variant="caption" color="text.secondary">Status</Typography><Typography sx={{ fontWeight: 700 }}>{liveFixture?.period || (fixture.finished ? 'FT' : 'NS')}</Typography></Box>
-                  </Box>
-                  {liveFixture?.timeline.length ? (
-                    <Stack spacing={1}>
-                      <Typography sx={{ fontWeight: 850 }}>Match events</Typography>
-                      {liveFixture.timeline.map((event) => (
-                        <Stack key={event.id} direction="row" sx={{ justifyContent: 'space-between', p: 1, borderRadius: '8px', backgroundColor: '#fff' }}>
-                          <Typography variant="body2"><strong>{event.playerName}</strong> · {event.label}</Typography>
-                          <Typography variant="body2" color="text.secondary">{event.minute ? `${event.minute}'` : event.teamShortName}</Typography>
-                        </Stack>
-                      ))}
-                    </Stack>
-                  ) : (
-                    <Typography variant="body2" color="text.secondary">Scorers, assists and bonus events will appear here as soon as FPL publishes live match data.</Typography>
-                  )}
-                </Box>
+                <FixtureMatchDetails fixture={fixture} liveFixture={liveFixture} />
               </Collapse>
             </Box>
           );

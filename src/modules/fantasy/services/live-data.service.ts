@@ -50,6 +50,26 @@ export interface MatchOwnedPlayerLive {
   bonusPending: number;
 }
 
+export interface MatchPlayerStat {
+  playerId: number;
+  playerName: string;
+  playerCode: number;
+  teamId: number;
+  teamShortName: string;
+  minutes: number;
+  goals: number;
+  assists: number;
+  ownGoals: number;
+  penaltiesSaved: number;
+  penaltiesMissed: number;
+  yellowCards: number;
+  redCards: number;
+  saves: number;
+  bonus: number;
+  bps: number;
+  totalPoints: number;
+}
+
 export interface MatchCenterFixture {
   id: number;
   kickoffTime: string;
@@ -72,6 +92,7 @@ export interface MatchCenterFixture {
   difficulty: number;
   timeline: MatchTimelineEvent[];
   ownedPlayers: MatchOwnedPlayerLive[];
+  playerStats: MatchPlayerStat[];
 }
 
 export interface LiveLeagueRow {
@@ -868,6 +889,31 @@ export class LiveDataService {
       );
 
       const timeline = this.buildTimeline(fixture, fixturePlayers, liveByPlayerId, teamById);
+      const playerStats: MatchPlayerStat[] = fixturePlayers
+        .map((player) => {
+          const live = liveByPlayerId.get(player.id);
+          return {
+            playerId: player.id,
+            playerName: player.web_name,
+            playerCode: player.code ?? 0,
+            teamId: player.team,
+            teamShortName: teamById.get(player.team)?.short_name ?? 'UNK',
+            minutes: live?.minutes ?? 0,
+            goals: live?.goals_scored ?? 0,
+            assists: live?.assists ?? 0,
+            ownGoals: live?.own_goals ?? 0,
+            penaltiesSaved: live?.penalties_saved ?? 0,
+            penaltiesMissed: live?.penalties_missed ?? 0,
+            yellowCards: live?.yellow_cards ?? 0,
+            redCards: live?.red_cards ?? 0,
+            saves: live?.saves ?? 0,
+            bonus: live?.bonus ?? 0,
+            bps: live?.bps ?? 0,
+            totalPoints: live?.total_points ?? 0,
+          };
+        })
+        .filter((player) => player.minutes > 0 || player.goals > 0 || player.assists > 0 || player.totalPoints !== 0)
+        .sort((left, right) => right.totalPoints - left.totalPoints || right.bps - left.bps);
       const ownedPlayers = this.buildOwnedPlayerLive(
         status,
         fixturePlayers,
@@ -900,6 +946,7 @@ export class LiveDataService {
         ),
         timeline,
         ownedPlayers,
+        playerStats,
       });
     });
 

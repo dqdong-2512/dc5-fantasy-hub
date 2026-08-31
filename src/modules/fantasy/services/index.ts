@@ -52,6 +52,7 @@ export {
   type LiveMatchCenterSnapshot,
   type MatchCenterFixture,
   type MatchTimelineEvent,
+  type MatchPlayerStat,
   type MatchOwnedPlayerLive,
   type LiveLeagueRow,
   type LiveTeamView,
