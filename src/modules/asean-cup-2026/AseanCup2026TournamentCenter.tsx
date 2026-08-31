@@ -58,6 +58,7 @@ import {
   getFixtureStatusLabel,
   getFixtureStatusTone as getFixtureStatusColor,
 } from './fixture-display';
+import { TournamentHonoursSection } from './components/TournamentHonoursSection';
 
 type SortOrder = 'asc' | 'desc';
 type PlayerSortField =
@@ -350,7 +351,9 @@ function renderKnockoutLegCard(fixture: TournamentFixture): React.ReactElement {
     >
       <CardContent sx={{ p: { xs: 1.75, md: 2 } }}>
         <Stack spacing={1.35}>
-          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
+          <Box
+            sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}
+          >
             <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
               {translateStage(fixture.stage)}
             </Typography>
@@ -597,7 +600,8 @@ function renderFinalTieCard(
         borderColor: '#F59E0B',
         borderRadius: '18px',
         boxShadow: '0 18px 42px rgba(180, 83, 9, 0.2)',
-        background: 'linear-gradient(160deg, rgba(255, 247, 237, 1) 0%, #ffffff 46%, rgba(255,255,255,1) 100%)',
+        background:
+          'linear-gradient(160deg, rgba(255, 247, 237, 1) 0%, #ffffff 46%, rgba(255,255,255,1) 100%)',
       }}
     >
       <CardContent sx={{ p: { xs: 1.5, md: ThemeTokens.spacing.md } }}>
@@ -606,7 +610,14 @@ function renderFinalTieCard(
             <React.Fragment key={fixture.id}>
               {index > 0 && <Divider />}
               <Stack spacing={1}>
-                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 1 }}>
+                <Box
+                  sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'space-between',
+                    gap: 1,
+                  }}
+                >
                   <Typography variant="subtitle2" sx={{ fontWeight: 800 }}>
                     {index === 0 ? 'Lượt đi' : 'Lượt về'}
                   </Typography>
@@ -2101,6 +2112,15 @@ export const AseanCup2026TournamentCenter: React.FC = (): React.ReactElement => 
           </CardContent>
         </Card>
       </PageSection>
+
+      <Divider
+        sx={{
+          mt: ThemeTokens.spacing.xxxl,
+          mb: ThemeTokens.spacing.xxxl,
+        }}
+      />
+
+      <TournamentHonoursSection />
 
       <Divider
         sx={{
