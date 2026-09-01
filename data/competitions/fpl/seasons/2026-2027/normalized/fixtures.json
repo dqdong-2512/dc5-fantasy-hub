@@ -137,7 +137,7 @@
     "homeTeamScore": 1,
     "awayTeamScore": 4,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-08-28T19:00:00Z",
     "homeDifficulty": 4,
     "awayDifficulty": 3
@@ -150,7 +150,7 @@
     "homeTeamScore": 2,
     "awayTeamScore": 2,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-08-29T11:30:00Z",
     "homeDifficulty": 3,
     "awayDifficulty": 4
@@ -163,7 +163,7 @@
     "homeTeamScore": 1,
     "awayTeamScore": 1,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-08-29T14:00:00Z",
     "homeDifficulty": 3,
     "awayDifficulty": 3
@@ -176,7 +176,7 @@
     "homeTeamScore": 0,
     "awayTeamScore": 1,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-08-29T14:00:00Z",
     "homeDifficulty": 2,
     "awayDifficulty": 2
@@ -189,7 +189,7 @@
     "homeTeamScore": 0,
     "awayTeamScore": 2,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-08-29T16:30:00Z",
     "homeDifficulty": 2,
     "awayDifficulty": 3
@@ -202,7 +202,7 @@
     "homeTeamScore": 4,
     "awayTeamScore": 3,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-08-30T13:00:00Z",
     "homeDifficulty": 2,
     "awayDifficulty": 4
@@ -215,7 +215,7 @@
     "homeTeamScore": 1,
     "awayTeamScore": 1,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-08-30T13:00:00Z",
     "homeDifficulty": 3,
     "awayDifficulty": 3
@@ -228,7 +228,7 @@
     "homeTeamScore": 1,
     "awayTeamScore": 0,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-08-30T13:00:00Z",
     "homeDifficulty": 2,
     "awayDifficulty": 3
@@ -241,7 +241,7 @@
     "homeTeamScore": 5,
     "awayTeamScore": 2,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-08-30T15:30:00Z",
     "homeDifficulty": 2,
     "awayDifficulty": 4
@@ -254,7 +254,7 @@
     "homeTeamScore": 0,
     "awayTeamScore": 1,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-08-31T19:00:00Z",
     "homeDifficulty": 4,
     "awayDifficulty": 4
