@@ -46,7 +46,7 @@ export default [
     },
   },
   {
-    files: ['worker/src/**/*.ts'],
+    files: ['worker/src/**/*.ts', 'functions/**/*.ts'],
     languageOptions: {
       ecmaVersion: 2023,
       sourceType: 'module',

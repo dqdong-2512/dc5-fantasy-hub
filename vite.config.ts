@@ -3,6 +3,7 @@ import { defineConfig, type Plugin } from 'vite';
 import react from '@vitejs/plugin-react';
 import path from 'path';
 import { appConfig } from './src/config/appConfig';
+import fplWorker from './worker/src/index';
 
 const fplSeasonAssetsDir = path.resolve(
   __dirname,
@@ -66,8 +67,49 @@ function fplSeasonAssetsPlugin(): Plugin {
   };
 }
 
+function fplDevelopmentApiPlugin(): Plugin {
+  return {
+    name: 'fpl-development-api',
+    configureServer(server) {
+      server.middlewares.use(async (req, res, next) => {
+        const requestPath = req.url?.split('?')[0] ?? '';
+        if (!requestPath.startsWith('/api/fpl')) {
+          next();
+          return;
+        }
+
+        try {
+          const requestUrl = new URL(req.url ?? '/api/fpl/status', 'http://localhost:5173');
+          const response = await fplWorker.fetch(
+            new Request(requestUrl, { method: req.method ?? 'GET' }),
+            { ALLOWED_ORIGIN: 'http://localhost:5173' }
+          );
+
+          res.statusCode = response.status;
+          response.headers.forEach((value, key) => res.setHeader(key, value));
+          res.end(await response.text());
+        } catch (error) {
+          server.config.logger.error(
+            `Local FPL API failed: ${error instanceof Error ? error.message : String(error)}`
+          );
+          res.statusCode = 503;
+          res.setHeader('Content-Type', 'application/json; charset=utf-8');
+          res.end(
+            JSON.stringify({
+              data: null,
+              dataStatus: 'ERROR',
+              lastUpdated: new Date().toISOString(),
+              error: 'Local FPL API is temporarily unavailable.',
+            })
+          );
+        }
+      });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [react(), fplSeasonAssetsPlugin()],
+  plugins: [react(), fplSeasonAssetsPlugin(), fplDevelopmentApiPlugin()],
   // Keep competition branding in /public. FPL player photos remain owned by the
   // active season data directory and are exposed by fplSeasonAssetsPlugin.
   publicDir: path.resolve(__dirname, 'public'),
@@ -93,12 +135,6 @@ export default defineConfig({
     port: 5173,
     strictPort: true,
     open: true,
-    proxy: {
-      '/api/fpl': {
-        target: 'http://127.0.0.1:8787',
-        changeOrigin: true,
-      },
-    },
   },
   build: {
     outDir: 'dist',

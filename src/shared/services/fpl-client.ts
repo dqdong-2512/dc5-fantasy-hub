@@ -387,9 +387,9 @@ export class FplClient {
   constructor() {
     // Use environment variable if available, otherwise use direct FPL API
     // Supports:
-    // - Browser/Vite: import.meta.env.VITE_FPL_API_BASE_URL (e.g., /api/fpl for proxied dev)
+    // - Browser/Vite: import.meta.env.VITE_FPL_API_BASE_URL (normally same-origin /api/fpl)
     // - Node.js scripts: process.env.VITE_FPL_API_BASE_URL or direct FPL API
-    // - Fallback: https://fantasy.premierleague.com/api (direct)
+    // - Browser fallback: /api/fpl, served by Vite locally and Pages Functions in production
 
     let baseUrl = '/api/fpl'; // Default for browser
 

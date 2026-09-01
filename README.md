@@ -60,8 +60,8 @@ npm run preview
 
 ## Available Scripts
 
-- `npm run dev` - Start development server with HMR
-- `npm run build` - Build for production
+- `npm run dev` - Start React and the same-origin FPL API in one local process
+- `npm run build` - Type-check Pages Functions and build the production frontend
 - `npm run preview` - Preview production build
 - `npm run lint` - Run ESLint on source files
 - `npm run lint:fix` - Fix linting issues automatically
@@ -121,27 +121,22 @@ npx husky install
 
 ## Production Deployment
 
-The build output is in the `dist/` directory. It contains:
+Production uses a Git-connected Cloudflare Pages project. Configure it with:
 
-- Optimized and minified JavaScript bundle
-- Minified CSS
-- Source maps for debugging
-
-Deploy the `dist/` directory to your hosting platform.
-
-### Example: Vercel
-
-```bash
-npm install -D vercel
-vercel
+```text
+Build command: npm run build
+Build output directory: dist
+Root directory: /
 ```
 
-### Example: Netlify
+Push the production branch. Pages deploys the frontend from `dist/` and the same-origin FPL API
+from `functions/` together. No manual Wrangler login or standalone Worker deployment is required.
 
-```bash
-npm install -D netlify-cli
-netlify deploy --prod --dir=dist
-```
+Keep `VITE_FPL_API_BASE_URL` unset or set it to `/api/fpl`, then verify that
+`https://dc5-fantasy-hub.pages.dev/api/fpl/status` returns JSON after deployment.
+
+See [`docs/FPL_LIVE_PIPELINE.md`](docs/FPL_LIVE_PIPELINE.md) for architecture, endpoints,
+verification, and the optional standalone Worker mode.
 
 ## Browser Support
 

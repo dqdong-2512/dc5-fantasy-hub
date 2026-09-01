@@ -1,38 +1,63 @@
 # FPL live data pipeline
 
-## Runtime architecture
+## Default architecture
 
 ```text
 Fantasy Premier League API
-  -> DC5 FPL Cloudflare Worker
-  -> normalize + Cache API/KV + live points calculator
-  -> /api/fpl/* internal API
-  -> React application on Cloudflare Pages
+  -> Cloudflare Pages Function (/api/fpl/*)
+  -> shared normalize/cache/live calculator in worker/src
+  -> React application on the same Pages domain
 ```
 
-React must only use `VITE_FPL_API_BASE_URL`. Browser code must never use
-`https://fantasy.premierleague.com/api` directly. The Node-based offline synchronization pipeline
-is separate and may continue to use the official API directly.
+The production entrypoint is `functions/api/fpl/[[path]].ts`. It reuses the provider and live
+calculation modules in `worker/src`; there is only one implementation of the FPL pipeline.
+
+React calls the same-origin `/api/fpl` path. Do not call the upstream FPL API directly from browser
+components. The default below works in development and production:
+
+```text
+VITE_FPL_API_BASE_URL=/api/fpl
+```
+
+No standalone Worker URL, cross-origin CORS configuration, Cloudflare API token, or manual
+`wrangler deploy` step is required for the normal production workflow.
 
 ## Local development
 
-Copy `worker/.dev.vars.example` to `worker/.dev.vars`. The checked development values resolve to
-entry `2055583` (Dương Đồng / Thêm 1 lần đau) and league `65957` (DC5 FPL 2026-2027).
-`worker/.dev.vars` is ignored by Git so local overrides are never committed accidentally.
-
-Start the Worker and Vite together:
+Run one process:
 
 ```powershell
 npm run dev
 ```
 
-For isolated debugging, use `npm run dev:worker` and `npm run dev:web` in separate terminals.
+Vite serves React and executes the shared FPL handler for `/api/fpl/*` in-process. Port `5173` is
+fixed so a stale process fails clearly instead of silently opening a second frontend.
 
-Vite proxies `/api/fpl` to `http://127.0.0.1:8787`. For a deployed environment set:
+## Production deployment
+
+Connect the repository to Cloudflare Pages and use:
 
 ```text
-VITE_FPL_API_BASE_URL=https://<worker-name>.<account>.workers.dev/api/fpl
+Build command: npm run build
+Build output directory: dist
+Root directory: /
 ```
+
+Push the branch used by the Pages production environment. Cloudflare deploys `dist` and the
+`functions` directory together. Leave `VITE_FPL_API_BASE_URL` unset or set it to `/api/fpl`.
+
+After deployment verify:
+
+```text
+https://dc5-fantasy-hub.pages.dev/api/fpl/status
+```
+
+The response must use `Content-Type: application/json`. HTML means the Pages build did not include
+the `functions` directory or an older deployment is still active.
+
+Live data does not rebuild Pages. Browser polling refreshes snapshots through the Pages Function
+according to the service TTLs. Pages Functions uses Cache API and isolate memory; an optional Pages
+KV binding named `FPL_CACHE` provides longer-lived cross-colo stale fallback.
 
 ## Internal endpoints
 
@@ -49,40 +74,27 @@ VITE_FPL_API_BASE_URL=https://<worker-name>.<account>.workers.dev/api/fpl
 - `GET /api/fpl/league/{leagueId}/live?gw={gw}`
 
 Responses use `{ data, dataStatus, lastUpdated, error? }`. `dataStatus` is `LIVE`, `STALE`, or
-`ERROR`. An upstream failure returns the previous valid cache record as `STALE` when available.
+`ERROR`. When possible, an upstream failure preserves the previous snapshot as `STALE`.
 
-## Cache and polling policy
+## Optional standalone Worker
 
-- Live fixtures and event-live snapshots: 20 seconds while a match is live.
-- Provisional gameweek: 60 seconds.
-- Preseason/pre-deadline: 3-5 minutes.
-- Finalized gameweek: 15 minutes or longer.
-- Manager picks: 15 minutes after publication; they are not fetched on every live poll. A picks
-  hash invalidates only the affected manager score when captaincy, chips or auto-subs change.
-- League pages: 2 minutes.
-
-The cron trigger warms the current gameweek once per minute. Browser requests may refresh a live
-snapshot after its 20-second TTL; this does not rebuild or redeploy Pages. Bind an optional KV
-namespace named `FPL_CACHE` for cross-colo persistence. Without KV, the Worker uses Cache API plus
-an isolate-local memory layer.
-
-Create and bind KV before production deployment if cross-colo stale fallback is required:
+The standalone entrypoint remains available for advanced deployments requiring a cron trigger or
+an independently scaled API:
 
 ```powershell
-npx wrangler kv namespace create FPL_CACHE
+npm run dev:worker:standalone
+npm run deploy:worker:standalone
 ```
 
-Then add the returned `[[kv_namespaces]]` binding to `worker/wrangler.toml`.
+This mode is optional and is not needed for the Pages production deployment.
 
-## Verification and deployment
+## Verification
 
 ```powershell
-npm test
 npm run type-check
 npm run type-check:worker
+npm run type-check:functions
+npm test
 npm run lint
 npm run build
-npm run deploy:worker
 ```
-
-Deploy the Worker independently from Cloudflare Pages. A live refresh never requires a Pages build.
