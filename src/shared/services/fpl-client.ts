@@ -355,6 +355,15 @@ export interface InternalLiveLeague {
   gameweek: number;
   members: InternalLiveLeagueMember[];
   provisional: boolean;
+  pagination: {
+    cursor: string;
+    nextCursor: string | null;
+    complete: boolean;
+    page: number;
+    offset: number;
+    batchSize: number;
+    pageSize: number;
+  };
 }
 
 interface InternalBootstrap {
@@ -648,9 +657,76 @@ export class FplClient {
     if (!this.useInternalApi) {
       throw new Error('Live league calculation is only available through the internal FPL API.');
     }
-    return this.httpClient.get<InternalApiResponse<InternalLiveLeague>>(
-      `/league/${leagueId}/live?gw=${gameweek}`
+    const members = new Map<number, InternalLiveLeagueMember>();
+    let cursor: string | null = null;
+    let lastResponse: InternalApiResponse<InternalLiveLeague> | null = null;
+    let aggregateStatus: InternalApiResponse<InternalLiveLeague>['dataStatus'] = 'LIVE';
+    let firstError: string | undefined;
+
+    // Each call is a separate Pages Function invocation and therefore receives a
+    // fresh Cloudflare Free subrequest budget. Requests are sequential so shared
+    // Cache API records are available to the following batch.
+    for (let batch = 0; batch < 200; batch += 1) {
+      const query = new URLSearchParams({ gw: String(gameweek), limit: '7' });
+      if (cursor) query.set('cursor', cursor);
+      let response: InternalApiResponse<InternalLiveLeague>;
+      try {
+        response = await this.httpClient.get<InternalApiResponse<InternalLiveLeague>>(
+          `/league/${leagueId}/live?${query.toString()}`
+        );
+      } catch (error) {
+        if (members.size === 0) throw error;
+        aggregateStatus = 'STALE';
+        firstError ??=
+          error instanceof Error ? error.message : 'A live league batch was unavailable.';
+        break;
+      }
+      if (!response.data) {
+        if (members.size === 0) return response;
+        aggregateStatus = 'STALE';
+        firstError ??= response.error ?? 'A live league batch was unavailable.';
+        break;
+      }
+
+      lastResponse = response;
+      response.data.members.forEach((member) => members.set(member.entryId, member));
+      if (response.dataStatus === 'ERROR') aggregateStatus = 'STALE';
+      else if (response.dataStatus === 'STALE' && aggregateStatus === 'LIVE') {
+        aggregateStatus = 'STALE';
+      }
+      firstError ??= response.error;
+      cursor = response.data.pagination.nextCursor;
+      if (!cursor) break;
+    }
+
+    if (!lastResponse?.data) {
+      throw new Error('Live league API returned no batches.');
+    }
+
+    const rankedMembers = [...members.values()].sort(
+      (left, right) =>
+        right.liveTotalPoints - left.liveTotalPoints ||
+        (left.rank ?? Number.MAX_SAFE_INTEGER) - (right.rank ?? Number.MAX_SAFE_INTEGER)
     );
+    rankedMembers.forEach((member, index) => {
+      member.liveRank = index + 1;
+      member.rankMovement = member.rank === null ? null : member.rank - member.liveRank;
+    });
+
+    return {
+      data: {
+        ...lastResponse.data,
+        members: rankedMembers,
+        pagination: {
+          ...lastResponse.data.pagination,
+          nextCursor: cursor,
+          complete: cursor === null,
+        },
+      },
+      dataStatus: aggregateStatus,
+      lastUpdated: lastResponse.lastUpdated,
+      ...(firstError ? { error: firstError } : {}),
+    };
   }
 
   private async getInternal<T>(path: string): Promise<T> {

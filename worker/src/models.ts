@@ -237,6 +237,15 @@ export interface FplLiveLeague {
   changedPlayerIds: number[];
   members: FplLiveLeagueMember[];
   provisional: boolean;
+  pagination: {
+    cursor: string;
+    nextCursor: string | null;
+    complete: boolean;
+    page: number;
+    offset: number;
+    batchSize: number;
+    pageSize: number;
+  };
 }
 
 export interface ResolvedGameweek {

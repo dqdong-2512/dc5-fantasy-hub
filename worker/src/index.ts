@@ -2,6 +2,7 @@ import { FplApiClient } from './FplApiClient';
 import { FplCache, type KvLike } from './FplCache';
 import { FplLeagueService } from './FplLeagueService';
 import { FplLiveService } from './FplLiveService';
+import type { LiveLeagueCursor } from './FplLeagueService';
 
 export interface Env {
   FPL_CACHE?: KvLike;
@@ -38,6 +39,17 @@ function jsonResponse(body: unknown, status: number, origin: string): Response {
 function positiveInteger(value: string | undefined): number | null {
   const parsed = Number(value);
   return Number.isInteger(parsed) && parsed > 0 ? parsed : null;
+}
+
+function liveLeagueCursor(value: string | null): LiveLeagueCursor | null {
+  if (!value) return { page: 1, offset: 0 };
+  const match = value.match(/^(\d+):(\d+)$/);
+  if (!match) return null;
+  const page = Number(match[1]);
+  const offset = Number(match[2]);
+  return Number.isInteger(page) && page > 0 && Number.isInteger(offset) && offset >= 0
+    ? { page, offset }
+    : null;
 }
 
 async function route(request: Request, env: Env): Promise<Response> {
@@ -85,7 +97,11 @@ async function route(request: Request, env: Env): Promise<Response> {
       const gameweek = positiveInteger(url.searchParams.get('gw') ?? undefined);
       if (!gameweek)
         return jsonResponse({ error: 'A positive gw query parameter is required.' }, 400, origin);
-      result = await league.getLiveLeague(Number(match[1]), gameweek);
+      const cursor = liveLeagueCursor(url.searchParams.get('cursor'));
+      if (!cursor)
+        return jsonResponse({ error: 'Cursor must use the page:offset format.' }, 400, origin);
+      const batchSize = positiveInteger(url.searchParams.get('limit') ?? undefined) ?? undefined;
+      result = await league.getLiveLeague(Number(match[1]), gameweek, cursor, batchSize);
     } else {
       return jsonResponse({ error: 'Not found' }, 404, origin);
     }

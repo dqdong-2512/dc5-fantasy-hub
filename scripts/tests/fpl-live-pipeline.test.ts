@@ -2,6 +2,11 @@ import { FplApiClient } from '../../worker/src/FplApiClient';
 import { FplCache } from '../../worker/src/FplCache';
 import { FplGameweekResolver } from '../../worker/src/FplGameweekResolver';
 import { FplLivePointsCalculator } from '../../worker/src/FplLivePointsCalculator';
+import {
+  FPL_FREE_TIER_LEAGUE_BATCH_SIZE,
+  FplLeagueService,
+} from '../../worker/src/FplLeagueService';
+import { FplLiveService } from '../../worker/src/FplLiveService';
 import { FplNormalizer } from '../../worker/src/FplNormalizer';
 import type { FplEntryPicks, FplLivePlayer } from '../../worker/src/models';
 import { stableHash } from '../../worker/src/utils';
@@ -231,11 +236,97 @@ async function runUpstreamFallbackTests(): Promise<void> {
   );
 }
 
+async function runFreeTierLeagueBatchTests(): Promise<void> {
+  const leagueMembers = Array.from({ length: 10 }, (_, index) => ({
+    entry: index + 1,
+    player_name: `Manager ${index + 1}`,
+    entry_name: `Team ${index + 1}`,
+    rank: index + 1,
+    last_rank: index + 1,
+    event_total: 0,
+    total: 100 - index,
+  }));
+  const requestedPicks: number[] = [];
+  const fetcher: typeof fetch = async (input) => {
+    const url = new URL(typeof input === 'string' ? input : input.url);
+    if (url.pathname.endsWith('/bootstrap-static/')) {
+      return Response.json({
+        events: [
+          {
+            id: 2,
+            name: 'Gameweek 2',
+            finished: true,
+            data_checked: true,
+            is_current: true,
+          },
+        ],
+        elements: [],
+        teams: [],
+        element_types: [],
+      });
+    }
+    if (url.pathname.endsWith('/fixtures/')) return Response.json([]);
+    if (url.pathname.endsWith('/event/2/live/')) {
+      return Response.json({ elements: [{ id: 1, stats: { total_points: 5, minutes: 90 } }] });
+    }
+    if (url.pathname.includes('/leagues-classic/')) {
+      return Response.json({
+        league: { id: 99, name: 'Free Tier League' },
+        standings: { page: 1, has_next: false, results: leagueMembers },
+      });
+    }
+    const picksMatch = url.pathname.match(/\/entry\/(\d+)\/event\/2\/picks\//);
+    if (picksMatch) {
+      requestedPicks.push(Number(picksMatch[1]));
+      return Response.json({
+        active_chip: null,
+        entry_history: { event_transfers_cost: 0 },
+        automatic_subs: [],
+        picks: [
+          {
+            element: 1,
+            position: 1,
+            multiplier: 1,
+            is_captain: false,
+            is_vice_captain: false,
+          },
+        ],
+      });
+    }
+    return new Response('not found', { status: 404 });
+  };
+
+  const client = new FplApiClient({
+    maxAttempts: 1,
+    fetcher,
+    logger: { warn: () => undefined, error: () => undefined },
+  });
+  const cache = new FplCache();
+  const live = new FplLiveService(client, cache);
+  const league = new FplLeagueService(client, cache, live);
+
+  const first = await league.getLiveLeague(99, 2);
+  assert(first.data !== null, 'First live league batch must return data');
+  assert(
+    first.data.members.length === FPL_FREE_TIER_LEAGUE_BATCH_SIZE,
+    'A live league invocation must cap manager picks to the free-tier batch size'
+  );
+  assert(first.data.pagination.nextCursor === '1:7', 'First batch must expose its next cursor');
+  assert(requestedPicks.length === 7, 'First batch must fetch picks for seven managers only');
+
+  const second = await league.getLiveLeague(99, 2, { page: 1, offset: 7 });
+  assert(second.data !== null, 'Second live league batch must return data');
+  assert(second.data.members.length === 3, 'Second batch must contain remaining managers');
+  assert(second.data.pagination.complete, 'Final batch must be marked complete');
+  assert(requestedPicks.length === 10, 'All managers must be covered across separate invocations');
+}
+
 async function main(): Promise<void> {
   runLivePointsTests();
   runNullableAndPreseasonTests();
   runAssetFallbackTests();
   await runUpstreamFallbackTests();
+  await runFreeTierLeagueBatchTests();
   console.log('fpl-live-pipeline.test.ts: all tests passed');
 }
 

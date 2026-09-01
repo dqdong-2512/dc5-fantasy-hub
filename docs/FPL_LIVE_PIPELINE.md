@@ -43,7 +43,7 @@ Build output directory: dist
 Root directory: /
 ```
 
-Push the branch used by the Pages production environment. Cloudflare deploys `dist` and the
+Push or merge into `main`, the branch used by the Pages production environment. Cloudflare deploys `dist` and the
 `functions` directory together. Leave `VITE_FPL_API_BASE_URL` unset or set it to `/api/fpl`.
 
 After deployment verify:
@@ -71,10 +71,25 @@ KV binding named `FPL_CACHE` provides longer-lived cross-colo stale fallback.
 - `GET /api/fpl/entry/{entryId}/gameweek/{gw}/picks`
 - `GET /api/fpl/entry/{entryId}/live?gw={gw}`
 - `GET /api/fpl/league/{leagueId}/standings?page={page}`
-- `GET /api/fpl/league/{leagueId}/live?gw={gw}`
+- `GET /api/fpl/league/{leagueId}/live?gw={gw}&cursor={page}:{offset}&limit=7`
 
 Responses use `{ data, dataStatus, lastUpdated, error? }`. `dataStatus` is `LIVE`, `STALE`, or
 `ERROR`. When possible, an upstream failure preserves the previous snapshot as `STALE`.
+
+### Free-tier live league batching
+
+Live league calculation is cursor-paginated to stay below Cloudflare Workers Free's external
+subrequest limit. One Pages Function invocation processes at most seven managers. Its response
+contains `pagination.nextCursor`; the internal frontend client follows the cursors sequentially,
+merges managers, and calculates the final league-wide live ranks.
+
+Do not increase this server-side maximum without recalculating the worst-case request budget. A
+cold batch can fetch league standings, bootstrap, fixtures, the gameweek live snapshot, and manager
+picks, and each upstream request may use up to four retry attempts. Normal live polls reuse Cache
+API snapshots and do not refetch manager picks on every poll.
+
+No paid Workers plan is required. The Pages project's empty Variables and Bindings sections are a
+valid baseline; an `FPL_CACHE` KV binding remains optional rather than required.
 
 ## Optional standalone Worker
 

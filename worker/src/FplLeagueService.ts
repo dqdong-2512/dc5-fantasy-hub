@@ -33,6 +33,13 @@ async function mapWithConcurrency<T, R>(
   return results;
 }
 
+export const FPL_FREE_TIER_LEAGUE_BATCH_SIZE = 7;
+
+export interface LiveLeagueCursor {
+  page: number;
+  offset: number;
+}
+
 export class FplLeagueService {
   constructor(
     private readonly client: FplApiClient,
@@ -67,12 +74,25 @@ export class FplLeagueService {
 
   async getLiveLeague(
     leagueId: number,
-    gameweek: number
+    gameweek: number,
+    cursor: LiveLeagueCursor = { page: 1, offset: 0 },
+    requestedBatchSize = FPL_FREE_TIER_LEAGUE_BATCH_SIZE
   ): Promise<InternalApiResponse<FplLiveLeague>> {
     try {
-      const pages = await this.getAllLeaguePages(leagueId);
-      if (pages.length === 0) return this.errorResponse('League standings unavailable');
-      const members = this.uniqueMembers(pages.flatMap((page) => page.members));
+      const pageNumber = Math.max(1, Math.trunc(cursor.page));
+      const offset = Math.max(0, Math.trunc(cursor.offset));
+      // Seven managers keeps a cold request below Cloudflare Free's 50 external
+      // subrequest ceiling even if every upstream fetch uses all four retries.
+      const batchSize = Math.min(
+        FPL_FREE_TIER_LEAGUE_BATCH_SIZE,
+        Math.max(1, Math.trunc(requestedBatchSize))
+      );
+      const pageResponse = await this.getLeaguePage(leagueId, pageNumber);
+      if (!pageResponse.data) {
+        return this.errorResponse(pageResponse.error ?? 'League standings unavailable');
+      }
+      const page = pageResponse.data;
+      const members = this.uniqueMembers(page.members).slice(offset, offset + batchSize);
       const entryIds = members.map((member) => member.entryId);
 
       const picksResponses = await mapWithConcurrency(entryIds, 8, (entryId) =>
@@ -94,10 +114,21 @@ export class FplLeagueService {
       const previousPickHashes =
         (await this.cache.get<Record<string, string>>(`league:${leagueId}:pick-hashes:${gameweek}`))
           ?.value ?? {};
-      const currentPickHashes = Object.fromEntries(
-        picks.map((entryPicks) => [String(entryPicks.entryId), stableHash(entryPicks)])
-      );
-      const affectedEntries = this.affectedEntries(live.data.changedPlayerIds, ownership);
+      const batchKey = `${pageNumber}:${offset}`;
+      const previousLiveHash = (
+        await this.cache.get<string>(`league:${leagueId}:live-hash:${gameweek}:${batchKey}`)
+      )?.value;
+      const liveCalculationHash = stableHash([
+        live.data.hash,
+        live.data.provisional,
+        live.data.availability,
+      ]);
+      const currentPickHashes = {
+        ...previousPickHashes,
+        ...Object.fromEntries(
+          picks.map((entryPicks) => [String(entryPicks.entryId), stableHash(entryPicks)])
+        ),
+      };
       const scores: Record<string, FplManagerLiveScore> = { ...previousScores };
       const availability = new Map(
         Object.entries(live.data.availability).map(([playerId, state]) => [Number(playerId), state])
@@ -106,7 +137,7 @@ export class FplLeagueService {
       for (const entryPicks of picks) {
         if (
           !scores[entryPicks.entryId] ||
-          affectedEntries.has(entryPicks.entryId) ||
+          previousLiveHash !== liveCalculationHash ||
           previousPickHashes[entryPicks.entryId] !== currentPickHashes[entryPicks.entryId]
         ) {
           scores[entryPicks.entryId] = this.calculator.calculate(entryPicks, live.data.players, {
@@ -126,6 +157,12 @@ export class FplLeagueService {
         currentPickHashes,
         stableHash(currentPickHashes),
         604_800
+      );
+      await this.cache.put(
+        `league:${leagueId}:live-hash:${gameweek}:${batchKey}`,
+        liveCalculationHash,
+        stableHash(liveCalculationHash),
+        live.data.provisional ? 86_400 : 604_800
       );
 
       const calculated: FplLiveLeagueMember[] = members.map((member) => {
@@ -152,7 +189,7 @@ export class FplLeagueService {
 
       const data: FplLiveLeague = {
         leagueId,
-        leagueName: pages[0].leagueName,
+        leagueName: page.leagueName,
         gameweek,
         entryIds,
         ownershipIndex: Object.fromEntries(
@@ -161,14 +198,18 @@ export class FplLeagueService {
         changedPlayerIds: live.data.changedPlayerIds,
         members: calculated,
         provisional: live.data.provisional,
+        pagination: this.buildPagination(page, offset, batchSize, members.length),
       };
       const status = this.combineStatus([
+        pageResponse.dataStatus,
         live.dataStatus,
         ...picksResponses.map((response) => response.dataStatus),
       ]);
       return {
         data,
-        dataStatus: status,
+        // A partial result is useful and must not become an HTTP 503 merely because
+        // one manager's private/pre-deadline picks are unavailable.
+        dataStatus: status === 'ERROR' ? 'STALE' : status,
         lastUpdated: live.lastUpdated,
         ...(picksResponses.some((response) => response.error)
           ? {
@@ -182,30 +223,30 @@ export class FplLeagueService {
     }
   }
 
-  private async getAllLeaguePages(leagueId: number): Promise<FplLeaguePage[]> {
-    const pages: FplLeaguePage[] = [];
-    for (let pageNumber = 1; pageNumber <= 100; pageNumber += 1) {
-      const response = await this.getLeaguePage(leagueId, pageNumber);
-      if (!response.data) break;
-      pages.push(response.data);
-      if (!response.data.hasNext) break;
-    }
-    return pages;
+  private buildPagination(
+    page: FplLeaguePage,
+    offset: number,
+    batchSize: number,
+    processedMembers: number
+  ): FplLiveLeague['pagination'] {
+    const nextOffset = offset + processedMembers;
+    let nextCursor: string | null = null;
+    if (nextOffset < page.members.length) nextCursor = `${page.page}:${nextOffset}`;
+    else if (page.hasNext) nextCursor = `${page.page + 1}:0`;
+
+    return {
+      cursor: `${page.page}:${offset}`,
+      nextCursor,
+      complete: nextCursor === null,
+      page: page.page,
+      offset,
+      batchSize,
+      pageSize: page.members.length,
+    };
   }
 
   private uniqueMembers(members: FplLeagueMember[]): FplLeagueMember[] {
     return [...new Map(members.map((member) => [member.entryId, member])).values()];
-  }
-
-  private affectedEntries(
-    changedPlayerIds: number[],
-    ownership: ReadonlyMap<number, Set<number>>
-  ): Set<number> {
-    const affected = new Set<number>();
-    for (const playerId of changedPlayerIds) {
-      for (const entryId of ownership.get(playerId) ?? []) affected.add(entryId);
-    }
-    return affected;
   }
 
   private combineStatus(statuses: FplDataStatus[]): FplDataStatus {

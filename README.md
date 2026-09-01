@@ -129,11 +129,14 @@ Build output directory: dist
 Root directory: /
 ```
 
-Push the production branch. Pages deploys the frontend from `dist/` and the same-origin FPL API
+Push or merge into the `main` production branch. Pages deploys the frontend from `dist/` and the same-origin FPL API
 from `functions/` together. No manual Wrangler login or standalone Worker deployment is required.
 
 Keep `VITE_FPL_API_BASE_URL` unset or set it to `/api/fpl`, then verify that
 `https://dc5-fantasy-hub.pages.dev/api/fpl/status` returns JSON after deployment.
+
+Live mini-league data is fetched in free-tier-safe cursor batches, so no paid Cloudflare Workers
+plan is required for the default deployment.
 
 See [`docs/FPL_LIVE_PIPELINE.md`](docs/FPL_LIVE_PIPELINE.md) for architecture, endpoints,
 verification, and the optional standalone Worker mode.
