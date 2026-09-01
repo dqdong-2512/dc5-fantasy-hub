@@ -1356,12 +1356,6 @@
     "file": "../../shared/player-photo-placeholder.svg"
   },
   {
-    "playerId": 201,
-    "code": 247348,
-    "available": true,
-    "file": "assets/player-photos/247348.png"
-  },
-  {
     "playerId": 202,
     "code": 427623,
     "available": true,
@@ -2424,6 +2418,12 @@
     "file": "../../shared/player-photo-placeholder.svg"
   },
   {
+    "playerId": 629,
+    "code": 155465,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
     "playerId": 350,
     "code": 116535,
     "available": false,
@@ -2634,6 +2634,12 @@
     "file": "../../shared/player-photo-placeholder.svg"
   },
   {
+    "playerId": 627,
+    "code": 482616,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
     "playerId": 238,
     "code": 114283,
     "available": true,
@@ -2810,6 +2816,12 @@
   {
     "playerId": 622,
     "code": 554054,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
+    "playerId": 628,
+    "code": 624777,
     "available": false,
     "file": "../../shared/player-photo-placeholder.svg"
   },
@@ -3190,6 +3202,12 @@
     "code": 463034,
     "available": true,
     "file": "assets/player-photos/463034.png"
+  },
+  {
+    "playerId": 201,
+    "code": 247348,
+    "available": true,
+    "file": "assets/player-photos/247348.png"
   },
   {
     "playerId": 467,

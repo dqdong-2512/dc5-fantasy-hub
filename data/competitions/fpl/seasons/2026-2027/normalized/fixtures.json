@@ -572,19 +572,6 @@
     "awayDifficulty": 3
   },
   {
-    "id": 44,
-    "gameweek": 5,
-    "homeTeamId": 13,
-    "awayTeamId": 8,
-    "homeTeamScore": null,
-    "awayTeamScore": null,
-    "started": false,
-    "finished": false,
-    "kickoffTime": "2026-09-19T14:00:00Z",
-    "homeDifficulty": 3,
-    "awayDifficulty": 3
-  },
-  {
     "id": 46,
     "gameweek": 5,
     "homeTeamId": 17,
@@ -621,6 +608,19 @@
     "finished": false,
     "kickoffTime": "2026-09-20T13:00:00Z",
     "homeDifficulty": 4,
+    "awayDifficulty": 3
+  },
+  {
+    "id": 44,
+    "gameweek": 5,
+    "homeTeamId": 13,
+    "awayTeamId": 8,
+    "homeTeamScore": null,
+    "awayTeamScore": null,
+    "started": false,
+    "finished": false,
+    "kickoffTime": "2026-09-20T13:00:00Z",
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -962,19 +962,6 @@
     "awayDifficulty": 2
   },
   {
-    "id": 78,
-    "gameweek": 8,
-    "homeTeamId": 14,
-    "awayTeamId": 5,
-    "homeTeamScore": null,
-    "awayTeamScore": null,
-    "started": false,
-    "finished": false,
-    "kickoffTime": "2026-10-24T14:00:00Z",
-    "homeDifficulty": 2,
-    "awayDifficulty": 4
-  },
-  {
     "id": 73,
     "gameweek": 8,
     "homeTeamId": 6,
@@ -1012,6 +999,19 @@
     "kickoffTime": "2026-10-25T14:00:00Z",
     "homeDifficulty": 3,
     "awayDifficulty": 2
+  },
+  {
+    "id": 78,
+    "gameweek": 8,
+    "homeTeamId": 14,
+    "awayTeamId": 5,
+    "homeTeamScore": null,
+    "awayTeamScore": null,
+    "started": false,
+    "finished": false,
+    "kickoffTime": "2026-10-25T14:00:00Z",
+    "homeDifficulty": 2,
+    "awayDifficulty": 4
   },
   {
     "id": 79,
@@ -1139,7 +1139,7 @@
     "awayTeamScore": null,
     "started": false,
     "finished": false,
-    "kickoffTime": "2026-11-01T14:00:00Z",
+    "kickoffTime": "2026-10-31T20:00:00Z",
     "homeDifficulty": 2,
     "awayDifficulty": 4
   },
