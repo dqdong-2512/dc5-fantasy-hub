@@ -924,6 +924,12 @@
     "file": "../../shared/player-photo-placeholder.svg"
   },
   {
+    "playerId": 652,
+    "code": 471551,
+    "available": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
     "playerId": 28,
     "code": 98980,
     "available": true,
