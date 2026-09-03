@@ -1,7 +1,7 @@
 {
   "competition": "fpl",
   "season": "2026-2027",
-  "syncedAt": "2026-09-03T04:36:02.929Z",
+  "syncedAt": "2026-09-03T11:18:00.839Z",
   "trigger": "automatic",
   "mode": "full-refresh",
   "complete": true,
@@ -40,11 +40,23 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 9,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 25,
         "message": "403 Forbidden"
       },
       {
         "id": 11,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 29,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 20,
         "message": "403 Forbidden"
       },
       {
@@ -56,23 +68,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 20,
+        "id": 52,
         "message": "403 Forbidden"
       },
       {
-        "id": 29,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 9,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 53,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 582,
+        "id": 606,
         "message": "403 Forbidden"
       },
       {
@@ -80,7 +80,15 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 52,
+        "id": 582,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 53,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 618,
         "message": "403 Forbidden"
       },
       {
@@ -92,11 +100,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 606,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 618,
+        "id": 66,
         "message": "403 Forbidden"
       },
       {
@@ -112,15 +116,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 63,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 67,
         "message": "403 Forbidden"
       },
       {
-        "id": 66,
+        "id": 63,
         "message": "403 Forbidden"
       },
       {
@@ -136,7 +136,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 573,
+        "id": 81,
         "message": "403 Forbidden"
       },
       {
@@ -144,7 +144,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 81,
+        "id": 615,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 573,
         "message": "403 Forbidden"
       },
       {
@@ -152,19 +156,15 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 615,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 93,
         "message": "403 Forbidden"
       },
       {
-        "id": 107,
+        "id": 99,
         "message": "403 Forbidden"
       },
       {
-        "id": 99,
+        "id": 114,
         "message": "403 Forbidden"
       },
       {
@@ -176,7 +176,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 114,
+        "id": 107,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 117,
         "message": "403 Forbidden"
       },
       {
@@ -188,7 +192,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 117,
+        "id": 120,
         "message": "403 Forbidden"
       },
       {
@@ -196,19 +200,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 134,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 133,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 120,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 135,
         "message": "403 Forbidden"
       },
       {
@@ -216,7 +208,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 504,
+        "id": 135,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 134,
         "message": "403 Forbidden"
       },
       {
@@ -224,11 +220,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 594,
+        "id": 504,
         "message": "403 Forbidden"
       },
       {
-        "id": 148,
+        "id": 594,
         "message": "403 Forbidden"
       },
       {
@@ -236,19 +232,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 639,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 150,
         "message": "403 Forbidden"
       },
       {
-        "id": 152,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 158,
+        "id": 148,
         "message": "403 Forbidden"
       },
       {
@@ -256,11 +244,19 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 152,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 639,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 163,
         "message": "403 Forbidden"
       },
       {
-        "id": 169,
+        "id": 158,
         "message": "403 Forbidden"
       },
       {
@@ -268,19 +264,23 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 170,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 560,
         "message": "403 Forbidden"
       },
       {
-        "id": 583,
+        "id": 169,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 170,
         "message": "403 Forbidden"
       },
       {
         "id": 171,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 583,
         "message": "403 Forbidden"
       },
       {
@@ -292,27 +292,15 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 175,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 174,
         "message": "403 Forbidden"
       },
       {
+        "id": 175,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 176,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 178,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 183,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 181,
         "message": "403 Forbidden"
       },
       {
@@ -324,7 +312,19 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 178,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 181,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 186,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 183,
         "message": "403 Forbidden"
       },
       {
@@ -332,7 +332,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 188,
+        "id": 191,
         "message": "403 Forbidden"
       },
       {
@@ -340,7 +340,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 189,
+        "id": 188,
         "message": "403 Forbidden"
       },
       {
@@ -348,19 +348,15 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 191,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 192,
         "message": "403 Forbidden"
       },
       {
-        "id": 194,
+        "id": 193,
         "message": "403 Forbidden"
       },
       {
-        "id": 193,
+        "id": 194,
         "message": "403 Forbidden"
       },
       {
@@ -372,6 +368,10 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 575,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 599,
         "message": "403 Forbidden"
       },
@@ -380,15 +380,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 575,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 199,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 203,
         "message": "403 Forbidden"
       },
       {
@@ -396,15 +388,11 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 203,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 207,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 211,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 220,
         "message": "403 Forbidden"
       },
       {
@@ -412,7 +400,19 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 211,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 189,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 221,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 220,
         "message": "403 Forbidden"
       },
       {
@@ -420,7 +420,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 225,
+        "id": 633,
         "message": "403 Forbidden"
       },
       {
@@ -428,11 +428,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 644,
+        "id": 225,
         "message": "403 Forbidden"
       },
       {
-        "id": 633,
+        "id": 644,
         "message": "403 Forbidden"
       },
       {
@@ -448,11 +448,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 246,
+        "id": 247,
         "message": "403 Forbidden"
       },
       {
-        "id": 247,
+        "id": 246,
         "message": "403 Forbidden"
       },
       {
@@ -460,7 +460,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 263,
+        "id": 251,
         "message": "403 Forbidden"
       },
       {
@@ -468,7 +468,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 251,
+        "id": 263,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 272,
         "message": "403 Forbidden"
       },
       {
@@ -480,7 +484,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 272,
+        "id": 626,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 635,
         "message": "403 Forbidden"
       },
       {
@@ -488,15 +496,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 626,
+        "id": 636,
         "message": "403 Forbidden"
       },
       {
         "id": 650,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 636,
         "message": "403 Forbidden"
       },
       {
@@ -508,10 +512,6 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 278,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 280,
         "message": "403 Forbidden"
       },
@@ -520,11 +520,15 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 286,
+        "id": 278,
         "message": "403 Forbidden"
       },
       {
         "id": 284,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 286,
         "message": "403 Forbidden"
       },
       {
@@ -540,15 +544,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 635,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 292,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 298,
         "message": "403 Forbidden"
       },
       {
@@ -560,7 +556,15 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 298,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 572,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 574,
         "message": "403 Forbidden"
       },
       {
@@ -568,15 +572,15 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 585,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 576,
         "message": "403 Forbidden"
       },
       {
-        "id": 574,
+        "id": 585,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 586,
         "message": "403 Forbidden"
       },
       {
@@ -588,10 +592,6 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 586,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 632,
         "message": "403 Forbidden"
       },
@@ -600,7 +600,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 645,
+        "id": 638,
         "message": "403 Forbidden"
       },
       {
@@ -608,7 +608,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 638,
+        "id": 645,
         "message": "403 Forbidden"
       },
       {
@@ -616,11 +616,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 316,
+        "id": 309,
         "message": "403 Forbidden"
       },
       {
-        "id": 309,
+        "id": 316,
         "message": "403 Forbidden"
       },
       {
@@ -628,7 +628,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 554,
+        "id": 321,
         "message": "403 Forbidden"
       },
       {
@@ -636,15 +636,15 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 554,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 562,
         "message": "403 Forbidden"
       },
       {
-        "id": 571,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 321,
+        "id": 619,
         "message": "403 Forbidden"
       },
       {
@@ -652,7 +652,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 619,
+        "id": 571,
         "message": "403 Forbidden"
       },
       {
@@ -664,11 +664,15 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 333,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 331,
         "message": "403 Forbidden"
       },
       {
-        "id": 333,
+        "id": 334,
         "message": "403 Forbidden"
       },
       {
@@ -677,10 +681,6 @@
       },
       {
         "id": 336,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 334,
         "message": "403 Forbidden"
       },
       {
@@ -696,23 +696,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 598,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 641,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 603,
         "message": "403 Forbidden"
       },
       {
-        "id": 625,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 629,
+        "id": 598,
         "message": "403 Forbidden"
       },
       {
@@ -720,11 +708,23 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 629,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 648,
         "message": "403 Forbidden"
       },
       {
+        "id": 641,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 350,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 625,
         "message": "403 Forbidden"
       },
       {
@@ -744,11 +744,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 356,
+        "id": 357,
         "message": "403 Forbidden"
       },
       {
-        "id": 357,
+        "id": 356,
         "message": "403 Forbidden"
       },
       {
@@ -764,19 +764,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 361,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 362,
         "message": "403 Forbidden"
       },
       {
-        "id": 365,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 364,
+        "id": 361,
         "message": "403 Forbidden"
       },
       {
@@ -784,7 +776,15 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 365,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 367,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 364,
         "message": "403 Forbidden"
       },
       {
@@ -800,11 +800,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 370,
+        "id": 371,
         "message": "403 Forbidden"
       },
       {
-        "id": 371,
+        "id": 370,
         "message": "403 Forbidden"
       },
       {
@@ -812,19 +812,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 375,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 374,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 376,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 382,
         "message": "403 Forbidden"
       },
       {
@@ -832,11 +820,15 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 377,
+        "id": 375,
         "message": "403 Forbidden"
       },
       {
-        "id": 380,
+        "id": 376,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 377,
         "message": "403 Forbidden"
       },
       {
@@ -844,7 +836,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 627,
+        "id": 380,
         "message": "403 Forbidden"
       },
       {
@@ -852,7 +844,15 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 394,
+        "id": 579,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 382,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 627,
         "message": "403 Forbidden"
       },
       {
@@ -860,7 +860,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 399,
+        "id": 394,
         "message": "403 Forbidden"
       },
       {
@@ -868,19 +868,11 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 399,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 404,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 579,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 409,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 616,
         "message": "403 Forbidden"
       },
       {
@@ -888,7 +880,15 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 409,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 587,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 616,
         "message": "403 Forbidden"
       },
       {
@@ -904,15 +904,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 412,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 434,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 162,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 412,
         "message": "403 Forbidden"
       },
       {
@@ -920,11 +916,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 435,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 438,
+        "id": 434,
         "message": "403 Forbidden"
       },
       {
@@ -932,7 +924,15 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 435,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 439,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 438,
         "message": "403 Forbidden"
       },
       {
@@ -944,19 +944,19 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 461,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 463,
         "message": "403 Forbidden"
       },
       {
-        "id": 466,
+        "id": 462,
         "message": "403 Forbidden"
       },
       {
-        "id": 462,
+        "id": 461,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 466,
         "message": "403 Forbidden"
       },
       {
@@ -968,11 +968,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 634,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 474,
+        "id": 593,
         "message": "403 Forbidden"
       },
       {
@@ -980,11 +976,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 478,
+        "id": 468,
         "message": "403 Forbidden"
       },
       {
-        "id": 468,
+        "id": 634,
         "message": "403 Forbidden"
       },
       {
@@ -992,23 +988,15 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 474,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 478,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 479,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 593,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 485,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 491,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 493,
         "message": "403 Forbidden"
       },
       {
@@ -1016,15 +1004,15 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 485,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 493,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 581,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 509,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 558,
         "message": "403 Forbidden"
       },
       {
@@ -1032,15 +1020,11 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 509,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 510,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 601,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 513,
         "message": "403 Forbidden"
       },
       {
@@ -1048,7 +1032,19 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 513,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 601,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 529,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 530,
         "message": "403 Forbidden"
       },
       {
@@ -1060,7 +1056,7 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 530,
+        "id": 491,
         "message": "403 Forbidden"
       },
       {
@@ -1068,15 +1064,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 535,
-        "message": "403 Forbidden"
-      },
-      {
         "id": 534,
         "message": "403 Forbidden"
       },
       {
-        "id": 537,
+        "id": 558,
         "message": "403 Forbidden"
       },
       {
@@ -1084,7 +1076,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 539,
+        "id": 535,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 537,
         "message": "403 Forbidden"
       },
       {
@@ -1092,11 +1088,11 @@
         "message": "403 Forbidden"
       },
       {
-        "id": 542,
+        "id": 539,
         "message": "403 Forbidden"
       },
       {
-        "id": 548,
+        "id": 542,
         "message": "403 Forbidden"
       },
       {
@@ -1112,15 +1108,23 @@
         "message": "403 Forbidden"
       },
       {
+        "id": 548,
+        "message": "403 Forbidden"
+      },
+      {
         "id": 551,
         "message": "403 Forbidden"
       },
       {
-        "id": 552,
+        "id": 550,
         "message": "403 Forbidden"
       },
       {
-        "id": 550,
+        "id": 553,
+        "message": "403 Forbidden"
+      },
+      {
+        "id": 552,
         "message": "403 Forbidden"
       },
       {
@@ -1129,10 +1133,6 @@
       },
       {
         "id": 613,
-        "message": "403 Forbidden"
-      },
-      {
-        "id": 553,
         "message": "403 Forbidden"
       },
       {
