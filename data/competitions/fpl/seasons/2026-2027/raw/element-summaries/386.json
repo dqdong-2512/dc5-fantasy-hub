@@ -1,22 +1,6 @@
 {
   "fixtures": [
     {
-      "id": 26,
-      "code": 2645222,
-      "team_h": 15,
-      "team_h_score": null,
-      "team_a": 7,
-      "team_a_score": null,
-      "event": 3,
-      "finished": false,
-      "minutes": 0,
-      "provisional_start_time": false,
-      "kickoff_time": "2026-09-05T14:00:00Z",
-      "event_name": "Gameweek 3",
-      "is_home": true,
-      "difficulty": 2
-    },
-    {
       "id": 39,
       "code": 2645232,
       "team_h": 16,
@@ -671,8 +655,8 @@
       "total_points": 0,
       "was_home": true,
       "kickoff_time": "2026-09-05T14:00:00Z",
-      "team_h_score": null,
-      "team_a_score": null,
+      "team_h_score": 1,
+      "team_a_score": 0,
       "round": 3,
       "modified": false,
       "minutes": 0,
