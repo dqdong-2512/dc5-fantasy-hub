@@ -17,9 +17,16 @@ export interface BenchSquadPlayer {
 export interface BenchProps {
   squad: BenchSquadPlayer[];
   gameweekId?: number;
+  compact?: boolean;
+  onPlayerClick?: (playerId: number) => void;
 }
 
-export const Bench: React.FC<BenchProps> = ({ squad, gameweekId }) => {
+export const Bench: React.FC<BenchProps> = ({
+  squad,
+  gameweekId,
+  compact = false,
+  onPlayerClick,
+}) => {
   // Get bench players sorted by bench order
   const benchPlayers = useMemo(() => {
     return squad
@@ -34,8 +41,8 @@ export const Bench: React.FC<BenchProps> = ({ squad, gameweekId }) => {
   return (
     <Box
       sx={{
-        p: { xs: 1.5, sm: 2 },
-        borderRadius: '12px',
+        p: compact ? 1 : { xs: 1.5, sm: 2 },
+        borderRadius: compact ? 0 : '12px',
         color: '#fff',
         background: 'linear-gradient(135deg, #37003c, #5b075f)',
       }}
@@ -44,7 +51,7 @@ export const Bench: React.FC<BenchProps> = ({ squad, gameweekId }) => {
         variant="h6"
         sx={{
           fontWeight: 700,
-          marginBottom: 2,
+          marginBottom: compact ? 0.75 : 2,
           fontSize: '1rem',
         }}
       >
@@ -55,8 +62,8 @@ export const Bench: React.FC<BenchProps> = ({ squad, gameweekId }) => {
         sx={{
           display: 'grid',
           gridTemplateColumns: { xs: 'repeat(2, 1fr)', sm: 'repeat(4, 1fr)' },
-          gap: { xs: 2, sm: 3 },
-          padding: 2,
+          gap: compact ? 0.5 : { xs: 2, sm: 3 },
+          padding: compact ? 0.75 : 2,
           backgroundColor: 'rgba(255,255,255,0.12)',
           borderRadius: '8px',
         }}
@@ -68,6 +75,7 @@ export const Bench: React.FC<BenchProps> = ({ squad, gameweekId }) => {
             gameweekPoints={player.gameweekPoints}
             size="small"
             gameweekId={gameweekId}
+            onClick={onPlayerClick}
           />
         ))}
       </Box>

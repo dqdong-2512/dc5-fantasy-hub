@@ -29,6 +29,8 @@ export interface SyncPublicResult {
   playerDetails: number;
   eventLiveSnapshots: number;
   playerPhotos: number;
+  playerPhotoDownloads: number;
+  playerPhotoCacheHits: number;
   complete: boolean;
 }
 
@@ -110,13 +112,47 @@ function pruneNumberedJsonFiles(directory: string, activeIds: Set<number>): void
   }
 }
 
-function prunePlayerPhotos(directory: string, activeCodes: Set<number>): void {
+function prunePlayerPhotos(directory: string, activeIdentifiers: Set<string>): void {
   for (const fileName of fs.readdirSync(directory)) {
     const match = /^(\d+)\.png$/.exec(fileName);
-    if (match && !activeCodes.has(Number(match[1]))) {
+    if (match && !activeIdentifiers.has(match[1])) {
       fs.unlinkSync(path.join(directory, fileName));
     }
   }
+}
+
+function playerPhotoIdentifier(player: Player): string {
+  const fromPhoto = String(player.photo ?? '').match(/(\d+)/)?.[1];
+  return fromPhoto ?? String(player.code);
+}
+
+function isValidCachedPhoto(filePath: string): boolean {
+  if (!fs.existsSync(filePath)) return false;
+  const stat = fs.statSync(filePath);
+  if (!stat.isFile() || stat.size < 1024) return false;
+  const header = Buffer.alloc(8);
+  const file = fs.openSync(filePath, 'r');
+  try {
+    fs.readSync(file, header, 0, header.length, 0);
+  } finally {
+    fs.closeSync(file);
+  }
+  return header.equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]));
+}
+
+function playerPhotoUrls(identifier: string, season: string): string[] {
+  const seasonStart = Number(season.split('-')[0]);
+  const currentEdition = Number.isFinite(seasonStart) ? String(seasonStart).slice(-2) : '';
+  const previousEdition = Number.isFinite(seasonStart) ? String(seasonStart - 1).slice(-2) : '';
+  const editions = [
+    currentEdition && `premierleague${currentEdition}`,
+    previousEdition && `premierleague${previousEdition}`,
+    'premierleague',
+  ].filter((edition): edition is string => Boolean(edition));
+  return editions.map(
+    (edition) =>
+      `https://resources.premierleague.com/${edition}/photos/players/250x250/p${identifier}.png`
+  );
 }
 
 export async function syncPublicData(
@@ -150,17 +186,21 @@ export async function syncPublicData(
   console.log(
     `Refreshing all ${bootstrapData.elements.length} player detail/history records from FPL...`
   );
-  const playerDetailResults = await mapWithConcurrency(bootstrapData.elements, 8, async (player) => {
-    try {
-      const summary = await fetchWithRetry(`element-summary/${player.id}`, () =>
-        client.getElementSummary(player.id)
-      );
-      return { playerId: player.id, summary };
-    } catch (error) {
-      playerDetailFailures.push({ id: player.id, message: errorMessage(error) });
-      return null;
+  const playerDetailResults = await mapWithConcurrency(
+    bootstrapData.elements,
+    8,
+    async (player) => {
+      try {
+        const summary = await fetchWithRetry(`element-summary/${player.id}`, () =>
+          client.getElementSummary(player.id)
+        );
+        return { playerId: player.id, summary };
+      } catch (error) {
+        playerDetailFailures.push({ id: player.id, message: errorMessage(error) });
+        return null;
+      }
     }
-  });
+  );
   const playerDetails = playerDetailResults.filter(
     (entry): entry is NonNullable<typeof entry> => entry !== null
   );
@@ -218,27 +258,56 @@ export async function syncPublicData(
   writeJson(path.join(paths.normalizedDir, 'event-live.json'), eventLiveSnapshots);
 
   const playerPhotoFailures: CollectionFailure[] = [];
-  console.log(`Downloading ${bootstrapData.elements.length} player photos...`);
+  console.log(`Validating the player photo cache and backfilling missing portraits...`);
   const photoResults = await mapWithConcurrency(bootstrapData.elements, 8, async (player) => {
-    const fileName = `${player.code}.png`;
-    const photoUrl =
-      `https://resources.premierleague.com/premierleague/photos/players/` +
-      `250x250/p${player.code}.png`;
+    const identifier = playerPhotoIdentifier(player);
+    const fileName = `${identifier}.png`;
+    const outputPath = path.join(paths.playerPhotosDir, fileName);
     try {
-      const outputPath = path.join(paths.playerPhotosDir, fileName);
-      if (!fs.existsSync(outputPath) || fs.statSync(outputPath).size === 0) {
-        const response = await fetchWithRetry(`player photo ${player.code}`, () => fetch(photoUrl));
-        if (!response.ok) {
-          throw new Error(`${response.status} ${response.statusText}`);
-        }
-        const temporaryPath = `${outputPath}.${process.pid}.tmp`;
-        fs.writeFileSync(temporaryPath, Buffer.from(await response.arrayBuffer()));
-        fs.renameSync(temporaryPath, outputPath);
+      if (isValidCachedPhoto(outputPath)) {
+        return {
+          playerId: player.id,
+          code: player.code,
+          photoIdentifier: identifier,
+          available: true,
+          cached: true,
+          file: `assets/player-photos/${fileName}`,
+        };
       }
+
+      if (fs.existsSync(outputPath)) fs.unlinkSync(outputPath);
+      let downloaded: Buffer | null = null;
+      let sourceUrl: string | null = null;
+      const candidateErrors: string[] = [];
+      for (const photoUrl of playerPhotoUrls(identifier, season)) {
+        try {
+          // A 404 usually means that edition does not own the portrait. Try the next
+          // official CDN namespace immediately instead of retrying the same missing URL.
+          const response = await fetch(photoUrl);
+          if (!response.ok) throw new Error(`${response.status} ${response.statusText}`);
+          const body = Buffer.from(await response.arrayBuffer());
+          const pngSignature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+          if (body.length < 1024 || !body.subarray(0, 8).equals(pngSignature)) {
+            throw new Error('response is not a valid PNG portrait');
+          }
+          downloaded = body;
+          sourceUrl = photoUrl;
+          break;
+        } catch (error) {
+          candidateErrors.push(errorMessage(error));
+        }
+      }
+      if (!downloaded) throw new Error(candidateErrors.join(' | '));
+      const temporaryPath = `${outputPath}.${process.pid}.tmp`;
+      fs.writeFileSync(temporaryPath, downloaded);
+      fs.renameSync(temporaryPath, outputPath);
       return {
         playerId: player.id,
         code: player.code,
+        photoIdentifier: identifier,
         available: true,
+        cached: false,
+        sourceUrl,
         file: `assets/player-photos/${fileName}`,
       };
     } catch (error) {
@@ -246,7 +315,9 @@ export async function syncPublicData(
       return {
         playerId: player.id,
         code: player.code,
+        photoIdentifier: identifier,
         available: false,
+        cached: false,
         file: '../../shared/player-photo-placeholder.svg',
       };
     }
@@ -254,7 +325,7 @@ export async function syncPublicData(
   const availablePlayerPhotos = photoResults.filter((entry) => entry.available);
   prunePlayerPhotos(
     paths.playerPhotosDir,
-    new Set(bootstrapData.elements.map((player) => player.code))
+    new Set(bootstrapData.elements.map(playerPhotoIdentifier))
   );
   writeJson(path.join(paths.assetsDir, 'player-photos.manifest.json'), photoResults);
   const photoPathByPlayerId = new Map(photoResults.map((entry) => [entry.playerId, entry.file]));
@@ -297,8 +368,7 @@ export async function syncPublicData(
       elementType: player.element_type,
       squadNumber: player.squad_number,
       photo: player.photo,
-      avatarPath:
-        photoPathByPlayerId.get(player.id) ?? '../../shared/player-photo-placeholder.svg',
+      avatarPath: photoPathByPlayerId.get(player.id) ?? '../../shared/player-photo-placeholder.svg',
       selectedByPercent: player.selected_by_percent,
       nowCost: player.now_cost,
       costChangeEvent: player.cost_change_event ?? 0,
@@ -365,6 +435,8 @@ export async function syncPublicData(
     playerDetails: playerDetails.length,
     eventLiveSnapshots: eventLiveSnapshots.length,
     playerPhotos: availablePlayerPhotos.length,
+    playerPhotoDownloads: photoResults.filter((entry) => entry.available && !entry.cached).length,
+    playerPhotoCacheHits: photoResults.filter((entry) => entry.available && entry.cached).length,
     complete:
       playerDetails.length === bootstrapData.elements.length &&
       eventLiveSnapshots.length === bootstrapData.events.length,
@@ -386,6 +458,8 @@ export async function syncPublicData(
       playerDetails: result.playerDetails,
       eventLiveSnapshots: result.eventLiveSnapshots,
       playerPhotos: result.playerPhotos,
+      playerPhotoDownloads: result.playerPhotoDownloads,
+      playerPhotoCacheHits: result.playerPhotoCacheHits,
     },
     coverage: {
       playerDetails: {

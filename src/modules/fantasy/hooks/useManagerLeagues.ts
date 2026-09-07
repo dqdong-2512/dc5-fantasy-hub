@@ -7,6 +7,7 @@
 import { useState, useCallback, useEffect, useMemo } from 'react';
 import { FantasyGameRepository } from '@repositories/fantasy';
 import type { FantasyLeagueStanding } from '@domain/models';
+import { FplClient } from '@shared/services/fpl-client';
 
 export interface UseManagerLeaguesState {
   // League data
@@ -26,6 +27,8 @@ export interface UseManagerLeaguesState {
   // Loading/Error states
   isLoadingStandings: boolean;
   error: string | null;
+  dataStatus: 'LIVE' | 'STALE' | 'ERROR' | null;
+  lastUpdated: string | null;
 
   // Actions
   selectLeague: (leagueId: number) => Promise<void>;
@@ -36,7 +39,8 @@ export interface UseManagerLeaguesState {
 
 export function useManagerLeagues(
   entryId: number | null,
-  joinedLeagueIds: number[] | null
+  joinedLeagueIds: number[] | null,
+  gameweekId?: number | null
 ): UseManagerLeaguesState {
   const [leagues, setLeagues] = useState<Array<{
     id: number;
@@ -51,8 +55,40 @@ export function useManagerLeagues(
   const [pageSize, setPageSize] = useState(0);
   const [isLoadingStandings, setIsLoadingStandings] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [dataStatus, setDataStatus] = useState<'LIVE' | 'STALE' | 'ERROR' | null>(null);
+  const [lastUpdated, setLastUpdated] = useState<string | null>(null);
 
   const repository = useMemo(() => new FantasyGameRepository(), []);
+  const fplClient = useMemo(() => new FplClient(), []);
+
+  const applyLiveStandings = useCallback(
+    async (leagueId: number, fallback: FantasyLeagueStanding[]) => {
+      if (!gameweekId) return fallback;
+      try {
+        const response = await fplClient.getLiveLeague(leagueId, gameweekId);
+        setDataStatus(response.dataStatus);
+        setLastUpdated(response.lastUpdated);
+        if (!response.data) return fallback;
+        setLeagueName(response.data.leagueName);
+        return response.data.members.map((member) => ({
+          rank: member.liveRank,
+          prevRank: member.previousRank,
+          entryId: member.entryId,
+          entryName: member.teamName,
+          playerName: member.managerName,
+          teamName: member.teamName,
+          points: member.liveTotalPoints,
+          eventPoints: member.liveGameweekPoints,
+          totalPoints: member.liveTotalPoints,
+          lastRank: member.rank ?? undefined,
+        }));
+      } catch {
+        setDataStatus('STALE');
+        return fallback;
+      }
+    },
+    [fplClient, gameweekId]
+  );
 
   // Initialize leagues when entry loads
   useEffect(() => {
@@ -87,7 +123,8 @@ export function useManagerLeagues(
         setIsLoadingStandings(true);
         setError(null);
         const data = await repository.getLeagueStandings(currentLeagueId, pageNumber);
-        setStandings(data.standings);
+        const resolvedStandings = await applyLiveStandings(currentLeagueId, data.standings);
+        setStandings(resolvedStandings);
         setLeagueName(data.leagueName);
         setLeagues(
           (previous) =>
@@ -101,7 +138,7 @@ export function useManagerLeagues(
         setPageSize(data.pageSize);
 
         // Find manager's rank in league
-        const managerRank = data.standings.find((s) => s.entryId === entryId)?.rank ?? null;
+        const managerRank = resolvedStandings.find((s) => s.entryId === entryId)?.rank ?? null;
         if (managerRank !== null) {
           // Update league rank in leagues list
           setLeagues(
@@ -118,7 +155,7 @@ export function useManagerLeagues(
     };
 
     loadStandings();
-  }, [currentLeagueId, pageNumber, entryId, repository]);
+  }, [applyLiveStandings, currentLeagueId, pageNumber, entryId, repository]);
 
   const selectLeague = useCallback(async (leagueId: number) => {
     setCurrentLeagueId(leagueId);
@@ -143,7 +180,7 @@ export function useManagerLeagues(
     try {
       setIsLoadingStandings(true);
       const data = await repository.getLeagueStandings(currentLeagueId, pageNumber);
-      setStandings(data.standings);
+      setStandings(await applyLiveStandings(currentLeagueId, data.standings));
       setLeagueName(data.leagueName);
       setHasNextPage(data.hasNext);
       setPageSize(data.pageSize);
@@ -152,7 +189,7 @@ export function useManagerLeagues(
     } finally {
       setIsLoadingStandings(false);
     }
-  }, [currentLeagueId, pageNumber, repository]);
+  }, [applyLiveStandings, currentLeagueId, pageNumber, repository]);
 
   return {
     leagues,
@@ -165,6 +202,8 @@ export function useManagerLeagues(
     hasNextPage,
     isLoadingStandings,
     error,
+    dataStatus,
+    lastUpdated,
     selectLeague,
     nextPage,
     previousPage,

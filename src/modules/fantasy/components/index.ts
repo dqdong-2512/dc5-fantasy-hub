@@ -33,6 +33,7 @@ export { FixturesList, type FixturesListProps } from './FixturesList';
 export { LiveLeagueRace, type LiveLeagueRaceProps } from './LiveLeagueRace';
 export { ManagerHeadToHeadPage, type ManagerHeadToHeadPageProps } from './ManagerHeadToHeadPage';
 export { PlayerPointBreakdown, type PlayerPointBreakdownProps } from './PlayerPointBreakdown';
+export { PlayerDetailsDialog, type PlayerDetailsDialogProps } from './PlayerDetailsDialog';
 export { GameweekHistory, type GameweekHistoryProps } from './GameweekHistory';
 export { LiveImpactFeed, type LiveImpactFeedProps } from './LiveImpactFeed';
 export { LiveTeamPoints, type LiveTeamPointsProps } from './LiveTeamPoints';

@@ -19,6 +19,8 @@ export interface PitchSquadPlayer {
 export interface FootballPitchProps {
   squad: PitchSquadPlayer[];
   gameweekId?: number;
+  compact?: boolean;
+  onPlayerClick?: (playerId: number) => void;
 }
 
 /**
@@ -27,7 +29,9 @@ export interface FootballPitchProps {
 const FormationRow: React.FC<{
   players: PitchSquadPlayer[];
   gameweekId?: number;
-}> = ({ players, gameweekId }) => {
+  compact?: boolean;
+  onPlayerClick?: (playerId: number) => void;
+}> = ({ players, gameweekId, compact = false, onPlayerClick }) => {
   if (players.length === 0) return null;
 
   return (
@@ -35,8 +39,8 @@ const FormationRow: React.FC<{
       sx={{
         display: 'flex',
         justifyContent: 'center',
-        gap: { xs: 0.5, sm: 2, md: 3.5 },
-        marginY: { xs: 0.75, sm: 1, md: 1.25 },
+        gap: compact ? { xs: 0.25, sm: 0.5 } : { xs: 0.5, sm: 2, md: 3.5 },
+        marginY: compact ? { xs: 0.25, sm: 0.5 } : { xs: 0.75, sm: 1, md: 1.25 },
         width: '100%',
       }}
     >
@@ -47,15 +51,21 @@ const FormationRow: React.FC<{
           gameweekPoints={player.gameweekPoints}
           isCaptain={player.isCaptain}
           isViceCaptain={player.isViceCaptain}
-          size="large"
+          size={compact ? 'small' : 'large'}
           gameweekId={gameweekId}
+          onClick={onPlayerClick}
         />
       ))}
     </Box>
   );
 };
 
-export const FootballPitch: React.FC<FootballPitchProps> = ({ squad, gameweekId }) => {
+export const FootballPitch: React.FC<FootballPitchProps> = ({
+  squad,
+  gameweekId,
+  compact = false,
+  onPlayerClick,
+}) => {
   const playerRepo = useMemo(() => new PlayerRepository(), []);
 
   // Get all players
@@ -111,9 +121,9 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({ squad, gameweekId 
           linear-gradient(180deg, #00a65a 0%, #009b53 100%)
         `,
         borderRadius: '12px',
-        padding: { xs: 1, sm: 2, md: 2.5 },
+        padding: compact ? { xs: 0.75, sm: 1 } : { xs: 1, sm: 2, md: 2.5 },
         position: 'relative',
-        minHeight: { xs: 540, sm: 590, md: 620 },
+        minHeight: compact ? { xs: 460, sm: 500, md: 540 } : { xs: 540, sm: 590, md: 620 },
         maxWidth: '100%',
         overflow: 'hidden',
         border: '1px solid rgba(255,255,255,0.35)',
@@ -165,16 +175,44 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({ squad, gameweekId 
         }}
       >
         {/* Goalkeeper Row */}
-        {grouped.gk.length > 0 && <FormationRow players={grouped.gk} gameweekId={gameweekId} />}
+        {grouped.gk.length > 0 && (
+          <FormationRow
+            players={grouped.gk}
+            gameweekId={gameweekId}
+            compact={compact}
+            onPlayerClick={onPlayerClick}
+          />
+        )}
 
         {/* Defender Rows */}
-        {grouped.def.length > 0 && <FormationRow players={grouped.def} gameweekId={gameweekId} />}
+        {grouped.def.length > 0 && (
+          <FormationRow
+            players={grouped.def}
+            gameweekId={gameweekId}
+            compact={compact}
+            onPlayerClick={onPlayerClick}
+          />
+        )}
 
         {/* Midfielder Rows */}
-        {grouped.mid.length > 0 && <FormationRow players={grouped.mid} gameweekId={gameweekId} />}
+        {grouped.mid.length > 0 && (
+          <FormationRow
+            players={grouped.mid}
+            gameweekId={gameweekId}
+            compact={compact}
+            onPlayerClick={onPlayerClick}
+          />
+        )}
 
         {/* Forward Rows */}
-        {grouped.fwd.length > 0 && <FormationRow players={grouped.fwd} gameweekId={gameweekId} />}
+        {grouped.fwd.length > 0 && (
+          <FormationRow
+            players={grouped.fwd}
+            gameweekId={gameweekId}
+            compact={compact}
+            onPlayerClick={onPlayerClick}
+          />
+        )}
       </Box>
 
       {/* Empty State */}

@@ -6,7 +6,7 @@ import { ThemeTokens } from '@shared/theme/tokens';
 import { FantasyGameHeader } from '../components';
 import { useGameweekHubState } from '../context';
 
-type HubTabValue = 'my-team' | 'league' | 'fixtures' | 'clubs' | 'table';
+type HubTabValue = 'my-team' | 'fixtures' | 'clubs' | 'table';
 
 interface HubTab {
   value: HubTabValue;
@@ -15,8 +15,7 @@ interface HubTab {
 }
 
 const HUB_TABS: HubTab[] = [
-  { value: 'my-team', label: 'My Team', path: '/premier-league/gameweek/my-team' },
-  { value: 'league', label: 'League', path: '/premier-league/gameweek/league' },
+  { value: 'my-team', label: 'Squad & League', path: '/premier-league/gameweek/my-team' },
   { value: 'fixtures', label: 'Fixtures', path: '/premier-league/gameweek/fixtures' },
   { value: 'clubs', label: 'Clubs', path: '/premier-league/gameweek/clubs' },
   { value: 'table', label: 'Table', path: '/premier-league/gameweek/table' },
@@ -39,7 +38,7 @@ function resolveHubTabValue(pathname: string): HubTabValue {
     pathname.startsWith('/premier-league/gameweek/league') ||
     pathname.startsWith('/premier-league/gameweek/leagues')
   ) {
-    return 'league';
+    return 'my-team';
   }
 
   if (pathname.startsWith('/premier-league/gameweek/fixtures')) {
@@ -149,7 +148,7 @@ export function GameweekHubShell(): React.ReactElement {
         </Box>
       </PageContainer>
 
-      {activeTab === 'my-team' || activeTab === 'league' ? (
+      {activeTab === 'my-team' ? (
         <PageContainer sx={{ paddingTop: 0, paddingBottom: 0 }}>
           <Outlet />
         </PageContainer>

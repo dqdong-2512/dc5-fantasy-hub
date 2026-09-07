@@ -31,7 +31,40 @@ export interface EnrichedPick extends FantasyPick {
   didPlay: boolean; // Did player actually play
   matchStatus: 'finished' | 'live' | 'not_started' | 'unknown';
   fixture?: string; // e.g., "ARS v MAN" or "ARS (H)" / "ARS (A)"
+  eventStats: PlayerEventStats;
 }
+
+export interface PlayerEventStats {
+  minutes: number;
+  goalsScored: number;
+  assists: number;
+  cleanSheets: number;
+  goalsConceded: number;
+  ownGoals: number;
+  penaltiesSaved: number;
+  penaltiesMissed: number;
+  yellowCards: number;
+  redCards: number;
+  saves: number;
+  bonus: number;
+  bps: number;
+}
+
+const EMPTY_EVENT_STATS: PlayerEventStats = {
+  minutes: 0,
+  goalsScored: 0,
+  assists: 0,
+  cleanSheets: 0,
+  goalsConceded: 0,
+  ownGoals: 0,
+  penaltiesSaved: 0,
+  penaltiesMissed: 0,
+  yellowCards: 0,
+  redCards: 0,
+  saves: 0,
+  bonus: 0,
+  bps: 0,
+};
 
 export interface PickEnrichmentResult {
   picks: EnrichedPick[];
@@ -125,11 +158,13 @@ export class PickEnrichmentService {
         playerEffectivePoints: 0,
         didPlay: false,
         matchStatus: 'unknown',
+        eventStats: { ...EMPTY_EVENT_STATS },
       };
     }
 
     // Get raw points from live data
     const rawPoints = liveData.stats?.total_points ?? 0;
+    const stats = liveData.stats ?? {};
 
     // Determine multiplier
     let multiplier = 1;
@@ -184,6 +219,21 @@ export class PickEnrichmentService {
       playerEffectivePoints: effectivePoints,
       didPlay,
       matchStatus,
+      eventStats: {
+        minutes: stats.minutes ?? 0,
+        goalsScored: stats.goals_scored ?? 0,
+        assists: stats.assists ?? 0,
+        cleanSheets: stats.clean_sheets ?? 0,
+        goalsConceded: stats.goals_conceded ?? 0,
+        ownGoals: stats.own_goals ?? 0,
+        penaltiesSaved: stats.penalties_saved ?? 0,
+        penaltiesMissed: stats.penalties_missed ?? 0,
+        yellowCards: stats.yellow_cards ?? 0,
+        redCards: stats.red_cards ?? 0,
+        saves: stats.saves ?? 0,
+        bonus: stats.bonus ?? 0,
+        bps: stats.bps ?? 0,
+      },
     };
   }
 
@@ -199,6 +249,7 @@ export class PickEnrichmentService {
       playerEffectivePoints: 0,
       didPlay: false,
       matchStatus: 'unknown',
+      eventStats: { ...EMPTY_EVENT_STATS },
     }));
 
     const starters = enrichedPicks.filter((p) => p.position <= 11);

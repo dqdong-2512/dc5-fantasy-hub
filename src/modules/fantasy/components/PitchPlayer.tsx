@@ -16,6 +16,7 @@ export interface PitchPlayerProps {
   isViceCaptain?: boolean;
   size?: 'small' | 'medium' | 'large';
   gameweekId?: number;
+  onClick?: (playerId: number) => void;
 }
 
 export const PitchPlayer: React.FC<PitchPlayerProps> = ({
@@ -25,6 +26,7 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
   isViceCaptain = false,
   size = 'medium',
   gameweekId,
+  onClick,
 }) => {
   // Fetch player from repository
   const player = useMemo(() => {
@@ -75,6 +77,10 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
 
   return (
     <Box
+      component={onClick ? 'button' : 'div'}
+      type={onClick ? 'button' : undefined}
+      onClick={onClick ? () => onClick(playerId) : undefined}
+      aria-label={onClick ? `View ${player.displayName} details` : undefined}
       sx={{
         display: 'flex',
         flexDirection: 'column',
@@ -85,6 +91,16 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
         transition: 'transform 160ms ease, filter 160ms ease',
         filter: 'drop-shadow(0 7px 8px rgba(0, 0, 0, 0.20))',
         '&:hover': { transform: 'translateY(-3px)' },
+        border: 0,
+        p: 0,
+        color: 'inherit',
+        background: 'transparent',
+        cursor: onClick ? 'pointer' : 'default',
+        font: 'inherit',
+        '&:focus-visible': {
+          outline: '3px solid #00ff87',
+          outlineOffset: 2,
+        },
       }}
     >
       <Box

@@ -1,461 +1,444 @@
-﻿/**
- * My Team Page
- * Displays the user's selected FPL squad on a football pitch with bench
- * Uses the connected manager entry plus the current normalized FPL dataset.
- */
-
 import React, { useMemo, useState } from 'react';
 import {
-  Box,
-  Typography,
-  Button,
-  Stack,
-  CircularProgress,
   Alert,
-  Select,
-  MenuItem,
-  FormControl,
+  Box,
+  Button,
   Card,
   CardContent,
-  ToggleButton,
-  ToggleButtonGroup,
+  Chip,
+  CircularProgress,
+  FormControl,
+  IconButton,
+  MenuItem,
+  Select,
+  Stack,
+  Typography,
 } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import SwapCallsIcon from '@mui/icons-material/SwapCalls';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import { ThemeTokens } from '@shared/theme/tokens';
-import { useEnrichedManagerPicks, useManagerLeagues } from '../hooks';
-import { useGameweekHubState } from '../context';
-import {
-  FootballPitch,
-  Bench,
-  TeamSummary,
-  GameweekSummaryCard,
-  GameweekHistory,
-  PlayerPointBreakdown,
-} from '../components';
+import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
+import SwapCallsIcon from '@mui/icons-material/SwapCalls';
+import { useNavigate } from 'react-router-dom';
 import { getBootstrapRepository } from '@repositories/index';
-import type { PointBreakdownData } from '../components/PlayerPointBreakdown';
-import { HeadToHeadGameweekComparison } from '../components/HeadToHeadGameweekComparison';
+import { Bench, FootballPitch, PlayerDetailsDialog } from '../components';
 import { getStoredLeagueId } from '../components/FplConnectionGate';
+import { useGameweekHubState } from '../context';
+import { useEnrichedManagerPicks, useManagerLeagues } from '../hooks';
+
+interface WorkspaceSquadPlayer {
+  playerId: number;
+  isStarter: boolean;
+  isCaptain: boolean;
+  isViceCaptain: boolean;
+  gameweekPoints: number;
+  benchOrder?: number;
+}
+
+function toWorkspaceSquad(
+  picks: ReturnType<typeof useEnrichedManagerPicks>
+): WorkspaceSquadPlayer[] {
+  return (
+    picks.enrichedPicks?.picks.map((pick) => ({
+      playerId: pick.element,
+      isStarter: pick.position <= 11,
+      isCaptain: pick.isCaptain,
+      isViceCaptain: pick.isViceCaptain,
+      gameweekPoints: pick.playerEffectivePoints,
+      benchOrder: pick.position > 11 ? pick.position - 12 : undefined,
+    })) ?? []
+  );
+}
 
 export const MyTeamPage: React.FC = () => {
   const navigate = useNavigate();
   const gameState = useGameweekHubState();
-  const [manualGameweekOverride, setManualGameweekOverride] = useState<number | null>(null);
-  const [viewMode, setViewMode] = useState<'pitch' | 'compare'>('pitch');
+  const [manualGameweek, setManualGameweek] = useState<number | null>(null);
   const [selectedOpponentId, setSelectedOpponentId] = useState<number | null>(null);
-  const [selectedPlayerBreakdown, setSelectedPlayerBreakdown] = useState<PointBreakdownData | null>(
-    null
-  );
+  const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
+  const displayGameweek = manualGameweek ?? gameState.displayGameweek;
+  const myPicks = useEnrichedManagerPicks(gameState.connectedEntryId, displayGameweek);
 
-  // Determine which gameweek to display
-  const displayGameweek = manualGameweekOverride || gameState.displayGameweek;
-
-  // Get enriched picks for the selected gameweek (includes player gameweek points)
-  const picks = useEnrichedManagerPicks(gameState.connectedEntryId, displayGameweek);
-
-  const comparisonLeagueIds = useMemo(() => {
-    const joinedLeagueIds = gameState.entry?.joinedLeaguesIds ?? [];
-    const connectedLeagueId = getStoredLeagueId();
-
-    if (!connectedLeagueId) {
-      return joinedLeagueIds;
-    }
-
-    return [
-      connectedLeagueId,
-      ...joinedLeagueIds.filter((leagueId) => leagueId !== connectedLeagueId),
-    ];
+  const leagueIds = useMemo(() => {
+    const joined = gameState.entry?.joinedLeaguesIds ?? [];
+    const preferred = getStoredLeagueId();
+    return preferred ? [preferred, ...joined.filter((id) => id !== preferred)] : joined;
   }, [gameState.entry?.joinedLeaguesIds]);
-
-  const leagueData = useManagerLeagues(
-    gameState.connectedEntryId,
-    comparisonLeagueIds
-  );
-  const myLeagueStanding =
-    leagueData.standings?.find((standing) => standing.entryId === gameState.connectedEntryId) ??
-    null;
+  const league = useManagerLeagues(gameState.connectedEntryId, leagueIds, displayGameweek);
   const opponents =
-    leagueData.standings?.filter((standing) => standing.entryId !== gameState.connectedEntryId) ??
-    [];
-  const selectedOpponent =
-    opponents.find((standing) => standing.entryId === selectedOpponentId) ?? opponents[0] ?? null;
+    league.standings?.filter((row) => row.entryId !== gameState.connectedEntryId) ?? [];
+  const opponent =
+    opponents.find((row) => row.entryId === selectedOpponentId) ?? opponents[0] ?? null;
+  const rivalPicks = useEnrichedManagerPicks(opponent?.entryId ?? null, displayGameweek);
 
-  // Get gameweek list for selector
   const bootstrapRepo = useMemo(() => getBootstrapRepository(), []);
-  const bootstrap = useMemo(() => {
+  const gameweeks = useMemo(() => {
     try {
-      return bootstrapRepo.getBootstrap();
+      return bootstrapRepo.getBootstrap().gameweeks;
     } catch {
-      return { gameweeks: [] };
+      return [];
     }
   }, [bootstrapRepo]);
+  const mySquad = toWorkspaceSquad(myPicks);
+  const rivalSquad = toWorkspaceSquad(rivalPicks);
+  const visiblePicks = [
+    ...(myPicks.enrichedPicks?.picks ?? []),
+    ...(rivalPicks.enrichedPicks?.picks ?? []),
+  ];
+  const selectedPick = visiblePicks.find((pick) => pick.element === selectedPlayerId) ?? null;
 
-  // The routed page is connection-gated, so only render the connected entry's runtime data.
-  const isUsingRealData = Boolean(
-    gameState.isConnected && gameState.connectedEntryId && picks.enrichedPicks
-  );
-
-  const teamName = gameState.entry?.team.name ?? 'My Team';
-  const gameweekNumber = displayGameweek ?? bootstrapRepo.getCurrentGameweek()?.id ?? 1;
-  const teamValue = isUsingRealData ? picks.teamValue / 10 : 0;
-  const bank = isUsingRealData ? picks.bankValue / 10 : 0;
-
-  // Prepare squad data for components
-  const squadForComponents =
-    picks.enrichedPicks?.picks?.map((pick: any) => ({
-        playerId: pick.element,
-        isStarter: pick.position <= 11,
-        isCaptain: pick.isCaptain,
-        isViceCaptain: pick.isViceCaptain,
-        gameweekPoints: pick.playerEffectivePoints, // Real points with multiplier applied
-        benchOrder: pick.position > 11 ? pick.position - 12 : undefined,
-      })) ?? [];
-
-  // Handle gameweek navigation
-  const handleGameweekChange = (newGameweek: number) => {
-    setManualGameweekOverride(newGameweek);
-  };
-
-  const handlePreviousGameweek = () => {
+  const moveGameweek = (offset: number) => {
     if (!displayGameweek) return;
-    const availableGameweeks = bootstrap.gameweeks.map((gw) => gw.id).sort((a, b) => a - b);
-    const currentIndex = availableGameweeks.indexOf(displayGameweek);
-    if (currentIndex > 0) {
-      handleGameweekChange(availableGameweeks[currentIndex - 1]);
-    }
+    const ids = gameweeks.map((gameweek) => gameweek.id).sort((a, b) => a - b);
+    const next = ids[ids.indexOf(displayGameweek) + offset];
+    if (next) setManualGameweek(next);
   };
 
-  const handleNextGameweek = () => {
-    if (!displayGameweek) return;
-    const availableGameweeks = bootstrap.gameweeks.map((gw) => gw.id).sort((a, b) => a - b);
-    const currentIndex = availableGameweeks.indexOf(displayGameweek);
-    if (currentIndex < availableGameweeks.length - 1) {
-      handleGameweekChange(availableGameweeks[currentIndex + 1]);
-    }
-  };
-
-  // Show loading state if connected and loading
-  if (gameState.isConnected && gameState.isLoading) {
+  if (gameState.isLoading)
     return (
-      <Box
-        sx={{
-          padding: 4,
-          textAlign: 'center',
-          minHeight: '60vh',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
+      <Box sx={{ minHeight: 420, display: 'grid', placeItems: 'center' }}>
         <CircularProgress />
       </Box>
     );
-  }
 
   return (
-    <Box
-      sx={{
-        // The shell places this route inside the same PageContainer rail as the tabs.
-        width: '100%',
-        maxWidth: '100%',
-        minWidth: 0,
-        marginX: 0,
-        boxSizing: 'border-box',
-        paddingTop: ThemeTokens.spacing.lg,
-        paddingBottom: ThemeTokens.spacing.xxl,
-      }}
-    >
-      <Stack spacing={ThemeTokens.spacing.lg}>
+    <Box sx={{ width: '100%', minWidth: 0, py: { xs: 2, md: 3 } }}>
+      <Stack spacing={2}>
         <Box
           sx={{
-            position: 'relative',
-            overflow: 'hidden',
-            p: { xs: 2.5, md: 3.5 },
-            borderRadius: '12px',
+            p: { xs: 2, md: 2.5 },
+            borderRadius: 3,
             color: '#fff',
-            background: 'linear-gradient(125deg, #37003c 0%, #6d0875 55%, #00a8e8 130%)',
-            boxShadow: '0 16px 36px rgba(55, 0, 60, 0.20)',
-            '&::after': {
-              content: '""',
-              position: 'absolute',
-              width: 240,
-              height: 240,
-              right: -60,
-              top: -150,
-              borderRadius: '50%',
-              backgroundColor: 'rgba(255,255,255,0.10)',
-            },
+            background: 'linear-gradient(115deg, #37003c, #6d0875 58%, #007a57)',
           }}
         >
-          <Stack spacing={2} sx={{ position: 'relative', zIndex: 1 }}>
-            <Stack
-              direction={{ xs: 'column', sm: 'row' }}
-              spacing={1}
-              sx={{ justifyContent: 'space-between', alignItems: { sm: 'center' } }}
-            >
+          <Stack
+            direction={{ xs: 'column', md: 'row' }}
+            spacing={2}
+            sx={{ alignItems: { md: 'center' }, justifyContent: 'space-between' }}
+          >
+            <Box>
               <Button
                 startIcon={<ArrowBackIcon />}
                 onClick={() => navigate('/premier-league/home')}
-                sx={{ alignSelf: 'flex-start', p: 0, color: 'rgba(255,255,255,.82)', textTransform: 'none' }}
+                sx={{ color: 'rgba(255,255,255,.76)', p: 0, mb: 1, textTransform: 'none' }}
               >
                 Back to Home
               </Button>
+              <Typography variant="h4" sx={{ fontWeight: 900 }}>
+                Squad & league live room
+              </Typography>
+              <Typography sx={{ opacity: 0.76 }}>
+                Compare your Gameweek team with any manager in one compact workspace.
+              </Typography>
+            </Box>
+            <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
+              <IconButton
+                aria-label="Previous gameweek"
+                onClick={() => moveGameweek(-1)}
+                sx={{ color: '#fff' }}
+              >
+                <KeyboardArrowLeftIcon />
+              </IconButton>
+              <FormControl size="small" sx={{ minWidth: 136 }}>
+                <Select
+                  value={displayGameweek ?? ''}
+                  onChange={(event) => setManualGameweek(Number(event.target.value))}
+                  sx={{ bgcolor: '#fff', fontWeight: 800 }}
+                >
+                  {gameweeks.map((gw) => (
+                    <MenuItem key={gw.id} value={gw.id}>
+                      Gameweek {gw.id}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
+              <IconButton
+                aria-label="Next gameweek"
+                onClick={() => moveGameweek(1)}
+                sx={{ color: '#fff' }}
+              >
+                <KeyboardArrowRightIcon />
+              </IconButton>
               <Button
+                variant="outlined"
                 startIcon={<SwapCallsIcon />}
                 onClick={() => navigate('/premier-league/gameweek/transfers')}
-                variant="outlined"
                 sx={{
-                  alignSelf: 'flex-start',
+                  display: { xs: 'none', sm: 'inline-flex' },
                   color: '#fff',
                   borderColor: 'rgba(255,255,255,.45)',
                   textTransform: 'none',
-                  '&:hover': { borderColor: '#fff', backgroundColor: 'rgba(255,255,255,.10)' },
                 }}
               >
-                Plan transfers
+                Transfers
               </Button>
             </Stack>
+          </Stack>
+        </Box>
 
-            <Box>
-              <Typography variant="overline" sx={{ opacity: 0.75, letterSpacing: 1.4 }}>
-                My FPL squad
-              </Typography>
-              <Typography
-                variant="h3"
-                sx={{ fontWeight: 850, lineHeight: 1.05, fontSize: { xs: '2rem', md: '2.75rem' } }}
-              >
-                {teamName}
-              </Typography>
-              <Typography variant="body2" sx={{ mt: 0.75, opacity: 0.78 }}>
-                Select your captain, review fixtures and prepare your starting XI
-              </Typography>
-            </Box>
-
-            {gameState.isConnected && displayGameweek && (
+        {(myPicks.error || league.error) && (
+          <Alert severity="warning">{myPicks.error ?? league.error}</Alert>
+        )}
+        <Box
+          sx={{
+            display: 'grid',
+            gridTemplateColumns: { xs: 'minmax(0, 1fr)', lg: '250px minmax(0, 1fr)' },
+            gap: 2,
+            alignItems: 'start',
+          }}
+        >
+          <Card
+            variant="outlined"
+            sx={{
+              borderRadius: 3,
+              overflow: 'hidden',
+              position: { lg: 'sticky' },
+              top: { lg: 16 },
+            }}
+          >
+            <Box sx={{ p: 1.5, bgcolor: '#151d35', color: '#fff' }}>
               <Stack direction="row" spacing={1} sx={{ alignItems: 'center' }}>
-                <Button
-                  size="small"
-                  onClick={handlePreviousGameweek}
-                  sx={{ minWidth: 36, color: '#fff' }}
-                >
-                  <KeyboardArrowLeftIcon />
-                </Button>
-                <FormControl sx={{ minWidth: 130 }}>
+                <FormControl size="small" fullWidth>
                   <Select
-                    value={displayGameweek}
-                    onChange={(event) => handleGameweekChange(event.target.value as number)}
-                    size="small"
-                    MenuProps={{
-                      anchorOrigin: { vertical: 'bottom', horizontal: 'left' },
-                      transformOrigin: { vertical: 'top', horizontal: 'left' },
-                      slotProps: {
-                        paper: {
-                          sx: {
-                            mt: 1,
-                            maxHeight: 304,
-                            borderRadius: '8px',
-                            boxShadow: '0 14px 32px rgba(15, 23, 42, 0.18)',
-                          },
-                        },
-                      },
+                    value={league.currentLeagueId ?? ''}
+                    displayEmpty
+                    onChange={(event) => void league.selectLeague(Number(event.target.value))}
+                    sx={{
+                      color: '#fff',
+                      fontWeight: 800,
+                      '.MuiOutlinedInput-notchedOutline': { borderColor: 'rgba(255,255,255,.24)' },
+                      '.MuiSvgIcon-root': { color: '#fff' },
                     }}
-                    sx={{ height: 40, fontWeight: 750, backgroundColor: '#fff' }}
                   >
-                    {bootstrap.gameweeks.map((gameweek) => (
-                      <MenuItem key={gameweek.id} value={gameweek.id}>
-                        Gameweek {gameweek.id}
+                    {(league.leagues ?? []).map((item) => (
+                      <MenuItem key={item.id} value={item.id}>
+                        {item.name}
                       </MenuItem>
                     ))}
                   </Select>
                 </FormControl>
-                <Button
-                  size="small"
-                  onClick={handleNextGameweek}
-                  sx={{ minWidth: 36, color: '#fff' }}
+                <IconButton
+                  aria-label="Refresh standings"
+                  onClick={() => void league.refreshStandings()}
+                  sx={{ color: '#fff' }}
                 >
-                  <KeyboardArrowRightIcon />
-                </Button>
+                  <RefreshRoundedIcon />
+                </IconButton>
               </Stack>
-            )}
-          </Stack>
-        </Box>
-
-        {/* Loading indicator for picks */}
-        {gameState.isConnected && picks.isLoading && (
-          <Box sx={{ display: 'flex', justifyContent: 'center', padding: 3 }}>
-            <CircularProgress />
-          </Box>
-        )}
-
-        {gameState.isConnected && (
-          <Card sx={{ border: '1px solid', borderColor: 'divider' }}>
-            <CardContent sx={{ p: '12px !important' }}>
-              <Stack
-                direction={{ xs: 'column', sm: 'row' }}
-                spacing={1.5}
-                sx={{ alignItems: { sm: 'center' }, justifyContent: 'space-between' }}
-              >
-                <Box>
-                  <Typography sx={{ fontWeight: 800 }}>Team workspace</Typography>
-                  <Typography variant="caption" color="text.secondary">
-                    Review your squad or compare it with a league rival
-                  </Typography>
-                </Box>
-                <ToggleButtonGroup
-                  exclusive
-                  size="small"
-                  value={viewMode}
-                  onChange={(_event, value: 'pitch' | 'compare' | null) => {
-                    if (value) setViewMode(value);
-                  }}
-                >
-                  <ToggleButton value="pitch" sx={{ textTransform: 'none', fontWeight: 700 }}>
-                    Pitch view
-                  </ToggleButton>
-                  <ToggleButton value="compare" sx={{ textTransform: 'none', fontWeight: 700 }}>
-                    Compare rival
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              </Stack>
-            </CardContent>
-          </Card>
-        )}
-
-        {viewMode === 'pitch' && picks.error && (
-          <Alert severity="info">
-            Your Entry ID is connected, but FPL has not published Gameweek {displayGameweek} picks
-            for public access yet. Manager squads normally become available after the deadline, so
-            the page will not substitute demo players for your real team.
-          </Alert>
-        )}
-
-        {/* Team Summary Stats */}
-        {!picks.isLoading && viewMode === 'pitch' && squadForComponents.length > 0 && (
-          <Stack spacing={ThemeTokens.spacing.lg}>
-            <TeamSummary
-              teamName={teamName ?? 'Team'}
-              gameweekNumber={gameweekNumber ?? 0}
-              gameweekPoints={isUsingRealData ? picks.totalPoints : 0}
-              teamValue={teamValue ?? 0}
-              bank={bank ?? 0}
-              squad={squadForComponents.map((p) => ({
-                playerId: p.playerId,
-                isStarter: p.isStarter,
-              }))}
-            />
-
-            <Box>
-              <Typography variant="h5" sx={{ mb: 1.5, fontWeight: 850 }}>
-                Starting XI
+              <Typography variant="caption" sx={{ opacity: 0.65 }}>
+                {league.leagueName ?? 'Classic league'} · page {league.pageNumber}
               </Typography>
-              <FootballPitch
-                squad={squadForComponents}
-                gameweekId={displayGameweek ?? undefined}
-              />
-            </Box>
-
-            <Bench squad={squadForComponents} gameweekId={displayGameweek ?? undefined} />
-
-            {isUsingRealData && displayGameweek && (
-              <GameweekSummaryCard
-                gameweekNumber={displayGameweek}
-                totalPoints={picks.totalPoints ?? 0}
-                gameweekRank={null}
-                transfers={picks.transfersMade ?? 0}
-                transferCost={picks.transfersCost ?? 0}
-                captainPoints={picks.captainPoints ?? 0}
-                benchPoints={picks.benchPoints ?? 0}
-                activeChip={picks.activeChip ?? null}
-                isHistorical={displayGameweek < (gameState.currentGameweekIndex ?? 0)}
-              />
-            )}
-
-            {isUsingRealData && gameState.history && (
-              <GameweekHistory
-                history={gameState.history}
-                currentGameweek={displayGameweek ?? undefined}
-                onSelectGameweek={handleGameweekChange}
-                isLoading={picks.isLoading}
-              />
-            )}
-          </Stack>
-        )}
-
-        {!picks.isLoading && viewMode === 'compare' && (
-          <Stack spacing={ThemeTokens.spacing.md}>
-            <Card sx={{ border: '1px solid', borderColor: 'divider' }}>
-              <CardContent>
-                <Stack
-                  direction={{ xs: 'column', md: 'row' }}
-                  spacing={2}
-                  sx={{ alignItems: { md: 'center' }, justifyContent: 'space-between' }}
-                >
-                  <Box>
-                    <Typography variant="h6" sx={{ fontWeight: 850 }}>
-                      Head-to-head comparison
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      Compare pitch, captaincy, differentials and live league race
-                    </Typography>
-                  </Box>
-                  <FormControl size="small" sx={{ minWidth: 240 }}>
-                    <Select
-                      value={selectedOpponent?.entryId ?? ''}
-                      displayEmpty
-                      onChange={(event) => setSelectedOpponentId(Number(event.target.value))}
-                    >
-                      {opponents.map((opponent) => (
-                        <MenuItem key={opponent.entryId} value={opponent.entryId}>
-                          {opponent.entryName} · #{opponent.rank}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                </Stack>
-              </CardContent>
-            </Card>
-
-            {leagueData.isLoadingStandings && (
-              <Box sx={{ display: 'flex', justifyContent: 'center', p: 4 }}>
-                <CircularProgress />
-              </Box>
-            )}
-            {leagueData.error && <Alert severity="warning">{leagueData.error}</Alert>}
-            {!leagueData.isLoadingStandings &&
-              !leagueData.error &&
-              myLeagueStanding &&
-              selectedOpponent &&
-              gameState.connectedEntryId &&
-              leagueData.currentLeagueId && (
-                <HeadToHeadGameweekComparison
-                  myManager={myLeagueStanding}
-                  opponentManager={selectedOpponent}
-                  connectedEntryId={gameState.connectedEntryId}
-                  selectedLeagueId={leagueData.currentLeagueId}
-                  onClose={() => setViewMode('pitch')}
+              {league.dataStatus && (
+                <Chip
+                  size="small"
+                  label={league.dataStatus === 'LIVE' ? 'Live ranking' : 'Cached ranking'}
+                  sx={{
+                    mt: 0.75,
+                    height: 20,
+                    bgcolor: league.dataStatus === 'LIVE' ? '#00ff87' : '#ffd166',
+                    fontWeight: 800,
+                  }}
                 />
               )}
-            {!leagueData.isLoadingStandings &&
-              !leagueData.error &&
-              (!myLeagueStanding || !selectedOpponent) && (
-                <Alert severity="info">
-                  No league opponent is available yet. Connect a classic league with at least two
-                  managers to enable comparison.
-                </Alert>
+            </Box>
+            <Box sx={{ maxHeight: { xs: 270, lg: 690 }, overflowY: 'auto' }}>
+              {league.isLoadingStandings && (
+                <Box sx={{ p: 3, textAlign: 'center' }}>
+                  <CircularProgress size={24} />
+                </Box>
               )}
-          </Stack>
-        )}
+              {(league.standings ?? []).map((row) => {
+                const mine = row.entryId === gameState.connectedEntryId;
+                const selected = row.entryId === opponent?.entryId;
+                return (
+                  <Box
+                    key={row.entryId}
+                    component="button"
+                    type="button"
+                    disabled={mine}
+                    onClick={() => setSelectedOpponentId(row.entryId)}
+                    sx={{
+                      width: '100%',
+                      display: 'grid',
+                      gridTemplateColumns: '30px minmax(0, 1fr) 42px',
+                      gap: 1,
+                      alignItems: 'center',
+                      p: 1.1,
+                      border: 0,
+                      borderBottom: '1px solid #e6eaf0',
+                      textAlign: 'left',
+                      bgcolor: mine ? '#e6fff3' : selected ? '#eef4ff' : '#fff',
+                      cursor: mine ? 'default' : 'pointer',
+                      color: 'inherit',
+                      '&:hover': { bgcolor: mine ? '#e6fff3' : '#f3f6fb' },
+                    }}
+                  >
+                    <Typography
+                      sx={{ fontWeight: 900, color: mine ? '#007a57' : 'text.secondary' }}
+                    >
+                      {row.rank}
+                    </Typography>
+                    <Box sx={{ minWidth: 0 }}>
+                      <Typography noWrap sx={{ fontSize: 13, fontWeight: 800 }}>
+                        {row.entryName}
+                      </Typography>
+                      <Typography noWrap variant="caption" color="text.secondary">
+                        {mine ? 'You' : row.playerName}
+                      </Typography>
+                    </Box>
+                    <Box sx={{ textAlign: 'right' }}>
+                      <Typography sx={{ fontSize: 13, fontWeight: 900 }}>
+                        {row.eventPoints}
+                      </Typography>
+                      <Typography variant="caption" color="text.secondary">
+                        GW
+                      </Typography>
+                    </Box>
+                  </Box>
+                );
+              })}
+            </Box>
+            <Stack direction="row" sx={{ justifyContent: 'space-between', p: 1 }}>
+              <Button
+                size="small"
+                disabled={league.pageNumber <= 1}
+                onClick={() => void league.previousPage()}
+              >
+                Previous
+              </Button>
+              <Button
+                size="small"
+                disabled={!league.hasNextPage}
+                onClick={() => void league.nextPage()}
+              >
+                Next
+              </Button>
+            </Stack>
+          </Card>
 
-        <PlayerPointBreakdown
-          open={selectedPlayerBreakdown !== null}
-          onClose={() => setSelectedPlayerBreakdown(null)}
-          breakdown={selectedPlayerBreakdown}
-        />
+          <Box
+            sx={{
+              display: 'grid',
+              gridTemplateColumns: { xs: 'minmax(0, 1fr)', md: 'repeat(2, minmax(0, 1fr))' },
+              gap: 2,
+            }}
+          >
+            <TeamPitchCard
+              title={gameState.entry?.team.name ?? 'My Team'}
+              subtitle={gameState.entry?.manager.name ?? 'You'}
+              points={myPicks.totalPoints}
+              transfers={myPicks.transfersMade}
+              loading={myPicks.isLoading}
+              squad={mySquad}
+              gameweek={displayGameweek}
+              onPlayerClick={setSelectedPlayerId}
+              accent="#00ff87"
+            />
+            <TeamPitchCard
+              title={opponent?.entryName ?? 'Select a rival'}
+              subtitle={
+                opponent
+                  ? `${opponent.playerName} · rank #${opponent.rank}`
+                  : 'Choose a manager from the standings'
+              }
+              points={rivalPicks.totalPoints || opponent?.eventPoints || 0}
+              transfers={rivalPicks.transfersMade}
+              loading={rivalPicks.isLoading}
+              squad={rivalSquad}
+              gameweek={displayGameweek}
+              onPlayerClick={setSelectedPlayerId}
+              accent="#04f5ff"
+            />
+          </Box>
+        </Box>
       </Stack>
+      <PlayerDetailsDialog
+        key={selectedPlayerId ?? 'closed'}
+        playerId={selectedPlayerId}
+        pick={selectedPick}
+        gameweekId={displayGameweek}
+        open={selectedPlayerId !== null}
+        onClose={() => setSelectedPlayerId(null)}
+      />
     </Box>
   );
 };
+
+const TeamPitchCard: React.FC<{
+  title: string;
+  subtitle: string;
+  points: number;
+  transfers: number;
+  loading: boolean;
+  squad: WorkspaceSquadPlayer[];
+  gameweek: number | null;
+  accent: string;
+  onPlayerClick: (playerId: number) => void;
+}> = ({ title, subtitle, points, transfers, loading, squad, gameweek, accent, onPlayerClick }) => (
+  <Card variant="outlined" sx={{ borderRadius: 3, overflow: 'hidden', minWidth: 0 }}>
+    <CardContent sx={{ p: '14px !important', bgcolor: '#20283a', color: '#fff' }}>
+      <Stack
+        direction="row"
+        spacing={1}
+        sx={{ justifyContent: 'space-between', alignItems: 'center' }}
+      >
+        <Box sx={{ minWidth: 0 }}>
+          <Typography noWrap sx={{ fontWeight: 900 }}>
+            {title}
+          </Typography>
+          <Typography noWrap variant="caption" sx={{ opacity: 0.66 }}>
+            {subtitle}
+          </Typography>
+        </Box>
+        <Stack direction="row" spacing={0.75}>
+          <Chip
+            size="small"
+            label={`${points} pts`}
+            sx={{ bgcolor: accent, color: '#09111f', fontWeight: 900 }}
+          />
+          <Chip
+            size="small"
+            label={`${transfers} tr`}
+            sx={{ bgcolor: 'rgba(255,255,255,.1)', color: '#fff' }}
+          />
+        </Stack>
+      </Stack>
+    </CardContent>
+    {loading ? (
+      <Box sx={{ minHeight: 540, display: 'grid', placeItems: 'center' }}>
+        <CircularProgress />
+      </Box>
+    ) : squad.length > 0 ? (
+      <>
+        <FootballPitch
+          squad={squad}
+          gameweekId={gameweek ?? undefined}
+          compact
+          onPlayerClick={onPlayerClick}
+        />
+        <Bench
+          squad={squad}
+          gameweekId={gameweek ?? undefined}
+          compact
+          onPlayerClick={onPlayerClick}
+        />
+      </>
+    ) : (
+      <Box
+        sx={{
+          minHeight: 540,
+          p: 3,
+          display: 'grid',
+          placeItems: 'center',
+          textAlign: 'center',
+          bgcolor: '#f7f9fc',
+        }}
+      >
+        <Typography color="text.secondary">
+          Squad data becomes public after the Gameweek deadline.
+        </Typography>
+      </Box>
+    )}
+  </Card>
+);

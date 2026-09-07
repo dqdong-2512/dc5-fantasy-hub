@@ -23,6 +23,12 @@ Existing player-detail and event-live JSON files are never treated as a permanen
 publishes mandatory JSON after all of those requests succeed. If an endpoint is still unavailable
 after four attempts, the command exits with an error and keeps the previous complete snapshot.
 
+Player portraits use a separate content-validated cache. The sync resolves the canonical identifier
+from the FPL `photo` field, verifies the PNG signature and file size, and skips every complete cached
+portrait. Only missing or invalid files are downloaded; the downloader tries the current and legacy
+official Premier League CDN namespaces before recording a placeholder. Cache hits and new downloads
+are reported as `playerPhotoCacheHits` and `playerPhotoDownloads` in the sync manifest.
+
 Useful options:
 
 ```powershell

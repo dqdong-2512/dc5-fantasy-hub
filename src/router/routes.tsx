@@ -42,9 +42,6 @@ const FantasyGameOverview = React.lazy(() =>
 const MyTeamPage = React.lazy(() =>
   import('../modules/fantasy/pages').then((module) => ({ default: module.MyTeamPage }))
 );
-const LeagueStandingsPage = React.lazy(() =>
-  import('../modules/fantasy/pages').then((module) => ({ default: module.LeagueStandingsPage }))
-);
 const GameweekCenterPage = React.lazy(() =>
   import('../modules/fantasy/pages').then((module) => ({ default: module.GameweekCenterPage }))
 );
@@ -209,43 +206,19 @@ const router = createBrowserRouter([
               },
               {
                 path: 'league',
-                element: (
-                  <FplConnectionGate showConnectedSummary={false}>
-                    <Suspense fallback={<RouteLoadingFallback />}>
-                      <LeagueStandingsPage />
-                    </Suspense>
-                  </FplConnectionGate>
-                ),
+                element: <Navigate to="/premier-league/gameweek/my-team" replace />,
               },
               {
                 path: 'league/:leagueId',
-                element: (
-                  <FplConnectionGate showConnectedSummary={false}>
-                    <Suspense fallback={<RouteLoadingFallback />}>
-                      <LeagueStandingsPage />
-                    </Suspense>
-                  </FplConnectionGate>
-                ),
+                element: <Navigate to="/premier-league/gameweek/my-team" replace />,
               },
               {
                 path: 'league/:leagueId/live',
-                element: (
-                  <FplConnectionGate showConnectedSummary={false}>
-                    <Suspense fallback={<RouteLoadingFallback />}>
-                      <LeagueStandingsPage />
-                    </Suspense>
-                  </FplConnectionGate>
-                ),
+                element: <Navigate to="/premier-league/gameweek/my-team" replace />,
               },
               {
                 path: 'league/:leagueId/managers/:managerId',
-                element: (
-                  <FplConnectionGate showConnectedSummary={false}>
-                    <Suspense fallback={<RouteLoadingFallback />}>
-                      <LeagueStandingsPage />
-                    </Suspense>
-                  </FplConnectionGate>
-                ),
+                element: <Navigate to="/premier-league/gameweek/my-team" replace />,
               },
               {
                 path: 'fixtures',
@@ -327,37 +300,19 @@ const router = createBrowserRouter([
               },
               {
                 path: 'leagues',
-                element: <Navigate to="../league" replace />,
+                element: <Navigate to="/premier-league/gameweek/my-team" replace />,
               },
               {
                 path: 'leagues/:leagueId',
-                element: (
-                  <FplConnectionGate>
-                    <Suspense fallback={<RouteLoadingFallback />}>
-                      <LeagueStandingsPage />
-                    </Suspense>
-                  </FplConnectionGate>
-                ),
+                element: <Navigate to="/premier-league/gameweek/my-team" replace />,
               },
               {
                 path: 'leagues/:leagueId/live',
-                element: (
-                  <FplConnectionGate>
-                    <Suspense fallback={<RouteLoadingFallback />}>
-                      <LeagueStandingsPage />
-                    </Suspense>
-                  </FplConnectionGate>
-                ),
+                element: <Navigate to="/premier-league/gameweek/my-team" replace />,
               },
               {
                 path: 'leagues/:leagueId/managers/:managerId',
-                element: (
-                  <FplConnectionGate>
-                    <Suspense fallback={<RouteLoadingFallback />}>
-                      <LeagueStandingsPage />
-                    </Suspense>
-                  </FplConnectionGate>
-                ),
+                element: <Navigate to="/premier-league/gameweek/my-team" replace />,
               },
             ],
           },
