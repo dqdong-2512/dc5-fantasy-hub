@@ -17,7 +17,7 @@
     "id": 3,
     "name": "Gameweek 3",
     "deadlineTime": "2026-09-04T17:30:00Z",
-    "finished": false,
+    "finished": true,
     "averageEntryScore": 51
   },
   {
