@@ -76,6 +76,7 @@ export const Bench: React.FC<BenchProps> = ({
             size="small"
             gameweekId={gameweekId}
             onClick={onPlayerClick}
+            compact={compact}
           />
         ))}
       </Box>

@@ -136,14 +136,22 @@ export interface FplEntry {
   overallRank: number | null;
   currentGameweek: number | null;
   classicLeagueIds: number[];
+  classicLeagues: Array<{
+    id: number;
+    name: string;
+    rank: number | null;
+  }>;
 }
 
 export interface FplEntryHistoryItem {
   gameweek: number;
   points: number;
   totalPoints: number;
+  gameweekRank: number | null;
   overallRank: number | null;
+  transfers: number;
   transferCost: number;
+  benchPoints: number;
   bank: number;
   teamValue: number;
 }

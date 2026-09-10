@@ -42,6 +42,7 @@ export interface FantasyEntry {
   manager: FantasyManager;
   team: FantasyTeam;
   joinedLeaguesIds: number[];
+  joinedLeagues: Array<{ id: number; name: string; rank: number | null }>;
   gameweekData?: {
     currentGameweek: number;
     currentGameweekPoints: number;
@@ -65,6 +66,8 @@ export interface FantasyGameweekHistory {
   benchPoints: number;
   eventTransfers?: number;
   eventTransfersCost?: number;
+  bankValue?: number;
+  teamValue?: number;
 }
 
 /**

@@ -54,6 +54,7 @@ const FormationRow: React.FC<{
           size={compact ? 'small' : 'large'}
           gameweekId={gameweekId}
           onClick={onPlayerClick}
+          compact={compact}
         />
       ))}
     </Box>
@@ -120,10 +121,10 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({
           repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0, rgba(255,255,255,.035) 12.5%, rgba(0,0,0,.025) 12.5%, rgba(0,0,0,.025) 25%),
           linear-gradient(180deg, #00a65a 0%, #009b53 100%)
         `,
-        borderRadius: '12px',
+        borderRadius: compact ? 0 : '12px',
         padding: compact ? { xs: 0.75, sm: 1 } : { xs: 1, sm: 2, md: 2.5 },
         position: 'relative',
-        minHeight: compact ? { xs: 460, sm: 500, md: 540 } : { xs: 540, sm: 590, md: 620 },
+        minHeight: compact ? { xs: 390, sm: 420, md: 440 } : { xs: 540, sm: 590, md: 620 },
         maxWidth: '100%',
         overflow: 'hidden',
         border: '1px solid rgba(255,255,255,0.35)',
@@ -160,6 +161,31 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({
             border: '2px solid rgba(255,255,255,0.1)',
             borderRadius: '50%',
           },
+        }}
+      />
+
+      <Box
+        sx={{
+          position: 'absolute',
+          left: '31%',
+          right: '31%',
+          top: 0,
+          height: '15%',
+          border: '2px solid rgba(255,255,255,.16)',
+          borderTop: 0,
+          pointerEvents: 'none',
+        }}
+      />
+      <Box
+        sx={{
+          position: 'absolute',
+          left: '31%',
+          right: '31%',
+          bottom: 0,
+          height: '15%',
+          border: '2px solid rgba(255,255,255,.16)',
+          borderBottom: 0,
+          pointerEvents: 'none',
         }}
       />
 

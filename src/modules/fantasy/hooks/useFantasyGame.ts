@@ -19,6 +19,7 @@ export interface UseFantasyGameState {
   // Data
   entry: FantasyEntry | null;
   history: FantasyGameweekHistory[] | null;
+  runtimeGameweeks: FplEvent[] | null;
 
   // Gameweek context
   displayGameweek: number | null;
@@ -205,6 +206,7 @@ export function useFantasyGame(): UseFantasyGameState {
     isConnected: connectedEntryId !== null,
     entry,
     history,
+    runtimeGameweeks,
     displayGameweek: displayGameweek ?? null,
     currentGameweekIndex,
     isCurrentGameweekActive,

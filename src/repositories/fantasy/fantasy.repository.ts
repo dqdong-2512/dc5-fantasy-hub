@@ -78,7 +78,9 @@ export class FantasyGameRepository {
         rankSort: h.rank_sort,
         transfers: h.transfers_made,
         transfersCost: h.transfers_cost,
-        benchPoints: 0, // Not provided in history endpoint
+        benchPoints: h.points_on_bench ?? 0,
+        bankValue: h.bank,
+        teamValue: h.value,
         eventTransfers: h.event_transfers,
         eventTransfersCost: h.event_transfers_cost,
       }));
@@ -140,6 +142,9 @@ export class FantasyGameRepository {
   async getEntryLeagues(entryId: number): Promise<Array<{ id: number; name: string }>> {
     try {
       const entry = await this.getEntry(entryId);
+      if (entry.joinedLeagues.length > 0) {
+        return entry.joinedLeagues.map(({ id, name }) => ({ id, name }));
+      }
       const leagues = await Promise.all(
         entry.joinedLeaguesIds.map(async (leagueId) => {
           try {
@@ -218,13 +223,18 @@ export class FantasyGameRepository {
       transfersBudget: 0,
     };
 
-    const classicLeagues = data.leagues?.classic?.map((league) => league.id) || [];
+    const joinedLeagues = data.leagues?.classic?.map((league) => ({
+      id: league.id,
+      name: league.name,
+      rank: league.rank ?? null,
+    })) || [];
 
     return {
       id: data.id,
       manager,
       team,
-      joinedLeaguesIds: classicLeagues,
+      joinedLeaguesIds: joinedLeagues.map((league) => league.id),
+      joinedLeagues,
     };
   }
 

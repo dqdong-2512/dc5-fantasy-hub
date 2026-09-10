@@ -17,6 +17,7 @@ export interface PitchPlayerProps {
   size?: 'small' | 'medium' | 'large';
   gameweekId?: number;
   onClick?: (playerId: number) => void;
+  compact?: boolean;
 }
 
 export const PitchPlayer: React.FC<PitchPlayerProps> = ({
@@ -27,6 +28,7 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
   size = 'medium',
   gameweekId,
   onClick,
+  compact = false,
 }) => {
   // Fetch player from repository
   const player = useMemo(() => {
@@ -72,8 +74,8 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
   };
 
   const config = sizeConfig[size];
-  const mobileCardWidth = size === 'small' ? 72 : 66;
-  const mobileImageSize = size === 'small' ? 44 : 50;
+  const mobileCardWidth = compact ? 60 : size === 'small' ? 72 : 66;
+  const mobileImageSize = compact ? 38 : size === 'small' ? 44 : 50;
 
   return (
     <Box
@@ -86,10 +88,12 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
         flexDirection: 'column',
         alignItems: 'center',
         position: 'relative',
-        width: { xs: mobileCardWidth, sm: config.card },
+        width: { xs: mobileCardWidth, sm: compact ? 68 : config.card },
         borderRadius: '8px',
         transition: 'transform 160ms ease, filter 160ms ease',
-        filter: 'drop-shadow(0 7px 8px rgba(0, 0, 0, 0.20))',
+        filter: compact
+          ? 'drop-shadow(0 4px 5px rgba(0, 0, 0, 0.22))'
+          : 'drop-shadow(0 7px 8px rgba(0, 0, 0, 0.20))',
         '&:hover': { transform: 'translateY(-3px)' },
         border: 0,
         p: 0,
@@ -108,7 +112,7 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
           position: 'relative',
           display: 'flex',
           justifyContent: 'center',
-          height: { xs: mobileImageSize, sm: config.avatar },
+          height: { xs: mobileImageSize, sm: compact ? 42 : config.avatar },
           overflow: 'hidden',
           borderRadius: '8px 8px 0 0',
           background: 'linear-gradient(145deg, rgba(255,255,255,.94), rgba(226,232,240,.88))',
@@ -178,9 +182,10 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
           px: 0.5,
           py: 0.45,
           textAlign: 'center',
-          color: '#0f172a',
+          color: compact ? '#fff' : '#0f172a',
           borderRadius: '0 0 8px 8px',
-          backgroundColor: '#fff',
+          backgroundColor: compact ? 'rgba(15, 23, 42, 0.91)' : '#fff',
+          width: '100%',
         }}
       >
         <Typography
@@ -196,7 +201,11 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
           {player.displayName}
         </Typography>
         <Typography
-          sx={{ fontSize: { xs: '8px', sm: config.pointsFont }, lineHeight: 1.2, color: '#64748b' }}
+          sx={{
+            fontSize: { xs: '8px', sm: compact ? '8px' : config.pointsFont },
+            lineHeight: 1.2,
+            color: compact ? 'rgba(255,255,255,.65)' : '#64748b',
+          }}
         >
           {fixtureLabel}
         </Typography>
@@ -206,10 +215,11 @@ export const PitchPlayer: React.FC<PitchPlayerProps> = ({
             fontSize: { xs: '8px', sm: config.pointsFont },
             lineHeight: 1.2,
             fontWeight: 800,
-            color: gameweekPoints > 0 ? '#16a34a' : '#475569',
+            color: compact ? '#00ff87' : gameweekPoints > 0 ? '#16a34a' : '#475569',
           }}
         >
-          {Number.isFinite(gameweekPoints) ? gameweekPoints : 0} pts · £{player.price.toFixed(1)}m
+          {Number.isFinite(gameweekPoints) ? gameweekPoints : 0} pts
+          {!compact && ` · £${player.price.toFixed(1)}m`}
         </Typography>
       </Box>
     </Box>

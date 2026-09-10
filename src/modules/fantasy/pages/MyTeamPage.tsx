@@ -56,6 +56,10 @@ export const MyTeamPage: React.FC = () => {
   const [manualGameweek, setManualGameweek] = useState<number | null>(null);
   const [selectedOpponentId, setSelectedOpponentId] = useState<number | null>(null);
   const [selectedPlayerId, setSelectedPlayerId] = useState<number | null>(null);
+  const [standingSort, setStandingSort] = useState<{
+    key: 'gw' | 'total';
+    direction: 'asc' | 'desc';
+  }>({ key: 'gw', direction: 'desc' });
   const displayGameweek = manualGameweek ?? gameState.displayGameweek;
   const myPicks = useEnrichedManagerPicks(gameState.connectedEntryId, displayGameweek);
 
@@ -64,9 +68,16 @@ export const MyTeamPage: React.FC = () => {
     const preferred = getStoredLeagueId();
     return preferred ? [preferred, ...joined.filter((id) => id !== preferred)] : joined;
   }, [gameState.entry?.joinedLeaguesIds]);
-  const league = useManagerLeagues(gameState.connectedEntryId, leagueIds, displayGameweek);
+  const league = useManagerLeagues(
+    gameState.connectedEntryId,
+    leagueIds,
+    displayGameweek,
+    gameState.entry?.joinedLeagues
+  );
   const opponents =
     league.standings?.filter((row) => row.entryId !== gameState.connectedEntryId) ?? [];
+  const myStanding =
+    league.standings?.find((row) => row.entryId === gameState.connectedEntryId) ?? null;
   const opponent =
     opponents.find((row) => row.entryId === selectedOpponentId) ?? opponents[0] ?? null;
   const rivalPicks = useEnrichedManagerPicks(opponent?.entryId ?? null, displayGameweek);
@@ -86,6 +97,21 @@ export const MyTeamPage: React.FC = () => {
     ...(rivalPicks.enrichedPicks?.picks ?? []),
   ];
   const selectedPick = visiblePicks.find((pick) => pick.element === selectedPlayerId) ?? null;
+  const sortedStandings = useMemo(() => {
+    const multiplier = standingSort.direction === 'asc' ? 1 : -1;
+    return [...(league.standings ?? [])].sort((left, right) => {
+      const leftValue = standingSort.key === 'gw' ? left.eventPoints : left.totalPoints;
+      const rightValue = standingSort.key === 'gw' ? right.eventPoints : right.totalPoints;
+      return (leftValue - rightValue) * multiplier || left.rank - right.rank;
+    });
+  }, [league.standings, standingSort]);
+
+  const toggleStandingSort = (key: 'gw' | 'total') => {
+    setStandingSort((current) => ({
+      key,
+      direction: current.key === key && current.direction === 'desc' ? 'asc' : 'desc',
+    }));
+  };
 
   const moveGameweek = (offset: number) => {
     if (!displayGameweek) return;
@@ -183,7 +209,7 @@ export const MyTeamPage: React.FC = () => {
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: 'minmax(0, 1fr)', lg: '250px minmax(0, 1fr)' },
+            gridTemplateColumns: { xs: 'minmax(0, 1fr)', lg: '360px minmax(0, 1fr)' },
             gap: 2,
             alignItems: 'start',
           }}
@@ -242,13 +268,55 @@ export const MyTeamPage: React.FC = () => {
                 />
               )}
             </Box>
-            <Box sx={{ maxHeight: { xs: 270, lg: 690 }, overflowY: 'auto' }}>
+            <Box sx={{ maxHeight: { xs: 320, lg: 650 }, overflowY: 'auto' }}>
+              <Box
+                sx={{
+                  position: 'sticky',
+                  top: 0,
+                  zIndex: 2,
+                  display: 'grid',
+                  gridTemplateColumns: '36px minmax(0, 1fr) 58px 66px',
+                  gap: 1,
+                  alignItems: 'center',
+                  px: 1.25,
+                  py: 0.75,
+                  bgcolor: '#f1f4f9',
+                  borderBottom: '1px solid #dce2ea',
+                }}
+              >
+                <Typography variant="caption" sx={{ fontWeight: 800 }}>
+                  #
+                </Typography>
+                <Typography variant="caption" sx={{ fontWeight: 800 }}>
+                  Manager
+                </Typography>
+                <Button
+                  size="small"
+                  onClick={() => toggleStandingSort('gw')}
+                  sx={{ minWidth: 0, p: 0, fontSize: 11, fontWeight: 900 }}
+                >
+                  GW{' '}
+                  {standingSort.key === 'gw' ? (standingSort.direction === 'desc' ? '↓' : '↑') : ''}
+                </Button>
+                <Button
+                  size="small"
+                  onClick={() => toggleStandingSort('total')}
+                  sx={{ minWidth: 0, p: 0, fontSize: 11, fontWeight: 900 }}
+                >
+                  Total{' '}
+                  {standingSort.key === 'total'
+                    ? standingSort.direction === 'desc'
+                      ? '↓'
+                      : '↑'
+                    : ''}
+                </Button>
+              </Box>
               {league.isLoadingStandings && (
                 <Box sx={{ p: 3, textAlign: 'center' }}>
                   <CircularProgress size={24} />
                 </Box>
               )}
-              {(league.standings ?? []).map((row) => {
+              {sortedStandings.map((row) => {
                 const mine = row.entryId === gameState.connectedEntryId;
                 const selected = row.entryId === opponent?.entryId;
                 return (
@@ -261,7 +329,7 @@ export const MyTeamPage: React.FC = () => {
                     sx={{
                       width: '100%',
                       display: 'grid',
-                      gridTemplateColumns: '30px minmax(0, 1fr) 42px',
+                      gridTemplateColumns: '36px minmax(0, 1fr) 58px 66px',
                       gap: 1,
                       alignItems: 'center',
                       p: 1.1,
@@ -291,8 +359,10 @@ export const MyTeamPage: React.FC = () => {
                       <Typography sx={{ fontSize: 13, fontWeight: 900 }}>
                         {row.eventPoints}
                       </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        GW
+                    </Box>
+                    <Box sx={{ textAlign: 'right' }}>
+                      <Typography sx={{ fontSize: 13, fontWeight: 900 }}>
+                        {row.totalPoints}
                       </Typography>
                     </Box>
                   </Box>
@@ -327,7 +397,7 @@ export const MyTeamPage: React.FC = () => {
             <TeamPitchCard
               title={gameState.entry?.team.name ?? 'My Team'}
               subtitle={gameState.entry?.manager.name ?? 'You'}
-              points={myPicks.totalPoints}
+              points={myStanding?.eventPoints ?? myPicks.totalPoints}
               transfers={myPicks.transfersMade}
               loading={myPicks.isLoading}
               squad={mySquad}
@@ -342,7 +412,7 @@ export const MyTeamPage: React.FC = () => {
                   ? `${opponent.playerName} · rank #${opponent.rank}`
                   : 'Choose a manager from the standings'
               }
-              points={rivalPicks.totalPoints || opponent?.eventPoints || 0}
+              points={opponent?.eventPoints ?? rivalPicks.totalPoints}
               transfers={rivalPicks.transfersMade}
               loading={rivalPicks.isLoading}
               squad={rivalSquad}
@@ -376,8 +446,22 @@ const TeamPitchCard: React.FC<{
   accent: string;
   onPlayerClick: (playerId: number) => void;
 }> = ({ title, subtitle, points, transfers, loading, squad, gameweek, accent, onPlayerClick }) => (
-  <Card variant="outlined" sx={{ borderRadius: 3, overflow: 'hidden', minWidth: 0 }}>
-    <CardContent sx={{ p: '14px !important', bgcolor: '#20283a', color: '#fff' }}>
+  <Card
+    variant="outlined"
+    sx={{
+      borderRadius: 3,
+      overflow: 'hidden',
+      minWidth: 0,
+      boxShadow: '0 14px 34px rgba(15,23,42,.10)',
+    }}
+  >
+    <CardContent
+      sx={{
+        p: '13px 15px !important',
+        color: '#fff',
+        background: 'linear-gradient(120deg, #20283a, #303b52)',
+      }}
+    >
       <Stack
         direction="row"
         spacing={1}
@@ -406,7 +490,7 @@ const TeamPitchCard: React.FC<{
       </Stack>
     </CardContent>
     {loading ? (
-      <Box sx={{ minHeight: 540, display: 'grid', placeItems: 'center' }}>
+      <Box sx={{ minHeight: 440, display: 'grid', placeItems: 'center' }}>
         <CircularProgress />
       </Box>
     ) : squad.length > 0 ? (
@@ -427,7 +511,7 @@ const TeamPitchCard: React.FC<{
     ) : (
       <Box
         sx={{
-          minHeight: 540,
+          minHeight: 440,
           p: 3,
           display: 'grid',
           placeItems: 'center',

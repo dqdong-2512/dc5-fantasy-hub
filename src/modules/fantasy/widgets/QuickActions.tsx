@@ -7,9 +7,7 @@ import React from 'react';
 import { Box, Button, Typography } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents';
-import CompareIcon from '@mui/icons-material/Compare';
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz';
-import HistoryIcon from '@mui/icons-material/History';
 
 export interface QuickActionsProps {
   onViewTeam?: () => void;
@@ -61,9 +59,7 @@ const ActionButton: React.FC<ActionButtonProps> = ({
 export const QuickActions: React.FC<QuickActionsProps> = ({
   onViewTeam,
   onViewGameweek,
-  onViewLeagues,
   onViewTransfers,
-  onViewHistory,
 }) => {
   return (
     <Box>
@@ -78,36 +74,24 @@ export const QuickActions: React.FC<QuickActionsProps> = ({
         Quick Actions
       </Typography>
 
-      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(2, 1fr)', lg: 'repeat(5, 1fr)' }, gap: 1.5 }}>
+      <Box sx={{ display: 'grid', gridTemplateColumns: { xs: '1fr', sm: 'repeat(3, 1fr)' }, gap: 1.5 }}>
         <ActionButton
-          label="My Team"
+          label="Squad & League"
           icon={<PersonIcon fontSize="small" />}
           onClick={onViewTeam}
-          description="Review your starting XI"
+          description="Compare squads and live league rank"
         />
         <ActionButton
-          label="Gameweek"
+          label="Fixtures"
           icon={<EmojiEventsIcon fontSize="small" />}
           onClick={onViewGameweek}
-          description="Open the live gameweek"
-        />
-        <ActionButton
-          label="My Leagues"
-          icon={<CompareIcon fontSize="small" />}
-          onClick={onViewLeagues}
-          description="Standings and rivals"
+          description="Results, line-ups and match stats"
         />
         <ActionButton
           label="Transfers"
           icon={<SwapHorizIcon fontSize="small" />}
           onClick={onViewTransfers}
           description="Plan your next moves"
-        />
-        <ActionButton
-          label="Points History"
-          icon={<HistoryIcon fontSize="small" />}
-          onClick={onViewHistory}
-          description="Review past scores"
         />
       </Box>
     </Box>

@@ -20,6 +20,7 @@ export interface Event {
   name: string;
   deadline_time: string;
   average_entry_score: number | null;
+  highest_score: number | null;
   finished: boolean;
   data_checked: boolean;
   highest_scoring_element: number | null;
@@ -186,6 +187,7 @@ export interface EntryHistory {
     event_transfers_cost: number;
     transfers_made: number;
     transfers_cost: number;
+    points_on_bench?: number;
   }>;
   past: Array<{
     season_name: string;
@@ -509,6 +511,11 @@ export class FplClient {
     if (this.useInternalApi) {
       const entry = await this.getInternal<Record<string, unknown>>(`/entry/${entryId}`);
       const leagueIds = this.numberArray(entry.classicLeagueIds);
+      const classicLeagues = this.recordArray(entry.classicLeagues).map((league) => ({
+        id: this.number(league.id),
+        name: this.string(league.name, `League ${this.number(league.id)}`),
+        rank: this.nullableNumber(league.rank),
+      }));
       return {
         id: this.number(entry.id, entryId),
         name: this.string(entry.teamName, 'Team'),
@@ -519,7 +526,9 @@ export class FplClient {
         summary_overall_rank: this.nullableNumber(entry.overallRank),
         current_event: this.nullableNumber(entry.currentGameweek) ?? undefined,
         leagues: {
-          classic: leagueIds.map((id) => ({ id, name: `League ${id}` })),
+          classic: classicLeagues.length > 0
+            ? classicLeagues
+            : leagueIds.map((id) => ({ id, name: `League ${id}` })),
           h2h: [],
         },
       };
@@ -537,15 +546,16 @@ export class FplClient {
           event: this.number(item.gameweek),
           points: this.number(item.points),
           total_points: this.number(item.totalPoints),
-          rank: null,
-          rank_sort: null,
+          rank: this.nullableNumber(item.gameweekRank),
+          rank_sort: this.nullableNumber(item.gameweekRank),
           overall_rank: this.nullableNumber(item.overallRank),
           bank: this.number(item.bank),
           value: this.number(item.teamValue),
-          event_transfers: 0,
+          event_transfers: this.number(item.transfers),
           event_transfers_cost: this.number(item.transferCost),
-          transfers_made: 0,
+          transfers_made: this.number(item.transfers),
           transfers_cost: this.number(item.transferCost),
+          points_on_bench: this.number(item.benchPoints),
         })),
         past: this.recordArray(history.past).map((item) => ({
           season_name: this.string(item.season),
@@ -744,6 +754,7 @@ export class FplClient {
         name: this.string(event.name),
         deadline_time: this.string(event.deadlineTime),
         average_entry_score: this.nullableNumber(event.averageEntryScore),
+        highest_score: this.nullableNumber(event.highestScore),
         finished: event.finished === true,
         data_checked: event.dataChecked === true,
         highest_scoring_element: null,

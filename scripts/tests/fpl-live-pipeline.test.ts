@@ -115,6 +115,24 @@ function runNullableAndPreseasonTests(): void {
 
   const entry = normalizer.normalizeEntry({ id: 10, summary_overall_rank: null });
   assert(entry.overallRank === null, 'Null manager rank must remain null');
+  const entryWithLeagues = normalizer.normalizeEntry({
+    id: 10,
+    leagues: { classic: [{ id: 16, name: 'Overall', entry_rank: 42 }] },
+  });
+  assert(
+    entryWithLeagues.classicLeagues[0]?.name === 'Overall' &&
+      entryWithLeagues.classicLeagues[0]?.rank === 42,
+    'Entry normalization must preserve real classic league names and ranks'
+  );
+  const history = normalizer.normalizeEntryHistory({
+    current: [{ event: 3, rank: 1234, event_transfers: 2, points_on_bench: 7 }],
+  });
+  assert(
+    history.current[0]?.gameweekRank === 1234 &&
+      history.current[0]?.transfers === 2 &&
+      history.current[0]?.benchPoints === 7,
+    'Entry history must preserve real gameweek metrics'
+  );
   const normalizedPicks = normalizer.normalizeEntryPicks(
     { entry_history: { bank: null, value: null }, picks: [] },
     10,

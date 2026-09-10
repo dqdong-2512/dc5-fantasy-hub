@@ -40,7 +40,8 @@ export interface UseManagerLeaguesState {
 export function useManagerLeagues(
   entryId: number | null,
   joinedLeagueIds: number[] | null,
-  gameweekId?: number | null
+  gameweekId?: number | null,
+  joinedLeagueMetadata?: Array<{ id: number; name: string; rank: number | null }>
 ): UseManagerLeaguesState {
   const [leagues, setLeagues] = useState<Array<{
     id: number;
@@ -101,8 +102,8 @@ export function useManagerLeagues(
     // In production, fetch actual league data
     const placeholderLeagues = joinedLeagueIds.map((id) => ({
       id,
-      name: `League ${id}`,
-      rank: null,
+      name: joinedLeagueMetadata?.find((league) => league.id === id)?.name ?? `League ${id}`,
+      rank: joinedLeagueMetadata?.find((league) => league.id === id)?.rank ?? null,
     }));
 
     // eslint-disable-next-line react-hooks/set-state-in-effect
@@ -112,7 +113,30 @@ export function useManagerLeagues(
     if (placeholderLeagues.length > 0) {
       setCurrentLeagueId(placeholderLeagues[0].id);
     }
-  }, [joinedLeagueIds]);
+  }, [joinedLeagueIds, joinedLeagueMetadata]);
+
+  useEffect(() => {
+    if (!entryId || !joinedLeagueIds?.length) return;
+    let active = true;
+
+    repository
+      .getEntryLeagues(entryId)
+      .then((resolvedLeagues) => {
+        if (!active) return;
+        const names = new Map(resolvedLeagues.map((item) => [item.id, item.name]));
+        setLeagues(
+          (previous) =>
+            previous?.map((item) => ({ ...item, name: names.get(item.id) ?? item.name })) ?? null
+        );
+      })
+      .catch(() => {
+        // Keep the ID placeholder when a secondary league is temporarily unavailable.
+      });
+
+    return () => {
+      active = false;
+    };
+  }, [entryId, joinedLeagueIds, repository]);
 
   // Fetch standings when league is selected
   useEffect(() => {

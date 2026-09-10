@@ -146,6 +146,17 @@ export class FplNormalizer {
     const managerName = [asString(entry.player_first_name), asString(entry.player_last_name)]
       .filter(Boolean)
       .join(' ');
+    const classicLeagues = asArray(leagues.classic)
+      .map((value) => {
+        const league = isRecord(value) ? value : {};
+        const id = asNumber(league.id);
+        return {
+          id,
+          name: asString(league.name, `League ${id}`),
+          rank: asNullableNumber(league.entry_rank ?? league.rank),
+        };
+      })
+      .filter((league) => league.id > 0);
     return {
       id: asNumber(entry.id),
       teamName: asString(entry.name, 'Team'),
@@ -153,9 +164,8 @@ export class FplNormalizer {
       overallPoints: asNumber(entry.summary_overall_points),
       overallRank: asNullableNumber(entry.summary_overall_rank),
       currentGameweek: asNullableNumber(entry.current_event),
-      classicLeagueIds: asArray(leagues.classic)
-        .map((value) => (isRecord(value) ? asNumber(value.id) : 0))
-        .filter((id) => id > 0),
+      classicLeagueIds: classicLeagues.map((league) => league.id),
+      classicLeagues,
     };
   }
 
@@ -168,8 +178,11 @@ export class FplNormalizer {
           gameweek: asNumber(item.event),
           points: asNumber(item.points),
           totalPoints: asNumber(item.total_points),
+          gameweekRank: asNullableNumber(item.rank),
           overallRank: asNullableNumber(item.overall_rank),
+          transfers: asNumber(item.event_transfers),
           transferCost: asNumber(item.event_transfers_cost),
+          benchPoints: asNumber(item.points_on_bench),
           bank: asNumber(item.bank),
           teamValue: asNumber(item.value),
         };

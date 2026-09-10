@@ -155,13 +155,13 @@ export class FplLiveService {
   }
 
   async getEntry(entryId: number): Promise<InternalApiResponse<FplEntry>> {
-    return this.fetchNormalized(`entry:${entryId}`, 300, async () =>
+    return this.fetchNormalized(`entry:v2:${entryId}`, 300, async () =>
       this.normalizer.normalizeEntry(await this.client.getEntry(entryId))
     );
   }
 
   async getEntryHistory(entryId: number): Promise<InternalApiResponse<FplEntryHistory>> {
-    return this.fetchNormalized(`entry-history:${entryId}`, 300, async () =>
+    return this.fetchNormalized(`entry-history:v2:${entryId}`, 300, async () =>
       this.normalizer.normalizeEntryHistory(await this.client.getEntryHistory(entryId))
     );
   }
