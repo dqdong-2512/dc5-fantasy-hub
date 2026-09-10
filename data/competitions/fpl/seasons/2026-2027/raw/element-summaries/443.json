@@ -219,7 +219,7 @@
       "finished": false,
       "minutes": 0,
       "provisional_start_time": false,
-      "kickoff_time": "2026-12-26T15:00:00Z",
+      "kickoff_time": "2026-12-26T20:00:00Z",
       "event_name": "Gameweek 17",
       "is_home": true,
       "difficulty": 4
@@ -235,7 +235,7 @@
       "finished": false,
       "minutes": 0,
       "provisional_start_time": false,
-      "kickoff_time": "2026-12-30T20:00:00Z",
+      "kickoff_time": "2026-12-30T19:30:00Z",
       "event_name": "Gameweek 18",
       "is_home": true,
       "difficulty": 3
@@ -251,7 +251,7 @@
       "finished": false,
       "minutes": 0,
       "provisional_start_time": false,
-      "kickoff_time": "2027-01-02T15:00:00Z",
+      "kickoff_time": "2027-01-03T14:00:00Z",
       "event_name": "Gameweek 19",
       "is_home": false,
       "difficulty": 4
@@ -267,7 +267,7 @@
       "finished": false,
       "minutes": 0,
       "provisional_start_time": false,
-      "kickoff_time": "2027-01-06T20:00:00Z",
+      "kickoff_time": "2027-01-07T20:00:00Z",
       "event_name": "Gameweek 20",
       "is_home": false,
       "difficulty": 4

@@ -235,7 +235,7 @@
       "finished": false,
       "minutes": 0,
       "provisional_start_time": false,
-      "kickoff_time": "2026-12-30T20:00:00Z",
+      "kickoff_time": "2026-12-30T20:15:00Z",
       "event_name": "Gameweek 18",
       "is_home": true,
       "difficulty": 4
@@ -267,7 +267,7 @@
       "finished": false,
       "minutes": 0,
       "provisional_start_time": false,
-      "kickoff_time": "2027-01-06T20:00:00Z",
+      "kickoff_time": "2027-01-06T19:30:00Z",
       "event_name": "Gameweek 20",
       "is_home": true,
       "difficulty": 2

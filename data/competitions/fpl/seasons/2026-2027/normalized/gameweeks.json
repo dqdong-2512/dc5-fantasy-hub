@@ -114,28 +114,28 @@
   {
     "id": 17,
     "name": "Gameweek 17",
-    "deadlineTime": "2026-12-26T13:30:00Z",
+    "deadlineTime": "2026-12-26T11:00:00Z",
     "finished": false,
     "averageEntryScore": 0
   },
   {
     "id": 18,
     "name": "Gameweek 18",
-    "deadlineTime": "2026-12-30T18:30:00Z",
+    "deadlineTime": "2026-12-29T18:00:00Z",
     "finished": false,
     "averageEntryScore": 0
   },
   {
     "id": 19,
     "name": "Gameweek 19",
-    "deadlineTime": "2027-01-02T13:30:00Z",
+    "deadlineTime": "2027-01-01T18:30:00Z",
     "finished": false,
     "averageEntryScore": 0
   },
   {
     "id": 20,
     "name": "Gameweek 20",
-    "deadlineTime": "2027-01-06T18:30:00Z",
+    "deadlineTime": "2027-01-05T18:00:00Z",
     "finished": false,
     "averageEntryScore": 0
   },

@@ -1784,6 +1784,14 @@
     "file": "assets/player-photos/79602.png"
   },
   {
+    "playerId": 655,
+    "code": 242893,
+    "photoIdentifier": "242893",
+    "available": false,
+    "cached": false,
+    "file": "../../shared/player-photo-placeholder.svg"
+  },
+  {
     "playerId": 42,
     "code": 485337,
     "photoIdentifier": "485337",
