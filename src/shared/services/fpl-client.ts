@@ -593,9 +593,9 @@ export class FplClient {
           percentile_rank: null,
           bank: this.nullableNumber(data.bank) ?? Number.NaN,
           value: this.nullableNumber(data.teamValue) ?? Number.NaN,
-          event_transfers: 0,
+          event_transfers: this.number(data.transfersMade),
           event_transfers_cost: this.number(data.transferCost),
-          transfers_made: 0,
+          transfers_made: this.number(data.transfersMade),
           transfers_cost: this.number(data.transferCost),
         },
         picks: this.recordArray(data.picks).map((pick) => ({

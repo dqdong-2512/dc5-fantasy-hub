@@ -118,8 +118,10 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({
       sx={{
         backgroundColor: '#00a65a',
         backgroundImage: `
-          repeating-linear-gradient(90deg, rgba(255,255,255,.035) 0, rgba(255,255,255,.035) 12.5%, rgba(0,0,0,.025) 12.5%, rgba(0,0,0,.025) 25%),
-          linear-gradient(180deg, #00a65a 0%, #009b53 100%)
+          radial-gradient(circle at 50% 42%, rgba(65, 220, 138, .24) 0, rgba(0, 82, 52, .08) 58%, rgba(0, 45, 35, .24) 100%),
+          repeating-linear-gradient(90deg, rgba(255,255,255,.055) 0, rgba(255,255,255,.055) 12.5%, rgba(0,55,35,.055) 12.5%, rgba(0,55,35,.055) 25%),
+          repeating-linear-gradient(0deg, transparent 0, transparent 31px, rgba(255,255,255,.018) 32px),
+          linear-gradient(145deg, #00b96b 0%, #009f5d 52%, #008a50 100%)
         `,
         borderRadius: compact ? 0 : '12px',
         padding: compact ? { xs: 0.75, sm: 1 } : { xs: 1, sm: 2, md: 2.5 },
@@ -127,8 +129,8 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({
         minHeight: compact ? { xs: 390, sm: 420, md: 440 } : { xs: 540, sm: 590, md: 620 },
         maxWidth: '100%',
         overflow: 'hidden',
-        border: '1px solid rgba(255,255,255,0.35)',
-        boxShadow: 'inset 0 0 0 5px rgba(255,255,255,0.04)',
+        border: '1px solid rgba(255,255,255,0.5)',
+        boxShadow: 'inset 0 0 0 5px rgba(255,255,255,0.055), inset 0 -70px 100px rgba(0,55,39,.12)',
       }}
     >
       {/* Field markings */}
@@ -147,7 +149,7 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({
             left: 0,
             right: 0,
             height: '2px',
-            backgroundColor: 'rgba(255,255,255,0.15)',
+            backgroundColor: 'rgba(255,255,255,0.32)',
             transform: 'translateY(-50%)',
           },
           '&::after': {
@@ -156,10 +158,11 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: '80px',
-            height: '80px',
-            border: '2px solid rgba(255,255,255,0.1)',
+            width: compact ? '82px' : '100px',
+            height: compact ? '82px' : '100px',
+            border: '2px solid rgba(255,255,255,0.28)',
             borderRadius: '50%',
+            boxShadow: '0 0 0 1px rgba(0,70,45,.08)',
           },
         }}
       />
@@ -171,7 +174,7 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({
           right: '31%',
           top: 0,
           height: '15%',
-          border: '2px solid rgba(255,255,255,.16)',
+          border: '2px solid rgba(255,255,255,.32)',
           borderTop: 0,
           pointerEvents: 'none',
         }}
@@ -183,7 +186,7 @@ export const FootballPitch: React.FC<FootballPitchProps> = ({
           right: '31%',
           bottom: 0,
           height: '15%',
-          border: '2px solid rgba(255,255,255,.16)',
+          border: '2px solid rgba(255,255,255,.32)',
           borderBottom: 0,
           pointerEvents: 'none',
         }}

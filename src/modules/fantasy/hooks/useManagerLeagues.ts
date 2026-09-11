@@ -70,7 +70,6 @@ export function useManagerLeagues(
         setDataStatus(response.dataStatus);
         setLastUpdated(response.lastUpdated);
         if (!response.data) return fallback;
-        setLeagueName(response.data.leagueName);
         return response.data.members.map((member) => ({
           rank: member.liveRank,
           prevRank: member.previousRank,
@@ -141,6 +140,7 @@ export function useManagerLeagues(
   // Fetch standings when league is selected
   useEffect(() => {
     if (!currentLeagueId) return;
+    let active = true;
 
     const loadStandings = async () => {
       try {
@@ -148,6 +148,7 @@ export function useManagerLeagues(
         setError(null);
         const data = await repository.getLeagueStandings(currentLeagueId, pageNumber);
         const resolvedStandings = await applyLiveStandings(currentLeagueId, data.standings);
+        if (!active) return;
         setStandings(resolvedStandings);
         setLeagueName(data.leagueName);
         setLeagues(
@@ -179,12 +180,17 @@ export function useManagerLeagues(
     };
 
     loadStandings();
+    return () => {
+      active = false;
+    };
   }, [applyLiveStandings, currentLeagueId, pageNumber, entryId, repository]);
 
   const selectLeague = useCallback(async (leagueId: number) => {
     setCurrentLeagueId(leagueId);
     setPageNumber(1);
-  }, []);
+    setStandings(null);
+    setLeagueName(leagues?.find((league) => league.id === leagueId)?.name ?? null);
+  }, [leagues]);
 
   const nextPage = useCallback(async () => {
     if (hasNextPage) {
@@ -220,7 +226,10 @@ export function useManagerLeagues(
     currentLeagueId,
     standings,
     leagueName,
-    managerRankInLeague: standings?.find((s) => s.entryId === entryId)?.rank ?? null,
+    managerRankInLeague:
+      standings?.find((s) => s.entryId === entryId)?.rank ??
+      leagues?.find((item) => item.id === currentLeagueId)?.rank ??
+      null,
     pageNumber,
     pageSize,
     hasNextPage,

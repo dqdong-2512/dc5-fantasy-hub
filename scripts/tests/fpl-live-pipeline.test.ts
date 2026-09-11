@@ -45,6 +45,7 @@ function picks(overrides: Partial<FplEntryPicks> = {}): FplEntryPicks {
     entryId: 10,
     gameweek: 2,
     activeChip: null,
+    transfersMade: 1,
     transferCost: 4,
     bank: null,
     teamValue: null,
@@ -298,7 +299,7 @@ async function runFreeTierLeagueBatchTests(): Promise<void> {
       requestedPicks.push(Number(picksMatch[1]));
       return Response.json({
         active_chip: null,
-        entry_history: { event_transfers_cost: 0 },
+        entry_history: { event_transfers: 2, event_transfers_cost: 4 },
         automatic_subs: [],
         picks: [
           {
@@ -331,6 +332,11 @@ async function runFreeTierLeagueBatchTests(): Promise<void> {
   );
   assert(first.data.pagination.nextCursor === '1:7', 'First batch must expose its next cursor');
   assert(requestedPicks.length === 7, 'First batch must fetch picks for seven managers only');
+  assert(
+    first.data.members[0]?.liveGameweekPoints === 5 &&
+      first.data.members[0]?.liveTotalPoints === 101,
+    'Displayed GW points must stay gross while transfer hits affect live total only'
+  );
 
   const second = await league.getLiveLeague(99, 2, { page: 1, offset: 7 });
   assert(second.data !== null, 'Second live league batch must return data');

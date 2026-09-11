@@ -215,6 +215,7 @@ export class FplNormalizer {
       entryId,
       gameweek,
       activeChip: asNullableString(root.active_chip),
+      transfersMade: asNumber(history.event_transfers),
       transferCost: asNumber(history.event_transfers_cost),
       bank: asNullableNumber(history.bank),
       teamValue: asNullableNumber(history.value),

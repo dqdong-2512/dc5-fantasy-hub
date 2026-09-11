@@ -179,6 +179,7 @@ export interface FplEntryPicks {
   entryId: number;
   gameweek: number;
   activeChip: string | null;
+  transfersMade: number;
   transferCost: number;
   bank: number | null;
   teamValue: number | null;

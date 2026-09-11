@@ -90,6 +90,8 @@ export const MyTeamPage: React.FC = () => {
       return [];
     }
   }, [bootstrapRepo]);
+  const selectedGameweekFinished =
+    gameweeks.find((gameweek) => gameweek.id === displayGameweek)?.finished ?? false;
   const mySquad = toWorkspaceSquad(myPicks);
   const rivalSquad = toWorkspaceSquad(rivalPicks);
   const visiblePicks = [
@@ -209,7 +211,7 @@ export const MyTeamPage: React.FC = () => {
         <Box
           sx={{
             display: 'grid',
-            gridTemplateColumns: { xs: 'minmax(0, 1fr)', lg: '360px minmax(0, 1fr)' },
+            gridTemplateColumns: { xs: 'minmax(0, 1fr)', lg: '480px minmax(0, 1fr)' },
             gap: 2,
             alignItems: 'start',
           }}
@@ -258,7 +260,13 @@ export const MyTeamPage: React.FC = () => {
               {league.dataStatus && (
                 <Chip
                   size="small"
-                  label={league.dataStatus === 'LIVE' ? 'Live ranking' : 'Cached ranking'}
+                  label={
+                    league.dataStatus !== 'LIVE'
+                      ? 'Cached ranking'
+                      : selectedGameweekFinished
+                        ? 'Final ranking'
+                        : 'Live ranking'
+                  }
                   sx={{
                     mt: 0.75,
                     height: 20,
@@ -316,7 +324,7 @@ export const MyTeamPage: React.FC = () => {
                   <CircularProgress size={24} />
                 </Box>
               )}
-              {sortedStandings.map((row) => {
+              {sortedStandings.map((row, rowIndex) => {
                 const mine = row.entryId === gameState.connectedEntryId;
                 const selected = row.entryId === opponent?.entryId;
                 return (
@@ -345,7 +353,7 @@ export const MyTeamPage: React.FC = () => {
                     <Typography
                       sx={{ fontWeight: 900, color: mine ? '#007a57' : 'text.secondary' }}
                     >
-                      {row.rank}
+                      {rowIndex + 1}
                     </Typography>
                     <Box sx={{ minWidth: 0 }}>
                       <Typography noWrap sx={{ fontSize: 13, fontWeight: 800 }}>

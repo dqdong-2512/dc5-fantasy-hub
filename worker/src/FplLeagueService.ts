@@ -169,7 +169,9 @@ export class FplLeagueService {
         const score = scores[member.entryId];
         return {
           ...member,
-          liveGameweekPoints: score?.livePoints ?? member.gameweekPoints,
+          // FPL presents Gameweek points before transfer deductions. Keep the hit visible as
+          // separate metadata while still applying it to the overall total and live rank.
+          liveGameweekPoints: score?.grossPoints ?? member.gameweekPoints,
           liveTotalPoints:
             member.totalPoints -
             member.gameweekPoints +

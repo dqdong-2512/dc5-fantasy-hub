@@ -170,7 +170,7 @@ export class FplLiveService {
     entryId: number,
     gameweek: number
   ): Promise<InternalApiResponse<FplEntryPicks>> {
-    return this.fetchNormalized(`entry-picks:${entryId}:${gameweek}`, 900, async () =>
+    return this.fetchNormalized(`entry-picks:v2:${entryId}:${gameweek}`, 900, async () =>
       this.normalizer.normalizeEntryPicks(
         await this.client.getEntryPicks(entryId, gameweek),
         entryId,
