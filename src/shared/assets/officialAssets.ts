@@ -30,7 +30,7 @@ export function getPlayerImageUrl(playerCode?: number | string | null): string {
     return `${getPublicBaseUrl()}player-photo-placeholder.svg`;
   }
 
-  // sync:fpl stores successful official downloads in the active season public assets folder.
+  // sync:avatars stores successful official downloads in the active season public assets folder.
   return `${getPublicBaseUrl()}player-photos/${identifier}.png`;
 }
 

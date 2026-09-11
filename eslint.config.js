@@ -75,4 +75,24 @@ export default [
       'no-unused-vars': 'off',
     },
   },
+  {
+    files: [
+      'scripts/services/player-avatar-cache.ts',
+      'scripts/sync/player-avatars.sync.ts',
+      'scripts/sync/public-sync.ts',
+    ],
+    languageOptions: {
+      ecmaVersion: 2023,
+      sourceType: 'module',
+      globals: {
+        ...globals.node,
+        fetch: 'readonly',
+      },
+      parser: typescriptParser,
+    },
+    rules: {
+      ...js.configs.recommended.rules,
+      'no-unused-vars': 'off',
+    },
+  },
 ];

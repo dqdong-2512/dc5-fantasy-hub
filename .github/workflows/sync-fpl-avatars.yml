@@ -1,0 +1,55 @@
+name: Sync FPL player avatars
+
+on:
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Re-download valid cached portraits too
+        required: false
+        type: boolean
+        default: false
+
+permissions:
+  contents: write
+
+concurrency:
+  group: sync-fpl-avatars
+  cancel-in-progress: false
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Scan and download player avatars
+        run: npm run sync:avatars ${{ inputs.force && '-- --force' || '' }}
+
+      - name: Verify generated assets
+        run: |
+          npm run type-check
+          npm run build
+
+      - name: Commit updated player avatars
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add data/competitions/fpl/seasons/*/assets/player-photos data/competitions/fpl/seasons/*/assets/player-photos.manifest.json data/competitions/fpl/seasons/*/normalized/players.json
+          if git diff --cached --quiet; then
+            echo "Player avatar cache is already complete."
+            exit 0
+          fi
+          git commit -m "chore(data): sync missing FPL player avatars"
+          git push

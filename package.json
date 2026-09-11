@@ -8,7 +8,7 @@
     "dev:web": "vite",
     "build": "npm run type-check:functions && tsc && vite build",
     "preview": "vite preview",
-    "lint": "eslint src worker/src functions scripts/tests/fpl-live-pipeline.test.ts --ext ts,tsx --report-unused-disable-directives",
+    "lint": "eslint src worker/src functions scripts/tests/fpl-live-pipeline.test.ts scripts/services/player-avatar-cache.ts scripts/sync/player-avatars.sync.ts scripts/sync/public-sync.ts --ext ts,tsx --report-unused-disable-directives",
     "lint:fix": "eslint src --ext ts,tsx --fix",
     "format": "prettier --write src",
     "format:check": "prettier --check src",
@@ -23,6 +23,8 @@
     "type-check:worker": "tsc -p worker/tsconfig.json",
     "sync:fpl": "tsx scripts/sync/index.ts",
     "sync:data:fpl": "tsx scripts/sync/index.ts",
+    "sync:avatars": "tsx scripts/sync/player-avatars.sync.ts",
+    "sync:fpl:avatars": "tsx scripts/sync/player-avatars.sync.ts",
     "sync:bootstrap": "tsx scripts/sync/bootstrap.sync.ts",
     "sync:asean": "node --dns-result-order=ipv4first --import tsx scripts/sync/asean.sync.ts"
   },

@@ -11,8 +11,9 @@ npm install
 
 Use the full pipeline for normal manual updates. Both command names below run the same full-refresh
 pipeline: they download fresh bootstrap data, fixtures, every player detail/history record and all
-gameweek live snapshots, refresh missing player photos, normalize the result, validate it, and
-atomically update `db.json`.
+gameweek live snapshots, normalize the result, validate it, and atomically update `db.json`.
+Player images are intentionally excluded so recurring data synchronization stays fast and produces
+smaller commits.
 
 ```powershell
 npm run sync:data:fpl
@@ -23,11 +24,28 @@ Existing player-detail and event-live JSON files are never treated as a permanen
 publishes mandatory JSON after all of those requests succeed. If an endpoint is still unavailable
 after four attempts, the command exits with an error and keeps the previous complete snapshot.
 
-Player portraits use a separate content-validated cache. The sync resolves the canonical identifier
-from the FPL `photo` field, verifies the PNG signature and file size, and skips every complete cached
-portrait. Only missing or invalid files are downloaded; the downloader tries the current and legacy
-official Premier League CDN namespaces before recording a placeholder. Cache hits and new downloads
-are reported as `playerPhotoCacheHits` and `playerPhotoDownloads` in the sync manifest.
+Run the avatar pipeline separately after new players or transfer-window squad changes appear:
+
+```powershell
+npm run sync:avatars
+```
+
+The command reads the already-normalized player snapshot, verifies each cached PNG by signature and
+file size, and downloads only missing or corrupt portraits. It tries the current and legacy official
+Premier League CDN namespaces, updates `players.json` avatar references, and writes
+`assets/player-photos.manifest.json`. Existing valid portraits never make a network request.
+
+Useful avatar options:
+
+```powershell
+npm run sync:avatars -- --season=2026-2027
+npm run sync:avatars -- --force
+npm run sync:avatars -- --strict
+```
+
+`--force` re-downloads every portrait. `--strict` returns a failing exit code when the official CDN
+still has no portrait for one or more players; without it, those players keep the placeholder while
+all available images are published.
 
 Useful options:
 
@@ -53,6 +71,10 @@ also be started with **Run workflow** in GitHub Actions. Automatic runs set
 `FPL_SYNC_TRIGGER=automatic` and `FPL_WRITE_DB=false` because the application consumes the versioned
 competition files under `data/competitions/fpl`; all other fetch, normalization and validation
 stages are identical to a manual run.
+
+Player portraits are not part of that six-hour job. Run the separate **Sync FPL player avatars**
+workflow manually after transfer-window updates, or run `npm run sync:avatars` locally and commit the
+changed assets.
 
 Use the bootstrap-only command only when raw `bootstrap-static.json` and `fixtures.json` need to
 be refreshed without running normalization or updating `db.json`:

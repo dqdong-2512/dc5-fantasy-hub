@@ -63,9 +63,13 @@ export function PlayerOfWeekStrip({
         <Box
           sx={{
             display: 'grid',
-            gridAutoFlow: 'column',
-            gridAutoColumns: { xs: 112, sm: 126 },
-            gap: 1,
+            gridAutoFlow: { xs: 'column', md: 'row' },
+            gridAutoColumns: { xs: 112, md: 'unset' },
+            gridTemplateColumns: {
+              xs: 'none',
+              md: `repeat(${entries.length}, minmax(0, 1fr))`,
+            },
+            gap: { xs: 1, md: 1.25 },
             overflowX: 'auto',
             pb: 0.5,
           }}
@@ -80,7 +84,7 @@ export function PlayerOfWeekStrip({
                 border: '1px solid rgba(255,255,255,.09)',
               }}
             >
-              <Box sx={{ height: 96, display: 'grid', placeItems: 'end center', pt: 1 }}>
+              <Box sx={{ height: { xs: 96, md: 108 }, display: 'grid', placeItems: 'end center', pt: 1 }}>
                 {player ? (
                   <PlayerAvatar
                     playerCode={player.playerCode}

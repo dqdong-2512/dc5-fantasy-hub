@@ -67,7 +67,8 @@ npm run preview
 - `npm run lint:fix` - Fix linting issues automatically
 - `npm run format` - Format code with Prettier
 - `npm run type-check` - Run TypeScript type checking
-- `npm run sync:fpl` - Download, normalize, validate, and persist current FPL data
+- `npm run sync:fpl` - Download, normalize, validate, and persist FPL data (no images)
+- `npm run sync:avatars` - Scan the active player snapshot and download only missing avatars
 - `npm run sync:bootstrap` - Refresh only raw FPL bootstrap and fixture responses
 - `npm run sync:asean` - Refresh the atomic ASEAN Cup tournament snapshot
 
