@@ -46,7 +46,6 @@ export function PlayerOfWeekStrip({
   isLoading: boolean;
   error?: string | null;
 }): React.ReactElement {
-  const loading = <LoadingState isLoading={isLoading} error={error} />;
   return (
     <Box
       sx={{
@@ -59,7 +58,8 @@ export function PlayerOfWeekStrip({
       <Typography variant="h5" sx={{ fontWeight: 900, mb: 2 }}>
         2026/27 Player of the Week
       </Typography>
-      {loading ?? (
+      <LoadingState isLoading={isLoading} error={error} />
+      {!isLoading && !error && entries.length > 0 && (
         <Box
           sx={{
             display: 'grid',
@@ -102,6 +102,9 @@ export function PlayerOfWeekStrip({
             </Box>
           ))}
         </Box>
+      )}
+      {!isLoading && !error && entries.length === 0 && (
+        <Alert severity="info">Player of the Week data is not available yet.</Alert>
       )}
     </Box>
   );
