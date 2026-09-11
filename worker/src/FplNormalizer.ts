@@ -24,12 +24,15 @@ export class FplNormalizer {
     return {
       gameweeks: asArray(record.events).map((value) => {
         const event = isRecord(value) ? value : {};
+        const topPlayer = isRecord(event.top_element_info) ? event.top_element_info : {};
         return {
           id: asNumber(event.id),
           name: asString(event.name, `Gameweek ${asNumber(event.id)}`),
           deadlineTime: asNullableString(event.deadline_time),
           averageEntryScore: asNullableNumber(event.average_entry_score),
           highestScore: asNullableNumber(event.highest_score),
+          topPlayerId: asNullableNumber(event.top_element ?? topPlayer.id),
+          topPlayerPoints: asNullableNumber(topPlayer.points),
           finished: asBoolean(event.finished),
           dataChecked: asBoolean(event.data_checked),
           isCurrent: asBoolean(event.is_current),
@@ -49,6 +52,9 @@ export class FplNormalizer {
           totalPoints: asNumber(player.total_points),
           price: asNumber(player.now_cost),
           status: asNullableString(player.status),
+          news: asNullableString(player.news),
+          chanceOfPlayingNextRound: asNullableNumber(player.chance_of_playing_next_round),
+          chanceOfPlayingThisRound: asNullableNumber(player.chance_of_playing_this_round),
           code: asNumber(player.code),
           teamCode: asNullableNumber(player.team_code),
           squadNumber: asNullableNumber(player.squad_number),

@@ -131,6 +131,9 @@ export interface FantasyLeagueStanding {
   eventPoints: number;
   totalPoints: number;
   lastRank?: number;
+  transfersMade?: number;
+  transferCost?: number;
+  activeChip?: string | null;
 }
 
 /**

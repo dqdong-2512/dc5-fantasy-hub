@@ -21,3 +21,9 @@ export {
   type UseGameweekLivePollingOptions,
 } from './useGameweekLivePolling';
 export { useLiveMatchCenter, type UseLiveMatchCenterState } from './useLiveMatchCenter';
+export {
+  useWeeklyHonours,
+  type UseWeeklyHonoursState,
+  type WeeklyHonourPlayer,
+  type PlayerOfWeekEntry,
+} from './useWeeklyHonours';

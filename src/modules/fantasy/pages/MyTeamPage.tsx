@@ -12,12 +12,12 @@ import {
   MenuItem,
   Select,
   Stack,
+  Tooltip,
   Typography,
 } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
-import RefreshRoundedIcon from '@mui/icons-material/RefreshRounded';
 import SwapCallsIcon from '@mui/icons-material/SwapCalls';
 import { useNavigate } from 'react-router-dom';
 import { getBootstrapRepository } from '@repositories/index';
@@ -33,6 +33,28 @@ interface WorkspaceSquadPlayer {
   isViceCaptain: boolean;
   gameweekPoints: number;
   benchOrder?: number;
+}
+
+function formatChipName(chip: string | null): string | null {
+  if (!chip) return null;
+  const labels: Record<string, string> = {
+    bboost: 'Bench Boost',
+    '3xc': 'Triple Captain',
+    freehit: 'Free Hit',
+    wildcard: 'Wildcard',
+  };
+  return labels[chip.toLowerCase()] ?? chip;
+}
+
+function formatChipShort(chip: string | null | undefined): string | null {
+  if (!chip) return null;
+  const labels: Record<string, string> = {
+    bboost: 'BB',
+    '3xc': 'TC',
+    freehit: 'FH',
+    wildcard: 'WC',
+  };
+  return labels[chip.toLowerCase()] ?? chip.toUpperCase();
 }
 
 function toWorkspaceSquad(
@@ -246,35 +268,24 @@ export const MyTeamPage: React.FC = () => {
                     ))}
                   </Select>
                 </FormControl>
-                <IconButton
-                  aria-label="Refresh standings"
-                  onClick={() => void league.refreshStandings()}
-                  sx={{ color: '#fff' }}
-                >
-                  <RefreshRoundedIcon />
-                </IconButton>
+                {league.dataStatus && (
+                  <Chip
+                    size="small"
+                    label={
+                      league.dataStatus !== 'LIVE'
+                        ? 'Cached ranking'
+                        : selectedGameweekFinished
+                          ? 'Final ranking'
+                          : 'Live ranking'
+                    }
+                    sx={{
+                      flexShrink: 0,
+                      bgcolor: league.dataStatus === 'LIVE' ? '#00ff87' : '#ffd166',
+                      fontWeight: 800,
+                    }}
+                  />
+                )}
               </Stack>
-              <Typography variant="caption" sx={{ opacity: 0.65 }}>
-                {league.leagueName ?? 'Classic league'} · page {league.pageNumber}
-              </Typography>
-              {league.dataStatus && (
-                <Chip
-                  size="small"
-                  label={
-                    league.dataStatus !== 'LIVE'
-                      ? 'Cached ranking'
-                      : selectedGameweekFinished
-                        ? 'Final ranking'
-                        : 'Live ranking'
-                  }
-                  sx={{
-                    mt: 0.75,
-                    height: 20,
-                    bgcolor: league.dataStatus === 'LIVE' ? '#00ff87' : '#ffd166',
-                    fontWeight: 800,
-                  }}
-                />
-              )}
             </Box>
             <Box sx={{ maxHeight: { xs: 320, lg: 650 }, overflowY: 'auto' }}>
               <Box
@@ -359,9 +370,20 @@ export const MyTeamPage: React.FC = () => {
                       <Typography noWrap sx={{ fontSize: 13, fontWeight: 800 }}>
                         {row.entryName}
                       </Typography>
-                      <Typography noWrap variant="caption" color="text.secondary">
-                        {mine ? 'You' : row.playerName}
-                      </Typography>
+                      <Stack direction="row" spacing={0.5} sx={{ alignItems: 'center' }}>
+                        <Typography noWrap variant="caption" color="text.secondary">
+                          {mine ? 'You' : row.playerName}
+                        </Typography>
+                        {formatChipShort(row.activeChip) && (
+                          <Tooltip title={`${formatChipName(row.activeChip ?? null)} used in this Gameweek`} arrow>
+                            <Chip
+                              size="small"
+                              label={formatChipShort(row.activeChip)}
+                              sx={{ height: 17, fontSize: 9, bgcolor: '#e90052', color: '#fff', fontWeight: 900 }}
+                            />
+                          </Tooltip>
+                        )}
+                      </Stack>
                     </Box>
                     <Box sx={{ textAlign: 'right' }}>
                       <Typography sx={{ fontSize: 13, fontWeight: 900 }}>
@@ -407,6 +429,8 @@ export const MyTeamPage: React.FC = () => {
               subtitle={gameState.entry?.manager.name ?? 'You'}
               points={myStanding?.eventPoints ?? myPicks.totalPoints}
               transfers={myPicks.transfersMade}
+              transferCost={myPicks.transfersCost}
+              activeChip={myPicks.activeChip}
               loading={myPicks.isLoading}
               squad={mySquad}
               gameweek={displayGameweek}
@@ -422,6 +446,8 @@ export const MyTeamPage: React.FC = () => {
               }
               points={opponent?.eventPoints ?? rivalPicks.totalPoints}
               transfers={rivalPicks.transfersMade}
+              transferCost={rivalPicks.transfersCost}
+              activeChip={rivalPicks.activeChip}
               loading={rivalPicks.isLoading}
               squad={rivalSquad}
               gameweek={displayGameweek}
@@ -448,12 +474,14 @@ const TeamPitchCard: React.FC<{
   subtitle: string;
   points: number;
   transfers: number;
+  transferCost: number;
+  activeChip: string | null;
   loading: boolean;
   squad: WorkspaceSquadPlayer[];
   gameweek: number | null;
   accent: string;
   onPlayerClick: (playerId: number) => void;
-}> = ({ title, subtitle, points, transfers, loading, squad, gameweek, accent, onPlayerClick }) => (
+}> = ({ title, subtitle, points, transfers, transferCost, activeChip, loading, squad, gameweek, accent, onPlayerClick }) => (
   <Card
     variant="outlined"
     sx={{
@@ -483,17 +511,26 @@ const TeamPitchCard: React.FC<{
             {subtitle}
           </Typography>
         </Box>
-        <Stack direction="row" spacing={0.75}>
-          <Chip
-            size="small"
-            label={`${points} pts`}
-            sx={{ bgcolor: accent, color: '#09111f', fontWeight: 900 }}
-          />
-          <Chip
-            size="small"
-            label={`${transfers} tr`}
-            sx={{ bgcolor: 'rgba(255,255,255,.1)', color: '#fff' }}
-          />
+        <Stack direction="row" spacing={0.75} sx={{ flexWrap: 'wrap', justifyContent: 'flex-end' }}>
+          <Tooltip title="Gameweek points before transfer deductions" arrow>
+            <Chip
+              size="small"
+              label={`${points} pts`}
+              sx={{ bgcolor: accent, color: '#09111f', fontWeight: 900 }}
+            />
+          </Tooltip>
+          <Tooltip title={`${transfers} transfer${transfers === 1 ? '' : 's'} made${transferCost ? ` · ${transferCost} point hit` : ' · no point hit'}`} arrow>
+            <Chip
+              size="small"
+              label={`${transfers} tr`}
+              sx={{ bgcolor: 'rgba(255,255,255,.1)', color: '#fff' }}
+            />
+          </Tooltip>
+          {formatChipName(activeChip) && (
+            <Tooltip title="Chip active for this Gameweek" arrow>
+              <Chip size="small" label={formatChipName(activeChip)} sx={{ bgcolor: '#e90052', color: '#fff', fontWeight: 800 }} />
+            </Tooltip>
+          )}
         </Stack>
       </Stack>
     </CardContent>

@@ -48,6 +48,9 @@ const GameweekCenterPage = React.lazy(() =>
 const FixturesExplorerPage = React.lazy(() =>
   import('../modules/fantasy/pages').then((module) => ({ default: module.FixturesExplorerPage }))
 );
+const LeagueActivityPage = React.lazy(() =>
+  import('../modules/fantasy/pages').then((module) => ({ default: module.LeagueActivityPage }))
+);
 const TransferPlannerPage = React.lazy(() =>
   import('../modules/fantasy/pages').then((module) => ({ default: module.TransferPlannerPage }))
 );
@@ -219,6 +222,16 @@ const router = createBrowserRouter([
               {
                 path: 'league/:leagueId/managers/:managerId',
                 element: <Navigate to="/premier-league/gameweek/my-team" replace />,
+              },
+              {
+                path: 'activity',
+                element: (
+                  <FplConnectionGate showConnectedSummary={false}>
+                    <Suspense fallback={<RouteLoadingFallback />}>
+                      <LeagueActivityPage />
+                    </Suspense>
+                  </FplConnectionGate>
+                ),
               },
               {
                 path: 'fixtures',

@@ -296,9 +296,10 @@ async function runFreeTierLeagueBatchTests(): Promise<void> {
     }
     const picksMatch = url.pathname.match(/\/entry\/(\d+)\/event\/2\/picks\//);
     if (picksMatch) {
-      requestedPicks.push(Number(picksMatch[1]));
+      const requestedEntryId = Number(picksMatch[1]);
+      requestedPicks.push(requestedEntryId);
       return Response.json({
-        active_chip: null,
+        active_chip: requestedEntryId === 1 ? 'wildcard' : null,
         entry_history: { event_transfers: 2, event_transfers_cost: 4 },
         automatic_subs: [],
         picks: [
@@ -336,6 +337,12 @@ async function runFreeTierLeagueBatchTests(): Promise<void> {
     first.data.members[0]?.liveGameweekPoints === 5 &&
       first.data.members[0]?.liveTotalPoints === 101,
     'Displayed GW points must stay gross while transfer hits affect live total only'
+  );
+  assert(
+    first.data.members[0]?.transfersMade === 2 &&
+      first.data.members[0]?.transferCost === 4 &&
+      first.data.members[0]?.activeChip === 'wildcard',
+    'Live league rows must expose manager transfer and chip activity'
   );
 
   const second = await league.getLiveLeague(99, 2, { page: 1, offset: 7 });

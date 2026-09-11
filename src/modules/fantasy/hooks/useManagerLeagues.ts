@@ -81,6 +81,9 @@ export function useManagerLeagues(
           eventPoints: member.liveGameweekPoints,
           totalPoints: member.liveTotalPoints,
           lastRank: member.rank ?? undefined,
+          transfersMade: member.transfersMade,
+          transferCost: member.transferCost,
+          activeChip: member.activeChip,
         }));
       } catch {
         setDataStatus('STALE');

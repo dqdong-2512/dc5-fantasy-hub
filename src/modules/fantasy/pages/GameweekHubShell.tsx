@@ -6,7 +6,7 @@ import { ThemeTokens } from '@shared/theme/tokens';
 import { FantasyGameHeader } from '../components';
 import { useGameweekHubState } from '../context';
 
-type HubTabValue = 'my-team' | 'fixtures' | 'clubs' | 'table';
+type HubTabValue = 'my-team' | 'activity' | 'fixtures' | 'clubs' | 'table';
 
 interface HubTab {
   value: HubTabValue;
@@ -16,6 +16,7 @@ interface HubTab {
 
 const HUB_TABS: HubTab[] = [
   { value: 'my-team', label: 'Squad & League', path: '/premier-league/gameweek/my-team' },
+  { value: 'activity', label: 'League Activity', path: '/premier-league/gameweek/activity' },
   { value: 'fixtures', label: 'Fixtures', path: '/premier-league/gameweek/fixtures' },
   { value: 'clubs', label: 'Clubs', path: '/premier-league/gameweek/clubs' },
   { value: 'table', label: 'Table', path: '/premier-league/gameweek/table' },
@@ -43,6 +44,10 @@ function resolveHubTabValue(pathname: string): HubTabValue {
 
   if (pathname.startsWith('/premier-league/gameweek/fixtures')) {
     return 'fixtures';
+  }
+
+  if (pathname.startsWith('/premier-league/gameweek/activity')) {
+    return 'activity';
   }
 
   if (pathname.startsWith('/premier-league/gameweek/clubs')) {

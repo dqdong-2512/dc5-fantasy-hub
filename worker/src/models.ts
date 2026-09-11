@@ -16,6 +16,8 @@ export interface FplGameweek {
   deadlineTime: string | null;
   averageEntryScore: number | null;
   highestScore: number | null;
+  topPlayerId: number | null;
+  topPlayerPoints: number | null;
   finished: boolean;
   dataChecked: boolean;
   isCurrent: boolean;
@@ -33,6 +35,9 @@ export interface FplPlayer {
   totalPoints: number;
   price: number;
   status: string | null;
+  news: string | null;
+  chanceOfPlayingNextRound: number | null;
+  chanceOfPlayingThisRound: number | null;
   code: number;
   teamCode: number | null;
   squadNumber: number | null;
@@ -235,6 +240,9 @@ export interface FplLiveLeagueMember extends FplLeagueMember {
   liveRank: number;
   rankMovement: number | null;
   provisional: boolean;
+  transfersMade: number;
+  transferCost: number;
+  activeChip: string | null;
 }
 
 export interface FplLiveLeague {

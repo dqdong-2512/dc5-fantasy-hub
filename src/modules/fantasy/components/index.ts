@@ -39,6 +39,7 @@ export { LiveImpactFeed, type LiveImpactFeedProps } from './LiveImpactFeed';
 export { LiveTeamPoints, type LiveTeamPointsProps } from './LiveTeamPoints';
 export { PlayersRemaining, type PlayersRemainingProps } from './PlayersRemaining';
 export { LiveLeagueStandings, type LiveLeagueStandingsProps } from './LiveLeagueStandings';
+export { PlayerOfWeekStrip, HomeHonoursGrid, TeamOfWeekPitch } from './WeeklyHonours';
 
 // League Detail Components
 export {

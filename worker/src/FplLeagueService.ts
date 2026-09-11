@@ -167,6 +167,7 @@ export class FplLeagueService {
 
       const calculated: FplLiveLeagueMember[] = members.map((member) => {
         const score = scores[member.entryId];
+        const entryPicks = picks.find((item) => item.entryId === member.entryId);
         return {
           ...member,
           // FPL presents Gameweek points before transfer deductions. Keep the hit visible as
@@ -179,6 +180,9 @@ export class FplLeagueService {
           liveRank: 0,
           rankMovement: null,
           provisional: live.data!.provisional,
+          transfersMade: entryPicks?.transfersMade ?? 0,
+          transferCost: entryPicks?.transferCost ?? 0,
+          activeChip: entryPicks?.activeChip ?? null,
         };
       });
       calculated.sort(

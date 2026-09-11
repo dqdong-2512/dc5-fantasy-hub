@@ -8,10 +8,10 @@ import { useNavigate } from 'react-router-dom';
 import { PageContainer, PlayerAvatar } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
 import { getBootstrapRepository, getPlayerRepository } from '@repositories/index';
-import { FplConnectionGate } from '../components';
+import { FplConnectionGate, HomeHonoursGrid, PlayerOfWeekStrip } from '../components';
 import { getStoredLeagueId } from '../components/FplConnectionGate';
 import { useGameweekHubState } from '../context';
-import { useEnrichedManagerPicks, useManagerLeagues } from '../hooks';
+import { useEnrichedManagerPicks, useManagerLeagues, useWeeklyHonours } from '../hooks';
 import { QuickActions } from '../widgets';
 import type { Player } from '@domain/models';
 
@@ -88,6 +88,8 @@ export const FantasyGameOverview: React.FC = () => {
   const topTransfersIn = useMemo(() => [...players].sort((a, b) => (b.transfersInEvent ?? 0) - (a.transfersInEvent ?? 0)).slice(0, 5), [players]);
   const topTransfersOut = useMemo(() => [...players].sort((a, b) => (b.transfersOutEvent ?? 0) - (a.transfersOutEvent ?? 0)).slice(0, 5), [players]);
   const upcomingGameweeks = useMemo(() => bootstrapRepository.getBootstrap().gameweeks.filter((gw) => !gw.finished).slice(0, 4), [bootstrapRepository]);
+  const currentGameweek = gameState.displayGameweek ?? bootstrapRepository.getCurrentGameweek()?.id ?? 1;
+  const weeklyHonours = useWeeklyHonours(performanceGameweek || currentGameweek);
 
   if (!gameState.isConnected) {
     return (
@@ -98,7 +100,6 @@ export const FantasyGameOverview: React.FC = () => {
     );
   }
 
-  const currentGameweek = gameState.displayGameweek ?? bootstrapRepository.getCurrentGameweek()?.id ?? 1;
   const openGameweek = (): void => {
     void navigate(`/premier-league/gameweek/gameweeks/${currentGameweek}`);
   };
@@ -175,6 +176,20 @@ export const FantasyGameOverview: React.FC = () => {
             <PlayerSignalList title="Most transferred out" subtitle={`Gameweek ${currentGameweek} departures`} players={topTransfersOut} mode="out" />
           </Box>
         </Box>
+
+        <PlayerOfWeekStrip
+          entries={weeklyHonours.playerOfWeek}
+          isLoading={weeklyHonours.isLoading}
+          error={weeklyHonours.error}
+        />
+
+        <HomeHonoursGrid
+          team={weeklyHonours.teamOfWeek}
+          availability={weeklyHonours.availability}
+          isLoading={weeklyHonours.isLoading}
+          error={weeklyHonours.error}
+          onOpenTeam={() => navigate('/premier-league/gameweek/fixtures')}
+        />
 
       </Stack>
     </PageContainer>

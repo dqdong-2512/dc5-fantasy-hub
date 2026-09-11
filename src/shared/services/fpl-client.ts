@@ -70,6 +70,9 @@ export interface Player {
   second_name: string;
   web_name: string;
   status: string;
+  news: string;
+  chance_of_playing_next_round: number | null;
+  chance_of_playing_this_round: number | null;
   code: number;
   team: number;
   team_code: number;
@@ -349,6 +352,9 @@ export interface InternalLiveLeagueMember {
   liveRank: number;
   rankMovement: number | null;
   provisional: boolean;
+  transfersMade: number;
+  transferCost: number;
+  activeChip: string | null;
 }
 
 export interface InternalLiveLeague {
@@ -759,8 +765,13 @@ export class FplClient {
         data_checked: event.dataChecked === true,
         highest_scoring_element: null,
         stats: [],
-        top_element: null,
-        top_element_info: null,
+        top_element: this.nullableNumber(event.topPlayerId),
+        top_element_info: this.nullableNumber(event.topPlayerId) === null
+          ? null
+          : {
+              id: this.number(event.topPlayerId),
+              points: this.number(event.topPlayerPoints),
+            },
         transfers_made: 0,
         most_transferred_in: null,
         most_transferred_out: null,
@@ -797,6 +808,9 @@ export class FplClient {
         second_name: this.string(player.secondName),
         web_name: this.string(player.webName),
         status: this.string(player.status, 'a'),
+        news: this.string(player.news),
+        chance_of_playing_next_round: this.nullableNumber(player.chanceOfPlayingNextRound),
+        chance_of_playing_this_round: this.nullableNumber(player.chanceOfPlayingThisRound),
         code: this.number(player.code),
         team: this.number(player.teamId),
         team_code: this.number(player.teamCode),

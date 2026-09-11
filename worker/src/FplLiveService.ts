@@ -39,7 +39,7 @@ export class FplLiveService {
   async getBootstrap(): Promise<InternalApiResponse<FplBootstrap>> {
     try {
       return this.resourceResponse(
-        await this.cache.getOrFetch('bootstrap', 300, stableHash, async () =>
+        await this.cache.getOrFetch('bootstrap:v2', 300, stableHash, async () =>
           this.normalizer.normalizeBootstrap(await this.client.getBootstrap())
         )
       );

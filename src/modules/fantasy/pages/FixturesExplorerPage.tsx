@@ -16,8 +16,8 @@ import { BootstrapRepository } from '@repositories/bootstrap';
 import { FixtureRepository } from '@repositories/fixtures';
 import { PageContainer } from '@shared/components';
 import { ThemeTokens } from '@shared/theme/tokens';
-import { FixturesList } from '../components';
-import { useLiveMatchCenter } from '../hooks';
+import { FixturesList, TeamOfWeekPitch } from '../components';
+import { useLiveMatchCenter, useWeeklyHonours } from '../hooks';
 import { useGameweekHubState } from '../context';
 import { getStoredLeagueId } from '../components/FplConnectionGate';
 
@@ -30,6 +30,9 @@ export const FixturesExplorerPage: React.FC = () => {
   const [selectedGameweek, setSelectedGameweek] = useState(initialGameweek);
 
   const selected = gameweeks.find((gameweek) => gameweek.id === selectedGameweek);
+  const honoursGameweek = selected?.finished
+    ? selectedGameweek
+    : [...gameweeks].reverse().find((gameweek) => gameweek.finished)?.id ?? selectedGameweek;
   const fixtureRepository = useMemo(() => new FixtureRepository(), []);
   const fixtures = fixtureRepository.getByGameweek(selectedGameweek);
   const live = useLiveMatchCenter({
@@ -38,6 +41,7 @@ export const FixturesExplorerPage: React.FC = () => {
     connectedLeagueId: getStoredLeagueId(),
     autoRefresh: true,
   });
+  const weeklyHonours = useWeeklyHonours(honoursGameweek);
 
   return (
     <PageContainer
@@ -141,6 +145,13 @@ export const FixturesExplorerPage: React.FC = () => {
             sx={{ color: '#b91c1c', backgroundColor: '#fee2e2' }}
           />
         </Stack>
+
+        <TeamOfWeekPitch
+          players={weeklyHonours.teamOfWeek}
+          gameweek={honoursGameweek}
+          isLoading={weeklyHonours.isLoading}
+          error={weeklyHonours.error}
+        />
 
         <Card sx={{ border: '1px solid', borderColor: 'divider' }}>
           <CardContent sx={{ p: { xs: 2, md: 3 } }}>
