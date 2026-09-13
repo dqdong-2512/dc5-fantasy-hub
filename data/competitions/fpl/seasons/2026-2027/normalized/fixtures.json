@@ -473,7 +473,7 @@
     "homeTeamId": 20,
     "awayTeamId": 1,
     "homeTeamScore": 0,
-    "awayTeamScore": 1,
+    "awayTeamScore": 2,
     "started": true,
     "finished": false,
     "kickoffTime": "2026-09-12T19:00:00Z",
