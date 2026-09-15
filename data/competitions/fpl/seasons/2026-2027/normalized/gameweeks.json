@@ -24,7 +24,7 @@
     "id": 4,
     "name": "Gameweek 4",
     "deadlineTime": "2026-09-12T12:30:00Z",
-    "finished": false,
+    "finished": true,
     "averageEntryScore": 69
   },
   {
