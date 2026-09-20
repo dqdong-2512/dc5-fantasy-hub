@@ -134692,7 +134692,7 @@
             "red_cards": 0,
             "saves": 0,
             "bonus": 0,
-            "bps": 25,
+            "bps": 24,
             "influence": "0.0",
             "creativity": "0.0",
             "threat": "0.0",
@@ -135268,7 +135268,7 @@
             "red_cards": 0,
             "saves": 0,
             "bonus": 0,
-            "bps": 1,
+            "bps": 2,
             "influence": "0.0",
             "creativity": "0.0",
             "threat": "0.0",
@@ -143748,11 +143748,11 @@
             "own_goals": 0,
             "penalties_saved": 0,
             "penalties_missed": 0,
-            "yellow_cards": 0,
+            "yellow_cards": 1,
             "red_cards": 0,
             "saves": 0,
             "bonus": 0,
-            "bps": 8,
+            "bps": 5,
             "influence": "0.0",
             "creativity": "0.0",
             "threat": "0.0",
@@ -143766,7 +143766,7 @@
             "expected_assists": "0.02",
             "expected_goal_involvements": "0.38",
             "expected_goals_conceded": "1.44",
-            "total_points": 2,
+            "total_points": 1,
             "in_dreamteam": false,
             "played": true
           },
@@ -143778,6 +143778,12 @@
                   "identifier": "minutes",
                   "points": 2,
                   "value": 90,
+                  "points_modification": 0
+                },
+                {
+                  "identifier": "yellow_cards",
+                  "points": -1,
+                  "value": 1,
                   "points_modification": 0
                 }
               ]
