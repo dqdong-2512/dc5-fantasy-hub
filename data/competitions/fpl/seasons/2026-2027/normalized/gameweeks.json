@@ -45,7 +45,7 @@
     "id": 7,
     "name": "Gameweek 7",
     "deadlineTime": "2026-10-17T10:00:00Z",
-    "finished": false,
+    "finished": true,
     "averageEntryScore": 59
   },
   {
