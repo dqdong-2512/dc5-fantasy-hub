@@ -1,24 +1,24 @@
 {
   "competition": "fpl",
   "season": "2026-2027",
-  "syncedAt": "2026-10-24T15:58:55.141Z",
+  "syncedAt": "2026-10-24T20:52:32.447Z",
   "trigger": "automatic",
   "mode": "full-refresh",
   "complete": true,
   "source": "https://fantasy.premierleague.com/api",
   "counts": {
-    "players": 668,
+    "players": 669,
     "teams": 20,
     "gameweeks": 38,
     "fixtures": 380,
     "elementTypes": 4,
-    "playerDetails": 668,
+    "playerDetails": 669,
     "eventLiveSnapshots": 38
   },
   "coverage": {
     "playerDetails": {
-      "expected": 668,
-      "actual": 668
+      "expected": 669,
+      "actual": 669
     },
     "eventLive": {
       "expected": 38,
