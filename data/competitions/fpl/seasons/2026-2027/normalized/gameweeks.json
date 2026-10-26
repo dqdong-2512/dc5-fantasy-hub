@@ -52,7 +52,7 @@
     "id": 8,
     "name": "Gameweek 8",
     "deadlineTime": "2026-10-23T17:30:00Z",
-    "finished": false,
+    "finished": true,
     "averageEntryScore": 45
   },
   {
