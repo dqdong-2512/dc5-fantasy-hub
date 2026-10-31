@@ -1,22 +1,6 @@
 {
   "fixtures": [
     {
-      "id": 82,
-      "code": 2645275,
-      "team_h": 3,
-      "team_h_score": null,
-      "team_a": 13,
-      "team_a_score": null,
-      "event": 9,
-      "finished": false,
-      "minutes": 0,
-      "provisional_start_time": false,
-      "kickoff_time": "2026-10-31T15:00:00Z",
-      "event_name": "Gameweek 9",
-      "is_home": false,
-      "difficulty": 3
-    },
-    {
       "id": 97,
       "code": 2645291,
       "team_h": 13,
@@ -747,8 +731,8 @@
       "total_points": 0,
       "was_home": false,
       "kickoff_time": "2026-10-31T15:00:00Z",
-      "team_h_score": null,
-      "team_a_score": null,
+      "team_h_score": 2,
+      "team_a_score": 0,
       "round": 9,
       "modified": false,
       "minutes": 0,
