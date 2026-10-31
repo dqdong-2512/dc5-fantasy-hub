@@ -1046,7 +1046,7 @@
     "awayTeamId": 16,
     "homeTeamScore": null,
     "awayTeamScore": null,
-    "started": false,
+    "started": true,
     "finished": false,
     "kickoffTime": "2026-10-31T12:30:00Z",
     "homeDifficulty": 4,
