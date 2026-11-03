@@ -22,7 +22,7 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-08-22T11:30:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 2
   },
   {
@@ -48,7 +48,7 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-08-22T14:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 2
   },
   {
@@ -62,7 +62,7 @@
     "finished": true,
     "kickoffTime": "2026-08-22T14:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 2,
@@ -74,8 +74,8 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-08-22T16:30:00Z",
-    "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "homeDifficulty": 3,
+    "awayDifficulty": 4
   },
   {
     "id": 7,
@@ -140,7 +140,7 @@
     "finished": true,
     "kickoffTime": "2026-08-28T19:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 14,
@@ -166,7 +166,7 @@
     "finished": true,
     "kickoffTime": "2026-08-29T14:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 13,
@@ -204,7 +204,7 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-08-30T13:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 4
   },
   {
@@ -244,7 +244,7 @@
     "finished": true,
     "kickoffTime": "2026-08-30T15:30:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 20,
@@ -295,8 +295,8 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-09-05T14:00:00Z",
-    "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "homeDifficulty": 2,
+    "awayDifficulty": 4
   },
   {
     "id": 23,
@@ -347,8 +347,8 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-09-05T14:00:00Z",
-    "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "homeDifficulty": 3,
+    "awayDifficulty": 2
   },
   {
     "id": 25,
@@ -373,7 +373,7 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-09-06T13:00:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -413,7 +413,7 @@
     "finished": true,
     "kickoffTime": "2026-09-12T14:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 33,
@@ -439,7 +439,7 @@
     "finished": true,
     "kickoffTime": "2026-09-12T14:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 35,
@@ -490,7 +490,7 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-09-13T13:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 2
   },
   {
@@ -504,7 +504,7 @@
     "finished": true,
     "kickoffTime": "2026-09-13T15:30:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 40,
@@ -530,7 +530,7 @@
     "finished": true,
     "kickoffTime": "2026-09-18T19:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 48,
@@ -595,7 +595,7 @@
     "finished": true,
     "kickoffTime": "2026-09-19T16:30:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 49,
@@ -608,7 +608,7 @@
     "finished": true,
     "kickoffTime": "2026-09-20T13:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 44,
@@ -633,7 +633,7 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-09-20T13:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 5
   },
   {
@@ -646,7 +646,7 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-09-20T15:30:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -711,7 +711,7 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-10-10T14:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 3
   },
   {
@@ -724,8 +724,8 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-10-10T16:30:00Z",
-    "homeDifficulty": 2,
-    "awayDifficulty": 4
+    "homeDifficulty": 3,
+    "awayDifficulty": 3
   },
   {
     "id": 55,
@@ -738,7 +738,7 @@
     "finished": true,
     "kickoffTime": "2026-10-11T13:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 56,
@@ -803,7 +803,7 @@
     "finished": true,
     "kickoffTime": "2026-10-17T14:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 65,
@@ -854,8 +854,8 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-10-18T13:00:00Z",
-    "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "homeDifficulty": 2,
+    "awayDifficulty": 4
   },
   {
     "id": 63,
@@ -880,7 +880,7 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-10-18T13:00:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -894,7 +894,7 @@
     "finished": true,
     "kickoffTime": "2026-10-18T15:30:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 70,
@@ -971,7 +971,7 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-10-24T16:30:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 4
   },
   {
@@ -985,7 +985,7 @@
     "finished": true,
     "kickoffTime": "2026-10-25T14:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 76,
@@ -1010,7 +1010,7 @@
     "started": true,
     "finished": true,
     "kickoffTime": "2026-10-25T14:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 4
   },
   {
@@ -1024,7 +1024,7 @@
     "finished": true,
     "kickoffTime": "2026-10-25T14:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 80,
@@ -1047,9 +1047,9 @@
     "homeTeamScore": 2,
     "awayTeamScore": 0,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-10-31T12:30:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 4
   },
   {
@@ -1060,10 +1060,10 @@
     "homeTeamScore": 2,
     "awayTeamScore": 0,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-10-31T15:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 83,
@@ -1073,10 +1073,10 @@
     "homeTeamScore": 2,
     "awayTeamScore": 0,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-10-31T15:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 85,
@@ -1086,9 +1086,9 @@
     "homeTeamScore": 3,
     "awayTeamScore": 1,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-10-31T15:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 2
   },
   {
@@ -1099,7 +1099,7 @@
     "homeTeamScore": 2,
     "awayTeamScore": 2,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-10-31T15:00:00Z",
     "homeDifficulty": 2,
     "awayDifficulty": 2
@@ -1112,9 +1112,9 @@
     "homeTeamScore": 0,
     "awayTeamScore": 1,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-10-31T15:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 5
   },
   {
@@ -1125,7 +1125,7 @@
     "homeTeamScore": 2,
     "awayTeamScore": 0,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-10-31T17:30:00Z",
     "homeDifficulty": 2,
     "awayDifficulty": 3
@@ -1138,7 +1138,7 @@
     "homeTeamScore": 1,
     "awayTeamScore": 1,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-10-31T20:00:00Z",
     "homeDifficulty": 2,
     "awayDifficulty": 3
@@ -1151,7 +1151,7 @@
     "homeTeamScore": 0,
     "awayTeamScore": 1,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-11-01T16:30:00Z",
     "homeDifficulty": 4,
     "awayDifficulty": 4
@@ -1164,7 +1164,7 @@
     "homeTeamScore": 0,
     "awayTeamScore": 1,
     "started": true,
-    "finished": false,
+    "finished": true,
     "kickoffTime": "2026-11-02T20:00:00Z",
     "homeDifficulty": 3,
     "awayDifficulty": 3
@@ -1192,7 +1192,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-11-07T12:30:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -1232,7 +1232,7 @@
     "finished": false,
     "kickoffTime": "2026-11-07T17:30:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 92,
@@ -1258,7 +1258,7 @@
     "finished": false,
     "kickoffTime": "2026-11-08T14:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 96,
@@ -1297,7 +1297,7 @@
     "finished": false,
     "kickoffTime": "2026-11-08T16:30:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 108,
@@ -1322,7 +1322,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-11-21T15:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 3
   },
   {
@@ -1336,7 +1336,7 @@
     "finished": false,
     "kickoffTime": "2026-11-21T15:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 104,
@@ -1400,7 +1400,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-11-22T14:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 2
   },
   {
@@ -1413,7 +1413,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-11-22T16:30:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 4
   },
   {
@@ -1427,7 +1427,7 @@
     "finished": false,
     "kickoffTime": "2026-11-23T20:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 119,
@@ -1440,7 +1440,7 @@
     "finished": false,
     "kickoffTime": "2026-11-27T20:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 117,
@@ -1466,7 +1466,7 @@
     "finished": false,
     "kickoffTime": "2026-11-28T15:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 116,
@@ -1518,7 +1518,7 @@
     "finished": false,
     "kickoffTime": "2026-11-29T14:05:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 115,
@@ -1543,7 +1543,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-11-29T14:05:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -1608,7 +1608,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-02T19:30:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 4
   },
   {
@@ -1647,8 +1647,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-02T20:15:00Z",
-    "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "homeDifficulty": 4,
+    "awayDifficulty": 4
   },
   {
     "id": 123,
@@ -1661,7 +1661,7 @@
     "finished": false,
     "kickoffTime": "2026-12-02T20:15:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 129,
@@ -1673,7 +1673,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-02T20:15:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -1726,7 +1726,7 @@
     "finished": false,
     "kickoffTime": "2026-12-05T15:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 136,
@@ -1752,7 +1752,7 @@
     "finished": false,
     "kickoffTime": "2026-12-05T15:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 139,
@@ -1764,8 +1764,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-05T17:30:00Z",
-    "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "homeDifficulty": 4,
+    "awayDifficulty": 2
   },
   {
     "id": 133,
@@ -1778,7 +1778,7 @@
     "finished": false,
     "kickoffTime": "2026-12-05T20:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 135,
@@ -1803,7 +1803,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-06T14:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 3
   },
   {
@@ -1933,8 +1933,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-13T19:00:00Z",
-    "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "homeDifficulty": 3,
+    "awayDifficulty": 2
   },
   {
     "id": 146,
@@ -1946,7 +1946,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-14T20:00:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 2
   },
   {
@@ -1960,7 +1960,7 @@
     "finished": false,
     "kickoffTime": "2026-12-19T12:30:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 152,
@@ -1973,7 +1973,7 @@
     "finished": false,
     "kickoffTime": "2026-12-19T15:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 156,
@@ -2012,7 +2012,7 @@
     "finished": false,
     "kickoffTime": "2026-12-19T15:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 157,
@@ -2024,7 +2024,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-19T17:30:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 4
   },
   {
@@ -2063,7 +2063,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-20T16:30:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 5
   },
   {
@@ -2102,7 +2102,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-26T15:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 3
   },
   {
@@ -2115,7 +2115,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-26T15:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 3
   },
   {
@@ -2194,7 +2194,7 @@
     "finished": false,
     "kickoffTime": "2026-12-27T16:30:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 163,
@@ -2207,7 +2207,7 @@
     "finished": false,
     "kickoffTime": "2026-12-27T19:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 176,
@@ -2232,7 +2232,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-29T19:30:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 3
   },
   {
@@ -2272,7 +2272,7 @@
     "finished": false,
     "kickoffTime": "2026-12-30T19:30:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 175,
@@ -2297,8 +2297,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2026-12-30T19:30:00Z",
-    "homeDifficulty": 3,
-    "awayDifficulty": 4
+    "homeDifficulty": 2,
+    "awayDifficulty": 3
   },
   {
     "id": 179,
@@ -2362,7 +2362,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-01-02T12:30:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 4
   },
   {
@@ -2389,7 +2389,7 @@
     "finished": false,
     "kickoffTime": "2027-01-02T15:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 187,
@@ -2415,7 +2415,7 @@
     "finished": false,
     "kickoffTime": "2027-01-02T15:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 190,
@@ -2441,7 +2441,7 @@
     "finished": false,
     "kickoffTime": "2027-01-02T17:30:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 185,
@@ -2466,7 +2466,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-01-03T16:30:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 5
   },
   {
@@ -2519,7 +2519,7 @@
     "finished": false,
     "kickoffTime": "2027-01-05T19:30:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 200,
@@ -2545,7 +2545,7 @@
     "finished": false,
     "kickoffTime": "2027-01-06T19:30:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 195,
@@ -2557,7 +2557,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-01-06T19:30:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -2597,7 +2597,7 @@
     "finished": false,
     "kickoffTime": "2027-01-07T20:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 201,
@@ -2609,7 +2609,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-01-16T15:00:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -2623,7 +2623,7 @@
     "finished": false,
     "kickoffTime": "2027-01-16T15:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 203,
@@ -2635,8 +2635,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-01-16T15:00:00Z",
-    "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "homeDifficulty": 4,
+    "awayDifficulty": 4
   },
   {
     "id": 204,
@@ -2648,7 +2648,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-01-16T15:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 4
   },
   {
@@ -2765,8 +2765,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-01-23T15:00:00Z",
-    "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "homeDifficulty": 3,
+    "awayDifficulty": 2
   },
   {
     "id": 214,
@@ -2831,7 +2831,7 @@
     "finished": false,
     "kickoffTime": "2027-01-23T15:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 219,
@@ -2844,7 +2844,7 @@
     "finished": false,
     "kickoffTime": "2027-01-23T15:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 220,
@@ -2883,7 +2883,7 @@
     "finished": false,
     "kickoffTime": "2027-01-30T15:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 223,
@@ -2895,8 +2895,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-01-30T15:00:00Z",
-    "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "homeDifficulty": 3,
+    "awayDifficulty": 4
   },
   {
     "id": 224,
@@ -2973,7 +2973,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-01-30T15:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 3
   },
   {
@@ -2986,7 +2986,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-01-30T15:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 3
   },
   {
@@ -3026,7 +3026,7 @@
     "finished": false,
     "kickoffTime": "2027-02-06T15:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 234,
@@ -3064,7 +3064,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-02-06T15:00:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 2
   },
   {
@@ -3091,7 +3091,7 @@
     "finished": false,
     "kickoffTime": "2027-02-06T15:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 239,
@@ -3104,7 +3104,7 @@
     "finished": false,
     "kickoffTime": "2027-02-06T15:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 240,
@@ -3156,7 +3156,7 @@
     "finished": false,
     "kickoffTime": "2027-02-10T20:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 244,
@@ -3194,7 +3194,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-02-10T20:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 2
   },
   {
@@ -3220,8 +3220,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-02-10T20:00:00Z",
-    "homeDifficulty": 3,
-    "awayDifficulty": 4
+    "homeDifficulty": 4,
+    "awayDifficulty": 3
   },
   {
     "id": 249,
@@ -3273,7 +3273,7 @@
     "finished": false,
     "kickoffTime": "2027-02-20T15:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 253,
@@ -3286,7 +3286,7 @@
     "finished": false,
     "kickoffTime": "2027-02-20T15:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 254,
@@ -3298,7 +3298,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-02-20T15:00:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 4
   },
   {
@@ -3363,8 +3363,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-02-20T15:00:00Z",
-    "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "homeDifficulty": 3,
+    "awayDifficulty": 2
   },
   {
     "id": 260,
@@ -3415,8 +3415,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-02-27T15:00:00Z",
-    "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "homeDifficulty": 2,
+    "awayDifficulty": 2
   },
   {
     "id": 264,
@@ -3467,7 +3467,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-02-27T15:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 2
   },
   {
@@ -3481,7 +3481,7 @@
     "finished": false,
     "kickoffTime": "2027-02-27T15:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 269,
@@ -3532,8 +3532,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-03-03T20:00:00Z",
-    "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "homeDifficulty": 3,
+    "awayDifficulty": 4
   },
   {
     "id": 273,
@@ -3546,7 +3546,7 @@
     "finished": false,
     "kickoffTime": "2027-03-03T20:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 274,
@@ -3624,7 +3624,7 @@
     "finished": false,
     "kickoffTime": "2027-03-03T20:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 280,
@@ -3636,7 +3636,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-03-03T20:00:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -3663,7 +3663,7 @@
     "finished": false,
     "kickoffTime": "2027-03-13T15:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 283,
@@ -3702,7 +3702,7 @@
     "finished": false,
     "kickoffTime": "2027-03-13T15:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 286,
@@ -3714,7 +3714,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-03-13T15:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 3
   },
   {
@@ -3741,7 +3741,7 @@
     "finished": false,
     "kickoffTime": "2027-03-13T15:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 290,
@@ -3779,7 +3779,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-03-20T15:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 5
   },
   {
@@ -3793,7 +3793,7 @@
     "finished": false,
     "kickoffTime": "2027-03-20T15:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 293,
@@ -3818,7 +3818,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-03-20T15:00:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -3870,7 +3870,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-03-20T15:00:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 5
   },
   {
@@ -3897,7 +3897,7 @@
     "finished": false,
     "kickoffTime": "2027-03-20T15:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 301,
@@ -3909,7 +3909,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-04-10T14:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 3
   },
   {
@@ -3923,7 +3923,7 @@
     "finished": false,
     "kickoffTime": "2027-04-10T14:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 303,
@@ -3962,7 +3962,7 @@
     "finished": false,
     "kickoffTime": "2027-04-10T14:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 306,
@@ -4001,7 +4001,7 @@
     "finished": false,
     "kickoffTime": "2027-04-10T14:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 310,
@@ -4053,7 +4053,7 @@
     "finished": false,
     "kickoffTime": "2027-04-17T14:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 313,
@@ -4091,7 +4091,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-04-17T14:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 3
   },
   {
@@ -4117,7 +4117,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-04-17T14:00:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 2
   },
   {
@@ -4143,7 +4143,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-04-17T14:00:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -4157,7 +4157,7 @@
     "finished": false,
     "kickoffTime": "2027-04-17T14:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 321,
@@ -4183,7 +4183,7 @@
     "finished": false,
     "kickoffTime": "2027-04-24T14:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 323,
@@ -4196,7 +4196,7 @@
     "finished": false,
     "kickoffTime": "2027-04-24T14:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 324,
@@ -4221,7 +4221,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-04-24T14:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 3
   },
   {
@@ -4248,7 +4248,7 @@
     "finished": false,
     "kickoffTime": "2027-04-24T14:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 328,
@@ -4273,8 +4273,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-04-24T14:00:00Z",
-    "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "homeDifficulty": 2,
+    "awayDifficulty": 2
   },
   {
     "id": 330,
@@ -4299,7 +4299,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-05-01T14:00:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 5
   },
   {
@@ -4325,7 +4325,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-05-01T14:00:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 2
   },
   {
@@ -4339,7 +4339,7 @@
     "finished": false,
     "kickoffTime": "2027-05-01T14:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 335,
@@ -4429,8 +4429,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-05-08T14:00:00Z",
-    "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "homeDifficulty": 3,
+    "awayDifficulty": 4
   },
   {
     "id": 342,
@@ -4443,7 +4443,7 @@
     "finished": false,
     "kickoffTime": "2027-05-08T14:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 343,
@@ -4455,7 +4455,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-05-08T14:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 4
   },
   {
@@ -4534,7 +4534,7 @@
     "finished": false,
     "kickoffTime": "2027-05-08T14:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 350,
@@ -4598,7 +4598,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-05-15T14:00:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 2
   },
   {
@@ -4611,8 +4611,8 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-05-15T14:00:00Z",
-    "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "homeDifficulty": 4,
+    "awayDifficulty": 2
   },
   {
     "id": 356,
@@ -4664,7 +4664,7 @@
     "finished": false,
     "kickoffTime": "2027-05-15T14:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 360,
@@ -4690,7 +4690,7 @@
     "finished": false,
     "kickoffTime": "2027-05-23T14:00:00Z",
     "homeDifficulty": 4,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 362,
@@ -4703,7 +4703,7 @@
     "finished": false,
     "kickoffTime": "2027-05-23T14:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 4
   },
   {
     "id": 363,
@@ -4754,7 +4754,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-05-23T14:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 2,
     "awayDifficulty": 3
   },
   {
@@ -4794,7 +4794,7 @@
     "finished": false,
     "kickoffTime": "2027-05-23T14:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 370,
@@ -4806,7 +4806,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-05-23T14:00:00Z",
-    "homeDifficulty": 4,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -4819,7 +4819,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-05-30T15:00:00Z",
-    "homeDifficulty": 3,
+    "homeDifficulty": 4,
     "awayDifficulty": 5
   },
   {
@@ -4832,7 +4832,7 @@
     "started": false,
     "finished": false,
     "kickoffTime": "2027-05-30T15:00:00Z",
-    "homeDifficulty": 2,
+    "homeDifficulty": 3,
     "awayDifficulty": 3
   },
   {
@@ -4872,7 +4872,7 @@
     "finished": false,
     "kickoffTime": "2027-05-30T15:00:00Z",
     "homeDifficulty": 3,
-    "awayDifficulty": 3
+    "awayDifficulty": 2
   },
   {
     "id": 376,
@@ -4924,7 +4924,7 @@
     "finished": false,
     "kickoffTime": "2027-05-30T15:00:00Z",
     "homeDifficulty": 2,
-    "awayDifficulty": 4
+    "awayDifficulty": 3
   },
   {
     "id": 380,
