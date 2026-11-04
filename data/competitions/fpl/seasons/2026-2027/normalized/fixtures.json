@@ -2002,19 +2002,6 @@
     "awayDifficulty": 5
   },
   {
-    "id": 159,
-    "gameweek": 16,
-    "homeTeamId": 18,
-    "awayTeamId": 9,
-    "homeTeamScore": null,
-    "awayTeamScore": null,
-    "started": false,
-    "finished": false,
-    "kickoffTime": "2026-12-19T15:00:00Z",
-    "homeDifficulty": 3,
-    "awayDifficulty": 2
-  },
-  {
     "id": 157,
     "gameweek": 16,
     "homeTeamId": 14,
@@ -2039,6 +2026,19 @@
     "kickoffTime": "2026-12-20T14:00:00Z",
     "homeDifficulty": 2,
     "awayDifficulty": 4
+  },
+  {
+    "id": 159,
+    "gameweek": 16,
+    "homeTeamId": 18,
+    "awayTeamId": 9,
+    "homeTeamScore": null,
+    "awayTeamScore": null,
+    "started": false,
+    "finished": false,
+    "kickoffTime": "2026-12-20T14:00:00Z",
+    "homeDifficulty": 3,
+    "awayDifficulty": 2
   },
   {
     "id": 160,
