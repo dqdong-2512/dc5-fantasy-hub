@@ -1,22 +1,6 @@
 {
   "fixtures": [
     {
-      "id": 94,
-      "code": 2645288,
-      "team_h": 9,
-      "team_h_score": null,
-      "team_a": 7,
-      "team_a_score": null,
-      "event": 10,
-      "finished": false,
-      "minutes": 0,
-      "provisional_start_time": false,
-      "kickoff_time": "2026-11-06T20:00:00Z",
-      "event_name": "Gameweek 10",
-      "is_home": false,
-      "difficulty": 3
-    },
-    {
       "id": 105,
       "code": 2645299,
       "team_h": 7,
@@ -860,8 +844,8 @@
       "total_points": 0,
       "was_home": false,
       "kickoff_time": "2026-11-06T20:00:00Z",
-      "team_h_score": null,
-      "team_a_score": null,
+      "team_h_score": 3,
+      "team_a_score": 1,
       "round": 10,
       "modified": false,
       "minutes": 0,
@@ -892,7 +876,7 @@
       "expected_goals_conceded": "0.00",
       "value": 45,
       "transfers_balance": -273,
-      "selected": 5887,
+      "selected": 5888,
       "transfers_in": 0,
       "transfers_out": 273
     }
