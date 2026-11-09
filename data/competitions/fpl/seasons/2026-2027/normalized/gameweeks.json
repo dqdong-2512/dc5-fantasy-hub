@@ -66,8 +66,8 @@
     "id": 10,
     "name": "Gameweek 10",
     "deadlineTime": "2026-11-06T18:30:00Z",
-    "finished": false,
-    "averageEntryScore": 25
+    "finished": true,
+    "averageEntryScore": 55
   },
   {
     "id": 11,
