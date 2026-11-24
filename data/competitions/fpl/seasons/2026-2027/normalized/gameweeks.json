@@ -73,8 +73,8 @@
     "id": 11,
     "name": "Gameweek 11",
     "deadlineTime": "2026-11-21T11:00:00Z",
-    "finished": false,
-    "averageEntryScore": 33
+    "finished": true,
+    "averageEntryScore": 35
   },
   {
     "id": 12,
