@@ -31,7 +31,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -85,7 +87,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -133,7 +137,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -181,7 +187,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -235,7 +243,9 @@
         "expected_goals_conceded": "0.61",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -289,7 +299,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -337,7 +349,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -385,7 +399,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -439,7 +455,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -487,7 +505,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -535,7 +555,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -583,7 +605,9 @@
         "expected_goals_conceded": "1.00",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -631,7 +655,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -685,7 +711,9 @@
         "expected_goals_conceded": "0.54",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -733,7 +761,9 @@
         "expected_goals_conceded": "0.77",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -781,7 +811,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -829,7 +861,9 @@
         "expected_goals_conceded": "0.70",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -877,7 +911,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -925,7 +961,9 @@
         "expected_goals_conceded": "0.70",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -973,7 +1011,9 @@
         "expected_goals_conceded": "0.31",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -1021,7 +1061,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -1069,7 +1111,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -1117,7 +1161,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -1165,7 +1211,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -1213,7 +1261,9 @@
         "expected_goals_conceded": "0.54",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -1261,7 +1311,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -1309,7 +1361,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -1357,7 +1411,9 @@
         "expected_goals_conceded": "2.65",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -1417,7 +1473,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -1465,7 +1523,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -1513,7 +1573,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -1567,7 +1629,9 @@
         "expected_goals_conceded": "0.92",
         "total_points": -1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -1627,7 +1691,9 @@
         "expected_goals_conceded": "1.56",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -1687,7 +1753,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -1735,7 +1803,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -1783,7 +1853,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -1831,7 +1903,9 @@
         "expected_goals_conceded": "1.56",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -1885,7 +1959,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -1933,7 +2009,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -1981,7 +2059,9 @@
         "expected_goals_conceded": "2.65",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -2029,7 +2109,9 @@
         "expected_goals_conceded": "1.56",
         "total_points": 12,
         "in_dreamteam": true,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -2095,7 +2177,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -2143,7 +2227,9 @@
         "expected_goals_conceded": "1.62",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -2197,7 +2283,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -2245,7 +2333,9 @@
         "expected_goals_conceded": "0.78",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -2305,7 +2395,9 @@
         "expected_goals_conceded": "0.78",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -2353,7 +2445,9 @@
         "expected_goals_conceded": "0.78",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -2413,7 +2507,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -2461,7 +2557,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -2509,7 +2607,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -2557,7 +2657,9 @@
         "expected_goals_conceded": "0.87",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -2605,7 +2707,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -2653,7 +2757,9 @@
         "expected_goals_conceded": "0.68",
         "total_points": 13,
         "in_dreamteam": true,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -2725,7 +2831,9 @@
         "expected_goals_conceded": "1.56",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -2779,7 +2887,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -2827,7 +2937,9 @@
         "expected_goals_conceded": "0.43",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -2875,7 +2987,9 @@
         "expected_goals_conceded": "1.65",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -2923,7 +3037,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -2971,7 +3087,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -3019,7 +3137,9 @@
         "expected_goals_conceded": "1.65",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3073,7 +3193,9 @@
         "expected_goals_conceded": "1.65",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3121,7 +3243,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -3169,7 +3293,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -3217,7 +3343,9 @@
         "expected_goals_conceded": "1.40",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3265,7 +3393,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -3313,7 +3443,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -3361,7 +3493,9 @@
         "expected_goals_conceded": "1.40",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3409,7 +3543,9 @@
         "expected_goals_conceded": "1.40",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3457,7 +3593,9 @@
         "expected_goals_conceded": "1.65",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3505,7 +3643,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -3553,7 +3693,9 @@
         "expected_goals_conceded": "0.25",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3601,7 +3743,9 @@
         "expected_goals_conceded": "0.25",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3649,7 +3793,9 @@
         "expected_goals_conceded": "1.40",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3703,7 +3849,9 @@
         "expected_goals_conceded": "0.25",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3751,7 +3899,9 @@
         "expected_goals_conceded": "1.40",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3799,7 +3949,9 @@
         "expected_goals_conceded": "0.25",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3847,7 +3999,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -3895,7 +4049,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -3943,7 +4099,9 @@
         "expected_goals_conceded": "1.65",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -3991,7 +4149,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -4039,7 +4199,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -4087,7 +4249,9 @@
         "expected_goals_conceded": "0.83",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -4141,7 +4305,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -4189,7 +4355,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -4237,7 +4405,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -4285,7 +4455,9 @@
         "expected_goals_conceded": "0.70",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -4339,7 +4511,9 @@
         "expected_goals_conceded": "0.83",
         "total_points": 7,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -4399,7 +4573,9 @@
         "expected_goals_conceded": "0.55",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -4453,7 +4629,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -4501,7 +4679,9 @@
         "expected_goals_conceded": "0.28",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -4549,7 +4729,9 @@
         "expected_goals_conceded": "1.10",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -4609,7 +4791,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -4657,7 +4841,9 @@
         "expected_goals_conceded": "0.83",
         "total_points": 14,
         "in_dreamteam": true,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -4729,7 +4915,9 @@
         "expected_goals_conceded": "0.83",
         "total_points": 9,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -4789,7 +4977,9 @@
         "expected_goals_conceded": "0.13",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -4837,7 +5027,9 @@
         "expected_goals_conceded": "0.70",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -4891,7 +5083,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -4939,7 +5133,9 @@
         "expected_goals_conceded": "0.83",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -4993,7 +5189,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -5041,7 +5239,9 @@
         "expected_goals_conceded": "0.13",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -5095,7 +5295,9 @@
         "expected_goals_conceded": "2.65",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -5143,7 +5345,9 @@
         "expected_goals_conceded": "0.55",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -5197,7 +5401,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -5245,7 +5451,9 @@
         "expected_goals_conceded": "1.10",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -5299,7 +5507,9 @@
         "expected_goals_conceded": "0.70",
         "total_points": 10,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -5365,7 +5575,9 @@
         "expected_goals_conceded": "0.83",
         "total_points": 5,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -5425,7 +5637,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -5473,7 +5687,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -5521,7 +5737,9 @@
         "expected_goals_conceded": "1.63",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -5575,7 +5793,9 @@
         "expected_goals_conceded": "1.10",
         "total_points": 11,
         "in_dreamteam": true,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -5641,7 +5861,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -5689,7 +5911,9 @@
         "expected_goals_conceded": "1.16",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -5755,7 +5979,9 @@
         "expected_goals_conceded": "0.89",
         "total_points": 5,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -5815,7 +6041,9 @@
         "expected_goals_conceded": "1.63",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -5869,7 +6097,9 @@
         "expected_goals_conceded": "1.63",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -5935,7 +6165,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -5983,7 +6215,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -6031,7 +6265,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -6079,7 +6315,9 @@
         "expected_goals_conceded": "0.74",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -6127,7 +6365,9 @@
         "expected_goals_conceded": "0.14",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -6175,7 +6415,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -6223,7 +6465,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -6271,7 +6515,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -6319,7 +6565,9 @@
         "expected_goals_conceded": "1.63",
         "total_points": 14,
         "in_dreamteam": true,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -6391,7 +6639,9 @@
         "expected_goals_conceded": "0.74",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -6439,7 +6689,9 @@
         "expected_goals_conceded": "0.14",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -6487,7 +6739,9 @@
         "expected_goals_conceded": "1.48",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -6553,7 +6807,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -6601,7 +6857,9 @@
         "expected_goals_conceded": "1.63",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -6655,7 +6913,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -6703,7 +6963,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -6751,7 +7013,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -6799,7 +7063,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -6847,7 +7113,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -6895,7 +7163,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -6943,7 +7213,9 @@
         "expected_goals_conceded": "1.45",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -6991,7 +7263,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7039,7 +7313,9 @@
         "expected_goals_conceded": "0.89",
         "total_points": 10,
         "in_dreamteam": true,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -7111,7 +7387,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7159,7 +7437,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7207,7 +7487,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7255,7 +7537,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7303,7 +7587,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7351,7 +7637,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7399,7 +7687,9 @@
         "expected_goals_conceded": "1.45",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -7453,7 +7743,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7501,7 +7793,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7549,7 +7843,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7597,7 +7893,9 @@
         "expected_goals_conceded": "2.65",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -7651,7 +7949,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7699,7 +7999,9 @@
         "expected_goals_conceded": "1.20",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -7753,7 +8055,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7801,7 +8105,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -7849,7 +8155,9 @@
         "expected_goals_conceded": "2.65",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -7897,7 +8205,9 @@
         "expected_goals_conceded": "3.57",
         "total_points": 7,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -7951,7 +8261,9 @@
         "expected_goals_conceded": "2.22",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -7999,7 +8311,9 @@
         "expected_goals_conceded": "0.43",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -8047,7 +8361,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8095,7 +8411,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8143,7 +8461,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8191,7 +8511,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8239,7 +8561,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8287,7 +8611,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8335,7 +8661,9 @@
         "expected_goals_conceded": "1.20",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -8383,7 +8711,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8431,7 +8761,9 @@
         "expected_goals_conceded": "1.13",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -8497,7 +8829,9 @@
         "expected_goals_conceded": "0.67",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -8551,7 +8885,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8599,7 +8935,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8647,7 +8985,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8695,7 +9035,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8743,7 +9085,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8791,7 +9135,9 @@
         "expected_goals_conceded": "1.10",
         "total_points": 9,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -8857,7 +9203,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8905,7 +9253,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -8953,7 +9303,9 @@
         "expected_goals_conceded": "1.10",
         "total_points": 15,
         "in_dreamteam": true,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -9019,7 +9371,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -9067,7 +9421,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -9115,7 +9471,9 @@
         "expected_goals_conceded": "0.02",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -9163,7 +9521,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -9211,7 +9571,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -9259,7 +9621,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -9307,7 +9671,9 @@
         "expected_goals_conceded": "0.85",
         "total_points": 5,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -9367,7 +9733,9 @@
         "expected_goals_conceded": "1.10",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -9421,7 +9789,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -9469,7 +9839,9 @@
         "expected_goals_conceded": "0.60",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -9517,7 +9889,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -9565,7 +9939,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -9613,7 +9989,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -9661,7 +10039,9 @@
         "expected_goals_conceded": "0.50",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -9709,7 +10089,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -9757,7 +10139,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -9805,7 +10189,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -9853,7 +10239,9 @@
         "expected_goals_conceded": "1.10",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -9907,7 +10295,9 @@
         "expected_goals_conceded": "0.24",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -9955,7 +10345,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -10003,7 +10395,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -10051,7 +10445,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -10099,7 +10495,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -10153,7 +10551,9 @@
         "expected_goals_conceded": "2.65",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -10213,7 +10613,9 @@
         "expected_goals_conceded": "0.67",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -10261,7 +10663,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -10321,7 +10725,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -10381,7 +10787,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 7,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -10441,7 +10849,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -10489,7 +10899,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -10537,7 +10949,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -10585,7 +10999,9 @@
         "expected_goals_conceded": "0.06",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -10633,7 +11049,9 @@
         "expected_goals_conceded": "1.06",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -10687,7 +11105,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -10747,7 +11167,9 @@
         "expected_goals_conceded": "1.26",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -10807,7 +11229,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -10855,7 +11279,9 @@
         "expected_goals_conceded": "0.77",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -10909,7 +11335,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -10963,7 +11391,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11011,7 +11441,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11059,7 +11491,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11107,7 +11541,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11155,7 +11591,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11203,7 +11641,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11251,7 +11691,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11299,7 +11741,9 @@
         "expected_goals_conceded": "1.26",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -11347,7 +11791,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11395,7 +11841,9 @@
         "expected_goals_conceded": "0.06",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -11443,7 +11891,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11491,7 +11941,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -11557,7 +12009,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11605,7 +12059,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11653,7 +12109,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 14,
         "in_dreamteam": true,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -11725,7 +12183,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -11785,7 +12245,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11833,7 +12295,9 @@
         "expected_goals_conceded": "0.16",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -11881,7 +12345,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 5,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -11941,7 +12407,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -11989,7 +12457,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -12037,7 +12507,9 @@
         "expected_goals_conceded": "1.28",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12091,7 +12563,9 @@
         "expected_goals_conceded": "3.15",
         "total_points": 5,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12145,7 +12619,9 @@
         "expected_goals_conceded": "1.06",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12199,7 +12675,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12253,7 +12731,9 @@
         "expected_goals_conceded": "0.25",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12301,7 +12781,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -12349,7 +12831,9 @@
         "expected_goals_conceded": "0.38",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12397,7 +12881,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -12445,7 +12931,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12505,7 +12993,9 @@
         "expected_goals_conceded": "0.38",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12553,7 +13043,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -12601,7 +13093,9 @@
         "expected_goals_conceded": "0.16",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12649,7 +13143,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -12697,7 +13193,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12751,7 +13249,9 @@
         "expected_goals_conceded": "1.60",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12805,7 +13305,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -12853,7 +13355,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -12901,7 +13405,9 @@
         "expected_goals_conceded": "0.36",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12949,7 +13455,9 @@
         "expected_goals_conceded": "1.60",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -12997,7 +13505,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -13045,7 +13555,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -13093,7 +13605,9 @@
         "expected_goals_conceded": "1.60",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -13153,7 +13667,9 @@
         "expected_goals_conceded": "1.60",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -13207,7 +13723,9 @@
         "expected_goals_conceded": "2.24",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -13261,7 +13779,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -13309,7 +13829,9 @@
         "expected_goals_conceded": "1.12",
         "total_points": 5,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -13369,7 +13891,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -13417,7 +13941,9 @@
         "expected_goals_conceded": "0.49",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -13465,7 +13991,9 @@
         "expected_goals_conceded": "1.12",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -13519,7 +14047,9 @@
         "expected_goals_conceded": "1.18",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -13573,7 +14103,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -13621,7 +14153,9 @@
         "expected_goals_conceded": "1.76",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -13669,7 +14203,9 @@
         "expected_goals_conceded": "1.25",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -13729,7 +14265,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -13777,7 +14315,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -13825,7 +14365,9 @@
         "expected_goals_conceded": "0.36",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -13879,7 +14421,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -13927,7 +14471,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -13975,7 +14521,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14023,7 +14571,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14071,7 +14621,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14119,7 +14671,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -14173,7 +14727,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14221,7 +14777,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -14275,7 +14833,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -14329,7 +14889,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14377,7 +14939,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -14437,7 +15001,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14485,7 +15051,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14533,7 +15101,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14581,7 +15151,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -14641,7 +15213,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14689,7 +15263,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14737,7 +15313,9 @@
         "expected_goals_conceded": "1.19",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -14791,7 +15369,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -14839,7 +15419,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14887,7 +15469,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14935,7 +15519,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -14983,7 +15569,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15031,7 +15619,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -15085,7 +15675,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15133,7 +15725,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15181,7 +15775,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15229,7 +15825,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15277,7 +15875,9 @@
         "expected_goals_conceded": "2.24",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -15325,7 +15925,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15373,7 +15975,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15421,7 +16025,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15469,7 +16075,9 @@
         "expected_goals_conceded": "2.24",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -15517,7 +16125,9 @@
         "expected_goals_conceded": "2.24",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -15565,7 +16175,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15613,7 +16225,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15661,7 +16275,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15709,7 +16325,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15757,7 +16375,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15805,7 +16425,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15853,7 +16475,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15901,7 +16525,9 @@
         "expected_goals_conceded": "1.68",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -15949,7 +16575,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -15997,7 +16625,9 @@
         "expected_goals_conceded": "1.68",
         "total_points": -1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -16051,7 +16681,9 @@
         "expected_goals_conceded": "2.07",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -16099,7 +16731,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -16147,7 +16781,9 @@
         "expected_goals_conceded": "0.56",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -16195,7 +16831,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -16243,7 +16881,9 @@
         "expected_goals_conceded": "0.16",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -16291,7 +16931,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -16339,7 +16981,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -16387,7 +17031,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -16435,7 +17081,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -16483,7 +17131,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -16531,7 +17181,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -16579,7 +17231,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -16627,7 +17281,9 @@
         "expected_goals_conceded": "1.48",
         "total_points": 5,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -16687,7 +17343,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -16735,7 +17393,9 @@
         "expected_goals_conceded": "0.66",
         "total_points": 5,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -16795,7 +17455,9 @@
         "expected_goals_conceded": "1.06",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -16849,7 +17511,9 @@
         "expected_goals_conceded": "1.06",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -16909,7 +17573,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -16957,7 +17623,9 @@
         "expected_goals_conceded": "1.06",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -17011,7 +17679,9 @@
         "expected_goals_conceded": "1.06",
         "total_points": 5,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -17071,7 +17741,9 @@
         "expected_goals_conceded": "0.68",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -17125,7 +17797,9 @@
         "expected_goals_conceded": "0.40",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -17173,7 +17847,9 @@
         "expected_goals_conceded": "1.06",
         "total_points": 5,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -17233,7 +17909,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -17281,7 +17959,9 @@
         "expected_goals_conceded": "0.13",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -17329,7 +18009,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -17377,7 +18059,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -17425,7 +18109,9 @@
         "expected_goals_conceded": "0.40",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -17473,7 +18159,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -17521,7 +18209,9 @@
         "expected_goals_conceded": "0.66",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -17581,7 +18271,9 @@
         "expected_goals_conceded": "1.06",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -17629,7 +18321,9 @@
         "expected_goals_conceded": "0.37",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -17677,7 +18371,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -17725,7 +18421,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -17773,7 +18471,9 @@
         "expected_goals_conceded": "0.79",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -17833,7 +18533,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -17881,7 +18583,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -17929,7 +18633,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -17977,7 +18683,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -18025,7 +18733,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -18073,7 +18783,9 @@
         "expected_goals_conceded": "0.79",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -18133,7 +18845,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -18181,7 +18895,9 @@
         "expected_goals_conceded": "0.79",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -18235,7 +18951,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -18283,7 +19001,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -18331,7 +19051,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -18379,7 +19101,9 @@
         "expected_goals_conceded": "0.79",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -18433,7 +19157,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -18481,7 +19207,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -18529,7 +19257,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -18577,7 +19307,9 @@
         "expected_goals_conceded": "0.66",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -18637,7 +19369,9 @@
         "expected_goals_conceded": "0.79",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -18691,7 +19425,9 @@
         "expected_goals_conceded": "0.66",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -18751,7 +19487,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -18799,7 +19537,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -18847,7 +19587,9 @@
         "expected_goals_conceded": "0.14",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -18895,7 +19637,9 @@
         "expected_goals_conceded": "0.79",
         "total_points": 5,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -18955,7 +19699,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -19003,7 +19749,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -19051,7 +19799,9 @@
         "expected_goals_conceded": "0.14",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -19099,7 +19849,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -19147,7 +19899,9 @@
         "expected_goals_conceded": "0.14",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -19195,7 +19949,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -19243,7 +19999,9 @@
         "expected_goals_conceded": "0.66",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -19309,7 +20067,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -19357,7 +20117,9 @@
         "expected_goals_conceded": "0.14",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -19405,7 +20167,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -19453,7 +20217,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -19501,7 +20267,9 @@
         "expected_goals_conceded": "3.57",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -19561,7 +20329,9 @@
         "expected_goals_conceded": "1.06",
         "total_points": 10,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -19627,7 +20397,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -19675,7 +20447,9 @@
         "expected_goals_conceded": "0.39",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -19723,7 +20497,9 @@
         "expected_goals_conceded": "3.57",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -19783,7 +20559,9 @@
         "expected_goals_conceded": "3.57",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -19837,7 +20615,9 @@
         "expected_goals_conceded": "3.57",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -19891,7 +20671,9 @@
         "expected_goals_conceded": "3.57",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -19951,7 +20733,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -19999,7 +20783,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20047,7 +20833,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20095,7 +20883,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20143,7 +20933,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20191,7 +20983,9 @@
         "expected_goals_conceded": "3.57",
         "total_points": 17,
         "in_dreamteam": true,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -20257,7 +21051,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20305,7 +21101,9 @@
         "expected_goals_conceded": "3.18",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -20365,7 +21163,9 @@
         "expected_goals_conceded": "0.42",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -20413,7 +21213,9 @@
         "expected_goals_conceded": "1.16",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -20461,7 +21263,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20509,7 +21313,9 @@
         "expected_goals_conceded": "1.16",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -20557,7 +21363,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20605,7 +21413,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20653,7 +21463,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20701,7 +21513,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20749,7 +21563,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20797,7 +21613,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20845,7 +21663,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -20893,7 +21713,9 @@
         "expected_goals_conceded": "3.57",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -20947,7 +21769,9 @@
         "expected_goals_conceded": "1.62",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -21001,7 +21825,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -21049,7 +21875,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -21097,7 +21925,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -21151,7 +21981,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -21199,7 +22031,9 @@
         "expected_goals_conceded": "1.62",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -21247,7 +22081,9 @@
         "expected_goals_conceded": "1.62",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -21295,7 +22131,9 @@
         "expected_goals_conceded": "1.62",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -21349,7 +22187,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -21397,7 +22237,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -21445,7 +22287,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -21493,7 +22337,9 @@
         "expected_goals_conceded": "1.62",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -21541,7 +22387,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -21589,7 +22437,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -21637,7 +22487,9 @@
         "expected_goals_conceded": "1.62",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -21685,7 +22537,9 @@
         "expected_goals_conceded": "1.62",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -21733,7 +22587,9 @@
         "expected_goals_conceded": "1.62",
         "total_points": 10,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -21793,7 +22649,9 @@
         "expected_goals_conceded": "1.62",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -21841,7 +22699,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -21889,7 +22749,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -21937,7 +22799,9 @@
         "expected_goals_conceded": "1.62",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -21991,7 +22855,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22039,7 +22905,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22087,7 +22955,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22135,7 +23005,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22183,7 +23055,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22231,7 +23105,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22279,7 +23155,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22327,7 +23205,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -22375,7 +23255,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22423,7 +23305,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22471,7 +23355,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22519,7 +23405,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22567,7 +23455,9 @@
         "expected_goals_conceded": "1.59",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -22621,7 +23511,9 @@
         "expected_goals_conceded": "1.08",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -22669,7 +23561,9 @@
         "expected_goals_conceded": "1.59",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -22723,7 +23617,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22771,7 +23667,9 @@
         "expected_goals_conceded": "1.59",
         "total_points": 13,
         "in_dreamteam": true,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -22837,7 +23735,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22885,7 +23785,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -22933,7 +23835,9 @@
         "expected_goals_conceded": "0.61",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -22981,7 +23885,9 @@
         "expected_goals_conceded": "1.59",
         "total_points": 9,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -23041,7 +23947,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -23089,7 +23997,9 @@
         "expected_goals_conceded": "1.10",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -23137,7 +24047,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -23185,7 +24097,9 @@
         "expected_goals_conceded": "1.59",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -23239,7 +24153,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -23287,7 +24203,9 @@
         "expected_goals_conceded": "1.59",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -23341,7 +24259,9 @@
         "expected_goals_conceded": "1.46",
         "total_points": 10,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -23401,7 +24321,9 @@
         "expected_goals_conceded": "0.60",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -23449,7 +24371,9 @@
         "expected_goals_conceded": "0.52",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -23503,7 +24427,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -23551,7 +24477,9 @@
         "expected_goals_conceded": "1.59",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -23605,7 +24533,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -23653,7 +24583,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -23701,7 +24633,9 @@
         "expected_goals_conceded": "0.67",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -23749,7 +24683,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -23797,7 +24733,9 @@
         "expected_goals_conceded": "0.67",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -23845,7 +24783,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -23893,7 +24833,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -23941,7 +24883,9 @@
         "expected_goals_conceded": "0.67",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -23995,7 +24939,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -24043,7 +24989,9 @@
         "expected_goals_conceded": "0.67",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -24097,7 +25045,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -24145,7 +25095,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -24193,7 +25145,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -24241,7 +25195,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -24289,7 +25245,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -24337,7 +25295,9 @@
         "expected_goals_conceded": "0.67",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -24385,7 +25345,9 @@
         "expected_goals_conceded": "3.57",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -24433,7 +25395,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -24481,7 +25445,9 @@
         "expected_goals_conceded": "0.63",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -24529,7 +25495,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -24577,7 +25545,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -24625,7 +25595,9 @@
         "expected_goals_conceded": "0.67",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -24673,7 +25645,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -24721,7 +25695,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -24769,7 +25745,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -24817,7 +25795,9 @@
         "expected_goals_conceded": "0.04",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -24865,7 +25845,9 @@
         "expected_goals_conceded": "0.04",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -24913,7 +25895,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -24961,7 +25945,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25009,7 +25995,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25057,7 +26045,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25105,7 +26095,9 @@
         "expected_goals_conceded": "1.16",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -25165,7 +26157,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25213,7 +26207,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25261,7 +26257,9 @@
         "expected_goals_conceded": "0.04",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -25309,7 +26307,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25357,7 +26357,9 @@
         "expected_goals_conceded": "2.82",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -25411,7 +26413,9 @@
         "expected_goals_conceded": "1.16",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -25471,7 +26475,9 @@
         "expected_goals_conceded": "1.16",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -25525,7 +26531,9 @@
         "expected_goals_conceded": "1.63",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -25585,7 +26593,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25633,7 +26643,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25681,7 +26693,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25729,7 +26743,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25777,7 +26793,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25825,7 +26843,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25873,7 +26893,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -25921,7 +26943,9 @@
         "expected_goals_conceded": "0.35",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -25975,7 +26999,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -26023,7 +27049,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -26071,7 +27099,9 @@
         "expected_goals_conceded": "0.15",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -26119,7 +27149,9 @@
         "expected_goals_conceded": "1.10",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -26173,7 +27205,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -26221,7 +27255,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -26269,7 +27305,9 @@
         "expected_goals_conceded": "0.07",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -26323,7 +27361,9 @@
         "expected_goals_conceded": "0.07",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -26371,7 +27411,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -26419,7 +27461,9 @@
         "expected_goals_conceded": "1.12",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -26467,7 +27511,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -26515,7 +27561,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -26563,7 +27611,9 @@
         "expected_goals_conceded": "0.82",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -26611,7 +27661,9 @@
         "expected_goals_conceded": "1.01",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -26659,7 +27711,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -26707,7 +27761,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -26755,7 +27811,9 @@
         "expected_goals_conceded": "2.82",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -26809,7 +27867,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -26857,7 +27917,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -26905,7 +27967,9 @@
         "expected_goals_conceded": "2.82",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -26965,7 +28029,9 @@
         "expected_goals_conceded": "2.82",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -27019,7 +28085,9 @@
         "expected_goals_conceded": "1.48",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -27067,7 +28135,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -27115,7 +28185,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -27163,7 +28235,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -27211,7 +28285,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -27259,7 +28335,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -27307,7 +28385,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -27355,7 +28435,9 @@
         "expected_goals_conceded": "1.34",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -27415,7 +28497,9 @@
         "expected_goals_conceded": "2.82",
         "total_points": 5,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -27469,7 +28553,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -27517,7 +28603,9 @@
         "expected_goals_conceded": "2.82",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -27565,7 +28653,9 @@
         "expected_goals_conceded": "1.02",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -27613,7 +28703,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -27661,7 +28753,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -27709,7 +28803,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -27757,7 +28853,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -27805,7 +28903,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -27853,7 +28953,9 @@
         "expected_goals_conceded": "0.75",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -27907,7 +29009,9 @@
         "expected_goals_conceded": "2.82",
         "total_points": 17,
         "in_dreamteam": true,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -27967,7 +29071,9 @@
         "expected_goals_conceded": "1.79",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28015,7 +29121,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -28063,7 +29171,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -28111,7 +29221,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -28159,7 +29271,9 @@
         "expected_goals_conceded": "0.77",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28207,7 +29321,9 @@
         "expected_goals_conceded": "0.67",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28255,7 +29371,9 @@
         "expected_goals_conceded": "0.14",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28303,7 +29421,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -28351,7 +29471,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -28399,7 +29521,9 @@
         "expected_goals_conceded": "0.48",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28447,7 +29571,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -28495,7 +29621,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -28543,7 +29671,9 @@
         "expected_goals_conceded": "0.28",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28597,7 +29727,9 @@
         "expected_goals_conceded": "1.65",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28657,7 +29789,9 @@
         "expected_goals_conceded": "1.59",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28711,7 +29845,9 @@
         "expected_goals_conceded": "2.22",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28759,7 +29895,9 @@
         "expected_goals_conceded": "1.25",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28807,7 +29945,9 @@
         "expected_goals_conceded": "0.49",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28855,7 +29995,9 @@
         "expected_goals_conceded": "0.48",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28903,7 +30045,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -28975,7 +30119,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -29023,7 +30169,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -29071,7 +30219,9 @@
         "expected_goals_conceded": "1.08",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -29125,7 +30275,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -29173,7 +30325,9 @@
         "expected_goals_conceded": "0.54",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -29221,7 +30375,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -29269,7 +30425,9 @@
         "expected_goals_conceded": "0.79",
         "total_points": 7,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -29329,7 +30487,9 @@
         "expected_goals_conceded": "1.60",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -29383,7 +30543,9 @@
         "expected_goals_conceded": "0.63",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -29431,7 +30593,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -29479,7 +30643,9 @@
         "expected_goals_conceded": "2.65",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -29533,7 +30699,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -29581,7 +30749,9 @@
         "expected_goals_conceded": "1.44",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -29635,7 +30805,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -29683,7 +30855,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -29731,7 +30905,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -29785,7 +30961,9 @@
         "expected_goals_conceded": "0.13",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -29833,7 +31011,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -29881,7 +31061,9 @@
         "expected_goals_conceded": "1.76",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -29929,7 +31111,9 @@
         "expected_goals_conceded": "2.24",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -29977,7 +31161,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30025,7 +31211,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30073,7 +31261,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30121,7 +31311,9 @@
         "expected_goals_conceded": "1.56",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -30181,7 +31373,9 @@
         "expected_goals_conceded": "1.56",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -30241,7 +31435,9 @@
         "expected_goals_conceded": "1.06",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -30295,7 +31491,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30343,7 +31541,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30391,7 +31591,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30439,7 +31641,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30487,7 +31691,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30535,7 +31741,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30583,7 +31791,9 @@
         "expected_goals_conceded": "0.14",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -30631,7 +31841,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30679,7 +31891,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30727,7 +31941,9 @@
         "expected_goals_conceded": "0.25",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -30775,7 +31991,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30823,7 +32041,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -30871,7 +32091,9 @@
         "expected_goals_conceded": "0.64",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -30919,7 +32141,9 @@
         "expected_goals_conceded": "2.82",
         "total_points": -1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -30979,7 +32203,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31027,7 +32253,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31075,7 +32303,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31123,7 +32353,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31171,7 +32403,9 @@
         "expected_goals_conceded": "0.16",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -31225,7 +32459,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31273,7 +32509,9 @@
         "expected_goals_conceded": "2.07",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -31321,7 +32559,9 @@
         "expected_goals_conceded": "0.13",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -31369,7 +32609,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31417,7 +32659,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31465,7 +32709,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31513,7 +32759,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31561,7 +32809,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31609,7 +32859,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31657,7 +32909,9 @@
         "expected_goals_conceded": "0.66",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -31711,7 +32965,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31759,7 +33015,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31807,7 +33065,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31855,7 +33115,9 @@
         "expected_goals_conceded": "0.78",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -31903,7 +33165,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31951,7 +33215,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -31999,7 +33265,9 @@
         "expected_goals_conceded": "0.99",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -32047,7 +33315,9 @@
         "expected_goals_conceded": "0.42",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -32095,7 +33365,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -32143,7 +33415,9 @@
         "expected_goals_conceded": "0.13",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -32191,7 +33465,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -32239,7 +33515,9 @@
         "expected_goals_conceded": "1.48",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -32299,7 +33577,9 @@
         "expected_goals_conceded": "0.16",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -32353,7 +33633,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -32401,7 +33683,9 @@
         "expected_goals_conceded": "1.28",
         "total_points": 2,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -32449,7 +33733,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -32497,7 +33783,9 @@
         "expected_goals_conceded": "1.31",
         "total_points": 3,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -32551,7 +33839,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -32599,7 +33889,9 @@
         "expected_goals_conceded": "2.07",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -32647,7 +33939,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -32695,7 +33989,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -32743,7 +34039,9 @@
         "expected_goals_conceded": "1.28",
         "total_points": 8,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -32803,7 +34101,9 @@
         "expected_goals_conceded": "1.60",
         "total_points": 4,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -32857,7 +34157,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -32905,7 +34207,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -32953,7 +34257,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -33001,7 +34307,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -33049,7 +34357,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -33097,7 +34407,9 @@
         "expected_goals_conceded": "1.10",
         "total_points": 6,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -33151,7 +34463,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -33199,7 +34513,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -33247,7 +34563,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -33295,7 +34613,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -33343,7 +34663,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -33391,7 +34713,9 @@
         "expected_goals_conceded": "0.43",
         "total_points": 1,
         "in_dreamteam": false,
-        "played": true
+        "played": true,
+        "can_auto_sub_out": false,
+        "can_auto_sub_in": true
       },
       "explain": [
         {
@@ -33439,7 +34763,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -33487,7 +34813,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -33535,7 +34863,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -33583,7 +34913,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
@@ -33631,7 +34963,9 @@
         "expected_goals_conceded": "0.00",
         "total_points": 0,
         "in_dreamteam": false,
-        "played": false
+        "played": false,
+        "can_auto_sub_out": true,
+        "can_auto_sub_in": false
       },
       "explain": [
         {
